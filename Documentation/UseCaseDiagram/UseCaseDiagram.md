@@ -22,6 +22,8 @@
 
 11. As a manager, I want to be able to register Customers in the application so that I have the possibility of new services.
 
+12. As a user of the system, I want to be able to login into the application so that I can access the application features.
+
 ## Use Case Diagram
 
 ![Use Case Diagram](UseCaseDiagram.png)
