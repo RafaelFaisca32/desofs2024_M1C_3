@@ -8,7 +8,7 @@
 
 4. As a Customer, I want to be able to see the progress of my accepted service so that so that I have full control of my service. (End date)
 
-5. As the Driver, I want to vizualise the services that have been assigned to me so that I can have control of my work.
+5. As the Driver, I want to visualize the services that have been assigned to me so that I can have control of my work.
 
 6. As the Driver, I want to signal the start and end of a service that has been provided by me so that I can finish my task.
 
