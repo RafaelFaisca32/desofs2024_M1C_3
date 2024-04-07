@@ -6,7 +6,7 @@
 
 3. As a customer, I want to be able to add Locations associated to me so that I can choose one of them in the Service.
 
-4. As a Customer, I want to be able to see the progress of my accepted Service so that I have full control of it. (End date)
+4. As a Customer, I want to be able to see the progress of my accepted Service so that I have full control of it.
 
 5. As the Driver, I want to visualize the Transports that have been assigned to me so that I can have control of my work.
 
