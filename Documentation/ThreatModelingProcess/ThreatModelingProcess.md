@@ -24,3 +24,14 @@
 | 1.2 | Login Function | The login function accepts user supplied credentials and compares them with those in the database. | 2, 3, 4, 5 |
 | 1.3 | Customer Job Requests Status List Page | The customer job requests status list page lists all the requests that the customer have request, without any interaction and only pagination | 4 |
 | 1.4 | Driver Job Requests Assigned List Page | The driver job requests assigned list page lists all the drivers job requests with the information needed. This page also does not need user interaction | 5 |
+
+## External Dependencies
+
+| ID | Description |
+| -- | ------------|
+| 1 | The TruckMotion application will run on a free Hosting Service at first when it's still a prototype. However, in the future it is intended to deploy the application on a private machine of ours. |
+| 2 | The database will be PostGreSQL and will run in a Linux Server. This server will include the installation of the latest operating system and application security patches. |
+| 3 | The connection between the application and the database server will be over a private network. |
+| 4 | The Backend and Frontend applications will communicate through HTTP requests on a private network. |
+| 5 | The application will communicate with an External API for the Geographicals locations. |
+| 6 | The application will communicate with the File System. |
