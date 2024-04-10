@@ -155,6 +155,40 @@ Sending malicious information to the Customer can influence him to access it and
 ### Countermeasures:
 Specify how the information will be given to the customer in order for him to know if something is wrong. Previously, educate users about identifying phishing attempts.
 
+# UC6 - As the Driver, I want to signal the start and end of a Transport that has been provided by me so that I can finish my Service.
+
+## False Start Signal:
+
+### Description:
+The driver signals the start of a transport service, but instead of actually starting the service, they deceive the system by activating the signal without intending to provide the service.
+
+### CVSS Risk Rating: 5.7 (Medium) CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:N/I:H/A:N
+
+### Justification:
+This could be done to manipulate the system for personal gain, such as receiving compensation for services not rendered or to create a false record of activity.
+
+### Countermeasures:
+Providing training and awareness programs so that drivers don't do this issue.
+Be restrictive when employing new drivers.
+If the gps tracker shows that the truck has been stopped for a long time, make the driver provide an explanation for that specific situation.
+
+# UC7 - As a driver, I want to be able to prove my delivery with a photo or a screenshot of the maps so that my job execution is accepted.
+
+## Photo manipulation
+
+### Description:
+The driver could use pre-existing photos from their gallery or the internet and pass them off as proof of delivery or instead of genuinely delivering the package or completing the service, they may provide a photo taken at a different location.
+
+### CVSS Risk Rating: 5.7 (Medium) CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:N/I:H/A:N
+
+### Justification:
+By fabricating proof of delivery, the driver can save time that would have been spent on actually completing the delivery. This time can then be used for personal activities or for taking on additional delivery jobs, thereby increasing potential earnings.
+
+### Countermeasures:
+Providing training and awareness programs for drivers about the importance of accurate reporting and the consequences of providing false proof of delivery can deter misconduct.
+Implementing strict disciplinary measures and consequences for drivers caught providing false proof of delivery.
+Implementing geofencing technology can help enforce delivery boundaries, ensuring that deliveries are made within designated areas.
+
 # UC8- As a manager, I want to be able to approve or reject a job so that I can control the services.
 
 ## Forged Approvals: 
