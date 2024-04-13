@@ -28,6 +28,8 @@
 | 1.2 | Login Function | The login function accepts user supplied credentials and compares them with those in the database. | 2, 3, 4, 5 |
 | 1.3 | Customer Job Requests Status List Page | The customer job requests status list page lists all the requests that the customer have request, without any interaction and only pagination | 3, 4 |
 | 1.4 | Driver Job Requests Assigned List Page | The driver job requests assigned list page lists all the drivers job requests with the information needed. This page also does not need user interaction | 3, 5 |
+| 1.5 | Customer Adds Locations to his Account | This page allows user to add Locations to his Account. | 4 |
+| 1.6 | Customer sees the progress of his Requested Service | This page shows the progress of the User's requested services. | 3, 4 |
 
 ## External Dependencies
 
