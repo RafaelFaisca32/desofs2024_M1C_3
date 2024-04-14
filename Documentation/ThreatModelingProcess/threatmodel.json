@@ -1167,7 +1167,7 @@
             },
             "attrs": {
               "text": {
-                "text": "External\nAPI"
+                "text": "External Geographical\nAPI"
               },
               "body": {
                 "stroke": "#333333",
@@ -1181,7 +1181,7 @@
             "zIndex": 15,
             "data": {
               "type": "tm.Process",
-              "name": "External\nAPI",
+              "name": "External Geographical\nAPI",
               "description": "",
               "outOfScope": true,
               "reasonOutOfScope": "External",
