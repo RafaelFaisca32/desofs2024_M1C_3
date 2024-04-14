@@ -1,0 +1,30 @@
+@startuml deployment
+
+node "Frontend Server" as fs{
+    artifact "React Application"
+}
+
+node "Device" as user {
+    artifact "Browser" as bw
+}
+
+node "FileSystem Server" as fServer{
+    artifact "FileSystem" as fileSystem
+}
+
+node "Backend Server" as backend{
+    artifact "Java Spring Application"
+}
+
+node "DB Server" as db {
+    artifact "PostGresSQL Server" as PSQL
+}
+node "Geographical API" as gm
+
+fServer -- backend : "FTP"
+fs -- user : "HTTPs"
+fs -- gm : "HTTPs"
+backend -- fs : "HTTPs"
+db -- backend : "TCP/IP"
+
+@enduml
