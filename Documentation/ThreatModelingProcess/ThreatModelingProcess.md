@@ -30,6 +30,8 @@
 | 1.4 | Driver Job Requests Assigned List Page | The driver job requests assigned list page lists all the drivers job requests with the information needed. This page also does not need user interaction | 3, 5 |
 | 1.5 | Customer Adds Locations to his Account | This page allows user to add Locations to his Account. | 4 |
 | 1.6 | Customer sees the progress of his Requested Service | This page shows the progress of the User's requested services. | 3, 4 |
+| 1.7 | Customer request a delivery service. | This page allows the user to do a delivery request. | 4 |
+| 1.8 | Manager approves or rejects a service request. | This page allows the suer to approve or reject a service request. | 3 |
 
 ## External Dependencies
 
@@ -284,7 +286,7 @@ It will be used STRIDE Model to identify the threats. It classifies threats in s
 
 | Type | Description | Security Control |
 | ---- | ----------- | ---------------- |
-| Spoofing | Threat action aimed at accessing and use of another user’s credentials, such as username and password. | <ul><li>Appropriate Authentication</li><li>Protect Secret Data</li></ul> |
+| Spoofing | Threat action aimed at accessing and use of another user’s credentials, such as username and password. | <ul><li>Appropriate Authentication</li><li>Protect Secret Data</li><li>Geolocation validation</li></ul> |
 | Tampering | Threat action intending to maliciously change or modify persistent data, such as records in a database, and the alteration of data in transit between two computers over an open network, such as the Internet. | <ul><li>Appropriate Authorization</li><li>Input Validations for Injection</li><li>Notify the owner if anything changed</li></ul> |
 | Repudiation | Threat action aimed at performing prohibited operations in a system that lacks the ability to trace the operations. | <ul><li>Audit Trails</li></ul> |
 | Information Disclosure | Threat action intending to read a file that one was not granted access to, or to read data in transit. | <ul><li>Authorization</li><li>Encryption</li><li>Protect secrets</li><li>Don’t store secrets</li><li>SMS Verification Code</li><li>Robust authentication and authorization verification process</li></ul> |
