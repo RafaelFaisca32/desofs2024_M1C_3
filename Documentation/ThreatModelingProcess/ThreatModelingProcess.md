@@ -90,7 +90,7 @@ Data Manipulation can result in customer's services being stolen or not being su
 
 ##### Countermeasures
 
-If any information about Customer's locations are changed, a notification is sent. This way, the Customer will know and will have time to report the situation. Also, when delivering the order a code must be shown to the driver in order to validate if it is the correct person to deliver.
+If any information about Customer's locations are changed, a notification is sent. This way, the Customer will know and will have time to report the situation. Also, when delivering the order a code must be shown to the driver in order to validate if it is the correct person to deliver. Another countermeasure could be adding two step confirmation for the changes, for example by Email or SMS.
 
 #### Injection
 
@@ -130,7 +130,7 @@ Implement rate limiting and traffic filtering to mitigate DoS attacks, use redun
 
 #### Unauthorized Access
 
-##### Justification
+##### Description
 
 As an attacker, I gain unauthorized access to the software and add locations to a customer's account without their consent, potentially causing confusion or inconvenience to the customer.
 
