@@ -90,7 +90,7 @@ Data Manipulation can result in customer's services being stolen or not being su
 
 ##### Countermeasures
 
-If any information about Customer's locations are changed, a notification is sent. This way, the Customer will know and will have time to report the situation. Also, when delivering the order a code must be shown to the driver in order to validate if it is the correct person to deliver.
+If any information about Customer's locations are changed, a notification is sent. This way, the Customer will know and will have time to report the situation. Also, when delivering the order a code must be shown to the driver in order to validate if it is the correct person to deliver. Another countermeasure could be adding two step confirmation for the changes, for example by Email or SMS.
 
 #### Injection
 
@@ -130,7 +130,7 @@ Implement rate limiting and traffic filtering to mitigate DoS attacks, use redun
 
 #### Unauthorized Access
 
-##### Justification
+##### Description
 
 As an attacker, I gain unauthorized access to the software and add locations to a customer's account without their consent, potentially causing confusion or inconvenience to the customer.
 
@@ -226,25 +226,21 @@ Specify how the information will be given to the customer in order for him to kn
    1. CVSS V3 risk rating: 5.7 CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:N/A:N
    2. Kind of Abuse: Technical
    3. Counter Measure: Add verification for authorization inside the data access.
-   4. STRIDE: Elevation of privilege.
 
 2. As an attacker and/or malicious user, I can manipulate the primary key so that I can access the transport status of other users.
    1. CVSS V3 risk rating: 5.7 CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:N/A:N
    2. Kind of Abuse: Technical
    3. Counter Measure: Add verification for authorization so that only verified users access the data defined for them.
-   4. STRIDE: Information Disclosure.
 
 3. As an attacker, I manipulate sessions, access tokens, or other access controls in the application to act as a user without being logged in, so that I can get access to the information about the transport status.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
    2. Kind of Abuse: Technical;
    3. Counter Measure: Make session and access tokens secrets and hardly unaccessible for outside users.
-   4. STRIDE: Information Disclosure.
 
 4. As an attacker, I force browsing to transport status page without being authenticated, gaining access to privilege the information about the transport status.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
    2. Kind of Abuse: Technical;
    3. Counter Measue: Always verify authentication inside the transport status page.
-   4. STRIDE: Information Disclosure.
 
 ## UC5. As the Driver, I want to visualize the Transports that have been assigned to me so that I can have control of my work
 
@@ -252,25 +248,21 @@ Specify how the information will be given to the customer in order for him to kn
    1. CVSS V3 risk rating: 5.7 CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:N/A:N
    2. Kind of Abuse: Technical
    3. Counter Measure: Add verification for authorization inside the data access.
-   4. STRIDE: Elevation of Privilege.
 
 2. As an attacker and/or malicious user, I can manipulate the primary key so that I can access the transport services assigned for other drivers.
    1. CVSS V3 risk rating: 5.7 CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:N/A:N
    2. Kind of Abuse: Technical
    3. Counter Measure: Add verification for authorization so that only verified users access the data defined for them.
-   4. STRIDE: Information Disclosure.
 
 3. As an attacker, I manipulate sessions, access tokens, or other access controls in the application to act as a user without being logged in, so that I can get access to the information about all the drivers transport jobs assigned.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
    2. Kind of Abuse: Technical;
    3. Counter Measure: Make session and access tokens secrets and hardly unaccessible for outside users.
-   4. STRIDE: Information Disclosure.
 
 4. As an attacker, I force browsing to transport status page without being authenticated, gaining access to privilege the information about the transport jobs assigned to the drivers.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
    2. Kind of Abuse: Technical;
    3. Counter Measue: Always verify authentication inside the transport jobs page.
-   4. STRIDE: Information Disclosure
 
 ## STRIDE
 
