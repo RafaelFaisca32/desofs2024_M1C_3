@@ -95,8 +95,8 @@
           },
           {
             "position": {
-              "x": 140,
-              "y": 470
+              "x": 150,
+              "y": 500
             },
             "size": {
               "width": 160,
@@ -143,7 +143,7 @@
               "hasOpenThreats": true,
               "isALog": false,
               "storesCredentials": true,
-              "isEncrypted": false,
+              "isEncrypted": true,
               "isSigned": false,
               "storesInventory": null
             }
@@ -173,7 +173,7 @@
             "id": "0d9909ea-1398-4898-be81-cf1c808324dc",
             "data": {
               "name": "Backend\nApplication",
-              "description": "",
+              "description": "Process that contains all the interactions needed to the backend API application",
               "type": "tm.Process",
               "isTrustBoundary": false,
               "outOfScope": false,
@@ -181,7 +181,7 @@
               "threats": [
                 {
                   "id": "9b63b86c-9242-42a1-a255-cd9aa39b8d7b",
-                  "title": "Attacker send too many requests",
+                  "title": "Attacker sends too many requests",
                   "status": "Open",
                   "severity": "High",
                   "type": "Denial of service",
@@ -194,7 +194,7 @@
                 },
                 {
                   "id": "b1803af5-f94f-47d7-916e-bf34d15ee7a9",
-                  "title": "Attacker sends API Request via Tool to gather data",
+                  "title": "Attacker sends API Request via Tool to steal data",
                   "status": "Mitigated",
                   "severity": "High",
                   "type": "Information disclosure",
@@ -216,6 +216,45 @@
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 35,
+                  "score": ""
+                },
+                {
+                  "id": "cf2a17f9-5cfa-478a-a69e-3b85e61cc90e",
+                  "title": "Attacker steals Authentication Token",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Spoofing",
+                  "description": "Attacker successfully steals or even generates a valid authentication token, with this, gaining access to data through API endpoints.",
+                  "mitigation": "Implement techniques to not use one static token, such as the refresh token.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 36,
+                  "score": ""
+                },
+                {
+                  "id": "e79ce516-93fa-4912-8691-4c9b8c2e5ae3",
+                  "title": "User pretends to be someone else changing Header Parameter",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Repudiation",
+                  "description": "The user, by manipulating the API Request changing the Header Parameter username, pretends to be someone else in the logging system and the actions taken are associated wrongly, making the logging invalid.",
+                  "mitigation": "Implement logging based on the token used to get the user in question and not the header user name parameter.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 37,
+                  "score": ""
+                },
+                {
+                  "id": "3cbef165-381b-4a7e-9cc6-c0151ecadaee",
+                  "title": "User by using their token successfully performs actions outside their authorization",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Elevation of privilege",
+                  "description": "A user, by sending an API Request to an End Point using their token, can successfully perform some action that is beyond their authorization.",
+                  "mitigation": "Implement authorization based on token and more inside the backend API.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 39,
                   "score": ""
                 }
               ],
@@ -1064,6 +1103,87 @@
             ]
           },
           {
+            "shape": "trust-boundary-curve",
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            },
+            "id": "043cf9bd-a6b2-4727-b6c2-140a85976d55",
+            "source": {
+              "x": -150,
+              "y": 580
+            },
+            "target": {
+              "x": 60,
+              "y": 590
+            },
+            "vertices": [
+              {
+                "x": -90,
+                "y": 500
+              },
+              {
+                "x": 40,
+                "y": 500
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Logs",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "2fb770ba-6788-4436-9db1-a95c2180a9a2",
+            "labels": [
+              "Logs"
+            ],
+            "source": {
+              "cell": "0d9909ea-1398-4898-be81-cf1c808324dc"
+            },
+            "target": {
+              "cell": "047754a0-e0bf-4e52-8251-507a38b03ab2"
+            },
+            "vertices": [
+              {
+                "x": 140,
+                "y": 410
+              }
+            ]
+          },
+          {
             "position": {
               "x": 360,
               "y": 580
@@ -1159,7 +1279,7 @@
             "data": {
               "type": "tm.Process",
               "name": "Frontend\nApplication",
-              "description": "",
+              "description": "Process that contains all the interactions needed with the front\nend application",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": true,
@@ -1264,7 +1384,7 @@
           },
           {
             "position": {
-              "x": 630,
+              "x": 620,
               "y": 180
             },
             "size": {
@@ -1312,7 +1432,7 @@
               "hasOpenThreats": true,
               "isALog": false,
               "storesCredentials": true,
-              "isEncrypted": false,
+              "isEncrypted": true,
               "isSigned": false,
               "storesInventory": null
             }
@@ -1338,8 +1458,8 @@
             },
             "visible": true,
             "shape": "actor",
-            "id": "eb411ce7-7fe3-4cfe-b674-f4bf697c2e6e",
             "zIndex": 16,
+            "id": "eb411ce7-7fe3-4cfe-b674-f4bf697c2e6e",
             "data": {
               "type": "tm.Actor",
               "name": "External Geographical API",
@@ -1349,6 +1469,63 @@
               "hasOpenThreats": false,
               "providesAuthentication": false,
               "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": -97.5,
+              "y": 520
+            },
+            "size": {
+              "width": 120,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Logging System"
+              },
+              "topLine": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "strokeDasharray": null
+              },
+              "bottomLine": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "zIndex": 17,
+            "id": "047754a0-e0bf-4e52-8251-507a38b03ab2",
+            "data": {
+              "type": "tm.Store",
+              "name": "Logging System",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isALog": true,
+              "isEncrypted": true,
+              "isSigned": false,
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": [
+                {
+                  "id": "402e2261-78b4-4036-ae03-0ebadb64ac5d",
+                  "title": "Attacker successfully gathers credentials User with write privilege",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Repudiation",
+                  "description": "Attacker successfully gains control of the User with write privilege, now being able to alter the logging or even deleting it.",
+                  "mitigation": "Create strong password policy for this particular user.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 40,
+                  "score": ""
+                }
+              ]
             }
           }
         ],
@@ -1362,7 +1539,7 @@
     ],
     "diagramTop": 0,
     "reviewer": "DESOFS 3",
-    "threatTop": 35
+    "threatTop": 40
   },
   "version": "2.0"
 }

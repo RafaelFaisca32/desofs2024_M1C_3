@@ -17,7 +17,10 @@
 | 11 | Database Server Administrator | The database server administrator has read and write permissions and can configure the the database |
 | 12 | FileSystem Administrator | The file system administrator has read and write permissions and can configure the filesystem server |
 | 13 | FileSystem Read User | The file system user used to access the filesystem with read permissions |
-| 14 | FileSystem Read/Wrote User | The file system user/write used to access the filesystem with read and write permissions |
+| 14 | FileSystem Read/Write User | The file system user/write used to access the filesystem with read and write permissions |
+| 15 | Logging System Read User | The logging system user account used to access loggings for read access. |
+| 16 | Logging System Read/Write User | The logging system user account used to access loggings for read and write access. |
+| 17 | Logging System Administrator | The logging system server administrator has read and write permissions and can configure the the server |
 
 ## Entry Points
 
@@ -62,7 +65,9 @@
 |2.3|Availability to Execute SQL as Database Read User | This is the ability to execute SQL select queries on the database, and thus retrieve any information stored within the Truck Motion Database |9, 10, 11 |
 |2.3|Availability to Execute SQL as Database Read/Write User | This is the ability to execute SQL select, insert and update queries on the database, and thus have read and write access to any information stored within the TruckMotion database | 10, 11 |
 |2.4|Availabiliy to Read Files in FileSystem | This is the ability to read files in the filesystem and thus have read access to files stored inside this server | 12, 13, 14 |
-|2.5 | Availability to Read and Write Files in FileSystem | This is the ability to read and write files in the filesystem and this have read and write access to any information stored inside the filesystem | 12, 14 |
+|2.5 | Availability to Read and Write Files in FileSystem | This is the ability to read and write files in the filesystem and thus have read and write access to any information stored inside the filesystem | 12, 14 |
+|2.6| Availability to Read logging in the logging system | This is the ability to read loggings in the logging system and thus have read access to this system | 15, 16, 17|
+|2.7| Availabilit to Read and Write Loggings | This is the ability to read and write loggins in the logging system and this have read and write access to this system | 16, 17|
 | **3** | **Application** | **Assets relating to the Application of TruckMotion** | |
 | 3.1| Login Session | This is the login session of a user of the TruckMotion application, this User could be a Driver, Customer or Manager | 2,3,4 |
 | 3.2 | Access to the Database Server | Access to the database server allows you to administer the database, giving you full access to the database users and all data contained within the database. | 11 |
@@ -287,3 +292,42 @@ It will be used STRIDE Model to identify the threats. It classifies threats in s
 | Information Disclosure | Threat action intending to read a file that one was not granted access to, or to read data in transit. | <ul><li>Authorization</li><li>Encryption</li><li>Protect secrets</li><li>Don’t store secrets</li><li>SMS Verification Code</li><li>Robust authentication and authorization verification process</li></ul> |
 | Denial of Service | Threat action attempting to deny access to valid users, such as by making a web server temporarily unavailable or unusable. | <ul><li>Appropriate authentication</li><li>Appropriate authorization</li><li>Quality of service</li><li>Traffic Filtering</li><li>Rate Limiting</li></ul> |
 | Elevation of privilege | Threat action intending to gain privileged access to resources in order to gain unauthorized access to information or to compromise a system. | <ul><li>Implement Least Privilege</li><li>Logging</li><li>Robust authentication and authorization verification process</li></ul> |
+
+### Data Flow Diagram
+
+The data flow diagram with STRIDE associated is accessible in this [PDF](./threatmodel.pdf).
+
+#### Description DFD
+
+Our application has 2 actors:
+    - External Geographical API
+      - This is an external API that will be used for the coordinates managment and live tracker for the user.
+      - This actor is out of scope because it will not be managed by our application. It is not our priority to secure because is external.
+    - Browser
+      - The user will use the browser to interact with our application.
+
+It has 2 Processes:
+    - Frontend Application
+      - This process contains all the interactions needed with the frontend application. It will have the renderization of the UI and it will send REST Requests and receive REST Responses to another process - Backend Application.
+      - It reads the frontend application configuration.
+    - Backend Application
+      - This process, a backend API, is responsible to handle requests from the frontend process, handle them as needed and answer them with responses. It will gather data from the file system and from the database to answer the requests. It also writes logging into the logging system for every action made.
+      - This process will contain all the business logic, so, it will be logged all the actions performed by the users.
+
+And finally, 5 Stores:
+    - Frontend Application Config
+      - This store will store the configuration for the frontend process, it will only be read by it.
+      - It is out of scope but it has to be secure because it can contain secrets.
+    - Backend Application Config
+      - This store will store the configuration for the backend process, it will only be read by it.
+      - It is out of scope but it has to be secure because it can contain secrets.
+    - File System
+      - This store represents the file system and it contains files.
+      - The backend process can upload files to it and download files from it.
+    - Database
+      - This store contains all the data that the applications asks to persist.
+      - The backend application will ask for the data in form of queries and the database will respond with the results.
+    - Logging System
+      - This store contains all the logging of the backend application. It is only accesse by the backend process and it does not send any data to any process.
+
+To see in detail the STRIDE Model Threat for each one of these components, you can read them in the [PDF](./threatmodel.pdf), including descriptions and mitigations.
