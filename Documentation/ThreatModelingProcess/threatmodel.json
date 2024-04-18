@@ -1231,7 +1231,7 @@
                   "severity": "High",
                   "type": "Tampering",
                   "description": "By letting the application have a file upload system, the files need to be stored somewhere, in a physical system. This allows malicious users to upload files that are bad to tamper the server.",
-                  "mitigation": "Add security processes such as define the maximum upload file or even only accept a certain type of extension.",
+                  "mitigation": "Add security processes such as define the maximum upload file or even only accept a certain type of extension.\nUse octet stream download.\nImplement a suitable Content Security Policy (CPS) to reduce the risk from XSS vectors.",
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 2,
