@@ -299,35 +299,35 @@ The data flow diagram with STRIDE associated is accessible in this [PDF](./threa
 
 #### Description DFD
 
-Our application has 2 actors:
-    - External Geographical API
-      - This is an external API that will be used for the coordinates managment and live tracker for the user.
-      - This actor is out of scope because it will not be managed by our application. It is not our priority to secure because is external.
-    - Browser
-      - The user will use the browser to interact with our application.
+Our application has two actors:
+- External Geographical API
+   - This is an external API that will be used for the coordinates management and live tracker for the user.
+   - This actor is out of scope because it will not be managed by our application. It is not our priority to secure because is external.
+- Browser
+   - The user will use the browser to interact with our application.
 
-It has 2 Processes:
-    - Frontend Application
-      - This process contains all the interactions needed with the frontend application. It will have the renderization of the UI and it will send REST Requests and receive REST Responses to another process - Backend Application.
-      - It reads the frontend application configuration.
-    - Backend Application
-      - This process, a backend API, is responsible to handle requests from the frontend process, handle them as needed and answer them with responses. It will gather data from the file system and from the database to answer the requests. It also writes logging into the logging system for every action made.
-      - This process will contain all the business logic, so, it will be logged all the actions performed by the users.
+It has two Processes:
+- Frontend Application
+   - This process contains all the interactions needed with the frontend application. It will have the renderization of the UI and it will send REST Requests and receive REST Responses from another process, the Backend Application.
+   - It reads the frontend application configuration.
+- Backend Application
+   - This process is responsible to handle requests from the frontend process, handle them as needed and answer them with responses. It will gather data from the file system and from the database to answer the requests. It also writes logging into the logging system for every action made.
+   - This process will contain all the business logic. So, it will log all the actions performed by the users.
 
-And finally, 5 Stores:
-    - Frontend Application Config
-      - This store will store the configuration for the frontend process, it will only be read by it.
-      - It is out of scope but it has to be secure because it can contain secrets.
-    - Backend Application Config
-      - This store will store the configuration for the backend process, it will only be read by it.
-      - It is out of scope but it has to be secure because it can contain secrets.
-    - File System
-      - This store represents the file system and it contains files.
-      - The backend process can upload files to it and download files from it.
-    - Database
-      - This store contains all the data that the applications asks to persist.
-      - The backend application will ask for the data in form of queries and the database will respond with the results.
-    - Logging System
-      - This store contains all the logging of the backend application. It is only accesse by the backend process and it does not send any data to any process.
+And finally, it has five Stores:
+- Frontend Application Config
+   - This store will store the configuration for the frontend process. It will only be read by this process.
+   - It is out of scope but it has to be secure because it can contain secrets.
+- Backend Application Config
+   - This store will store the configuration for the backend process. It will only be read by this process.
+   - It is out of scope but it has to be secure because it can contain secrets.
+- File System
+   - This store represents the file system and it contains files.
+   - The backend process can upload files into it and download them from it.
+- Database
+   - This store contains all the data that the applications asks to persist.
+   - The backend application will ask for the data in form of queries and the database will respond with the results.
+- Logging System
+   - This store contains all the logging of the backend application. It is only accessed by the backend process and it does not send any data to any process.
 
 To see in detail the STRIDE Model Threat for each one of these components, you can read them in the [PDF](./threatmodel.pdf), including descriptions and mitigations.
