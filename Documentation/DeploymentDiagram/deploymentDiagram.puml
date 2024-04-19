@@ -21,10 +21,15 @@ node "DB Server" as db {
 }
 node "Geographical API" as gm
 
+node "Logging System Server" as lss {
+    artifact "Logging System" as ls
+}
+
 fServer -- backend : "FTP"
 fs -- user : "HTTPs"
 fs -- gm : "HTTPs"
 backend -- fs : "HTTPs"
 db -- backend : "TCP/IP"
+lss -- backend : "HTTPs"
 
 @enduml

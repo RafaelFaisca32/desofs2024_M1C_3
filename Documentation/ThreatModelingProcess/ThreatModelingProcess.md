@@ -34,10 +34,13 @@
 | 1.5  | Customer Adds Locations to his Account              | This page allows user to add Locations to his Account.                                                                                                   | 4 |
 | 1.6  | Customer sees the progress of his Requested Service | This page shows the progress of the User's requested services.                                                                                           | 3, 4 |
 | 1.7  | Customer request a delivery service.                | This page allows the user to do a delivery request.                                                                                                      | 4 |
-| 1.8  | Manager approves or rejects a service request.      | This page allows the user to approve or reject a service request.                                                                                        | 3 |
-| 1.9  | Manager dispatch services to drivers.               | This page allows the user to dispatch one or more services to a certain driver.                                                                          | 3 |
-| 1.10 | Manager register drivers.                           | This page allows the user to register drivers.                                                                                                           | 3 |
-| 1.11 | Manager register Customers.                         | This page allows the user to register customers.                                                                                                         | 3 |
+| 1.8 | Driver signals the start and end of a delivery      | This page allows the user to signal the start or end of a delivery |3, 5|
+| 1.9 | Driver sends a photo or a screenshot to confirm delivery is done | This page allows the user to upload a photo to confirm delivery completion | 3, 5 |
+| 1.10  | Manager approves or rejects a service request.      | This page allows the user to approve or reject a service request.                                                                                        | 3 |
+| 1.11  | Manager dispatch services to drivers.               | This page allows the user to dispatch one or more services to a certain driver.                                                                          | 3 |
+| 1.12 | Manager register drivers.                           | This page allows the user to register drivers.                                                                                                           | 3 |
+| 1.13 | Manager register Customers.                         | This page allows the user to register customers.                                                                                                         | 3 |
+
 
 ## External Dependencies
 

@@ -1,0 +1,76 @@
+@startuml ddd
+
+left to right direction
+object "Truck" as truck{
+    id : guid <<generated>>
+    make: String
+    model: String
+}
+object "Driver" as driver{
+    id : guid <<generated>>
+}
+object "Manager" as manager{
+    id : guid <<generated>>
+}
+object "Service" as service{
+    id : guid <<generated>>
+    items : String
+    serviceName : String
+    totalWeightOfItems : float
+    price : float
+    date : DateTime
+}
+object "Customer" as client{
+    id : guid <<generated>>
+    company : String
+}
+object "Transport" as transport{
+    id : guid <<generated>>
+    startTime : DateTime
+    endTime : DateTime
+}
+object "Location" as location{
+    id : guid <<generated>>
+    coordX : float 
+    coordY : float
+    coordZ : float
+}
+object "ServiceStatus" as serviceStatus{
+    id : guid <<generated>>
+    date: DateTime
+    observations: String
+}
+object "User" as user {
+    id: guid <<generated>>
+    name: String
+    birthDate: Date
+}
+object "Status" as status {
+    ACTIVE
+    FINISHED
+    CANCELED
+    PENDING
+}
+object "Gender" as gender {
+    MALE, FEMALE, OTHER
+}
+
+truck "1" --> "1..*" driver : "is driven"
+driver "*" --> "1..*" manager : "gets assigned by"
+driver "1" <- "1..*" transport : "has a"
+gender <. user
+
+transport "1" --> "1" location : "has"
+service "1" --> "1" location : "has"
+client "1" -> "1..*" service : "        registers"
+client "1" -> "1..*" location : "has"
+transport "1" --> "1..*" service  : "executes           "
+status <. serviceStatus
+serviceStatus "1..*" <-- "1" service
+
+
+user "1" <-- "1" client : is a
+user "1" <-- "1" driver : is a
+user "1" <-- "1" manager : is a
+
+@enduml
