@@ -256,27 +256,18 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 #### Unauthorized Access to Dispatch System
 
 - **Description:** An attacker gains unauthorized access to the dispatch system and dispatches fake or malicious services to drivers.
-- **CVSS Risk Rating:** 7.5 (High)
+- **CVSS Risk Rating:** 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
 - **Justification:** Unauthorized access can lead to the dispatch of fake services, causing confusion and potentially leading to wasted resources.
 - **Countermeasures:**
     - Implement strict access controls with multi-factor authentication.
     - Regularly monitor access logs for suspicious activity.
     - Conduct security training to educate employees on the risks of unauthorized access.
 
-#### Service Tampering
-
-- **Description:** An attacker intercepts the service dispatch requests and modifies them to redirect drivers to unintended destinations or tasks.
-- **CVSS Risk Rating:** 8.0 (High)
-- **Justification:** Tampered services can lead to misallocation of resources, delays, or potential security breaches.
-- **Countermeasures:**
-    - Implement end-to-end encryption for dispatch requests.
-    - Use digital signatures to verify the integrity of dispatch messages.
-    - Conduct regular audits of dispatched services for anomalies.
 
 #### Denial of Service (DoS)
 
 - **Description:** An attacker floods the dispatch system with bogus service requests, overwhelming it and preventing legitimate services from being dispatched.
-- **CVSS Risk Rating:** 7.5 (High)
+- **CVSS Risk Rating:** 8.7 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:H/A:H
 - **Justification:** DoS attacks can disrupt operations and prevent critical services from being dispatched.
 - **Countermeasures:**
     - Implement rate limiting and traffic filtering to mitigate DoS attacks.
@@ -286,7 +277,7 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 #### Impersonation
 
 - **Description:** An attacker impersonates a manager or dispatcher to dispatch services, potentially causing confusion or miscommunication among drivers.
-- **CVSS Risk Rating:** 7.0 (High)
+- **CVSS Risk Rating:** 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
 - **Justification:** Impersonation can lead to unauthorized dispatches and miscommunication among drivers.
 - **Countermeasures:**
     - Implement strong authentication mechanisms for dispatchers.
@@ -295,8 +286,8 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 
 #### Location Spoofing
 
-- **Description:** An attacker spoofs the location data of drivers, making it seem like they are in a different location than they actually are. This could lead to misallocation of resources or fraudulent activity.
-- **CVSS Risk Rating:** 8.0 (High)
+- **Description:** An attacker spoofs the location data of services to drivers, making it seem like they are in a different location than they actually are. This could lead to misallocation of resources or fraudulent activity.
+- **CVSS Risk Rating:** 6.2 (Medium) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:L/I:H/A:N
 - **Justification:** Spoofed location data can result in incorrect resource allocation or fraudulent activities.
 - **Countermeasures:**
     - Use secure geolocation services with validation checks.
@@ -306,7 +297,7 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 #### Unauthorized Service Modification
 
 - **Description:** An attacker intercepts service dispatch messages and modifies them to change service details, such as pickup/delivery locations or cargo information, leading to confusion or potential theft.
-- **CVSS Risk Rating:** 8.5 (High)
+- **CVSS Risk Rating:** 8.2 (High) CVSS:3.0/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:N
 - **Justification:** Modified service details can lead to confusion, delays, or potential theft of goods.
 - **Countermeasures:**
     - Implement end-to-end encryption for dispatch messages.
@@ -316,7 +307,7 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 #### Insider Threat
 
 - **Description:** A disgruntled employee with access to the dispatch system intentionally disrupts operations by canceling valid services or sending drivers on unnecessary routes.
-- **CVSS Risk Rating:** 7.0 (High)
+- **CVSS Risk Rating:** 8.1 (High) CVSS:3.0/AV:N/AC:L/PR:H/UI:R/S:C/C:H/I:H/A:N
 - **Justification:** Insider threats can lead to operational disruptions and financial losses.
 - **Countermeasures:**
     - Implement least privilege access controls.
@@ -326,7 +317,7 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 #### Man-in-the-Middle (MitM) Attack
 
 - **Description:** An attacker intercepts communication between the manager and drivers, potentially gaining access to sensitive information or altering instructions.
-- **CVSS Risk Rating:** 8.0 (High)
+- **CVSS Risk Rating:** 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
 - **Justification:** MitM attacks can lead to unauthorized access to sensitive information or alteration of critical instructions.
 - **Countermeasures:**
     - Implement encryption protocols like TLS/SSL for communication.
@@ -340,7 +331,7 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 #### Fake Driver Registration
 
 - **Description:** An attacker registers fake drivers in the application, possibly using stolen identities, to gain access to the system.
-- **CVSS Risk Rating:** 8.0 (High)
+- **CVSS Risk Rating:** 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
 - **Justification:** Fake driver registrations can lead to unauthorized access and misuse of the system.
 - **Countermeasures:**
     - Implement identity verification checks for driver registration.
@@ -350,7 +341,7 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 #### SQL Injection
 
 - **Description:** An attacker injects malicious SQL queries into the registration form, gaining unauthorized access to the database or causing data loss.
-- **CVSS Risk Rating:** 9.0 (Critical)
+- **CVSS Risk Rating:** 7.7 (Critical) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
 - **Justification:** SQL injection can lead to unauthorized access to sensitive data and compromise the integrity of the system.
 - **Countermeasures:**
     - Implement input validation and parameterized queries to prevent SQL injection.
@@ -360,7 +351,7 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 #### Unauthorized Access to Driver Information
 
 - **Description:** A malicious insider or hacker gains access to sensitive driver information stored in the system, such as personal details or driving history.
-- **CVSS Risk Rating:** 8.5 (High)
+- **CVSS Risk Rating:** 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
 - **Justification:** Unauthorized access to driver information can lead to privacy violations and misuse of personal data.
 - **Countermeasures:**
     - Implement strict access controls and least privilege principles.
@@ -370,7 +361,7 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 #### Denial of Service (DoS)
 
 - **Description:** An attacker floods the registration system with automated requests, overwhelming it and preventing legitimate drivers from registering.
-- **CVSS Risk Rating:** 7.0 (High)
+- **CVSS Risk Rating:** 9.0 (Critical) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H
 - **Justification:** DoS attacks can disrupt the registration process, preventing legitimate drivers from accessing the system.
 - **Countermeasures:**
     - Implement rate limiting and captcha mechanisms to mitigate DoS attacks.
@@ -380,19 +371,17 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 #### Credential Stuffing
 
 - **Description:** An attacker uses automated scripts to try known username and password combinations (obtained from previous data breaches) to gain unauthorized access to driver accounts.
-- **CVSS Risk Rating:** 8.0 (High)
+- **CVSS Risk Rating:** 6.1 (Medium) CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N
 - **Justification:** Credential stuffing exploits weak passwords and can lead to unauthorized access to driver accounts.
 - **Countermeasures:**
-    - Enforce strong password policies for
-
-driver accounts.
+    - Enforce strong password policies for driver accounts.
 - Implement multi-factor authentication to mitigate credential stuffing.
 - Educate drivers on creating and using strong, unique passwords.
 
 #### Insecure Authentication
 
 - **Description:** Weak authentication mechanisms allow an attacker to easily bypass the login process and gain access to driver accounts.
-- **CVSS Risk Rating:** 7.5 (High)
+- **CVSS Risk Rating:** 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:N
 - **Justification:** Insecure authentication can lead to unauthorized access and compromise the security of driver accounts.
 - **Countermeasures:**
     - Implement strong authentication protocols such as OAuth 2.0 or OpenID Connect.
@@ -402,7 +391,7 @@ driver accounts.
 #### Data Breach
 
 - **Description:** Hackers gain access to the database storing driver information, compromising sensitive data such as driver licenses, insurance details, or personal addresses.
-- **CVSS Risk Rating:** 9.0 (Critical)
+- **CVSS Risk Rating:** 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
 - **Justification:** Data breaches can lead to severe privacy violations and financial losses for both drivers and the organization.
 - **Countermeasures:**
     - Encrypt sensitive data at rest and in transit.
@@ -412,7 +401,7 @@ driver accounts.
 #### Account Takeover
 
 - **Description:** An attacker gains access to a legitimate driver's account by stealing their credentials through phishing or other means, and then misuses this access for malicious purposes.
-- **CVSS Risk Rating:** 8.5 (High)
+- **CVSS Risk Rating:** 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:N
 - **Justification:** Account takeovers can lead to fraudulent activities and misuse of driver accounts.
 - **Countermeasures:**
     - Educate drivers on phishing awareness and safe account practices.
@@ -426,7 +415,7 @@ driver accounts.
 #### Fake Customer Registration
 
 - **Description:** An attacker registers fake customers in the application to place fraudulent service requests or obtain sensitive information.
-- **CVSS Risk Rating:** 8.0 (High)
+- **CVSS Risk Rating:** 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
 - **Justification:** Fake customer registrations can lead to fraudulent transactions and misuse of the system.
 - **Countermeasures:**
     - Implement identity verification checks for customer registration.
@@ -436,7 +425,7 @@ driver accounts.
 #### Privacy Violation
 
 - **Description:** A rogue employee or unauthorized user accesses and misuses customer data for personal gain or malicious purposes.
-- **CVSS Risk Rating:** 8.5 (High)
+- **CVSS Risk Rating:** 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
 - **Justification:** Privacy violations can lead to legal repercussions and loss of trust from customers.
 - **Countermeasures:**
     - Implement strict access controls and data encryption for customer data.
@@ -446,57 +435,28 @@ driver accounts.
 #### Data Manipulation
 
 - **Description:** An attacker alters customer details in the system, such as contact information or billing details, leading to confusion or financial loss.
-- **CVSS Risk Rating:** 7.5 (High)
+- **CVSS Risk Rating:** 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
 - **Justification:** Altered customer details can lead to service disruptions and financial harm.
 - **Countermeasures:**
     - Implement data integrity checks and validation rules.
     - Encrypt sensitive customer information to prevent tampering.
     - Provide customers with the ability to review and verify their information.
 
-#### Phishing Attacks
-
-- **Description:** An attacker uses the registered customer information to launch targeted phishing attacks, tricking customers into revealing sensitive information.
-- **CVSS Risk Rating:** 8.0 (High)
-- **Justification:** Phishing attacks can lead to data breaches and financial losses for customers.
-- **Countermeasures:**
-    - Educate customers on phishing awareness and safe online practices.
-    - Implement email validation checks and SPF/DKIM/DMARC for email security.
-    - Provide a mechanism for reporting suspicious emails or activities.
-
-#### Payment Fraud
-
-- **Description:** An attacker registers fake customers to make fraudulent payment transactions within the application, potentially leading to financial losses.
-- **CVSS Risk Rating:** 8.5 (High)
-- **Justification:** Payment fraud can result in financial losses and damage to the organization's reputation.
-- **Countermeasures:**
-    - Implement secure payment gateways with fraud detection.
-    - Conduct regular audits of payment transactions for anomalies.
-    - Educate customers on verifying payment details and using secure payment methods.
-
-#### Unauthorized Access to Billing Information
-
-- **Description:** A hacker gains access to the billing information of registered customers, such as credit card details, by exploiting vulnerabilities in the application.
-- **CVSS Risk Rating:** 9.0 (Critical)
-- **Justification:** Unauthorized access to billing information can lead to severe financial losses and legal consequences.
-- **Countermeasures:**
-    - Encrypt sensitive billing information and use secure tokenization.
-    - Implement strict access controls and least privilege principles.
-    - Conduct regular penetration testing and security audits.
 
 #### Account Hijacking
 
 - **Description:** An attacker takes over a legitimate customer account, changes their contact information, and places orders under their name, leading to confusion and potential financial harm.
-- **CVSS Risk Rating:** 8.0 (High)
+- **CVSS Risk Rating:** 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
 - **Justification:** Account hijacking can result in fraudulent transactions and damage to the customer's reputation.
 - **Countermeasures:**
     - Implement multi-factor authentication for customer accounts.
     - Notify customers of any changes to their account information.
     - Provide a mechanism for customers to report suspicious account activities.
 
-#### API Abuse
+#### API Abuse (DOS)
 
 - **Description:** If the application has APIs for customer registration, an attacker could abuse these APIs to register fake customers in bulk, overwhelming the system and causing disruption.
-- **CVSS Risk Rating:** 7.5 (High)
+- **CVSS Risk Rating:** 9.0 (Critical) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H
 - **Justification:** API abuse can lead to system overload and service disruption.
 - **Countermeasures:**
     - Implement API rate limiting and authentication.
