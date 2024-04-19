@@ -5,7 +5,7 @@
 ### Description:
 Attackers could manipulate the location data provided during the registration process to redirect deliveries to a different address, potentially their own. This could result in theft or tampering of packages.
 
-### CVSS Risk Rating: 8.5 (High) 
+### CVSS Risk Rating: 7.3 (High)  CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
 
 ### Justification: 
 Location spoofing can redirect deliveries to unauthorized addresses, leading to theft or tampering of packages.
@@ -16,7 +16,7 @@ Implement geolocation validation during registration to detect anomalies, use se
 ### Description:
 During the registration process, if the communication channel between the customer and the delivery service provider is compromised, attackers could intercept the registration data, modify it, and redirect deliveries to an unauthorized location.
 
-### CVSS Risk Rating: 8.0 (High)
+### CVSS Risk Rating: 8.7 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N
 ### Justification: 
 MitM attacks during registration can intercept and modify registration data, leading to unauthorized redirection of deliveries.
 ### Countermeasures: 
@@ -27,7 +27,7 @@ Implement HTTPS and certificate pinning to secure communication channels, regula
 ### Description : 
 Attackers may inject malicious scripts into the delivery service registration page, potentially compromising the security of other users' data or redirecting deliveries to unintended locations.
 
-### CVSS Risk Rating: 7.5 (High)
+### CVSS Risk Rating: 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
 
 ### Justification: 
 XSS attacks can compromise the security of delivery service registration pages, potentially redirecting deliveries or compromising user data.
@@ -39,7 +39,7 @@ Implement input sanitization to prevent XSS vulnerabilities, employ web applicat
 ### Description
 Attackers may flood the delivery service provider's registration system with a high volume of fake registration requests, causing service disruption or preventing legitimate customers from registering delivery services.
 
-### CVSS Risk Rating: 7.0 (High)
+### CVSS Risk Rating: 5.9 (Medium)CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H
 ### Justification: 
 DoS attacks can disrupt delivery service registration systems, preventing legitimate customers from registering or modifying delivery services.
 ### Countermeasures: 
@@ -48,7 +48,7 @@ Implement rate limiting and traffic filtering to mitigate DoS attacks, use scala
 ## Unauthorized Access to Delivery Records: 
 Attackers may attempt to gain unauthorized access to the delivery service provider's database or systems to retrieve sensitive information about past deliveries, including customer addresses and delivery contents, for malicious purposes such as identity theft or targeted theft of valuable goods.
 
-### CVSS Risk Rating: 8.5 (High)
+### CVSS Risk Rating: 8.7 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N
 
 ### Justification: 
 Unauthorized access to delivery records can lead to identity theft or targeted theft of valuable goods by revealing sensitive information about past deliveries.
@@ -74,7 +74,7 @@ If any information about Customer's locations are changed, a notification is sen
 ### Description:
 As an attacker, I insert malicious sentences causing Injection or SQL queries into input areas, potentially leading to data breaches or system compromise.
 
-### CVSS Risk Rating: 9.0 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H
+### CVSS Risk Rating: 9.0 (Critical) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H
 
 ### Justification: 
 Injection can result in many things, such as manipulation or visualization of anything in the Database by SQL Injection. It can make the application execute unintended commands compromising the entire system.
@@ -86,7 +86,7 @@ It must be done validations to any input done by Users to check if it is a valid
 ### Description
 As an attacker, I use automated scripts to create many locations to multiple customer accounts simultaneously, potentially overloading the system or causing performance issues.
 
-### CVSS Risk Rating: 6.8 (Medium) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:N/A:H
+### CVSS Risk Rating: 5.9 (Medium)CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H
 
 ### Justification:
 Making the system unavailable will cause contraints to the Customers that might be expecting deliveries and won't get them because Driver will not have access to the destiny. Also, won't be able to ask for more Delivers.
@@ -136,7 +136,7 @@ Notify the customer whenever his live locations deliveries are asked. Restrict l
 ### Justification:
 As an attacker, I flood the system with a high volume of requests for live location updates, overwhelming the system's resources and causing it to become unavailable for legitimate customers who wants to track their services' progress.
 
-### CVSS Risk Rating: 6.3 (Medium) CVSS:3.0/AV:N/AC:H/PR:L/UI:N/S:C/C:N/I:N/A:H
+### CVSS Risk Rating: 5.9 (Medium)CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H
 
 ### Justification:
 Making the system unavailable will cause contraints to the Customers because they won't be able to see how much time their deliveries will take.
@@ -196,7 +196,7 @@ Implementing geofencing technology can help enforce delivery boundaries, ensurin
 ### Description: 
 An attacker gains access to the approval system and forges approvals for jobs that were not actually reviewed by the manager. This could result in unauthorized services being provided or resources being allocated improperly.
 
-### CVSS Risk Rating: 8.0 (High)
+### CVSS Risk Rating: 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
 
 ### Justification: 
 Forged approvals can result in unauthorized services being provided or resources being allocated improperly.
@@ -208,7 +208,7 @@ Implement approval workflows with multiple layers of verification, provide train
 ### Description:
 Attackers flood the approval system with a high volume of fake job approval requests, causing service disruption or preventing legitimate job approvals from being processed.
 
-### CVSS Risk Rating: 7.0 (High)
+### CVSS Risk Rating: 5.9 (Medium)CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H
 
 ### Justification: 
 DoS attacks can disrupt the job approval system, preventing legitimate approvals from being processed.
@@ -220,7 +220,7 @@ Implement rate limiting and traffic filtering to mitigate DoS attacks, use redun
 ### Description: 
 Malware infects the manager's device, allowing attackers to manipulate job approvals or steal sensitive information related to job details or clients.
 
-### CVSS Risk Rating: 8.0 (High)
+### CVSS Risk Rating: 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
 
 ### Justification: 
 Malware infections can compromise the manager's device, allowing attackers to manipulate job approvals or steal sensitive information.
@@ -232,7 +232,7 @@ Implement endpoint security solutions, conduct regular malware scans and updates
 ### Description: 
 Attackers intercept communication between the manager and the approval system, allowing them to manipulate job approval requests or intercept sensitive information.
 
-### CVSS Risk Rating: 8.0 (High)
+### CVSS Risk Rating: 8.7 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N
 ### Justification: 
 MitM attacks can intercept and manipulate job approval requests, leading to unauthorized changes in service delivery.
 ### Countermeasures: 
@@ -243,7 +243,7 @@ Implement encryption protocols like TLS/SSL to secure communication channels, us
 ### Description: 
 Attackers exploit vulnerabilities in the approval system's database to manipulate job approval records or gain unauthorized access to sensitive information.
 
-### CVSS Risk Rating: 8.5 (High)
+### CVSS Risk Rating: 9.0 (Critical) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H
 ### Justification: 
 SQL injection attacks can manipulate job approval records or gain unauthorized access to sensitive information.
 ### Countermeasures: 
@@ -259,7 +259,7 @@ Implement input validation and parameterized queries to prevent SQL injection, c
 An attacker attempts to gain unauthorized access to user accounts by repeatedly guessing usernames and passwords.
 This could be done manually or using automated scripts or tools to systematically try different combinations until a valid login is found.
 
-### CVSS Risk Rating: 7.5 (High)
+### CVSS Risk Rating: 7.5 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:L/A:N
 ### Justification: 
 Brute force attacks can lead to unauthorized access to user accounts, potentially compromising sensitive information.
 ### Countermeasures: 
@@ -271,7 +271,8 @@ Implement account lockout mechanisms after a certain number of failed login atte
 Attackers use previously leaked username/password pairs from other breaches and attempt to log in with those credentials on your application.
 Since users often reuse passwords across multiple services, this can lead to successful unauthorized access.
 
-### CVSS Risk Rating: 8.0 (High)
+### CVSS Risk Rating: 6.9 (Medium) CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:L/A:N
+
 ### Justification: 
 Credential stuffing exploits users' tendencies to reuse passwords across multiple services, potentially granting unauthorized access to accounts.
 ### Countermeasures: 
@@ -283,7 +284,7 @@ Encourage users to use unique passwords for each service, implement multi-factor
 Attackers send deceptive emails or messages pretending to be from the application, tricking users into providing their login credentials on a fake login page.
 Once the user submits their credentials, the attacker can use them to access the legitimate application.
 
-### CVSS Risk Rating: 9.0 (Critical)
+### CVSS Risk Rating: 8.6 (High) CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N
 
 ### Justification: 
 Phishing attacks can deceive users into providing their login credentials, compromising their accounts and potentially leading to further exploitation.
@@ -296,7 +297,7 @@ Educate users about identifying phishing attempts, implement email filtering to 
 Attackers intercept or steal a valid session token or cookie after a user successfully logs in.
 With the stolen session token, the attacker can then impersonate the logged-in user without needing to know their credentials.
 
-### CVSS Risk Rating: 8.5 (High)
+### CVSS Risk Rating: 8.5 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N
 
 
 ### Justification: 
@@ -310,7 +311,7 @@ Implement secure session management techniques such as using HTTPS, using secure
 Attackers intercept communication between the user and the application during the login process.
 They can eavesdrop on the login credentials being transmitted, potentially capturing sensitive information like usernames and passwords.
 
-### CVSS Risk Rating: 8.0 (High)
+### CVSS Risk Rating: 8.7 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N
 
 ### Justification: 
 MitM attacks during login can intercept sensitive information like usernames and passwords, leading to unauthorized access to accounts.
@@ -324,7 +325,7 @@ Use encryption protocols like TLS/SSL to secure communication channels, implemen
 If the application displays database content retrieved via SQL injection in user-accessible pages without proper sanitization, it can lead to XSS vulnerabilities.
 Attackers can inject malicious scripts into the database, which are then executed in the context of other users' sessions when the data is displayed in the application.
 
-### CVSS Risk Rating: 9.0 (Critical)
+### CVSS Risk Rating: 9.0 (Critical) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H
 
 ### Justification: 
 XSS via SQL injection can lead to the execution of malicious scripts in the context of other users' sessions, compromising the security of the application and user data.
