@@ -15,7 +15,7 @@
 3. As an attacker, I manipulate sessions, access tokens, or other access controls in the application to act as a user without being logged in, so that I can get access to the information about the transport status.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
    2. Kind of Abuse: Technical;
-   3. Counter Measure: Make session and access tokens secrets and hardly unaccessible for outside users.
+   3. Counter Measure: Make session and access tokens secrets and hardly unaccessible for outside users. Always check users tokens for data, not only their role.
 
 4. As an attacker, I force browsing to transport status page without being authenticated, gaining access to privilege the information about the transport status.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
@@ -37,7 +37,7 @@
 3. As an attacker, I manipulate sessions, access tokens, or other access controls in the application to act as a user without being logged in, so that I can get access to the information about all the drivers transport jobs assigned.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
    2. Kind of Abuse: Technical;
-   3. Counter Measure: Make session and access tokens secrets and hardly unaccessible for outside users.
+   3. Counter Measure: Make session and access tokens secrets and hardly unaccessible for outside users. Always check users tokens for data, not only their role.
 
 4. As an attacker, I force browsing to transport status page without being authenticated, gaining access to privilege the information about the transport jobs assigned to the drivers.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;

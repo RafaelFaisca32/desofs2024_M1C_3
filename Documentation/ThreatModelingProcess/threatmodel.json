@@ -65,22 +65,24 @@
                 {
                   "status": "Mitigated",
                   "severity": "High",
-                  "description": "An attacker could make an query call on the DB,",
+                  "description": "An attacker could make an query call on the DB.",
                   "title": "Unauthorised access",
                   "type": "Information disclosure",
                   "mitigation": "Require all queries to be authenticated.",
                   "modelType": "STRIDE",
-                  "id": "21fc4b20-ca29-4891-9691-d8f0331b2a11"
+                  "id": "21fc4b20-ca29-4891-9691-d8f0331b2a11",
+                  "new": false
                 },
                 {
                   "status": "Open",
                   "severity": "Medium",
-                  "description": "An attacker could obtain the DB credentials ans use them to make unauthorised queries.",
+                  "description": "An attacker could obtain the DB credentials and use them to make unauthorised queries.",
                   "title": "Credential theft",
                   "type": "Information disclosure",
-                  "mitigation": "Use a firewall to restrict access to the DB to only the Background Worker IP address.",
+                  "mitigation": "Use a firewall to restrict access to the DB to only the Backend IP address.",
                   "modelType": "STRIDE",
-                  "id": "e12765bf-ec61-47d8-8e9f-6bb3f5adab47"
+                  "id": "e12765bf-ec61-47d8-8e9f-6bb3f5adab47",
+                  "new": false
                 }
               ],
               "hasOpenThreats": true,
@@ -93,8 +95,8 @@
           },
           {
             "position": {
-              "x": 140,
-              "y": 470
+              "x": 150,
+              "y": 500
             },
             "size": {
               "width": 160,
@@ -141,7 +143,7 @@
               "hasOpenThreats": true,
               "isALog": false,
               "storesCredentials": true,
-              "isEncrypted": false,
+              "isEncrypted": true,
               "isSigned": false,
               "storesInventory": null
             }
@@ -160,8 +162,8 @@
                 "text": "Backend\nApplication"
               },
               "body": {
-                "stroke": "#333333",
-                "strokeWidth": 1.5,
+                "stroke": "red",
+                "strokeWidth": 2.5,
                 "strokeDasharray": null
               }
             },
@@ -171,13 +173,92 @@
             "id": "0d9909ea-1398-4898-be81-cf1c808324dc",
             "data": {
               "name": "Backend\nApplication",
-              "description": "",
+              "description": "Process that contains all the interactions needed to the backend API application",
               "type": "tm.Process",
               "isTrustBoundary": false,
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "threats": [],
-              "hasOpenThreats": false,
+              "threats": [
+                {
+                  "id": "9b63b86c-9242-42a1-a255-cd9aa39b8d7b",
+                  "title": "Attacker sends too many requests",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Denial of service",
+                  "description": "An attacker send too many requests to API endpoint so that the service goes down.",
+                  "mitigation": "Add a strategy that blocks requests when the amount is high and the interval of time is low.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 32,
+                  "score": ""
+                },
+                {
+                  "id": "b1803af5-f94f-47d7-916e-bf34d15ee7a9",
+                  "title": "Attacker sends API Request via Tool to steal data",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Attacker sends a request using another tool (i.e.: postman) with the known endpoint to gather data.",
+                  "mitigation": "Add tokens or some type of authentication inside backend.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 33,
+                  "score": ""
+                },
+                {
+                  "id": "c9f36766-fde7-4b26-a23b-268af3e1ea3f",
+                  "title": "Attacker sends an API POST/Delete Request",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Attacker uses another tool instead of browser (i.e.: postman) to update or delete data inside the application.",
+                  "mitigation": "Add token/authentication inside the backend.\nDo not allow delete endpoints.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 35,
+                  "score": ""
+                },
+                {
+                  "id": "cf2a17f9-5cfa-478a-a69e-3b85e61cc90e",
+                  "title": "Attacker steals Authentication Token",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Spoofing",
+                  "description": "Attacker successfully steals or even generates a valid authentication token, with this, gaining access to data through API endpoints.",
+                  "mitigation": "Implement techniques to not use one static token, such as the refresh token.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 36,
+                  "score": ""
+                },
+                {
+                  "id": "e79ce516-93fa-4912-8691-4c9b8c2e5ae3",
+                  "title": "User pretends to be someone else changing Header Parameter",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Repudiation",
+                  "description": "The user, by manipulating the API Request changing the Header Parameter username, pretends to be someone else in the logging system and the actions taken are associated wrongly, making the logging invalid.",
+                  "mitigation": "Implement logging based on the token used to get the user in question and not the header user name parameter.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 37,
+                  "score": ""
+                },
+                {
+                  "id": "3cbef165-381b-4a7e-9cc6-c0151ecadaee",
+                  "title": "User by using their token successfully performs actions outside their authorization",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Elevation of privilege",
+                  "description": "A user, by sending an API Request to an End Point using their token, can successfully perform some action that is beyond their authorization.",
+                  "mitigation": "Implement authorization based on token and more inside the backend API.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 39,
+                  "score": ""
+                }
+              ],
+              "hasOpenThreats": true,
               "isWebApplication": null,
               "handlesCardPayment": null,
               "handlesGoodsOrServices": null
@@ -185,8 +266,8 @@
           },
           {
             "position": {
-              "x": 40,
-              "y": 29
+              "x": 22.5,
+              "y": 30
             },
             "size": {
               "width": 160,
@@ -197,8 +278,8 @@
                 "text": "Browser"
               },
               "body": {
-                "stroke": "#333333",
-                "strokeWidth": 1,
+                "stroke": "red",
+                "strokeWidth": 2.5,
                 "strokeDasharray": null
               }
             },
@@ -213,8 +294,22 @@
               "isTrustBoundary": false,
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "threats": [],
-              "hasOpenThreats": false,
+              "threats": [
+                {
+                  "id": "ac1a5a61-7f81-47f8-b88e-f1087b5d0f36",
+                  "title": "GPS Spoofing",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Spoofing",
+                  "description": "Users can use GPS Spoofing applications to fake the geographical location.",
+                  "mitigation": "Apply mechanisms to detect suspicious changes of location that can be associate with GPS Spoofing, for example, if a driver changes from a location to another distancing more than 1km faster than a second, it triggers a warning.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 16,
+                  "score": ""
+                }
+              ],
+              "hasOpenThreats": true,
               "providesAuthentication": false
             }
           },
@@ -575,6 +670,9 @@
               "threats": []
             },
             "id": "0142ccb7-8361-4fde-88ef-83a816baad9e",
+            "labels": [
+              "Read Backend \nApplication Config"
+            ],
             "source": {
               "cell": "bdd3e115-4b92-4020-90b7-c3351dba292b"
             },
@@ -594,9 +692,6 @@
                 "x": 320,
                 "y": 380
               }
-            ],
-            "labels": [
-              "Read Backend \nApplication Config"
             ]
           },
           {
@@ -631,15 +726,15 @@
               "threats": []
             },
             "id": "a5ab7d3b-a44f-4525-acf8-8ffdefe64d9b",
+            "labels": [
+              "REST Request"
+            ],
             "source": {
               "cell": "22eddb4b-7085-4ae6-8837-c052c09d18cd"
             },
             "target": {
               "cell": "0d9909ea-1398-4898-be81-cf1c808324dc"
             },
-            "labels": [
-              "REST Request"
-            ],
             "vertices": [
               {
                 "x": 220,
@@ -679,6 +774,9 @@
               "threats": []
             },
             "id": "1e24df99-5f4f-4510-afa4-bd8e32515c65",
+            "labels": [
+              "REST Response"
+            ],
             "source": {
               "cell": "0d9909ea-1398-4898-be81-cf1c808324dc"
             },
@@ -690,9 +788,6 @@
                 "x": 410,
                 "y": 180
               }
-            ],
-            "labels": [
-              "REST Response"
             ]
           },
           {
@@ -727,15 +822,15 @@
               "threats": []
             },
             "id": "d9a3d8b8-6945-42f8-8c90-a655bb960a06",
+            "labels": [
+              "Read Frontend \nApplication Config"
+            ],
             "source": {
               "cell": "6ec437d3-79c1-4d2c-a620-530caeab8134"
             },
             "target": {
               "cell": "22eddb4b-7085-4ae6-8837-c052c09d18cd"
-            },
-            "labels": [
-              "Read Frontend \nApplication Config"
-            ]
+            }
           },
           {
             "shape": "trust-boundary-curve",
@@ -787,102 +882,6 @@
                 "x": 770,
                 "y": 330
               }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "Response",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": []
-            },
-            "id": "03e87ce3-6047-439d-ba19-adaee47ff101",
-            "source": {
-              "cell": "e5e8b0a4-bdf9-471e-98b6-3469044cc04e"
-            },
-            "target": {
-              "cell": "22eddb4b-7085-4ae6-8837-c052c09d18cd"
-            },
-            "vertices": [
-              {
-                "x": 160,
-                "y": 340
-              }
-            ],
-            "labels": [
-              "Response"
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "Request",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": []
-            },
-            "id": "e3e0f476-4cfd-4c27-8279-06ce6446bab8",
-            "source": {
-              "cell": "22eddb4b-7085-4ae6-8837-c052c09d18cd"
-            },
-            "target": {
-              "cell": "e5e8b0a4-bdf9-471e-98b6-3469044cc04e"
-            },
-            "vertices": [
-              {
-                "x": 30,
-                "y": 270
-              }
-            ],
-            "labels": [
-              "Request"
             ]
           },
           {
@@ -1008,6 +1007,183 @@
             ]
           },
           {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Request",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "e3e0f476-4cfd-4c27-8279-06ce6446bab8",
+            "labels": [
+              "Request"
+            ],
+            "source": {
+              "cell": "22eddb4b-7085-4ae6-8837-c052c09d18cd"
+            },
+            "target": {
+              "cell": "eb411ce7-7fe3-4cfe-b674-f4bf697c2e6e"
+            },
+            "vertices": [
+              {
+                "x": 30,
+                "y": 270
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Response",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "03e87ce3-6047-439d-ba19-adaee47ff101",
+            "labels": [
+              "Response"
+            ],
+            "source": {
+              "cell": "eb411ce7-7fe3-4cfe-b674-f4bf697c2e6e"
+            },
+            "target": {
+              "cell": "22eddb4b-7085-4ae6-8837-c052c09d18cd"
+            },
+            "vertices": [
+              {
+                "x": 160,
+                "y": 340
+              }
+            ]
+          },
+          {
+            "shape": "trust-boundary-curve",
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            },
+            "id": "043cf9bd-a6b2-4727-b6c2-140a85976d55",
+            "source": {
+              "x": -150,
+              "y": 580
+            },
+            "target": {
+              "x": 60,
+              "y": 590
+            },
+            "vertices": [
+              {
+                "x": -90,
+                "y": 500
+              },
+              {
+                "x": 40,
+                "y": 500
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Logs",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "2fb770ba-6788-4436-9db1-a95c2180a9a2",
+            "labels": [
+              "Logs"
+            ],
+            "source": {
+              "cell": "0d9909ea-1398-4898-be81-cf1c808324dc"
+            },
+            "target": {
+              "cell": "047754a0-e0bf-4e52-8251-507a38b03ab2"
+            },
+            "vertices": [
+              {
+                "x": 140,
+                "y": 410
+              }
+            ]
+          },
+          {
             "position": {
               "x": 360,
               "y": 580
@@ -1018,7 +1194,7 @@
             },
             "attrs": {
               "text": {
-                "text": "File Storage"
+                "text": "File System"
               },
               "topLine": {
                 "stroke": "red",
@@ -1037,7 +1213,7 @@
             "id": "95f959ad-c996-4258-b1ed-fce33dfa5b69",
             "data": {
               "type": "tm.Store",
-              "name": "File Storage",
+              "name": "File System",
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
@@ -1055,10 +1231,23 @@
                   "severity": "High",
                   "type": "Tampering",
                   "description": "By letting the application have a file upload system, the files need to be stored somewhere, in a physical system. This allows malicious users to upload files that are bad to tamper the server.",
-                  "mitigation": "Provide remediation for this threat or a reason if status is N/A",
+                  "mitigation": "Add security processes such as define the maximum upload file or even only accept a certain type of extension.\nUse octet stream download.\nImplement a suitable Content Security Policy (CPS) to reduce the risk from XSS vectors.",
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 2,
+                  "score": ""
+                },
+                {
+                  "id": "a7f8503a-ceed-4693-b279-3388b2d18809",
+                  "title": "Execute command line to access other files",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "User access the filesystem by the application and by running some command can access other files.",
+                  "mitigation": "Make the filesystem have files separated by folders or other strategy so that users can not access other files.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 31,
                   "score": ""
                 }
               ]
@@ -1066,7 +1255,7 @@
           },
           {
             "position": {
-              "x": 220,
+              "x": 210,
               "y": 180
             },
             "size": {
@@ -1078,32 +1267,124 @@
                 "text": "Frontend\nApplication"
               },
               "body": {
-                "stroke": "#333333",
-                "strokeWidth": 1.5,
+                "stroke": "red",
+                "strokeWidth": 2.5,
                 "strokeDasharray": null
               }
             },
             "visible": true,
             "shape": "process",
-            "id": "22eddb4b-7085-4ae6-8837-c052c09d18cd",
             "zIndex": 12,
+            "id": "22eddb4b-7085-4ae6-8837-c052c09d18cd",
             "data": {
               "type": "tm.Process",
               "name": "Frontend\nApplication",
-              "description": "",
+              "description": "Process that contains all the interactions needed with the front\nend application",
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "hasOpenThreats": false,
+              "hasOpenThreats": true,
               "handlesCardPayment": false,
               "handlesGoodsOrServices": false,
               "isWebApplication": false,
               "privilegeLevel": "",
-              "threats": []
+              "threats": [
+                {
+                  "id": "7d6dfcfc-bfc7-421a-ad8e-e570d8ddffb6",
+                  "title": "Credentials Spoofing",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "Get users credentials to access frontend application and pretend to be user with the stolen credentials.",
+                  "mitigation": "Add strong password policies.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 21,
+                  "score": ""
+                },
+                {
+                  "id": "d32dc152-8e81-4128-b014-d75bfb8bdf7c",
+                  "title": "XSS Injection",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Cross Site Injection",
+                  "mitigation": "Never use unsafe functions, such as eval, and verify every input that can be inserted by the user",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 22,
+                  "score": ""
+                },
+                {
+                  "id": "e1ea603d-6967-4d57-9198-1427b39baffe",
+                  "title": "Change user sensible data",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "User with stolen credentials changing sensible data such as Bank Information, Address and more.",
+                  "mitigation": "Add notification for each change or even add 2 step confirmation, with e-mail or SMS Token.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 25,
+                  "score": ""
+                },
+                {
+                  "id": "7747669a-3b4a-4874-8bdd-785b4514fcfb",
+                  "title": "Customer/Driver being able to perform Manager Actions",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Repudiation",
+                  "description": "An user with less privilege being able to perform prohibited actions, such as a customer/driver being able to create users.",
+                  "mitigation": "Add logging and roles verification.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 26,
+                  "score": ""
+                },
+                {
+                  "id": "b5aea78f-782a-440c-9c15-2e0022cfd748",
+                  "title": "Hacker send too much requests",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Hacker send too much requests to the frontend page so that denies service.",
+                  "mitigation": "Add configuration such as a limit of connections per machine or IP, so it blocks after a suspicious amount of requests in a short interval of time",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 27,
+                  "score": ""
+                },
+                {
+                  "id": "f2bd88c2-c0fb-4b0e-883e-320df69cad5e",
+                  "title": "Accessing others information altering accessible data",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "A user, by changing something accessible, such as the request query string of the link, access other information, such as a customer accessing a service from another customer.",
+                  "mitigation": "Added authorization and data protection in every page needed.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 28,
+                  "score": ""
+                },
+                {
+                  "id": "9b844a5a-0bff-4664-a2d7-34da3e86b56c",
+                  "title": "Execute client functions via console to access unauthorized pages",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Elevation of privilege",
+                  "description": "User executes client functions via console that redirects the browser to a page without privilege.",
+                  "mitigation": "Do not render all client functions into the users browser so that the user doesn't execute them.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 30,
+                  "score": ""
+                }
+              ]
             }
           },
           {
             "position": {
-              "x": 630,
+              "x": 620,
               "y": 180
             },
             "size": {
@@ -1127,6 +1408,7 @@
             },
             "visible": true,
             "shape": "store",
+            "zIndex": 14,
             "id": "6ec437d3-79c1-4d2c-a620-530caeab8134",
             "data": {
               "name": "Frontend Application Config",
@@ -1150,24 +1432,23 @@
               "hasOpenThreats": true,
               "isALog": false,
               "storesCredentials": true,
-              "isEncrypted": false,
+              "isEncrypted": true,
               "isSigned": false,
               "storesInventory": null
-            },
-            "zIndex": 14
+            }
           },
           {
             "position": {
-              "x": -100,
+              "x": -90,
               "y": 350
             },
             "size": {
-              "width": 170,
-              "height": 100
+              "width": 112.5,
+              "height": 60
             },
             "attrs": {
               "text": {
-                "text": "External Geographical\nAPI"
+                "text": "External Geographical API"
               },
               "body": {
                 "stroke": "#333333",
@@ -1176,21 +1457,75 @@
               }
             },
             "visible": true,
-            "shape": "process",
-            "id": "e5e8b0a4-bdf9-471e-98b6-3469044cc04e",
-            "zIndex": 15,
+            "shape": "actor",
+            "zIndex": 16,
+            "id": "eb411ce7-7fe3-4cfe-b674-f4bf697c2e6e",
             "data": {
-              "type": "tm.Process",
-              "name": "External Geographical\nAPI",
+              "type": "tm.Actor",
+              "name": "External Geographical API",
               "description": "",
               "outOfScope": true,
-              "reasonOutOfScope": "External",
+              "reasonOutOfScope": "",
               "hasOpenThreats": false,
-              "handlesCardPayment": false,
-              "handlesGoodsOrServices": false,
-              "isWebApplication": false,
-              "privilegeLevel": "",
+              "providesAuthentication": false,
               "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": -97.5,
+              "y": 520
+            },
+            "size": {
+              "width": 120,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Logging System"
+              },
+              "topLine": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "strokeDasharray": null
+              },
+              "bottomLine": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "zIndex": 17,
+            "id": "047754a0-e0bf-4e52-8251-507a38b03ab2",
+            "data": {
+              "type": "tm.Store",
+              "name": "Logging System",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isALog": true,
+              "isEncrypted": true,
+              "isSigned": false,
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": [
+                {
+                  "id": "402e2261-78b4-4036-ae03-0ebadb64ac5d",
+                  "title": "Attacker successfully gathers credentials User with write privilege",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Repudiation",
+                  "description": "Attacker successfully gains control of the User with write privilege, now being able to alter the logging or even deleting it.",
+                  "mitigation": "Create strong password policy for this particular user.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 40,
+                  "score": ""
+                }
+              ]
             }
           }
         ],
@@ -1204,7 +1539,7 @@
     ],
     "diagramTop": 0,
     "reviewer": "DESOFS 3",
-    "threatTop": 2
+    "threatTop": 40
   },
   "version": "2.0"
 }

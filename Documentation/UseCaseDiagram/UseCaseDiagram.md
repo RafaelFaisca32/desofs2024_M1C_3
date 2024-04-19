@@ -24,6 +24,18 @@
 
 12. As a user of the system, I want to be able to login into the application so that I can access the application features. I should not be able to access the system without valid login credentials.
 
+13. As a user of the system, I want to be able to change my password. I should only be able to change my password.
+    1. This passworld should be at least 12 characters long, after multiple spaces are combined.
+    2. This password should not be more that 128 characters.
+    3. This password should not be truncated, only multiple concatenated spaces should by replaced ny a single space.
+    4. This password should alloy any printable unicode character.
+    5. It requires me my current password and new password.
+    6. There should be a strength meter.
+    7. There should be no requirement for upper or lowe case or numbers or special chartacters.
+    8. There should not be any password history requirement.
+    9. "Paste" functionality should be allowed.
+    10. I should be able to see the full length of the password I just typed or only the last character.
+
 ## Use Case Diagram
 
 ![Use Case Diagram](UseCaseDiagram.png)

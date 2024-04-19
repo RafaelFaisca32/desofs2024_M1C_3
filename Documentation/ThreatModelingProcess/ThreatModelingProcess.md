@@ -17,21 +17,27 @@
 | 11 | Database Server Administrator | The database server administrator has read and write permissions and can configure the the database |
 | 12 | FileSystem Administrator | The file system administrator has read and write permissions and can configure the filesystem server |
 | 13 | FileSystem Read User | The file system user used to access the filesystem with read permissions |
-| 14 | FileSystem Read/Wrote User | The file system user/write used to access the filesystem with read and write permissions |
+| 14 | FileSystem Read/Write User | The file system user/write used to access the filesystem with read and write permissions |
+| 15 | Logging System Read User | The logging system user account used to access loggings for read access. |
+| 16 | Logging System Read/Write User | The logging system user account used to access loggings for read and write access. |
+| 17 | Logging System Administrator | The logging system server administrator has read and write permissions and can configure the the server |
 
 ## Entry Points
 
-| ID | Name | Description | Trust Levels |
-|:----:|:-------|:-----|:-----|
-| 1 | HTTPS Port | The TruckMotion website will be only be accessible via TLS. All pages within this website are layered on this entry point. | 1, 2, 3, 4, 5 |
-| 1.1 | Login Page | The login page for all the users of the system. | 1, 2, 3, 4, 5 |
-| 1.2 | Login Function | The login function accepts user supplied credentials and compares them with those in the database. | 2, 3, 4, 5 |
-| 1.3 | Customer Job Requests Status List Page | The customer job requests status list page lists all the requests that the customer have request, without any interaction and only pagination | 3, 4 |
-| 1.4 | Driver Job Requests Assigned List Page | The driver job requests assigned list page lists all the drivers job requests with the information needed. This page also does not need user interaction | 3, 5 |
-| 1.5 | Customer Adds Locations to his Account | This page allows user to add Locations to his Account. | 4 |
-| 1.6 | Customer sees the progress of his Requested Service | This page shows the progress of the User's requested services. | 3, 4 |
-| 1.7 | Customer request a delivery service. | This page allows the user to do a delivery request. | 4 |
-| 1.8 | Manager approves or rejects a service request. | This page allows the suer to approve or reject a service request. | 3 |
+|  ID  | Name                                                | Description                                                                                                                                              | Trust Levels |
+|:----:|:----------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|:-----|
+|  1   | HTTPS Port                                          | The TruckMotion website will be only be accessible via TLS. All pages within this website are layered on this entry point.                               | 1, 2, 3, 4, 5 |
+| 1.1  | Login Page                                          | The login page for all the users of the system.                                                                                                          | 1, 2, 3, 4, 5 |
+| 1.2  | Login Function                                      | The login function accepts user supplied credentials and compares them with those in the database.                                                       | 2, 3, 4, 5 |
+| 1.3  | Customer Job Requests Status List Page              | The customer job requests status list page lists all the requests that the customer have request, without any interaction and only pagination            | 3, 4 |
+| 1.4  | Driver Job Requests Assigned List Page              | The driver job requests assigned list page lists all the drivers job requests with the information needed. This page also does not need user interaction | 3, 5 |
+| 1.5  | Customer Adds Locations to his Account              | This page allows user to add Locations to his Account.                                                                                                   | 4 |
+| 1.6  | Customer sees the progress of his Requested Service | This page shows the progress of the User's requested services.                                                                                           | 3, 4 |
+| 1.7  | Customer request a delivery service.                | This page allows the user to do a delivery request.                                                                                                      | 4 |
+| 1.8  | Manager approves or rejects a service request.      | This page allows the user to approve or reject a service request.                                                                                        | 3 |
+| 1.9  | Manager dispatch services to drivers.               | This page allows the user to dispatch one or more services to a certain driver.                                                                          | 3 |
+| 1.10 | Manager register drivers.                           | This page allows the user to register drivers.                                                                                                           | 3 |
+| 1.11 | Manager register Customers.                         | This page allows the user to register customers.                                                                                                         | 3 |
 
 ## External Dependencies
 
@@ -59,7 +65,9 @@
 |2.3|Availability to Execute SQL as Database Read User | This is the ability to execute SQL select queries on the database, and thus retrieve any information stored within the Truck Motion Database |9, 10, 11 |
 |2.3|Availability to Execute SQL as Database Read/Write User | This is the ability to execute SQL select, insert and update queries on the database, and thus have read and write access to any information stored within the TruckMotion database | 10, 11 |
 |2.4|Availabiliy to Read Files in FileSystem | This is the ability to read files in the filesystem and thus have read access to files stored inside this server | 12, 13, 14 |
-|2.5 | Availability to Read and Write Files in FileSystem | This is the ability to read and write files in the filesystem and this have read and write access to any information stored inside the filesystem | 12, 14 |
+|2.5 | Availability to Read and Write Files in FileSystem | This is the ability to read and write files in the filesystem and thus have read and write access to any information stored inside the filesystem | 12, 14 |
+|2.6| Availability to Read logging in the logging system | This is the ability to read loggings in the logging system and thus have read access to this system | 15, 16, 17|
+|2.7| Availabilit to Read and Write Loggings | This is the ability to read and write loggins in the logging system and this have read and write access to this system | 16, 17|
 | **3** | **Application** | **Assets relating to the Application of TruckMotion** | |
 | 3.1| Login Session | This is the login session of a user of the TruckMotion application, this User could be a Driver, Customer or Manager | 2,3,4 |
 | 3.2 | Access to the Database Server | Access to the database server allows you to administer the database, giving you full access to the database users and all data contained within the database. | 11 |
@@ -87,7 +95,7 @@ Data Manipulation can result in customer's services being stolen or not being su
 
 ##### Countermeasures
 
-If any information about Customer's locations are changed, a notification is sent. This way, the Customer will know and will have time to report the situation. Also, when delivering the order a code must be shown to the driver in order to validate if it is the correct person to deliver.
+If any information about Customer's locations are changed, a notification is sent. This way, the Customer will know and will have time to report the situation. Also, when delivering the order a code must be shown to the driver in order to validate if it is the correct person to deliver. Another countermeasure could be adding two step confirmation for the changes, for example by Email or SMS.
 
 #### Injection
 
@@ -127,7 +135,7 @@ Implement rate limiting and traffic filtering to mitigate DoS attacks, use redun
 
 #### Unauthorized Access
 
-##### Justification
+##### Description
 
 As an attacker, I gain unauthorized access to the software and add locations to a customer's account without their consent, potentially causing confusion or inconvenience to the customer.
 
@@ -223,25 +231,21 @@ Specify how the information will be given to the customer in order for him to kn
    1. CVSS V3 risk rating: 5.7 CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:N/A:N
    2. Kind of Abuse: Technical
    3. Counter Measure: Add verification for authorization inside the data access.
-   4. STRIDE: Elevation of privilege.
 
 2. As an attacker and/or malicious user, I can manipulate the primary key so that I can access the transport status of other users.
    1. CVSS V3 risk rating: 5.7 CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:N/A:N
    2. Kind of Abuse: Technical
    3. Counter Measure: Add verification for authorization so that only verified users access the data defined for them.
-   4. STRIDE: Information Disclosure.
 
 3. As an attacker, I manipulate sessions, access tokens, or other access controls in the application to act as a user without being logged in, so that I can get access to the information about the transport status.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
    2. Kind of Abuse: Technical;
-   3. Counter Measure: Make session and access tokens secrets and hardly unaccessible for outside users.
-   4. STRIDE: Information Disclosure.
+   3. Counter Measure: Make session and access tokens secrets and hardly unaccessible for outside users. Always check users tokens for data, not only their role.
 
 4. As an attacker, I force browsing to transport status page without being authenticated, gaining access to privilege the information about the transport status.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
    2. Kind of Abuse: Technical;
    3. Counter Measue: Always verify authentication inside the transport status page.
-   4. STRIDE: Information Disclosure.
 
 ## UC5. As the Driver, I want to visualize the Transports that have been assigned to me so that I can have control of my work
 
@@ -249,25 +253,21 @@ Specify how the information will be given to the customer in order for him to kn
    1. CVSS V3 risk rating: 5.7 CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:N/A:N
    2. Kind of Abuse: Technical
    3. Counter Measure: Add verification for authorization inside the data access.
-   4. STRIDE: Elevation of Privilege.
 
 2. As an attacker and/or malicious user, I can manipulate the primary key so that I can access the transport services assigned for other drivers.
    1. CVSS V3 risk rating: 5.7 CVSS:3.0/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:N/A:N
    2. Kind of Abuse: Technical
    3. Counter Measure: Add verification for authorization so that only verified users access the data defined for them.
-   4. STRIDE: Information Disclosure.
 
 3. As an attacker, I manipulate sessions, access tokens, or other access controls in the application to act as a user without being logged in, so that I can get access to the information about all the drivers transport jobs assigned.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
    2. Kind of Abuse: Technical;
-   3. Counter Measure: Make session and access tokens secrets and hardly unaccessible for outside users.
-   4. STRIDE: Information Disclosure.
+   3. Counter Measure: Make session and access tokens secrets and hardly unaccessible for outside users. Always check users tokens for data, not only their role.
 
 4. As an attacker, I force browsing to transport status page without being authenticated, gaining access to privilege the information about the transport jobs assigned to the drivers.
    1. CVSS V3 risk rating: 5.3 CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N;
    2. Kind of Abuse: Technical;
    3. Counter Measue: Always verify authentication inside the transport jobs page.
-   4. STRIDE: Information Disclosure
 
 ## STRIDE
 
@@ -292,3 +292,42 @@ It will be used STRIDE Model to identify the threats. It classifies threats in s
 | Information Disclosure | Threat action intending to read a file that one was not granted access to, or to read data in transit. | <ul><li>Authorization</li><li>Encryption</li><li>Protect secrets</li><li>Don’t store secrets</li><li>SMS Verification Code</li><li>Robust authentication and authorization verification process</li></ul> |
 | Denial of Service | Threat action attempting to deny access to valid users, such as by making a web server temporarily unavailable or unusable. | <ul><li>Appropriate authentication</li><li>Appropriate authorization</li><li>Quality of service</li><li>Traffic Filtering</li><li>Rate Limiting</li></ul> |
 | Elevation of privilege | Threat action intending to gain privileged access to resources in order to gain unauthorized access to information or to compromise a system. | <ul><li>Implement Least Privilege</li><li>Logging</li><li>Robust authentication and authorization verification process</li></ul> |
+
+### Data Flow Diagram
+
+The data flow diagram with STRIDE associated is accessible in this [PDF](./threatmodel.pdf).
+
+#### Description DFD
+
+Our application has two actors:
+- External Geographical API
+   - This is an external API that will be used for the coordinates management and live tracker for the user.
+   - This actor is out of scope because it will not be managed by our application. It is not our priority to secure because is external.
+- Browser
+   - The user will use the browser to interact with our application.
+
+It has two Processes:
+- Frontend Application
+   - This process contains all the interactions needed with the frontend application. It will have the renderization of the UI and it will send REST Requests and receive REST Responses from another process, the Backend Application.
+   - It reads the frontend application configuration.
+- Backend Application
+   - This process is responsible to handle requests from the frontend process, handle them as needed and answer them with responses. It will gather data from the file system and from the database to answer the requests. It also writes logging into the logging system for every action made.
+   - This process will contain all the business logic. So, it will log all the actions performed by the users.
+
+And finally, it has five Stores:
+- Frontend Application Config
+   - This store will store the configuration for the frontend process. It will only be read by this process.
+   - It is out of scope but it has to be secure because it can contain secrets.
+- Backend Application Config
+   - This store will store the configuration for the backend process. It will only be read by this process.
+   - It is out of scope but it has to be secure because it can contain secrets.
+- File System
+   - This store represents the file system and it contains files.
+   - The backend process can upload files into it and download them from it.
+- Database
+   - This store contains all the data that the applications asks to persist.
+   - The backend application will ask for the data in form of queries and the database will respond with the results.
+- Logging System
+   - This store contains all the logging of the backend application. It is only accessed by the backend process and it does not send any data to any process.
+
+To see in detail the STRIDE Model Threat for each one of these components, you can read them in the [PDF](./threatmodel.pdf), including descriptions and mitigations.
