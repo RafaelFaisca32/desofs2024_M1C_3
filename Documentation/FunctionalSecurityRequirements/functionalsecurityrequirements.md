@@ -27,8 +27,15 @@
 
 ## Data Encryption
 
-- User credentials and sensitive data like location information should be encrypted during transmission and storage.
-- Encryption should adhere to industry-standard protocols to prevent unauthorized access.
+- User passwords will be encrypted during transmission and storage
+- Encryption should handle errors and problems in a way that does not enable Padding Oracle attacks.
+- AES 256 will be the encryption mechanism used since it is industry proven and even approved by the NSA.
+- All configuration related to the encryption will use the latest advice.
+- The system will allow easy configuration of any configuration related to the encryption (random number, encryption or hashing algorithms, key lengths, rounds, ciphers or modes).
+- The system won't use repeated nonces per encryption key.
+- The system will verify if the encrypted data is authenticated via signatures and other authenticated cipher modes, or HMAC to ensure that ciphertext is not altered by an unauthorized party.
+- The system won't use "short-circuit" operations to avoid leaking information.
+- All generated GUIDs will be created with the GUID v4 algorithm and with a Cryptographically-secure Pseudo-random Number Generator (CSPRNG) to avoid predictability.
 
 ## Secure Communication
 
@@ -38,6 +45,7 @@
 
 - Role-based access control (RBAC) should be implemented to restrict access to specific features based on user roles.
 - Managers should have access to administrative functions such as assigning requests, drivers should only have access to request details and navigation features and clients should access the create request page.
+- Every performed request must be identified with the Logged in Users' Token
 
 ## Audit Trails
 
