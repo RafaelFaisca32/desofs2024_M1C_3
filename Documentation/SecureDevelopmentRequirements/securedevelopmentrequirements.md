@@ -9,12 +9,14 @@
 
 - Follow secure coding guidelines and standards such as OWASP Top 10 and CWE/SANS Top 25.
 - Use secure coding practices to prevent common vulnerabilities such as injection attacks (SQL injection, XSS), insecure direct object references, and buffer overflows.
+- Do not use unsupported, inscure or deprecate client-side technologies.
 
 ## Input Validation
 
 - Implement input validation to prevent injection attacks and ensure that user input is properly sanitized and validated before processing.
 - Validate input data types, length, format, and range to mitigate the risk of malicious input.
-
+- Data images should be served by their octet stream.
+  
 ## Output Encoding
 
 - Encode output data to prevent cross-site scripting (XSS) attacks.
@@ -25,6 +27,7 @@
 - Configure the application and underlying components securely, following vendor recommendations and security best practices.
 - Disable unnecessary services, ports, and functionalities to reduce the attack surface.
 - Never reveal Session Tokens in URL parameters
+- Never use client-side secrets, such as symmetric keys, passwords or API tokens to protect or access sensitive data.
 
 ## Secure Authentication and Session Management
 
