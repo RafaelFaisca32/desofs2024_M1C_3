@@ -12,6 +12,7 @@
 - Do not use unsupported, inscure or deprecate client-side technologies.
 - Avoid the usage of eval() or other similar dynamic coding.
 - Code Integrity and malicious code search will be analysed by tools such as Sonarqube and Dependency track. If possible with integration of quality gates.
+- ZAP to test the application security.
 
 ## Input Validation
 
