@@ -11,6 +11,7 @@
 - Use secure coding practices to prevent common vulnerabilities such as injection attacks (SQL injection, XSS), insecure direct object references, and buffer overflows.
 - Do not use unsupported, inscure or deprecate client-side technologies.
 - Avoid the usage of eval() or other similar dynamic coding.
+- Code Integrity and malicious code search will be analysed by tools such as Sonarqube and Dependency track. If possible with integration of quality gates.
 
 ## Input Validation
 
@@ -51,11 +52,13 @@
 - Use secure communication protocols (e.g., TLS/SSL) to encrypt data transmitted between clients and servers.
 - Verify server certificates and use strong cipher suites to prevent man-in-the-middle attacks.
 - The communication with Backend must be protected against JSON injection attacks.
+- Will run the application on port 443, is the most common port used for encrypted HTTPS traffic.
 
 ## Secure Data Storage
 
 - Encrypt sensitive data at rest using strong encryption algorithms and key management practices.
 - Implement access controls and authorization mechanisms to restrict access to sensitive data based on user roles and permissions.
+- Cron job that does a database backup every 24 hours.
 
 ## Security Testing
 
