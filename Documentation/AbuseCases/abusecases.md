@@ -155,7 +155,7 @@ Sending malicious information to the Customer can influence him to access it and
 ### Countermeasures:
 Specify how the information will be given to the customer in order for him to know if something is wrong. Previously, educate users about identifying phishing attempts.
 
-# UC6 - As the Driver, I want to signal the start and end of a Transport that has been provided by me so that I can finish my Service.
+# UC6 - As the Driver, I want to signal the start and end of a Transport that has been provided to me so that I can finish my Service.
 
 ## False Start Signal:
 
@@ -171,6 +171,47 @@ This could be done to manipulate the system for personal gain, such as receiving
 Providing training and awareness programs so that drivers don't do this issue.
 Be restrictive when employing new drivers.
 If the gps tracker shows that the truck has been stopped for a long time, make the driver provide an explanation for that specific situation.
+
+## Impersonation
+
+### Description:
+An attacker impersonates a driver to fake signaling.
+
+### CVSS Risk Rating: 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
+
+### Justification: 
+Impersonation can lead to unauthorized signaling creating problems for deliveries.
+
+### Countermeasures:
+Implement strong authentication mechanisms for drivers.
+Conduct regular verification checks for all drivers.
+
+## Location Spoofing
+
+### Description:
+An attacker/driver spoofs the location of his truck, making it seem like they are in a different location than they actually are. This could lead to misallocation of resources or fraudulent activity.
+
+### CVSS Risk Rating: 6.2 (Medium) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:L/I:H/A:N
+
+### Justification:  
+Spoofed location data can result in incorrect resource allocation or fraudulent activities.
+
+### Countermeasures:
+Use secure geolocation services with validation checks.
+Employ GPS tracking with tamper-proof mechanisms.
+Educate drivers on the importance of verifying their assigned locations.
+
+## Denial of Service (DoS): 
+
+### Description:
+Attackers flood the signaling system with a high volume of fake signals requests, causing service disruption.
+
+### CVSS Risk Rating: 5.9 (Medium)CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H
+
+### Justification: 
+DoS attacks can disrupt the signaling system, preventing the manager to actually know when a transport started/ended.
+### Countermeasures: 
+Implement rate limiting and traffic filtering to mitigate DoS attacks, use redundant systems to maintain service availability, and employ DDoS mitigation services as a proactive measure.
 
 # UC7 - As a driver, I want to be able to prove my delivery with a photo or a screenshot of the maps so that my job execution is accepted.
 
@@ -188,6 +229,32 @@ By fabricating proof of delivery, the driver can save time that would have been 
 Providing training and awareness programs for drivers about the importance of accurate reporting and the consequences of providing false proof of delivery can deter misconduct.
 Implementing strict disciplinary measures and consequences for drivers caught providing false proof of delivery.
 Implementing geofencing technology can help enforce delivery boundaries, ensuring that deliveries are made within designated areas.
+
+## Impersonation
+
+### Description:
+An attacker impersonates a driver to fake photo sending.
+
+### CVSS Risk Rating: 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
+
+### Justification: 
+Impersonation can lead to unauthorized signaling creating problems for deliveries.
+
+### Countermeasures:
+Implement strong authentication mechanisms for drivers.
+Conduct regular verification checks for all drivers.
+
+## Denial of Service (DoS): 
+
+### Description:
+Attackers flood the photo sending system with a high volume of photo requests, causing service disruption.
+
+### CVSS Risk Rating: 5.9 (Medium)CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H
+
+### Justification: 
+DoS attacks can disrupt the signaling system, preventing the manager to actually know when a transport started/ended.
+### Countermeasures: 
+Implement rate limiting and traffic filtering to mitigate DoS attacks, use redundant systems to maintain service availability, and employ DDoS mitigation services as a proactive measure.
 
 # UC8- As a manager, I want to be able to approve or reject a job so that I can control the services.
 
