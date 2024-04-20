@@ -9,16 +9,21 @@
 
 - Follow secure coding guidelines and standards such as OWASP Top 10 and CWE/SANS Top 25.
 - Use secure coding practices to prevent common vulnerabilities such as injection attacks (SQL injection, XSS), insecure direct object references, and buffer overflows.
+- Avoid the usage of eval() or other similar dynamic coding.
 
 ## Input Validation
 
 - Implement input validation to prevent injection attacks and ensure that user input is properly sanitized and validated before processing.
 - Validate input data types, length, format, and range to mitigate the risk of malicious input.
+- Protection against OS Command Injection.
+- Verify that sign, range, and input validation techniques are used to prevent integer overflows.
 
 ## Output Encoding
 
 - Encode output data to prevent cross-site scripting (XSS) attacks.
 - Use output encoding techniques such as HTML entity encoding or escaping to neutralize user-controlled data before rendering it in the browser.
+- Output encoding preserves the user's chosen character set and locale.
+- Guarantee that output encoding is not vulnerable against injection attacks.
 
 ## Secure Configuration
 
@@ -30,6 +35,7 @@
 
 - Use strong and adaptive authentication mechanisms, such as multi-factor authentication (MFA), to verify the identity of users.
 - Implement secure session management practices, including session expiration, session token regeneration, and secure cookie attributes.
+- Never reveal Session Tokens in URL parameters.
 
 ## Error Handling and Logging
 
@@ -40,6 +46,7 @@
 
 - Use secure communication protocols (e.g., TLS/SSL) to encrypt data transmitted between clients and servers.
 - Verify server certificates and use strong cipher suites to prevent man-in-the-middle attacks.
+- The communication with Backend must be protected against JSON injection attacks.
 
 ## Secure Data Storage
 

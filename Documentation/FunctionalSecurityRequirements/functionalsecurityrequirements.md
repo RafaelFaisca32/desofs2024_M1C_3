@@ -45,6 +45,7 @@
 
 - Role-based access control (RBAC) should be implemented to restrict access to specific features based on user roles.
 - Managers should have access to administrative functions such as assigning requests, drivers should only have access to request details and navigation features and clients should access the create request page.
+- Every performed request must be identified with the Logged in Users' Token
 
 ## Audit Trails
 
