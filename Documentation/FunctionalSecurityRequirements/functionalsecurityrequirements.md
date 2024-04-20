@@ -6,6 +6,10 @@
 - Clients should have the authority to create requests.
 - Managers should have the authority to assign requests to drivers.
 - Drivers should only be able to access requests assigned to them.
+- No default passwords in use for the application framework or any components used by the application.
+- Usage of JWT Token for Authentication managed by Server Side Code.
+- Invalidate Token when user Logouts.
+- Whenever the JWT Token expires, disable every transaction or data modifications.
 
 ## Data Encryption:
 
