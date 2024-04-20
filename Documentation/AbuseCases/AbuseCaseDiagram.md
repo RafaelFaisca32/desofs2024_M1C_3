@@ -31,7 +31,8 @@
       - 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
    2. **Justification:**
       - XSS attacks can compromise the security of delivery service registration pages, potentially redirecting deliveries or compromising user data.
-   3. **Kind of Abuse:** Technical and Business
+   3. **Kind of Abuse:** 
+      - Technical and Business
    4. **Countermeasures:**
       - Implement input sanitization to prevent XSS vulnerabilities
       - Employ web application firewalls (WAFs) to detect and block malicious scripts
@@ -113,7 +114,7 @@
    2. **Justification:**
       - Injection can result in many things, such as manipulation or visualization of anything in the Database by SQL Injection. It can make the application execute unintended commands compromising the entire system.
    3. **Kind of Abuse:**
-      - Technical
+      - Technical and Business.
    4. **Countermeasures:**
       - It must be done validations to any input done by Users to check if it is a valid one.
 
@@ -453,3 +454,243 @@
       - Implement encryption protocols like TLS/SSL for communication.
       - Use digital signatures to verify message integrity.
       - Educate users on detecting and reporting suspicious activities.
+
+## UC 10. Register Drivers
+
+1. An attacker registers fake drivers in the application, possibly using stolen identities, to gain access to the system.
+   1. **CVSS Risk Rating:** 
+      - 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - Fake driver registrations can lead to unauthorized access and misuse of the system.
+   3. **Kind of Abuse:**
+      - Business.
+   4. **Countermeasures:**
+      - Implement identity verification checks for driver registration.
+      - Use CAPTCHA or similar mechanisms to prevent automated registrations.
+      - Conduct regular audits of registered drivers for anomalies.
+
+2. An attacker injects malicious SQL queries into the registration form, gaining unauthorized access to the database or causing data loss.
+   1. **CVSS Risk Rating:** 
+      - 7.7 (Critical) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - SQL injection can lead to unauthorized access to sensitive data and compromise the integrity of the system.
+   3. **Kind of Abuse:**
+      - Technical and Business. 
+   4. **Countermeasures:**
+      - Implement input validation and parameterized queries to prevent SQL injection.
+      - Conduct regular security audits of the registration system.
+      - Use secure coding practices to mitigate injection vulnerabilities.
+
+3. A malicious insider or hacker gains access to sensitive driver information stored in the system, such as personal details or driving history.
+   1. **CVSS Risk Rating:** 
+      - 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - Unauthorized access to driver information can lead to privacy violations and misuse of personal data.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Implement strict access controls and least privilege principles.
+      - Encrypt sensitive driver information at rest and in transit.
+      - Monitor access logs for suspicious activity and unauthorized access attempts.
+
+4. An attacker floods the registration system with automated requests, overwhelming it and preventing legitimate drivers from registering.
+   1. **CVSS Risk Rating:**
+      - 9.0 (Critical) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H
+   2. **Justification:** 
+      - DoS attacks can disrupt the registration process, preventing legitimate drivers from accessing the system.
+   3. **Kind of Abuse:**
+      - Technical.    
+   4. **Countermeasures:**
+      - Implement rate limiting and captcha mechanisms to mitigate DoS attacks.
+      - Use scalable infrastructure to handle increased registration traffic.
+      - Employ intrusion detection systems to detect and block suspicious activities.
+
+5. An attacker uses automated scripts to try known username and password combinations (obtained from previous data breaches) to gain unauthorized access to driver accounts.
+   1. **CVSS Risk Rating:** 
+      - 6.1 (Medium) CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N
+   2. **Justification:** 
+      - Credential stuffing exploits weak passwords and can lead to unauthorized access to driver accounts.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Enforce strong password policies for driver accounts.
+      - Implement multi-factor authentication to mitigate credential stuffing.
+      - Educate drivers on creating and using strong, unique passwords.
+
+6. Weak authentication mechanisms allow an attacker to easily bypass the login process and gain access to driver accounts.
+   1. **CVSS Risk Rating:** 
+      - 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - Insecure authentication can lead to unauthorized access and compromise the security of driver accounts.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Implement strong authentication protocols such as OAuth 2.0 or OpenID Connect.
+      - Use secure token-based authentication for API access.
+      - Conduct regular security assessments to identify and address authentication vulnerabilities.
+
+7. Hackers gain access to the database storing driver information, compromising sensitive data such as driver licenses, insurance details, or personal addresses.
+   1. **CVSS Risk Rating:** 
+      - 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - Data breaches can lead to severe privacy violations and financial losses for both drivers and the organization.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Encrypt sensitive data at rest and in transit.
+      - Implement intrusion detection and prevention systems.
+      - Comply with data protection regulations such as GDPR or CCPA.
+
+8. An attacker gains access to a legitimate driver's account by stealing their credentials through phishing or other means, and then misuses this access for malicious purposes.
+   1. **CVSS Risk Rating:** 
+      - 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - Account takeovers can lead to fraudulent activities and misuse of driver accounts.
+   3. **Kind of Abuse:**
+      - Business.   
+   3. **Countermeasures:**
+      - Educate drivers on phishing awareness and safe account practices.
+      - Implement anomaly detection for unusual account activities.
+      - Provide a mechanism for drivers to report suspicious account access.
+
+## UC11. Register Customers
+
+1. An attacker registers fake customers in the application to place fraudulent service requests or obtain sensitive information.
+   1. **CVSS Risk Rating:** 
+      - 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - Fake customer registrations can lead to fraudulent transactions and misuse of the system.
+   3. **Kind of Abuse:**
+      - Technical and Business.   
+   4. **Countermeasures:**
+      - Implement identity verification checks for customer registration.
+      - Use CAPTCHA or similar mechanisms to prevent automated registrations.
+      - Conduct regular audits of registered customers for anomalies.
+
+2. A rogue employee or unauthorized user accesses and misuses customer data for personal gain or malicious purposes.
+   1. **CVSS Risk Rating:** 
+      - 7.7 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:N/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - Privacy violations can lead to legal repercussions and loss of trust from customers.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Implement strict access controls and data encryption for customer data.
+      - Conduct background checks on employees with access to sensitive data.
+      - Monitor access logs for unauthorized access attempts.
+
+3. An attacker alters customer details in the system, such as contact information or billing details, leading to confusion or financial loss.
+   1. **CVSS Risk Rating:** 
+      - 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - Altered customer details can lead to service disruptions and financial harm.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Implement data integrity checks and validation rules.
+      - Encrypt sensitive customer information to prevent tampering.
+      - Provide customers with the ability to review and verify their information.
+
+4. An attacker takes over a legitimate customer account, changes their contact information, and places orders under their name, leading to confusion and potential financial harm.
+   1. **CVSS Risk Rating:**
+      - 7.3 (High) CVSS:3.0/AV:N/AC:H/PR:H/UI:R/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - Account hijacking can result in fraudulent transactions and damage to the customer's reputation.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Implement multi-factor authentication for customer accounts.
+      - Notify customers of any changes to their account information.
+      - Provide a mechanism for customers to report suspicious account activities.
+
+5. If the application has APIs for customer registration, an attacker could abuse these APIs to register fake customers in bulk, overwhelming the system and causing disruption.
+   1. **CVSS Risk Rating:** 
+      - 9.0 (Critical) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H
+   2. **Justification:** 
+      - API abuse can lead to system overload and service disruption.
+   3. **Kind of Abuse:**
+      - Technical.   
+   4. **Countermeasures:**
+      - Implement API rate limiting and authentication.
+      - Use API keys with proper access controls.
+      - Monitor API usage for unusual patterns and behavior.
+
+## UC12. As a user of the system, I want to be able to login into the application so that I can access the application features.
+
+1. An attacker attempts to gain unauthorized access to user accounts by repeatedly guessing usernames and passwords.
+This could be done manually or using automated scripts or tools to systematically try different combinations until a valid login is found with the purpose of getting sensitive information.
+   1. **CVSS Risk Rating:** 
+      - 7.5 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:L/A:N
+   2. **Justification:** 
+      - Brute force attacks can lead to unauthorized access to user accounts, potentially compromising sensitive information.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Implement account lockout mechanisms after a certain number of failed login attempts.
+      - Enforce strong password policies.
+      - Employ CAPTCHA or multi-factor authentication to mitigate brute force attacks.
+
+2. Attackers use previously leaked username/password pairs from other breaches and attempt to log in with those credentials on your application with the purpose of stealing sensitive information.
+Since users often reuse passwords across multiple services, this can lead to successful unauthorized access.
+   1. **CVSS Risk Rating:** 
+      - 6.9 (Medium) CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:L/A:N
+   2. **Justification:** 
+      - Credential stuffing exploits users' tendencies to reuse passwords across multiple services, potentially granting unauthorized access to accounts.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Encourage users to use unique passwords for each service.
+      - Implement multi-factor authentication.
+      - Regularly monitor for suspicious login attempts or patterns.
+
+3. Attackers send deceptive emails or messages pretending to be from the application, tricking users into providing their login credentials on a fake login page with the purpose of getting sensitive information.
+Once the user submits their credentials, the attacker can use them to access the legitimate application.
+   1. **CVSS Risk Rating:** 
+      - 8.6 (High) CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N
+   2. **Justification:** 
+      - Phishing attacks can deceive users into providing their login credentials, compromising their accounts and potentially leading to further exploitation.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Educate users about identifying phishing attempts.
+      - Implement email filtering to detect and block phishing emails.
+      - Use domain validation techniques to verify legitimate login pages.
+
+4. Attackers intercept or steal a valid session token or cookie after a user successfully logs in.
+With the stolen session token, the attacker can then impersonate the logged-in user without needing to know their credentials.
+   1. **CVSS Risk Rating:** 
+      - 8.5 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N
+   2. **Justification:** 
+      - Session hijacking can result in unauthorized access to user accounts and sensitive information without requiring knowledge of login credentials.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Implement secure session management techniques such as using HTTPS.
+      - Use secure cookies with HttpOnly and Secure flags.
+      - Regularly rotating session tokens.
+
+5. Attackers intercept communication between the user and the application during the login process.
+They can eavesdrop on the login credentials being transmitted, potentially capturing sensitive information like usernames and passwords.
+   1. **CVSS Risk Rating:** 
+      - 8.7 (High) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N
+   2. **Justification:** 
+      - MitM attacks during login can intercept sensitive information like usernames and passwords, leading to unauthorized access to accounts.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Use encryption protocols like TLS/SSL to secure communication channels.
+      - Implement certificate pinning.
+      - Educate users about connecting to trusted networks.
+
+6. If the application displays database content retrieved via SQL injection in user-accessible pages without proper sanitization, it can lead to XSS vulnerabilities
+Attackers can inject malicious scripts into the database, which are then executed in the context of other users' sessions when the data is displayed in the application.
+   1. **CVSS Risk Rating:** 
+      - 9.0 (Critical) CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H
+   2. **Justification:** 
+      - XSS via SQL injection can lead to the execution of malicious scripts in the context of other users' sessions, compromising the security of the application and user data.
+   3. **Kind of Abuse:**
+      - Business.   
+   4. **Countermeasures:**
+      - Implement input validation and parameterized queries to prevent SQL injection.
+      - Sanitize user input to mitigate XSS vulnerabilities.
+      - Regularly patch and update application frameworks and libraries.
