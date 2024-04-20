@@ -12,6 +12,7 @@
 - Do not use unsupported, inscure or deprecate client-side technologies.
 - Avoid the usage of eval() or other similar dynamic coding.
 - Code Integrity and malicious code search will be analysed by tools such as Sonarqube and Dependency track. If possible with integration of quality gates.
+- ZAP to test the application security.
 
 ## Input Validation
 
@@ -46,6 +47,7 @@
 
 - Implement robust error handling mechanisms to provide meaningful error messages to users without exposing sensitive information.
 - Log security-related events, errors, and exceptions to facilitate incident response and forensic analysis.
+- When an unexpected or security sensitive error occurs, show a generic message, potentially with a unique ID.
 
 ## Secure Communication
 
