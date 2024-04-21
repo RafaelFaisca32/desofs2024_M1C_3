@@ -3,7 +3,7 @@
 ## Exposure Minization
 
     - Least Privilege
-      - Always give the user the minimum leves of acces (or permissions) needed to perform their actions.
+      - Always give the user the minimum levesl of access (or permissions) needed to perform their actions.
     - Least Information
       - Do not proide unnecessary information. In implementatin level, the cache should be cleaned when no longer needed.
     - Secure by Default
