@@ -9,7 +9,7 @@
 
 - Follow secure coding guidelines and standards such as OWASP Top 10 and CWE/SANS Top 25.
 - Use secure coding practices to prevent common vulnerabilities such as injection attacks (SQL injection, XSS), insecure direct object references, and buffer overflows.
-- Do not use unsupported, inscure or deprecate client-side technologies.
+- Do not use unsupported, insecure or deprecate client-side technologies.
 - Avoid the usage of eval() or other similar dynamic coding.
 - Code Integrity and malicious code search will be analysed by tools such as Sonarqube and Dependency track. If possible with integration of quality gates.
 - ZAP to test the application security.
@@ -19,7 +19,6 @@
 - Implement input validation to prevent injection attacks and ensure that user input is properly sanitized and validated before processing.
 - Validate input data types, length, format, and range to mitigate the risk of malicious input.
 - Data images should be served by their octet stream.
-  
 - Protection against OS Command Injection.
 - Verify that sign, range, and input validation techniques are used to prevent integer overflows.
 
@@ -37,7 +36,7 @@
 - Never reveal Session Tokens in URL parameters
 - Never use client-side secrets, such as symmetric keys, passwords or API tokens to protect or access sensitive data.
 - The application will have CI/CD automation, automated configuration management and automated deployment scripts.
-- The application will have have the compiler flags so that all available buffer overflow protections and warnings are active.
+- The application will have the compiler flags so that all available buffer overflow protections and warnings are active.
 - The server configuration will be hardened in order to follow the recommendations of the application server and frameworks in use.
 - The application will be able to be re-deployed using automated deployment scripts.
 - Only Admin level users will be able to verify the integrity of all security-relevant configurations to detect tampering.
@@ -59,7 +58,6 @@
 
 ## Secure Authentication and Session Management
 
-- Use strong and adaptive authentication mechanisms, such as multi-factor authentication (MFA), to verify the identity of users.
 - Implement secure session management practices, including session expiration, session token regeneration, and secure cookie attributes.
 - Never reveal Session Tokens in URL parameters.
 

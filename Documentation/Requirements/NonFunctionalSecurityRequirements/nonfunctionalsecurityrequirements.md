@@ -22,5 +22,5 @@
 
 ## Compliance
 
-- Ensure compliance with relevant security standards and regulations (e.g., GDPR, HIPAA) depending on the nature of the data being handled.
+- Ensure compliance with relevant security standards and regulations like GDPR.
 - Implement features such as data anonymization and user consent management to comply with privacy regulations.

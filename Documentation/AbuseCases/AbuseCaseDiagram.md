@@ -455,7 +455,7 @@
       - Use digital signatures to verify message integrity.
       - Educate users on detecting and reporting suspicious activities.
 
-## UC 10. Register Drivers
+## UC 10. As a manager, I want to be able to register Drivers in the application so that the Transports can be executed by them. I should only be able to register them and not update their data.
 
 1. An attacker registers fake drivers in the application, possibly using stolen identities, to gain access to the system.
    1. **CVSS Risk Rating:** 
@@ -553,7 +553,7 @@
       - Implement anomaly detection for unusual account activities.
       - Provide a mechanism for drivers to report suspicious account access.
 
-## UC11. Register Customers
+## UC11. As a manager, I want to be able to register Customers in the application so that I have the possibility of new Services be asked. I should only be able to register them and not update their data.
 
 1. An attacker registers fake customers in the application to place fraudulent service requests or obtain sensitive information.
    1. **CVSS Risk Rating:** 
@@ -615,7 +615,7 @@
       - Use API keys with proper access controls.
       - Monitor API usage for unusual patterns and behavior.
 
-## UC12. As a user of the system, I want to be able to login into the application so that I can access the application features.
+## UC12. As a user of the system, I want to be able to login into the application so that I can access the application features. I should not be able to access the system without valid login credentials.
 
 1. An attacker attempts to gain unauthorized access to user accounts by repeatedly guessing usernames and passwords.
 This could be done manually or using automated scripts or tools to systematically try different combinations until a valid login is found with the purpose of getting sensitive information.
