@@ -132,7 +132,7 @@ Our application has two actors:
 
 It has two Processes:
 - Frontend Application
-   - This process contains all the interactions needed with the frontend application. It will have the renderization of the UI and it will send REST Requests and receive REST Responses from another process, the Backend Application.
+   - This process contains all the interactions needed with the frontend application. It will render the UI and it will send REST Requests and receive REST Responses from another process, the Backend Application.
    - It reads the frontend application configuration.
 - Backend Application
    - This process is responsible to handle requests from the frontend process, handle them as needed and answer them with responses. It will gather data from the file system and from the database to answer the requests. It also writes logging into the logging system for every action made.
