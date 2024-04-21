@@ -44,6 +44,7 @@ object "User" as user {
     id: guid <<generated>>
     name: String
     birthDate: Date
+    email: String
 }
 object "Status" as status {
     ACTIVE
