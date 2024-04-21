@@ -36,6 +36,26 @@
 - Disable unnecessary services, ports, and functionalities to reduce the attack surface.
 - Never reveal Session Tokens in URL parameters
 - Never use client-side secrets, such as symmetric keys, passwords or API tokens to protect or access sensitive data.
+- The application will have CI/CD automation, automated configuration management and automated deployment scripts.
+- The application will have have the compiler flags so that all available buffer overflow protections and warnings are active.
+- The server configuration will be hardened in order to follow the recommendations of the application server and frameworks in use.
+- The application will be able to be re-deployed using automated deployment scripts.
+- Only Admin level users will be able to verify the integrity of all security-relevant configurations to detect tampering.
+- Dependency checker will be used during build or compile time to see if all components are up to date.
+- Clean up of unnecessary feature, documentation and configuration will be done.
+- All application assets will be hosted externally on a content delivery network or external provider.
+- All third party components will come from pre-defined, trusted and continually maintained repositories.
+- All third party libraries in use will only be exposed only for the required behavior of the application to reduce attack surface.
+- Debug mode of the application will be disabled on the web application to avoid possible security disclosures and debug features.
+- System components information will be removed from the HTTP headers/response.
+- HTTP response will contain a Content-Type header.
+- All API responses will have a Content-Disposition: attachment; filename="api.json" header.
+- A Content Security Policy (CSP) will exist in order to avoid possible XSS attacks.
+- All API responses will have  a X-Content-Type-Options: nosniff header.
+- A Strict-Transport-Header will be used in all responses and for all subdomains.
+- A Referrer-Policy header will be used to avoid exposing sensitive information in the URL to untrusted parties.
+- Origin header will not be used for authentication or access control decisions, since it can be easily changed by an attacker.
+- CORS (Cross-Origin Resource Sharing) will use a strict allow list of trusted domains and subdomains.
 
 ## Secure Authentication and Session Management
 
