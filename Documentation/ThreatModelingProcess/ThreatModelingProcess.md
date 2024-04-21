@@ -77,6 +77,8 @@
 | 3.3 | Ability to check information about the Customer Requested Services | The ability to check the data about the customer requested services | 3, 4, 6, 7 |
 | 3.4 | Ability to check information about the Driver Assigned Services | The ability to check the data related to the driver assigned services | 3, 4, 6, 7 |
 | 3.5 | Access to Audit Data | The audit data shows all audit-able events that occurred within the TruckMotion Application by Managers, Drivers and Customers | 6, 7 |
+| 3.6 | Ability to ask for a delivery service | The ability to request that a certain product reaches a certain destination. | 4,6,7 |
+| 3.7 | Ability to approve/reject a delivery request | The ability to approve or reject a certain delivery request that dictates the flow of it. | 3,6,7
 
 ## Abuse Cases
 
