@@ -2,12 +2,12 @@
 
 ## Authentication and Authorization
 
-- Users (clients, managers, drivers) must authenticate before accessing the system.
-- Clients should have the authority to create requests.
-- Managers should have the authority to assign requests to drivers.
-- Drivers should only be able to access requests assigned to them.
+- Users (customers, managers, drivers) must authenticate before accessing the system.
+- Customers should have the authority to create Services.
+- Managers should have the authority to assign Services to drivers.
+- Drivers should only be able to access Services assigned to them.
 - No default passwords in use for the application framework or any components used by the application.
-- Usage of JWT Token for Authentication managed by Server Side Code.
+- Usage of JWT Token for Authentication managed by Server-Side Code.
 - Invalidate Token when user Logouts.
 - Whenever the JWT Token expires, disable every transaction or data modifications.
 - The password policy should follow:
@@ -18,7 +18,7 @@
   5. Must not be any requirement for upper or lowe case or numbers or special chartacters.
   6. "Paste" functionality should be allowed.
 - The e-mail/sms push-up notification should not contain any sensitive information.
-- Any password generated (such as for drivers and clients) should be at least 6 characters long, may contain letters and numbers and expire after a short period of time. It should be securely randomly generated.
+- Any password generated (such as for drivers and customers) should be at least 6 characters long, may contain letters and numbers and expire after a short period of time. It should be securely randomly generated.
 - No Secrets Questions used.
 - Credential recovery must not reveal the current password.
 - No default accounts should be present (admin, root or sa).
@@ -27,7 +27,7 @@
 
 ## Data Encryption
 
-- User passwords will be encrypted during transmission and storage
+- Users' passwords will be encrypted during transmission and storage
 - Encryption should handle errors and problems in a way that does not enable Padding Oracle attacks.
 - AES 256 will be the encryption mechanism used since it is industry proven and even approved by the NSA.
 - All configuration related to the encryption will use the latest advice.
@@ -39,12 +39,12 @@
 
 ## Secure Communication
 
-- Secure communication channels (HTTPS) should be used between clients, managers, drivers, and the server to prevent data interception.
+- Secure communication channels (HTTPS) should be used between customers, managers, drivers, and the server to prevent data interception.
 
 ## Access Control
 
 - Role-based access control (RBAC) should be implemented to restrict access to specific features based on user roles.
-- Managers should have access to administrative functions such as assigning requests, drivers should only have access to request details and navigation features and clients should access the create request page.
+- Managers should have access to administrative functions such as assigning requests, drivers should only have access to request details and navigation features and customers should access the create service page.
 - Every performed request must be identified with the Logged in Users' Token
 
 ## Audit Trails
