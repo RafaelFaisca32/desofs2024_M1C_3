@@ -15,6 +15,9 @@ const EntitiesMenu = () => {
       <MenuItem icon="asterisk" to="/customer">
         Customer
       </MenuItem>
+      <MenuItem icon="asterisk" to="/application-user">
+        Application User
+      </MenuItem>
       <MenuItem icon="asterisk" to="/truck">
         Truck
       </MenuItem>

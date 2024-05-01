@@ -1,6 +1,6 @@
 {
   "annotations": {
-    "changelogDate": "20240501154707"
+    "changelogDate": "20240501155949"
   },
   "applications": "*",
   "dto": "mapstruct",
@@ -13,8 +13,8 @@
   "name": "Manager",
   "relationships": [
     {
-      "otherEntityName": "user",
-      "relationshipName": "user",
+      "otherEntityName": "applicationUser",
+      "relationshipName": "applicationUser",
       "relationshipSide": "left",
       "relationshipType": "one-to-one"
     }

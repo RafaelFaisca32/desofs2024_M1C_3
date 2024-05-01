@@ -1,8 +1,8 @@
-import { IUser } from 'app/shared/model/user.model';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
 
 export interface IManager {
   id?: string;
-  user?: IUser | null;
+  applicationUser?: IApplicationUser | null;
 }
 
 export const defaultValue: Readonly<IManager> = {};

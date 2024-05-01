@@ -8,8 +8,8 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { IUser } from 'app/shared/model/user.model';
-import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
+import { getEntities as getApplicationUsers } from 'app/entities/application-user/application-user.reducer';
 import { ICustomer } from 'app/shared/model/customer.model';
 import { getEntity, updateEntity, createEntity, reset } from './customer.reducer';
 
@@ -21,7 +21,7 @@ export const CustomerUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-  const users = useAppSelector(state => state.userManagement.users);
+  const applicationUsers = useAppSelector(state => state.applicationUser.entities);
   const customerEntity = useAppSelector(state => state.customer.entity);
   const loading = useAppSelector(state => state.customer.loading);
   const updating = useAppSelector(state => state.customer.updating);
@@ -38,7 +38,7 @@ export const CustomerUpdate = () => {
       dispatch(getEntity(id));
     }
 
-    dispatch(getUsers({}));
+    dispatch(getApplicationUsers({}));
   }, []);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export const CustomerUpdate = () => {
     const entity = {
       ...customerEntity,
       ...values,
-      user: users.find(it => it.id.toString() === values.user?.toString()),
+      applicationUser: applicationUsers.find(it => it.id.toString() === values.applicationUser?.toString()),
     };
 
     if (isNew) {
@@ -67,7 +67,7 @@ export const CustomerUpdate = () => {
       ? {}
       : {
           ...customerEntity,
-          user: customerEntity?.user?.id,
+          applicationUser: customerEntity?.applicationUser?.id,
         };
 
   return (
@@ -87,10 +87,16 @@ export const CustomerUpdate = () => {
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
               {!isNew ? <ValidatedField name="id" required readOnly id="customer-id" label="Id" validate={{ required: true }} /> : null}
               <ValidatedField label="Company" id="customer-company" name="company" data-cy="company" type="text" />
-              <ValidatedField id="customer-user" name="user" data-cy="user" label="User" type="select">
+              <ValidatedField
+                id="customer-applicationUser"
+                name="applicationUser"
+                data-cy="applicationUser"
+                label="Application User"
+                type="select"
+              >
                 <option value="" key="0" />
-                {users
-                  ? users.map(otherEntity => (
+                {applicationUsers
+                  ? applicationUsers.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
                         {otherEntity.id}
                       </option>

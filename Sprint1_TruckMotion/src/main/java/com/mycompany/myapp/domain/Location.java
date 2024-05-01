@@ -30,7 +30,7 @@ public class Location implements Serializable {
     private Float coordZ;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "user", "locations", "serviceRequest" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "applicationUser", "locations", "serviceRequest" }, allowSetters = true)
     private Customer customer;
 
     @JsonIgnoreProperties(value = { "location", "customer", "serviceStatuses", "transport" }, allowSetters = true)

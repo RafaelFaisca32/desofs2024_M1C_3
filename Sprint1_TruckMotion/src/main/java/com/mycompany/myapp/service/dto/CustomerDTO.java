@@ -14,7 +14,7 @@ public class CustomerDTO implements Serializable {
 
     private String company;
 
-    private UserDTO user;
+    private ApplicationUserDTO applicationUser;
 
     public UUID getId() {
         return id;
@@ -32,12 +32,12 @@ public class CustomerDTO implements Serializable {
         this.company = company;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public ApplicationUserDTO getApplicationUser() {
+        return applicationUser;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setApplicationUser(ApplicationUserDTO applicationUser) {
+        this.applicationUser = applicationUser;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class CustomerDTO implements Serializable {
         return "CustomerDTO{" +
             "id='" + getId() + "'" +
             ", company='" + getCompany() + "'" +
-            ", user=" + getUser() +
+            ", applicationUser=" + getApplicationUser() +
             "}";
     }
 }

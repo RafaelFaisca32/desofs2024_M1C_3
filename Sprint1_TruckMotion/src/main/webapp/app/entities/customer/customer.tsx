@@ -89,7 +89,7 @@ export const Customer = () => {
                   Company <FontAwesomeIcon icon={getSortIconByFieldName('company')} />
                 </th>
                 <th>
-                  User <FontAwesomeIcon icon="sort" />
+                  Application User <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -103,7 +103,13 @@ export const Customer = () => {
                     </Button>
                   </td>
                   <td>{customer.company}</td>
-                  <td>{customer.user ? customer.user.id : ''}</td>
+                  <td>
+                    {customer.applicationUser ? (
+                      <Link to={`/application-user/${customer.applicationUser.id}`}>{customer.applicationUser.id}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/customer/${customer.id}`} color="info" size="sm" data-cy="entityDetailsButton">

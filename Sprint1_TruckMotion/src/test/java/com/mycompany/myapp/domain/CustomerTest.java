@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain;
 
+import static com.mycompany.myapp.domain.ApplicationUserTestSamples.*;
 import static com.mycompany.myapp.domain.CustomerTestSamples.*;
 import static com.mycompany.myapp.domain.LocationTestSamples.*;
 import static com.mycompany.myapp.domain.ServiceRequestTestSamples.*;
@@ -24,6 +25,18 @@ class CustomerTest {
 
         customer2 = getCustomerSample2();
         assertThat(customer1).isNotEqualTo(customer2);
+    }
+
+    @Test
+    void applicationUserTest() throws Exception {
+        Customer customer = getCustomerRandomSampleGenerator();
+        ApplicationUser applicationUserBack = getApplicationUserRandomSampleGenerator();
+
+        customer.setApplicationUser(applicationUserBack);
+        assertThat(customer.getApplicationUser()).isEqualTo(applicationUserBack);
+
+        customer.applicationUser(null);
+        assertThat(customer.getApplicationUser()).isNull();
     }
 
     @Test

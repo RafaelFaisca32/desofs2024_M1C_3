@@ -8,8 +8,8 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { IUser } from 'app/shared/model/user.model';
-import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
+import { getEntities as getApplicationUsers } from 'app/entities/application-user/application-user.reducer';
 import { IManager } from 'app/shared/model/manager.model';
 import { getEntity, updateEntity, createEntity, reset } from './manager.reducer';
 
@@ -21,7 +21,7 @@ export const ManagerUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-  const users = useAppSelector(state => state.userManagement.users);
+  const applicationUsers = useAppSelector(state => state.applicationUser.entities);
   const managerEntity = useAppSelector(state => state.manager.entity);
   const loading = useAppSelector(state => state.manager.loading);
   const updating = useAppSelector(state => state.manager.updating);
@@ -38,7 +38,7 @@ export const ManagerUpdate = () => {
       dispatch(getEntity(id));
     }
 
-    dispatch(getUsers({}));
+    dispatch(getApplicationUsers({}));
   }, []);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export const ManagerUpdate = () => {
     const entity = {
       ...managerEntity,
       ...values,
-      user: users.find(it => it.id.toString() === values.user?.toString()),
+      applicationUser: applicationUsers.find(it => it.id.toString() === values.applicationUser?.toString()),
     };
 
     if (isNew) {
@@ -67,7 +67,7 @@ export const ManagerUpdate = () => {
       ? {}
       : {
           ...managerEntity,
-          user: managerEntity?.user?.id,
+          applicationUser: managerEntity?.applicationUser?.id,
         };
 
   return (
@@ -86,10 +86,16 @@ export const ManagerUpdate = () => {
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
               {!isNew ? <ValidatedField name="id" required readOnly id="manager-id" label="Id" validate={{ required: true }} /> : null}
-              <ValidatedField id="manager-user" name="user" data-cy="user" label="User" type="select">
+              <ValidatedField
+                id="manager-applicationUser"
+                name="applicationUser"
+                data-cy="applicationUser"
+                label="Application User"
+                type="select"
+              >
                 <option value="" key="0" />
-                {users
-                  ? users.map(otherEntity => (
+                {applicationUsers
+                  ? applicationUsers.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
                         {otherEntity.id}
                       </option>

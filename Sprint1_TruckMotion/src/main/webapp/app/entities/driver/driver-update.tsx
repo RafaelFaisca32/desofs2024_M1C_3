@@ -10,8 +10,8 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { ITruck } from 'app/shared/model/truck.model';
 import { getEntities as getTrucks } from 'app/entities/truck/truck.reducer';
-import { IUser } from 'app/shared/model/user.model';
-import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
+import { getEntities as getApplicationUsers } from 'app/entities/application-user/application-user.reducer';
 import { IDriver } from 'app/shared/model/driver.model';
 import { getEntity, updateEntity, createEntity, reset } from './driver.reducer';
 
@@ -24,7 +24,7 @@ export const DriverUpdate = () => {
   const isNew = id === undefined;
 
   const trucks = useAppSelector(state => state.truck.entities);
-  const users = useAppSelector(state => state.userManagement.users);
+  const applicationUsers = useAppSelector(state => state.applicationUser.entities);
   const driverEntity = useAppSelector(state => state.driver.entity);
   const loading = useAppSelector(state => state.driver.loading);
   const updating = useAppSelector(state => state.driver.updating);
@@ -42,7 +42,7 @@ export const DriverUpdate = () => {
     }
 
     dispatch(getTrucks({}));
-    dispatch(getUsers({}));
+    dispatch(getApplicationUsers({}));
   }, []);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export const DriverUpdate = () => {
       ...driverEntity,
       ...values,
       truck: trucks.find(it => it.id.toString() === values.truck?.toString()),
-      user: users.find(it => it.id.toString() === values.user?.toString()),
+      applicationUser: applicationUsers.find(it => it.id.toString() === values.applicationUser?.toString()),
     };
 
     if (isNew) {
@@ -73,7 +73,7 @@ export const DriverUpdate = () => {
       : {
           ...driverEntity,
           truck: driverEntity?.truck?.id,
-          user: driverEntity?.user?.id,
+          applicationUser: driverEntity?.applicationUser?.id,
         };
 
   return (
@@ -102,10 +102,16 @@ export const DriverUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <ValidatedField id="driver-user" name="user" data-cy="user" label="User" type="select">
+              <ValidatedField
+                id="driver-applicationUser"
+                name="applicationUser"
+                data-cy="applicationUser"
+                label="Application User"
+                type="select"
+              >
                 <option value="" key="0" />
-                {users
-                  ? users.map(otherEntity => (
+                {applicationUsers
+                  ? applicationUsers.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
                         {otherEntity.id}
                       </option>

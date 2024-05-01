@@ -32,7 +32,7 @@ public class Transport implements Serializable {
     @JoinColumn(unique = true)
     private Location location;
 
-    @JsonIgnoreProperties(value = { "truck", "user", "transport" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "truck", "applicationUser", "transport" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private Driver driver;

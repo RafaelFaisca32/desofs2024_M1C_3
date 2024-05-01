@@ -25,9 +25,10 @@ public class Customer implements Serializable {
     @Column(name = "company")
     private String company;
 
+    @JsonIgnoreProperties(value = { "internalUser", "driver", "manager", "customer" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
-    private User user;
+    private ApplicationUser applicationUser;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     @JsonIgnoreProperties(value = { "customer", "serviceRequest", "transport" }, allowSetters = true)
@@ -65,16 +66,16 @@ public class Customer implements Serializable {
         this.company = company;
     }
 
-    public User getUser() {
-        return this.user;
+    public ApplicationUser getApplicationUser() {
+        return this.applicationUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setApplicationUser(ApplicationUser applicationUser) {
+        this.applicationUser = applicationUser;
     }
 
-    public Customer user(User user) {
-        this.setUser(user);
+    public Customer applicationUser(ApplicationUser applicationUser) {
+        this.setApplicationUser(applicationUser);
         return this;
     }
 

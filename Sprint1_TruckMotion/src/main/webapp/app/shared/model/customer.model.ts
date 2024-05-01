@@ -1,9 +1,9 @@
-import { IUser } from 'app/shared/model/user.model';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
 
 export interface ICustomer {
   id?: string;
   company?: string | null;
-  user?: IUser | null;
+  applicationUser?: IApplicationUser | null;
 }
 
 export const defaultValue: Readonly<ICustomer> = {};

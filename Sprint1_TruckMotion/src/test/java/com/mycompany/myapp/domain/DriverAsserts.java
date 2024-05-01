@@ -55,6 +55,7 @@ public class DriverAsserts {
     public static void assertDriverUpdatableRelationshipsEquals(Driver expected, Driver actual) {
         assertThat(expected)
             .as("Verify Driver relationships")
-            .satisfies(e -> assertThat(e.getTruck()).as("check truck").isEqualTo(actual.getTruck()));
+            .satisfies(e -> assertThat(e.getTruck()).as("check truck").isEqualTo(actual.getTruck()))
+            .satisfies(e -> assertThat(e.getApplicationUser()).as("check applicationUser").isEqualTo(actual.getApplicationUser()));
     }
 }

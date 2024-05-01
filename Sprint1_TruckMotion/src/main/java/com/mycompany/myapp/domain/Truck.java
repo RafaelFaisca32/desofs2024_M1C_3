@@ -26,7 +26,7 @@ public class Truck implements Serializable {
     @Column(name = "model")
     private String model;
 
-    @JsonIgnoreProperties(value = { "truck", "user", "transport" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "truck", "applicationUser", "transport" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "truck")
     private Driver driver;
 

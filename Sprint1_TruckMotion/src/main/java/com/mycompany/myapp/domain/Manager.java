@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
@@ -19,9 +20,10 @@ public class Manager implements Serializable {
     @Column(name = "id")
     private UUID id;
 
+    @JsonIgnoreProperties(value = { "internalUser", "driver", "manager", "customer" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
-    private User user;
+    private ApplicationUser applicationUser;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -38,16 +40,16 @@ public class Manager implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
-        return this.user;
+    public ApplicationUser getApplicationUser() {
+        return this.applicationUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setApplicationUser(ApplicationUser applicationUser) {
+        this.applicationUser = applicationUser;
     }
 
-    public Manager user(User user) {
-        this.setUser(user);
+    public Manager applicationUser(ApplicationUser applicationUser) {
+        this.setApplicationUser(applicationUser);
         return this;
     }
 

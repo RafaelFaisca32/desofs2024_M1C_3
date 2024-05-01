@@ -1,10 +1,10 @@
 import { ITruck } from 'app/shared/model/truck.model';
-import { IUser } from 'app/shared/model/user.model';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
 
 export interface IDriver {
   id?: string;
   truck?: ITruck | null;
-  user?: IUser | null;
+  applicationUser?: IApplicationUser | null;
 }
 
 export const defaultValue: Readonly<IDriver> = {};

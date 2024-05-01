@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain;
 
+import static com.mycompany.myapp.domain.ApplicationUserTestSamples.*;
 import static com.mycompany.myapp.domain.DriverTestSamples.*;
 import static com.mycompany.myapp.domain.TransportTestSamples.*;
 import static com.mycompany.myapp.domain.TruckTestSamples.*;
@@ -34,6 +35,18 @@ class DriverTest {
 
         driver.truck(null);
         assertThat(driver.getTruck()).isNull();
+    }
+
+    @Test
+    void applicationUserTest() throws Exception {
+        Driver driver = getDriverRandomSampleGenerator();
+        ApplicationUser applicationUserBack = getApplicationUserRandomSampleGenerator();
+
+        driver.setApplicationUser(applicationUserBack);
+        assertThat(driver.getApplicationUser()).isEqualTo(applicationUserBack);
+
+        driver.applicationUser(null);
+        assertThat(driver.getApplicationUser()).isNull();
     }
 
     @Test

@@ -56,5 +56,9 @@ public class CustomerAsserts {
      * @param expected the expected entity
      * @param actual the actual entity
      */
-    public static void assertCustomerUpdatableRelationshipsEquals(Customer expected, Customer actual) {}
+    public static void assertCustomerUpdatableRelationshipsEquals(Customer expected, Customer actual) {
+        assertThat(expected)
+            .as("Verify Customer relationships")
+            .satisfies(e -> assertThat(e.getApplicationUser()).as("check applicationUser").isEqualTo(actual.getApplicationUser()));
+    }
 }

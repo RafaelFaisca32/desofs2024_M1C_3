@@ -14,7 +14,7 @@ public class DriverDTO implements Serializable {
 
     private TruckDTO truck;
 
-    private UserDTO user;
+    private ApplicationUserDTO applicationUser;
 
     public UUID getId() {
         return id;
@@ -32,12 +32,12 @@ public class DriverDTO implements Serializable {
         this.truck = truck;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public ApplicationUserDTO getApplicationUser() {
+        return applicationUser;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setApplicationUser(ApplicationUserDTO applicationUser) {
+        this.applicationUser = applicationUser;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DriverDTO implements Serializable {
         return "DriverDTO{" +
             "id='" + getId() + "'" +
             ", truck=" + getTruck() +
-            ", user=" + getUser() +
+            ", applicationUser=" + getApplicationUser() +
             "}";
     }
 }

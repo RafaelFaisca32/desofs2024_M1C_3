@@ -76,7 +76,7 @@ public class UserMapper {
         return authorities;
     }
 
-    public User userFromId(UUID id) {
+    public User userFromId(Long id) {
         if (id == null) {
             return null;
         }

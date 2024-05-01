@@ -6,6 +6,7 @@ import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import Driver from './driver';
 import Manager from './manager';
 import Customer from './customer';
+import ApplicationUser from './application-user';
 import Truck from './truck';
 import Location from './location';
 import ServiceRequest from './service-request';
@@ -21,6 +22,7 @@ export default () => {
         <Route path="driver/*" element={<Driver />} />
         <Route path="manager/*" element={<Manager />} />
         <Route path="customer/*" element={<Customer />} />
+        <Route path="application-user/*" element={<ApplicationUser />} />
         <Route path="truck/*" element={<Truck />} />
         <Route path="location/*" element={<Location />} />
         <Route path="service-request/*" element={<ServiceRequest />} />

@@ -27,8 +27,8 @@ export const ManagerDetail = () => {
             <span id="id">Id</span>
           </dt>
           <dd>{managerEntity.id}</dd>
-          <dt>User</dt>
-          <dd>{managerEntity.user ? managerEntity.user.id : ''}</dd>
+          <dt>Application User</dt>
+          <dd>{managerEntity.applicationUser ? managerEntity.applicationUser.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/manager" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

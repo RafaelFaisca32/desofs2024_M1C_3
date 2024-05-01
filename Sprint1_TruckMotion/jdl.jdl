@@ -12,8 +12,7 @@ entity Customer {
     company String
 }
 
-entity User {
-	id UUID
+entity ApplicationUser {
 	name String
     birthDate LocalDate
     email String
@@ -88,15 +87,15 @@ relationship OneToOne {
 }
 
 relationship OneToOne {
-	Manager{user} to User
+	Manager{applicationUser} to ApplicationUser
 }
 
 relationship OneToOne {
-	Customer{user} to User
+	Customer{applicationUser} to ApplicationUser
 }
 
 relationship OneToOne {
-	Driver{user} to User
+	Driver{applicationUser} to ApplicationUser
 }
 
 relationship OneToMany {
@@ -107,6 +106,9 @@ relationship OneToOne {
 	ServiceRequest{customer} to Customer
 }
 
+relationship OneToOne {
+	ApplicationUser{internalUser(login)} to @OnDelete("CASCADE") @Id User with builtInEntity
+}
 
 
 // Set pagination options

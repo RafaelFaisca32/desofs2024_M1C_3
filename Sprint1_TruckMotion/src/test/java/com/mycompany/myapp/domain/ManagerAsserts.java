@@ -52,5 +52,9 @@ public class ManagerAsserts {
      * @param expected the expected entity
      * @param actual the actual entity
      */
-    public static void assertManagerUpdatableRelationshipsEquals(Manager expected, Manager actual) {}
+    public static void assertManagerUpdatableRelationshipsEquals(Manager expected, Manager actual) {
+        assertThat(expected)
+            .as("Verify Manager relationships")
+            .satisfies(e -> assertThat(e.getApplicationUser()).as("check applicationUser").isEqualTo(actual.getApplicationUser()));
+    }
 }

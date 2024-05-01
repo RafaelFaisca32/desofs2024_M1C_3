@@ -29,8 +29,8 @@ export const DriverDetail = () => {
           <dd>{driverEntity.id}</dd>
           <dt>Truck</dt>
           <dd>{driverEntity.truck ? driverEntity.truck.id : ''}</dd>
-          <dt>User</dt>
-          <dd>{driverEntity.user ? driverEntity.user.id : ''}</dd>
+          <dt>Application User</dt>
+          <dd>{driverEntity.applicationUser ? driverEntity.applicationUser.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/driver" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

@@ -1,11 +1,11 @@
 package com.mycompany.myapp.service.mapper;
 
+import com.mycompany.myapp.domain.ApplicationUser;
 import com.mycompany.myapp.domain.Driver;
 import com.mycompany.myapp.domain.Truck;
-import com.mycompany.myapp.domain.User;
+import com.mycompany.myapp.service.dto.ApplicationUserDTO;
 import com.mycompany.myapp.service.dto.DriverDTO;
 import com.mycompany.myapp.service.dto.TruckDTO;
-import com.mycompany.myapp.service.dto.UserDTO;
 import java.util.Objects;
 import java.util.UUID;
 import org.mapstruct.*;
@@ -16,7 +16,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface DriverMapper extends EntityMapper<DriverDTO, Driver> {
     @Mapping(target = "truck", source = "truck", qualifiedByName = "truckId")
-    @Mapping(target = "user", source = "user", qualifiedByName = "userId")
+    @Mapping(target = "applicationUser", source = "applicationUser", qualifiedByName = "applicationUserId")
     DriverDTO toDto(Driver s);
 
     @Named("truckId")
@@ -24,10 +24,10 @@ public interface DriverMapper extends EntityMapper<DriverDTO, Driver> {
     @Mapping(target = "id", source = "id")
     TruckDTO toDtoTruckId(Truck truck);
 
-    @Named("userId")
+    @Named("applicationUserId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    UserDTO toDtoUserId(User user);
+    ApplicationUserDTO toDtoApplicationUserId(ApplicationUser applicationUser);
 
     default String map(UUID value) {
         return Objects.toString(value, null);

@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain;
 
+import static com.mycompany.myapp.domain.ApplicationUserTestSamples.*;
 import static com.mycompany.myapp.domain.ManagerTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,5 +21,17 @@ class ManagerTest {
 
         manager2 = getManagerSample2();
         assertThat(manager1).isNotEqualTo(manager2);
+    }
+
+    @Test
+    void applicationUserTest() throws Exception {
+        Manager manager = getManagerRandomSampleGenerator();
+        ApplicationUser applicationUserBack = getApplicationUserRandomSampleGenerator();
+
+        manager.setApplicationUser(applicationUserBack);
+        assertThat(manager.getApplicationUser()).isEqualTo(applicationUserBack);
+
+        manager.applicationUser(null);
+        assertThat(manager.getApplicationUser()).isNull();
     }
 }

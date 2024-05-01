@@ -86,7 +86,7 @@ export const Manager = () => {
                   Id <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
                 <th>
-                  User <FontAwesomeIcon icon="sort" />
+                  Application User <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -99,7 +99,13 @@ export const Manager = () => {
                       {manager.id}
                     </Button>
                   </td>
-                  <td>{manager.user ? manager.user.id : ''}</td>
+                  <td>
+                    {manager.applicationUser ? (
+                      <Link to={`/application-user/${manager.applicationUser.id}`}>{manager.applicationUser.id}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/manager/${manager.id}`} color="info" size="sm" data-cy="entityDetailsButton">

@@ -89,7 +89,7 @@ export const Driver = () => {
                   Truck <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  User <FontAwesomeIcon icon="sort" />
+                  Application User <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -103,7 +103,13 @@ export const Driver = () => {
                     </Button>
                   </td>
                   <td>{driver.truck ? <Link to={`/truck/${driver.truck.id}`}>{driver.truck.id}</Link> : ''}</td>
-                  <td>{driver.user ? driver.user.id : ''}</td>
+                  <td>
+                    {driver.applicationUser ? (
+                      <Link to={`/application-user/${driver.applicationUser.id}`}>{driver.applicationUser.id}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/driver/${driver.id}`} color="info" size="sm" data-cy="entityDetailsButton">

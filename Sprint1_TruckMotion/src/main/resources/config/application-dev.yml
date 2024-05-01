@@ -32,9 +32,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/TruckMotion
-    username: TruckMotion
-    password:
+    url: jdbc:postgresql://vsgate-s1.dei.isep.ipp.pt:10406/truckmotion
+    username: postgres
+    password: qF/n1TZ16Vi0
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -80,7 +80,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: YWE4ZmQ2NDA4NTBmZTJmMTYxMWNiZTI0NzJjOWU5YjFlMGFiYzVmYjFkNTA3MTQ1MTJlODk0OTg1NDU1Y2NhMzg2YjEwZTQ1ZmVhZjU1ZGRkZjIwOWQ0OTg5NDM5OWJmNzQ2OGIxODFmZTY5ODQ1MjBkNWJjYjkwMzZkNmEwNzA=
+        base64-secret: NzRlNGNiMTYwM2VmNDJlNzcyZWYwMGY0ODVjNTNkZmYwN2JlYjQxZmYxMGE3NGYyOTllM2FkMDFmYTA5ZGU2MWE3Mzg2NTE1MWY1OTdiMmVmMDI2YTRiZmY2MWIwYTRkZmI0M2VmM2I1YjIxNDg1YTczNTEzODA1ODNmMGViNjU=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000

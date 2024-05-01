@@ -45,6 +45,7 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.domain.Manager.class.getName());
             createCache(cm, com.mycompany.myapp.domain.Customer.class.getName());
             createCache(cm, com.mycompany.myapp.domain.Customer.class.getName() + ".locations");
+            createCache(cm, com.mycompany.myapp.domain.ApplicationUser.class.getName());
             createCache(cm, com.mycompany.myapp.domain.Truck.class.getName());
             createCache(cm, com.mycompany.myapp.domain.Location.class.getName());
             createCache(cm, com.mycompany.myapp.domain.ServiceRequest.class.getName());

@@ -31,8 +31,8 @@ export const CustomerDetail = () => {
             <span id="company">Company</span>
           </dt>
           <dd>{customerEntity.company}</dd>
-          <dt>User</dt>
-          <dd>{customerEntity.user ? customerEntity.user.id : ''}</dd>
+          <dt>Application User</dt>
+          <dd>{customerEntity.applicationUser ? customerEntity.applicationUser.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/customer" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

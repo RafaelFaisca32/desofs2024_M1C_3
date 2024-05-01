@@ -12,7 +12,7 @@ public class ManagerDTO implements Serializable {
 
     private UUID id;
 
-    private UserDTO user;
+    private ApplicationUserDTO applicationUser;
 
     public UUID getId() {
         return id;
@@ -22,12 +22,12 @@ public class ManagerDTO implements Serializable {
         this.id = id;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public ApplicationUserDTO getApplicationUser() {
+        return applicationUser;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setApplicationUser(ApplicationUserDTO applicationUser) {
+        this.applicationUser = applicationUser;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ManagerDTO implements Serializable {
     public String toString() {
         return "ManagerDTO{" +
             "id='" + getId() + "'" +
-            ", user=" + getUser() +
+            ", applicationUser=" + getApplicationUser() +
             "}";
     }
 }

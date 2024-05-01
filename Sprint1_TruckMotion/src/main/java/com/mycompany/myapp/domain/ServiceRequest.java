@@ -43,7 +43,7 @@ public class ServiceRequest implements Serializable {
     @JoinColumn(unique = true)
     private Location location;
 
-    @JsonIgnoreProperties(value = { "user", "locations", "serviceRequest" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "applicationUser", "locations", "serviceRequest" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private Customer customer;
