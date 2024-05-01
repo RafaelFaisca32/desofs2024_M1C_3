@@ -1,0 +1,29 @@
+{
+  "annotations": {
+    "changelogDate": "20240501152756"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "coordX",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "coordY",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "coordZ",
+      "fieldType": "Float"
+    }
+  ],
+  "name": "Location",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,121 @@
+
+entity Driver {
+	id UUID
+}
+
+entity Manager {
+	id UUID
+}
+
+entity Customer {
+	id UUID
+    company String
+}
+
+entity User {
+	id UUID
+	name String
+    birthDate LocalDate
+    email String
+    gender Gender
+}
+
+entity Truck {
+	id UUID
+	make String
+    model String
+}
+
+entity Location {
+	id UUID
+    coordX Float
+    coordY Float
+    coordZ Float
+}
+
+entity Service {
+	id UUID
+    items String
+    serviceName String
+    totalWeightOfItems Float
+    price Float
+    date ZonedDateTime
+}
+
+entity ServiceStatus {
+	id UUID
+    date ZonedDateTime
+    observations String
+    status Status
+}
+
+entity Transport {
+	id UUID
+    startTime ZonedDateTime
+    endTime ZonedDateTime
+}
+
+enum Gender {
+    MALE, FEMALE, OTHER
+}
+
+enum Status {
+	ACTIVE, FINISHED, CANCELED, PENDING
+}
+
+relationship OneToOne {
+	Transport{location} to Location
+}
+
+relationship OneToOne {
+	Transport{driver} to Driver
+}
+
+relationship OneToOne {
+	Transport{service} to Service
+}
+
+relationship OneToMany {
+	Service{serviceStatus} to ServiceStatus
+}
+
+relationship OneToOne {
+	Service{location} to Location
+}
+
+relationship OneToOne {
+	Driver{truck} to Truck
+}
+
+relationship OneToOne {
+	Manager{user} to User
+}
+
+relationship OneToOne {
+	Customer{user} to User
+}
+
+relationship OneToOne {
+	Driver{user} to User
+}
+
+relationship OneToMany {
+	Customer{location} to Location
+}
+
+relationship OneToOne {
+	Service{customer} to Customer
+}
+
+
+
+// Set pagination options
+
+// Use Data Transfer Objects (DTO)
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
