@@ -1,6 +1,18 @@
 package com.mycompany.myapp.config;
 
 import java.time.Duration;
+
+import com.mycompany.myapp.domain.customer.Customer;
+import com.mycompany.myapp.domain.driver.Driver;
+import com.mycompany.myapp.domain.location.Location;
+import com.mycompany.myapp.domain.manager.Manager;
+import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
+import com.mycompany.myapp.domain.serviceRequest.ServiceStatus;
+import com.mycompany.myapp.domain.transport.Transport;
+import com.mycompany.myapp.domain.truck.Truck;
+import com.mycompany.myapp.domain.user.ApplicationUser;
+import com.mycompany.myapp.domain.user.Authority;
+import com.mycompany.myapp.infrastructure.repository.jpa.UserRepository;
 import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,20 +50,20 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
-            createCache(cm, com.mycompany.myapp.repository.UserRepository.USERS_BY_LOGIN_CACHE);
-            createCache(cm, com.mycompany.myapp.repository.UserRepository.USERS_BY_EMAIL_CACHE);
-            createCache(cm, com.mycompany.myapp.domain.Authority.class.getName());
-            createCache(cm, com.mycompany.myapp.domain.Driver.class.getName());
-            createCache(cm, com.mycompany.myapp.domain.Manager.class.getName());
-            createCache(cm, com.mycompany.myapp.domain.Customer.class.getName());
-            createCache(cm, com.mycompany.myapp.domain.Customer.class.getName() + ".locations");
-            createCache(cm, com.mycompany.myapp.domain.ApplicationUser.class.getName());
-            createCache(cm, com.mycompany.myapp.domain.Truck.class.getName());
-            createCache(cm, com.mycompany.myapp.domain.Location.class.getName());
-            createCache(cm, com.mycompany.myapp.domain.ServiceRequest.class.getName());
-            createCache(cm, com.mycompany.myapp.domain.ServiceRequest.class.getName() + ".serviceStatuses");
-            createCache(cm, com.mycompany.myapp.domain.ServiceStatus.class.getName());
-            createCache(cm, com.mycompany.myapp.domain.Transport.class.getName());
+            createCache(cm, UserRepository.USERS_BY_LOGIN_CACHE);
+            createCache(cm, UserRepository.USERS_BY_EMAIL_CACHE);
+            createCache(cm, Authority.class.getName());
+            createCache(cm, Driver.class.getName());
+            createCache(cm, Manager.class.getName());
+            createCache(cm, Customer.class.getName());
+            createCache(cm, Customer.class.getName() + ".locations");
+            createCache(cm, ApplicationUser.class.getName());
+            createCache(cm, Truck.class.getName());
+            createCache(cm, Location.class.getName());
+            createCache(cm, ServiceRequest.class.getName());
+            createCache(cm, ServiceRequest.class.getName() + ".serviceStatuses");
+            createCache(cm, ServiceStatus.class.getName());
+            createCache(cm, Transport.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

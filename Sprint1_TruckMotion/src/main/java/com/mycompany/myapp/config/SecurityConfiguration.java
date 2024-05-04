@@ -3,7 +3,7 @@ package com.mycompany.myapp.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import com.mycompany.myapp.security.*;
-import com.mycompany.myapp.web.filter.SpaWebFilter;
+import com.mycompany.myapp.application.controller.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

@@ -4,8 +4,8 @@ import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.mycompany.myapp.IntegrationTest;
-import com.mycompany.myapp.repository.timezone.DateTimeWrapper;
-import com.mycompany.myapp.repository.timezone.DateTimeWrapperRepository;
+import com.mycompany.myapp.infrastructure.repository.timezone.DateTimeWrapper;
+import com.mycompany.myapp.infrastructure.repository.timezone.DateTimeWrapperRepository;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.BeforeEach;
