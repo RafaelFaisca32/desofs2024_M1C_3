@@ -135,7 +135,7 @@ class UserControllerIT {
         user.setActivated(true);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.DRIVER));
 
         restUserMockMvc
             .perform(post("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(user)))
@@ -168,7 +168,7 @@ class UserControllerIT {
         user.setActivated(true);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.DRIVER));
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUserMockMvc
@@ -194,7 +194,7 @@ class UserControllerIT {
         user.setActivated(true);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.DRIVER));
 
         // Create the User
         restUserMockMvc
@@ -220,7 +220,7 @@ class UserControllerIT {
         user.setActivated(true);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.DRIVER));
 
         // Create the User
         restUserMockMvc
@@ -302,7 +302,7 @@ class UserControllerIT {
         user.setCreatedDate(updatedUser.getCreatedDate());
         user.setLastModifiedBy(updatedUser.getLastModifiedBy());
         user.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.DRIVER));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(user)))
@@ -343,7 +343,7 @@ class UserControllerIT {
         user.setCreatedDate(updatedUser.getCreatedDate());
         user.setLastModifiedBy(updatedUser.getLastModifiedBy());
         user.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.DRIVER));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(user)))
@@ -395,7 +395,7 @@ class UserControllerIT {
         user.setCreatedDate(updatedUser.getCreatedDate());
         user.setLastModifiedBy(updatedUser.getLastModifiedBy());
         user.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.DRIVER));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(user)))
@@ -435,7 +435,7 @@ class UserControllerIT {
         user.setCreatedDate(updatedUser.getCreatedDate());
         user.setLastModifiedBy(updatedUser.getLastModifiedBy());
         user.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.DRIVER));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(user)))
@@ -487,7 +487,7 @@ class UserControllerIT {
         userDTO.setLangKey(DEFAULT_LANGKEY);
         userDTO.setCreatedBy(DEFAULT_LOGIN);
         userDTO.setLastModifiedBy(DEFAULT_LOGIN);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.DRIVER));
 
         User user = userMapper.userDTOToUser(userDTO);
         assertThat(user.getId()).isEqualTo(DEFAULT_ID);
@@ -502,7 +502,7 @@ class UserControllerIT {
         assertThat(user.getCreatedDate()).isNotNull();
         assertThat(user.getLastModifiedBy()).isNull();
         assertThat(user.getLastModifiedDate()).isNotNull();
-        assertThat(user.getAuthorities()).extracting("name").containsExactly(AuthoritiesConstants.USER);
+        assertThat(user.getAuthorities()).extracting("name").containsExactly(AuthoritiesConstants.DRIVER);
     }
 
     @Test
@@ -514,7 +514,7 @@ class UserControllerIT {
         user.setLastModifiedDate(Instant.now());
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
-        authority.setName(AuthoritiesConstants.USER);
+        authority.setName(AuthoritiesConstants.DRIVER);
         authorities.add(authority);
         user.setAuthorities(authorities);
 
@@ -532,7 +532,7 @@ class UserControllerIT {
         assertThat(userDTO.getCreatedDate()).isEqualTo(user.getCreatedDate());
         assertThat(userDTO.getLastModifiedBy()).isEqualTo(DEFAULT_LOGIN);
         assertThat(userDTO.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
-        assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
+        assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.DRIVER);
         assertThat(userDTO.toString()).isNotNull();
     }
 
