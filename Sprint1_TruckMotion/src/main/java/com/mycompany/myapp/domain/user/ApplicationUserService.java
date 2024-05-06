@@ -173,4 +173,8 @@ public class ApplicationUserService {
         log.debug("Request to delete ApplicationUser : {}", id);
         applicationUserRepository.deleteById(id);
     }
+
+    public boolean existsById(Long id) {
+        return applicationUserRepository.existsById(id);
+    }
 }

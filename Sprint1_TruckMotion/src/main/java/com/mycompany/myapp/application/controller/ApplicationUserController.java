@@ -34,11 +34,9 @@ public class ApplicationUserController {
 
     private final ApplicationUserService applicationUserService;
 
-    private final ApplicationUserRepository applicationUserRepository;
 
-    public ApplicationUserController(ApplicationUserService applicationUserService, ApplicationUserRepository applicationUserRepository) {
+    public ApplicationUserController(ApplicationUserService applicationUserService) {
         this.applicationUserService = applicationUserService;
-        this.applicationUserRepository = applicationUserRepository;
     }
 
     /**
@@ -87,7 +85,7 @@ public class ApplicationUserController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!applicationUserRepository.existsById(id)) {
+        if (!applicationUserService.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
@@ -121,7 +119,7 @@ public class ApplicationUserController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!applicationUserRepository.existsById(id)) {
+        if (!applicationUserService.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
