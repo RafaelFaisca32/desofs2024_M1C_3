@@ -16,4 +16,6 @@ public interface IServiceRequestRepository {
     ServiceRequest saveAndFlush(ServiceRequest serviceRequest);
 
     long count();
+
+    boolean existsById(UUID id);
 }

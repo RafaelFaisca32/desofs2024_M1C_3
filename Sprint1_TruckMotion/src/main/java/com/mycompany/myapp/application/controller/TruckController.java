@@ -34,11 +34,8 @@ public class TruckController {
 
     private final TruckService truckService;
 
-    private final TruckRepository truckRepository;
-
-    public TruckController(TruckService truckService, TruckRepository truckRepository) {
+    public TruckController(TruckService truckService) {
         this.truckService = truckService;
-        this.truckRepository = truckRepository;
     }
 
     /**
@@ -83,10 +80,6 @@ public class TruckController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!truckRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
         truckDTO = truckService.update(truckDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, truckDTO.getId().toString()))
@@ -115,10 +108,6 @@ public class TruckController {
         }
         if (!Objects.equals(id, truckDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!truckRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         Optional<TruckDTO> result = truckService.partialUpdate(truckDTO);

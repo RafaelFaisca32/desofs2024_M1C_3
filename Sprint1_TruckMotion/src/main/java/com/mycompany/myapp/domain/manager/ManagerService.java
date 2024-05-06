@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain.manager;
 
+import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import com.mycompany.myapp.infrastructure.repository.jpa.ManagerRepository;
 import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
 import com.mycompany.myapp.domain.manager.mapper.ManagerMapper;
@@ -25,6 +26,8 @@ public class ManagerService {
     private final IManagerRepository managerRepository;
 
     private final ManagerMapper managerMapper;
+
+    private static final String ENTITY_NAME = "manager";
 
     public ManagerService(IManagerRepository managerRepository, ManagerMapper managerMapper) {
         this.managerRepository = managerRepository;
@@ -52,6 +55,11 @@ public class ManagerService {
      */
     public ManagerDTO update(ManagerDTO managerDTO) {
         log.debug("Request to update Manager : {}", managerDTO);
+
+        if (!managerRepository.existsById(managerDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
         Manager manager = managerMapper.toEntity(managerDTO);
         manager = managerRepository.save(manager);
         return managerMapper.toDto(manager);
@@ -65,6 +73,10 @@ public class ManagerService {
      */
     public Optional<ManagerDTO> partialUpdate(ManagerDTO managerDTO) {
         log.debug("Request to partially update Manager : {}", managerDTO);
+
+        if (!managerRepository.existsById(managerDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
         return managerRepository
             .findById(managerDTO.getId())

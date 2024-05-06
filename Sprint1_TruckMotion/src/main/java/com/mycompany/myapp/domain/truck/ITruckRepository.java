@@ -16,4 +16,6 @@ public interface ITruckRepository {
     Truck saveAndFlush(Truck customer);
 
     long count();
+
+    boolean existsById(UUID id);
 }

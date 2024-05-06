@@ -35,11 +35,8 @@ public class TransportController {
 
     private final TransportService transportService;
 
-    private final TransportRepository transportRepository;
-
-    public TransportController(TransportService transportService, TransportRepository transportRepository) {
+    public TransportController(TransportService transportService) {
         this.transportService = transportService;
-        this.transportRepository = transportRepository;
     }
 
     /**
@@ -84,10 +81,6 @@ public class TransportController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!transportRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
         transportDTO = transportService.update(transportDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, transportDTO.getId().toString()))
@@ -116,10 +109,6 @@ public class TransportController {
         }
         if (!Objects.equals(id, transportDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!transportRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         Optional<TransportDTO> result = transportService.partialUpdate(transportDTO);

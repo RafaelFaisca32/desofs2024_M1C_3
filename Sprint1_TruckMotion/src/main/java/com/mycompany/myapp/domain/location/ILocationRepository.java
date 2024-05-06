@@ -16,4 +16,6 @@ public interface ILocationRepository {
     Location saveAndFlush(Location location);
 
     long count();
+
+    boolean existsById(UUID id);
 }

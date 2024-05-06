@@ -16,4 +16,6 @@ public interface IDriverRepository {
     Driver saveAndFlush(Driver driver);
 
     long count();
+
+    boolean existsById(UUID id);
 }

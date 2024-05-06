@@ -35,11 +35,8 @@ public class ManagerController {
 
     private final ManagerService managerService;
 
-    private final ManagerRepository managerRepository;
-
-    public ManagerController(ManagerService managerService, ManagerRepository managerRepository) {
+    public ManagerController(ManagerService managerService) {
         this.managerService = managerService;
-        this.managerRepository = managerRepository;
     }
 
     /**
@@ -84,10 +81,6 @@ public class ManagerController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!managerRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
         managerDTO = managerService.update(managerDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, managerDTO.getId().toString()))
@@ -117,11 +110,6 @@ public class ManagerController {
         if (!Objects.equals(id, managerDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-
-        if (!managerRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
         Optional<ManagerDTO> result = managerService.partialUpdate(managerDTO);
 
         return ResponseUtil.wrapOrNotFound(

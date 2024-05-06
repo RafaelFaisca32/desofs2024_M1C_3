@@ -35,11 +35,8 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    private final CustomerRepository customerRepository;
-
-    public CustomerController(CustomerService customerService, CustomerRepository customerRepository) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        this.customerRepository = customerRepository;
     }
 
     /**
@@ -84,11 +81,9 @@ public class CustomerController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!customerRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
         customerDTO = customerService.update(customerDTO);
+
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, customerDTO.getId().toString()))
             .body(customerDTO);
@@ -116,10 +111,6 @@ public class CustomerController {
         }
         if (!Objects.equals(id, customerDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!customerRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         Optional<CustomerDTO> result = customerService.partialUpdate(customerDTO);

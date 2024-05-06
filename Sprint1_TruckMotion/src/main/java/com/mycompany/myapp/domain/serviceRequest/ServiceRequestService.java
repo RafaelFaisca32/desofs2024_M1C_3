@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain.serviceRequest;
 
+import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import com.mycompany.myapp.infrastructure.repository.jpa.ServiceRequestRepository;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
 import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceRequestMapper;
@@ -27,6 +28,8 @@ public class ServiceRequestService {
 
     private final ServiceRequestMapper serviceRequestMapper;
 
+    private static final String ENTITY_NAME = "serviceRequest";
+
     public ServiceRequestService(IServiceRequestRepository serviceRequestRepository, ServiceRequestMapper serviceRequestMapper) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.serviceRequestMapper = serviceRequestMapper;
@@ -53,6 +56,11 @@ public class ServiceRequestService {
      */
     public ServiceRequestDTO update(ServiceRequestDTO serviceRequestDTO) {
         log.debug("Request to update ServiceRequest : {}", serviceRequestDTO);
+
+        if (!serviceRequestRepository.existsById(serviceRequestDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
         ServiceRequest serviceRequest = serviceRequestMapper.toEntity(serviceRequestDTO);
         serviceRequest = serviceRequestRepository.save(serviceRequest);
         return serviceRequestMapper.toDto(serviceRequest);
@@ -66,6 +74,11 @@ public class ServiceRequestService {
      */
     public Optional<ServiceRequestDTO> partialUpdate(ServiceRequestDTO serviceRequestDTO) {
         log.debug("Request to partially update ServiceRequest : {}", serviceRequestDTO);
+
+        if (!serviceRequestRepository.existsById(serviceRequestDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
 
         return serviceRequestRepository
             .findById(serviceRequestDTO.getId())

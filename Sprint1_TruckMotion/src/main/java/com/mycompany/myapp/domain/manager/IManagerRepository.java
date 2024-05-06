@@ -16,4 +16,6 @@ public interface IManagerRepository {
     Manager saveAndFlush(Manager manager);
 
     long count();
+
+    boolean existsById(UUID id);
 }

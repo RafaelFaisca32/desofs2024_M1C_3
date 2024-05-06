@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain.driver;
 
+import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import com.mycompany.myapp.infrastructure.repository.jpa.DriverRepository;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.driver.mapper.DriverMapper;
@@ -27,6 +28,8 @@ public class DriverService {
 
     private final DriverMapper driverMapper;
 
+    private static final String ENTITY_NAME = "driver";
+
     public DriverService(IDriverRepository driverRepository, DriverMapper driverMapper) {
         this.driverRepository = driverRepository;
         this.driverMapper = driverMapper;
@@ -53,6 +56,9 @@ public class DriverService {
      */
     public DriverDTO update(DriverDTO driverDTO) {
         log.debug("Request to update Driver : {}", driverDTO);
+        if (!driverRepository.existsById(driverDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
         Driver driver = driverMapper.toEntity(driverDTO);
         driver = driverRepository.save(driver);
         return driverMapper.toDto(driver);
@@ -66,6 +72,10 @@ public class DriverService {
      */
     public Optional<DriverDTO> partialUpdate(DriverDTO driverDTO) {
         log.debug("Request to partially update Driver : {}", driverDTO);
+
+        if (!driverRepository.existsById(driverDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
         return driverRepository
             .findById(driverDTO.getId())

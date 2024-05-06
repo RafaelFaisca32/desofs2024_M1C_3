@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain.customer;
 
+import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import com.mycompany.myapp.infrastructure.repository.jpa.CustomerRepository;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.domain.customer.mapper.CustomerMapper;
@@ -27,6 +28,9 @@ public class CustomerService {
 
     private final CustomerMapper customerMapper;
 
+    private static final String ENTITY_NAME = "customer";
+
+
     public CustomerService(ICustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
@@ -52,6 +56,11 @@ public class CustomerService {
      * @return the persisted entity.
      */
     public CustomerDTO update(CustomerDTO customerDTO) {
+
+        if (!customerRepository.existsById(customerDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
         log.debug("Request to update Customer : {}", customerDTO);
         Customer customer = customerMapper.toEntity(customerDTO);
         customer = customerRepository.save(customer);
@@ -66,6 +75,10 @@ public class CustomerService {
      */
     public Optional<CustomerDTO> partialUpdate(CustomerDTO customerDTO) {
         log.debug("Request to partially update Customer : {}", customerDTO);
+
+        if (!customerRepository.existsById(customerDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
         return customerRepository
             .findById(customerDTO.getId())

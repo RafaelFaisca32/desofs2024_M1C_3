@@ -35,11 +35,8 @@ public class ServiceRequestController {
 
     private final ServiceRequestService serviceRequestService;
 
-    private final ServiceRequestRepository serviceRequestRepository;
-
-    public ServiceRequestController(ServiceRequestService serviceRequestService, ServiceRequestRepository serviceRequestRepository) {
+    public ServiceRequestController(ServiceRequestService serviceRequestService) {
         this.serviceRequestService = serviceRequestService;
-        this.serviceRequestRepository = serviceRequestRepository;
     }
 
     /**
@@ -85,10 +82,6 @@ public class ServiceRequestController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!serviceRequestRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
         serviceRequestDTO = serviceRequestService.update(serviceRequestDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, serviceRequestDTO.getId().toString()))
@@ -117,10 +110,6 @@ public class ServiceRequestController {
         }
         if (!Objects.equals(id, serviceRequestDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!serviceRequestRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         Optional<ServiceRequestDTO> result = serviceRequestService.partialUpdate(serviceRequestDTO);

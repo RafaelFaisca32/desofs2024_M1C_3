@@ -16,4 +16,6 @@ public interface ITransportRepository {
     Transport saveAndFlush(Transport transport);
 
     long count();
+
+    boolean existsById(UUID id);
 }

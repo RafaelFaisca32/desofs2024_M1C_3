@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain.transport;
 
+import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import com.mycompany.myapp.infrastructure.repository.jpa.TransportRepository;
 import com.mycompany.myapp.domain.transport.dto.TransportDTO;
 import com.mycompany.myapp.domain.transport.mapper.TransportMapper;
@@ -25,6 +26,8 @@ public class TransportService {
     private final ITransportRepository transportRepository;
 
     private final TransportMapper transportMapper;
+
+    private static final String ENTITY_NAME = "transport";
 
     public TransportService(ITransportRepository transportRepository, TransportMapper transportMapper) {
         this.transportRepository = transportRepository;
@@ -52,6 +55,9 @@ public class TransportService {
      */
     public TransportDTO update(TransportDTO transportDTO) {
         log.debug("Request to update Transport : {}", transportDTO);
+        if (!transportRepository.existsById(transportDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
         Transport transport = transportMapper.toEntity(transportDTO);
         transport = transportRepository.save(transport);
         return transportMapper.toDto(transport);
@@ -65,6 +71,10 @@ public class TransportService {
      */
     public Optional<TransportDTO> partialUpdate(TransportDTO transportDTO) {
         log.debug("Request to partially update Transport : {}", transportDTO);
+
+        if (!transportRepository.existsById(transportDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
         return transportRepository
             .findById(transportDTO.getId())

@@ -35,11 +35,8 @@ public class LocationController {
 
     private final LocationService locationService;
 
-    private final LocationRepository locationRepository;
-
-    public LocationController(LocationService locationService, LocationRepository locationRepository) {
+    public LocationController(LocationService locationService) {
         this.locationService = locationService;
-        this.locationRepository = locationRepository;
     }
 
     /**
@@ -84,10 +81,6 @@ public class LocationController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!locationRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
         locationDTO = locationService.update(locationDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, locationDTO.getId().toString()))
@@ -116,10 +109,6 @@ public class LocationController {
         }
         if (!Objects.equals(id, locationDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!locationRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         Optional<LocationDTO> result = locationService.partialUpdate(locationDTO);

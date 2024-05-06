@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain.truck;
 
+import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import com.mycompany.myapp.infrastructure.repository.jpa.TruckRepository;
 import com.mycompany.myapp.domain.truck.dto.TruckDTO;
 import com.mycompany.myapp.domain.truck.mapper.TruckMapper;
@@ -27,6 +28,8 @@ public class TruckService {
 
     private final TruckMapper truckMapper;
 
+    private static final String ENTITY_NAME = "truck";
+
     public TruckService(ITruckRepository truckRepository, TruckMapper truckMapper) {
         this.truckRepository = truckRepository;
         this.truckMapper = truckMapper;
@@ -53,6 +56,11 @@ public class TruckService {
      */
     public TruckDTO update(TruckDTO truckDTO) {
         log.debug("Request to update Truck : {}", truckDTO);
+
+        if (!truckRepository.existsById(truckDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
         Truck truck = truckMapper.toEntity(truckDTO);
         truck = truckRepository.save(truck);
         return truckMapper.toDto(truck);
@@ -66,7 +74,9 @@ public class TruckService {
      */
     public Optional<TruckDTO> partialUpdate(TruckDTO truckDTO) {
         log.debug("Request to partially update Truck : {}", truckDTO);
-
+        if (!truckRepository.existsById(truckDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
         return truckRepository
             .findById(truckDTO.getId())
             .map(existingTruck -> {

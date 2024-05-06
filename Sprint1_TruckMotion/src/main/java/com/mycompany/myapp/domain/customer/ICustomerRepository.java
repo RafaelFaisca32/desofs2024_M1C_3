@@ -16,4 +16,6 @@ public interface ICustomerRepository {
     Customer saveAndFlush(Customer customer);
 
     long count();
+
+    boolean existsById(UUID id);
 }

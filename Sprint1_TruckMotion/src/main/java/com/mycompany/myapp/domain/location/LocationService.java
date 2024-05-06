@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain.location;
 
+import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import com.mycompany.myapp.infrastructure.repository.jpa.LocationRepository;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.location.mapper.LocationMapper;
@@ -27,6 +28,8 @@ public class LocationService {
 
     private final LocationMapper locationMapper;
 
+    private static final String ENTITY_NAME = "location";
+
     public LocationService(ILocationRepository locationRepository, LocationMapper locationMapper) {
         this.locationRepository = locationRepository;
         this.locationMapper = locationMapper;
@@ -53,6 +56,9 @@ public class LocationService {
      */
     public LocationDTO update(LocationDTO locationDTO) {
         log.debug("Request to update Location : {}", locationDTO);
+        if (!locationRepository.existsById(locationDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
         Location location = locationMapper.toEntity(locationDTO);
         location = locationRepository.save(location);
         return locationMapper.toDto(location);
@@ -66,6 +72,10 @@ public class LocationService {
      */
     public Optional<LocationDTO> partialUpdate(LocationDTO locationDTO) {
         log.debug("Request to partially update Location : {}", locationDTO);
+
+        if (!locationRepository.existsById(locationDTO.getId())) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
         return locationRepository
             .findById(locationDTO.getId())

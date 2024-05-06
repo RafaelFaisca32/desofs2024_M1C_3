@@ -35,11 +35,8 @@ public class DriverController {
 
     private final DriverService driverService;
 
-    private final DriverRepository driverRepository;
-
-    public DriverController(DriverService driverService, DriverRepository driverRepository) {
+    public DriverController(DriverService driverService) {
         this.driverService = driverService;
-        this.driverRepository = driverRepository;
     }
 
     /**
@@ -84,10 +81,6 @@ public class DriverController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!driverRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
         driverDTO = driverService.update(driverDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, driverDTO.getId().toString()))
@@ -116,10 +109,6 @@ public class DriverController {
         }
         if (!Objects.equals(id, driverDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!driverRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         Optional<DriverDTO> result = driverService.partialUpdate(driverDTO);
