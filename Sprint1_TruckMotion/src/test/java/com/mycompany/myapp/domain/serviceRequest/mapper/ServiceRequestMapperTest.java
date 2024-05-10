@@ -12,7 +12,7 @@ class ServiceRequestMapperTest {
 
     @BeforeEach
     void setUp() {
-        serviceRequestMapper = new ServiceRequestMapperImpl();
+        serviceRequestMapper = new ServiceRequestMapper();
     }
 
     @Test

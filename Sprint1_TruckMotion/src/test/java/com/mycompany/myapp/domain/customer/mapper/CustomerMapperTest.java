@@ -12,7 +12,7 @@ class CustomerMapperTest {
 
     @BeforeEach
     void setUp() {
-        customerMapper = new CustomerMapperImpl();
+        customerMapper = new CustomerMapper();
     }
 
     @Test

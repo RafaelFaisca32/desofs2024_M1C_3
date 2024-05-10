@@ -6,18 +6,38 @@ import com.mycompany.myapp.domain.user.User;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
 import com.mycompany.myapp.domain.user.dto.UserDTO;
 import org.mapstruct.*;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Mapper for the entity {@link ApplicationUser} and its DTO {@link ApplicationUserDTO}.
  */
-@Mapper(componentModel = "spring")
-public interface ApplicationUserMapper extends EntityMapper<ApplicationUserDTO, ApplicationUser> {
-    @Mapping(target = "internalUser", source = "internalUser", qualifiedByName = "userLogin")
-    ApplicationUserDTO toDto(ApplicationUser s);
+@Service
+public class ApplicationUserMapper implements EntityMapper<ApplicationUserDTO, ApplicationUser> {
 
-    @Named("userLogin")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "login", source = "login")
-    UserDTO toDtoUserLogin(User user);
+    @Override
+    public ApplicationUser toEntity(ApplicationUserDTO dto) {
+        return null;
+    }
+
+    @Override
+    public ApplicationUserDTO toDto(ApplicationUser entity) {
+        return null;
+    }
+
+    @Override
+    public List<ApplicationUser> toEntity(List<ApplicationUserDTO> dtoList) {
+        return List.of();
+    }
+
+    @Override
+    public List<ApplicationUserDTO> toDto(List<ApplicationUser> entityList) {
+        return List.of();
+    }
+
+    @Override
+    public void partialUpdate(ApplicationUser entity, ApplicationUserDTO dto) {
+
+    }
 }

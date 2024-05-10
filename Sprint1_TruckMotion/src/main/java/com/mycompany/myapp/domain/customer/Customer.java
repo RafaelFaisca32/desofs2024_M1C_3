@@ -20,13 +20,14 @@ public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+    @EmbeddedId
     @GeneratedValue
     @Column(name = "id")
-    private UUID id;
+    private CustomerId id;
 
+    @Embedded
     @Column(name = "company")
-    private String company;
+    private Company company;
 
     @JsonIgnoreProperties(value = { "internalUser", "driver", "manager", "customer" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
@@ -43,29 +44,29 @@ public class Customer implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public UUID getId() {
-        return this.id;
+    public CustomerId getId() {
+        return new CustomerId(this.id.value());
     }
 
-    public Customer id(UUID id) {
+    public Customer id(CustomerId id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(UUID id) {
+    public void setId(CustomerId id) {
         this.id = id;
     }
 
-    public String getCompany() {
+    public Company getCompany() {
         return this.company;
     }
 
-    public Customer company(String company) {
+    public Customer company(Company company) {
         this.setCompany(company);
         return this;
     }
 
-    public void setCompany(String company) {
+    public void setCompany(Company company) {
         this.company = company;
     }
 

@@ -9,7 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.domain.customer.Company;
 import com.mycompany.myapp.domain.customer.Customer;
+import com.mycompany.myapp.domain.customer.CustomerId;
 import com.mycompany.myapp.domain.customer.ICustomerRepository;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.domain.customer.mapper.CustomerMapper;
@@ -32,8 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class CustomerControllerIT {
 
-    private static final String DEFAULT_COMPANY = "AAAAAAAAAA";
-    private static final String UPDATED_COMPANY = "BBBBBBBBBB";
+    private static final Company DEFAULT_COMPANY = new Company("AAAAAAAAAA");
+    private static final Company UPDATED_COMPANY = new Company("BBBBBBBBBB");
 
     private static final String ENTITY_API_URL = "/api/customers";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -191,7 +193,7 @@ class CustomerControllerIT {
     @Transactional
     void putNonExistingCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(UUID.randomUUID());
+        customer.setId(new CustomerId() );
 
         // Create the Customer
         CustomerDTO customerDTO = customerMapper.toDto(customer);
@@ -213,7 +215,7 @@ class CustomerControllerIT {
     @Transactional
     void putWithIdMismatchCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(UUID.randomUUID());
+        customer.setId(new CustomerId());
 
         // Create the Customer
         CustomerDTO customerDTO = customerMapper.toDto(customer);
@@ -233,7 +235,7 @@ class CustomerControllerIT {
     @Transactional
     void putWithMissingIdPathParamCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(UUID.randomUUID());
+        customer.setId(new CustomerId());
 
         // Create the Customer
         CustomerDTO customerDTO = customerMapper.toDto(customer);
@@ -305,7 +307,7 @@ class CustomerControllerIT {
     @Transactional
     void patchNonExistingCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(UUID.randomUUID());
+        customer.setId(new CustomerId());
 
         // Create the Customer
         CustomerDTO customerDTO = customerMapper.toDto(customer);
@@ -327,7 +329,7 @@ class CustomerControllerIT {
     @Transactional
     void patchWithIdMismatchCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(UUID.randomUUID());
+        customer.setId(new CustomerId());
 
         // Create the Customer
         CustomerDTO customerDTO = customerMapper.toDto(customer);
@@ -349,7 +351,7 @@ class CustomerControllerIT {
     @Transactional
     void patchWithMissingIdPathParamCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(UUID.randomUUID());
+        customer.setId(new CustomerId());
 
         // Create the Customer
         CustomerDTO customerDTO = customerMapper.toDto(customer);

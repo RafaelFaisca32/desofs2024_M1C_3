@@ -12,7 +12,7 @@ class TruckMapperTest {
 
     @BeforeEach
     void setUp() {
-        truckMapper = new TruckMapperImpl();
+        truckMapper = new TruckMapper();
     }
 
     @Test

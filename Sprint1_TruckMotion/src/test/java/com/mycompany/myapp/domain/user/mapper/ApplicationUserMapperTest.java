@@ -12,7 +12,7 @@ class ApplicationUserMapperTest {
 
     @BeforeEach
     void setUp() {
-        applicationUserMapper = new ApplicationUserMapperImpl();
+        applicationUserMapper = new ApplicationUserMapper();
     }
 
     @Test

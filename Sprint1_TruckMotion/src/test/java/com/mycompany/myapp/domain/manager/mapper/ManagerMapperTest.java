@@ -12,7 +12,7 @@ class ManagerMapperTest {
 
     @BeforeEach
     void setUp() {
-        managerMapper = new ManagerMapperImpl();
+        managerMapper = new ManagerMapper();
     }
 
     @Test

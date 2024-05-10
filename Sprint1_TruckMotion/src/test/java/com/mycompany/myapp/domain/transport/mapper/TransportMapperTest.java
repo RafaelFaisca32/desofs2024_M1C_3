@@ -12,7 +12,7 @@ class TransportMapperTest {
 
     @BeforeEach
     void setUp() {
-        transportMapper = new TransportMapperImpl();
+        transportMapper = new TransportMapper();
     }
 
     @Test

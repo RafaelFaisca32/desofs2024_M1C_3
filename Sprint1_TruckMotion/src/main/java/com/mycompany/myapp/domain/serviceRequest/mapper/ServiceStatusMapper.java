@@ -4,26 +4,43 @@ import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
 import com.mycompany.myapp.domain.serviceRequest.ServiceStatus;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceStatusDTO;
+
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
 import org.mapstruct.*;
+import org.springframework.stereotype.Service;
 
 /**
  * Mapper for the entity {@link ServiceStatus} and its DTO {@link ServiceStatusDTO}.
  */
-@Mapper(componentModel = "spring")
-public interface ServiceStatusMapper extends EntityMapper<ServiceStatusDTO, ServiceStatus> {
-    @Mapping(target = "serviceRequest", source = "serviceRequest", qualifiedByName = "serviceRequestId")
-    ServiceStatusDTO toDto(ServiceStatus s);
+@Service
+public class ServiceStatusMapper implements EntityMapper<ServiceStatusDTO,ServiceStatus>{
 
-    @Named("serviceRequestId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ServiceRequestDTO toDtoServiceRequestId(ServiceRequest serviceRequest);
+    @Override
+    public ServiceStatus toEntity(ServiceStatusDTO dto) {
+        return null;
+    }
 
-    default String map(UUID value) {
-        return Objects.toString(value, null);
+    @Override
+    public ServiceStatusDTO toDto(ServiceStatus entity) {
+        return null;
+    }
+
+    @Override
+    public List<ServiceStatus> toEntity(List<ServiceStatusDTO> dtoList) {
+        return List.of();
+    }
+
+    @Override
+    public List<ServiceStatusDTO> toDto(List<ServiceStatus> entityList) {
+        return List.of();
+    }
+
+    @Override
+    public void partialUpdate(ServiceStatus entity, ServiceStatusDTO dto) {
+
     }
 }

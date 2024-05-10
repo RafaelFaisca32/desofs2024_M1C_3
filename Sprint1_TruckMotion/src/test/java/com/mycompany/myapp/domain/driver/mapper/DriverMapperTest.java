@@ -12,7 +12,7 @@ class DriverMapperTest {
 
     @BeforeEach
     void setUp() {
-        driverMapper = new DriverMapperImpl();
+        driverMapper = new DriverMapper();
     }
 
     @Test

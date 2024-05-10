@@ -9,36 +9,41 @@ import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
 import com.mycompany.myapp.domain.transport.dto.TransportDTO;
+
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.mapstruct.*;
+import org.springframework.stereotype.Service;
 
 /**
  * Mapper for the entity {@link Transport} and its DTO {@link TransportDTO}.
  */
-@Mapper(componentModel = "spring")
-public interface TransportMapper extends EntityMapper<TransportDTO, Transport> {
-    @Mapping(target = "location", source = "location", qualifiedByName = "locationId")
-    @Mapping(target = "driver", source = "driver", qualifiedByName = "driverId")
-    @Mapping(target = "serviceRequest", source = "serviceRequest", qualifiedByName = "serviceRequestId")
-    TransportDTO toDto(Transport s);
+@Service
+public class TransportMapper implements EntityMapper<TransportDTO,Transport> {
 
-    @Named("locationId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    LocationDTO toDtoLocationId(Location location);
+    @Override
+    public Transport toEntity(TransportDTO dto) {
+        return null;
+    }
 
-    @Named("driverId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    DriverDTO toDtoDriverId(Driver driver);
+    @Override
+    public TransportDTO toDto(Transport entity) {
+        return null;
+    }
 
-    @Named("serviceRequestId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ServiceRequestDTO toDtoServiceRequestId(ServiceRequest serviceRequest);
+    @Override
+    public List<Transport> toEntity(List<TransportDTO> dtoList) {
+        return List.of();
+    }
 
-    default String map(UUID value) {
-        return Objects.toString(value, null);
+    @Override
+    public List<TransportDTO> toDto(List<Transport> entityList) {
+        return List.of();
+    }
+
+    @Override
+    public void partialUpdate(Transport entity, TransportDTO dto) {
+
     }
 }

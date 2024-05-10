@@ -12,7 +12,7 @@ class ServiceStatusMapperTest {
 
     @BeforeEach
     void setUp() {
-        serviceStatusMapper = new ServiceStatusMapperImpl();
+        serviceStatusMapper = new ServiceStatusMapper();
     }
 
     @Test

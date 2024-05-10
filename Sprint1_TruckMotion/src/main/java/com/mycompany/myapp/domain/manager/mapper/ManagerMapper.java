@@ -6,17 +6,38 @@ import com.mycompany.myapp.domain.manager.Manager;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
 import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
 import org.mapstruct.*;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Mapper for the entity {@link Manager} and its DTO {@link ManagerDTO}.
  */
-@Mapper(componentModel = "spring")
-public interface ManagerMapper extends EntityMapper<ManagerDTO, Manager> {
-    @Mapping(target = "applicationUser", source = "applicationUser", qualifiedByName = "applicationUserId")
-    ManagerDTO toDto(Manager s);
+@Service
+public class ManagerMapper implements EntityMapper<ManagerDTO,Manager>{
 
-    @Named("applicationUserId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ApplicationUserDTO toDtoApplicationUserId(ApplicationUser applicationUser);
+    @Override
+    public Manager toEntity(ManagerDTO dto) {
+        return null;
+    }
+
+    @Override
+    public ManagerDTO toDto(Manager entity) {
+        return null;
+    }
+
+    @Override
+    public List<Manager> toEntity(List<ManagerDTO> dtoList) {
+        return List.of();
+    }
+
+    @Override
+    public List<ManagerDTO> toDto(List<Manager> entityList) {
+        return List.of();
+    }
+
+    @Override
+    public void partialUpdate(Manager entity, ManagerDTO dto) {
+
+    }
 }

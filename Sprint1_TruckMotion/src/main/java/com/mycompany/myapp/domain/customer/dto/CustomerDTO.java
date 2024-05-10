@@ -43,6 +43,15 @@ public class CustomerDTO implements Serializable {
         this.applicationUser = applicationUser;
     }
 
+    public CustomerDTO(UUID id, String company, ApplicationUserDTO applicationUser) {
+        this.id = id;
+        this.company = company;
+        this.applicationUser = applicationUser;
+    }
+
+    public CustomerDTO() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

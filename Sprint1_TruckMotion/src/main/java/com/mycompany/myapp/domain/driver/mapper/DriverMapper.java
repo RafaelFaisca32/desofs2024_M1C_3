@@ -7,30 +7,41 @@ import com.mycompany.myapp.domain.truck.Truck;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.truck.dto.TruckDTO;
+
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.mapstruct.*;
+import org.springframework.stereotype.Service;
 
 /**
  * Mapper for the entity {@link Driver} and its DTO {@link DriverDTO}.
  */
-@Mapper(componentModel = "spring")
-public interface DriverMapper extends EntityMapper<DriverDTO, Driver> {
-    @Mapping(target = "truck", source = "truck", qualifiedByName = "truckId")
-    @Mapping(target = "applicationUser", source = "applicationUser", qualifiedByName = "applicationUserId")
-    DriverDTO toDto(Driver s);
+@Service
+public class DriverMapper implements EntityMapper<DriverDTO,Driver>{
 
-    @Named("truckId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    TruckDTO toDtoTruckId(Truck truck);
+    @Override
+    public Driver toEntity(DriverDTO dto) {
+        return null;
+    }
 
-    @Named("applicationUserId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ApplicationUserDTO toDtoApplicationUserId(ApplicationUser applicationUser);
+    @Override
+    public DriverDTO toDto(Driver entity) {
+        return null;
+    }
 
-    default String map(UUID value) {
-        return Objects.toString(value, null);
+    @Override
+    public List<Driver> toEntity(List<DriverDTO> dtoList) {
+        return List.of();
+    }
+
+    @Override
+    public List<DriverDTO> toDto(List<Driver> entityList) {
+        return List.of();
+    }
+
+    @Override
+    public void partialUpdate(Driver entity, DriverDTO dto) {
+
     }
 }

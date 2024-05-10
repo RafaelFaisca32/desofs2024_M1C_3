@@ -6,32 +6,43 @@ import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
+
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
 import org.mapstruct.*;
+import org.springframework.stereotype.Service;
 
 /**
  * Mapper for the entity {@link ServiceRequest} and its DTO {@link ServiceRequestDTO}.
  */
-@Mapper(componentModel = "spring")
-public interface ServiceRequestMapper extends EntityMapper<ServiceRequestDTO, ServiceRequest> {
-    @Mapping(target = "location", source = "location", qualifiedByName = "locationId")
-    @Mapping(target = "customer", source = "customer", qualifiedByName = "customerId")
-    ServiceRequestDTO toDto(ServiceRequest s);
+@Service
+public class ServiceRequestMapper implements EntityMapper<ServiceRequestDTO,ServiceRequest> {
 
-    @Named("locationId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    LocationDTO toDtoLocationId(Location location);
+    @Override
+    public ServiceRequest toEntity(ServiceRequestDTO dto) {
+        return null;
+    }
 
-    @Named("customerId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    CustomerDTO toDtoCustomerId(Customer customer);
+    @Override
+    public ServiceRequestDTO toDto(ServiceRequest entity) {
+        return null;
+    }
 
-    default String map(UUID value) {
-        return Objects.toString(value, null);
+    @Override
+    public List<ServiceRequest> toEntity(List<ServiceRequestDTO> dtoList) {
+        return List.of();
+    }
+
+    @Override
+    public List<ServiceRequestDTO> toDto(List<ServiceRequest> entityList) {
+        return List.of();
+    }
+
+    @Override
+    public void partialUpdate(ServiceRequest entity, ServiceRequestDTO dto) {
+
     }
 }

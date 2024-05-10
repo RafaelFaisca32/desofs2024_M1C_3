@@ -12,7 +12,7 @@ class LocationMapperTest {
 
     @BeforeEach
     void setUp() {
-        locationMapper = new LocationMapperImpl();
+        locationMapper = new LocationMapper();
     }
 
     @Test
