@@ -52,8 +52,8 @@ public class CustomerService {
      * @return the persisted entity.
      */
     public CustomerDTO update(CustomerDTO customerDTO) {
-
-        if (!customerRepository.existsById( customerDTO.getId() )) {
+        CustomerId id = new CustomerId(customerDTO.getId());
+        if (!customerRepository.existsById( id )) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
@@ -71,13 +71,13 @@ public class CustomerService {
      */
     public Optional<CustomerDTO> partialUpdate(CustomerDTO customerDTO) {
         log.debug("Request to partially update Customer : {}", customerDTO);
-
-        if (!customerRepository.existsById(customerDTO.getId())) {
+        CustomerId id = new CustomerId(customerDTO.getId());
+        if (!customerRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         return customerRepository
-            .findById(customerDTO.getId())
+            .findById(id)
             .map(existingCustomer -> {
                 CustomerMapper.partialUpdate(existingCustomer, customerDTO);
 
@@ -120,7 +120,8 @@ public class CustomerService {
     @Transactional(readOnly = true)
     public Optional<CustomerDTO> findOne(UUID id) {
         log.debug("Request to get Customer : {}", id);
-        return customerRepository.findById(id).map(CustomerMapper::toDto);
+        CustomerId cId = new CustomerId(id);
+        return customerRepository.findById(cId).map(CustomerMapper::toDto);
     }
 
     /**
@@ -130,6 +131,7 @@ public class CustomerService {
      */
     public void delete(UUID id) {
         log.debug("Request to delete Customer : {}", id);
-        customerRepository.deleteById(id);
+        CustomerId cId = new CustomerId(id);
+        customerRepository.deleteById(cId);
     }
 }

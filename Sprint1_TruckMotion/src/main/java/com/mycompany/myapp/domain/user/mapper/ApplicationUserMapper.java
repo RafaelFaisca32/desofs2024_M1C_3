@@ -17,11 +17,11 @@ import java.util.List;
 public final class ApplicationUserMapper{
 
     public static ApplicationUser toEntity(ApplicationUserDTO dto) {
-        return null;
+        return new ApplicationUser();
     }
 
     public static ApplicationUserDTO toDto(ApplicationUser entity) {
-        return null;
+        return new ApplicationUserDTO();
     }
 
     public static List<ApplicationUser> toEntity(List<ApplicationUserDTO> dtoList) {
