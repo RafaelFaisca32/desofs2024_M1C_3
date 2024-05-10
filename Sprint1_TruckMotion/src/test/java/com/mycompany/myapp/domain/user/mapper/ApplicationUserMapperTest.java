@@ -7,18 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ApplicationUserMapperTest {
-
-    private ApplicationUserMapper applicationUserMapper;
-
-    @BeforeEach
-    void setUp() {
-        applicationUserMapper = new ApplicationUserMapper();
-    }
-
     @Test
     void shouldConvertToDtoAndBack() {
         var expected = getApplicationUserSample1();
-        var actual = applicationUserMapper.toEntity(applicationUserMapper.toDto(expected));
+        var actual = ApplicationUserMapper.toEntity(ApplicationUserMapper.toDto(expected));
         assertApplicationUserAllPropertiesEquals(expected, actual);
     }
 }

@@ -8,17 +8,10 @@ import org.junit.jupiter.api.Test;
 
 class ManagerMapperTest {
 
-    private ManagerMapper managerMapper;
-
-    @BeforeEach
-    void setUp() {
-        managerMapper = new ManagerMapper();
-    }
-
     @Test
     void shouldConvertToDtoAndBack() {
         var expected = getManagerSample1();
-        var actual = managerMapper.toEntity(managerMapper.toDto(expected));
+        var actual = ManagerMapper.toEntity(ManagerMapper.toDto(expected));
         assertManagerAllPropertiesEquals(expected, actual);
     }
 }

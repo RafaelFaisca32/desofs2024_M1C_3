@@ -11,36 +11,29 @@ import java.util.UUID;
 
 import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
 import org.mapstruct.*;
-import org.springframework.stereotype.Service;
 
 /**
  * Mapper for the entity {@link ServiceStatus} and its DTO {@link ServiceStatusDTO}.
  */
-@Service
-public class ServiceStatusMapper implements EntityMapper<ServiceStatusDTO,ServiceStatus>{
+public final class ServiceStatusMapper {
 
-    @Override
-    public ServiceStatus toEntity(ServiceStatusDTO dto) {
+    public static ServiceStatus toEntity(ServiceStatusDTO dto) {
         return null;
     }
 
-    @Override
-    public ServiceStatusDTO toDto(ServiceStatus entity) {
+    public static ServiceStatusDTO toDto(ServiceStatus entity) {
         return null;
     }
 
-    @Override
-    public List<ServiceStatus> toEntity(List<ServiceStatusDTO> dtoList) {
+    public static List<ServiceStatus> toEntity(List<ServiceStatusDTO> dtoList) {
         return List.of();
     }
 
-    @Override
-    public List<ServiceStatusDTO> toDto(List<ServiceStatus> entityList) {
+    public static List<ServiceStatusDTO> toDto(List<ServiceStatus> entityList) {
         return List.of();
     }
 
-    @Override
-    public void partialUpdate(ServiceStatus entity, ServiceStatusDTO dto) {
+    public static void partialUpdate(ServiceStatus entity, ServiceStatusDTO dto) {
 
     }
 }

@@ -13,36 +13,29 @@ import java.util.UUID;
 
 import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
 import org.mapstruct.*;
-import org.springframework.stereotype.Service;
 
 /**
  * Mapper for the entity {@link Location} and its DTO {@link LocationDTO}.
  */
-@Service
-public class LocationMapper implements EntityMapper<LocationDTO,Location> {
+public final class LocationMapper {
 
-    @Override
-    public Location toEntity(LocationDTO dto) {
+    public static Location toEntity(LocationDTO dto) {
         return null;
     }
 
-    @Override
-    public LocationDTO toDto(Location entity) {
+    public static LocationDTO toDto(Location entity) {
         return null;
     }
 
-    @Override
-    public List<Location> toEntity(List<LocationDTO> dtoList) {
+    public static List<Location> toEntity(List<LocationDTO> dtoList) {
         return List.of();
     }
 
-    @Override
-    public List<LocationDTO> toDto(List<Location> entityList) {
+    public static List<LocationDTO> toDto(List<Location> entityList) {
         return List.of();
     }
 
-    @Override
-    public void partialUpdate(Location entity, LocationDTO dto) {
+    public static void partialUpdate(Location entity, LocationDTO dto) {
 
     }
 }

@@ -12,36 +12,29 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.mapstruct.*;
-import org.springframework.stereotype.Service;
 
 /**
  * Mapper for the entity {@link Driver} and its DTO {@link DriverDTO}.
  */
-@Service
-public class DriverMapper implements EntityMapper<DriverDTO,Driver>{
+public final class DriverMapper {
 
-    @Override
-    public Driver toEntity(DriverDTO dto) {
+    public static Driver toEntity(DriverDTO dto) {
         return null;
     }
 
-    @Override
-    public DriverDTO toDto(Driver entity) {
+    public static DriverDTO toDto(Driver entity) {
         return null;
     }
 
-    @Override
-    public List<Driver> toEntity(List<DriverDTO> dtoList) {
+    public static List<Driver> toEntity(List<DriverDTO> dtoList) {
         return List.of();
     }
 
-    @Override
-    public List<DriverDTO> toDto(List<Driver> entityList) {
+    public static List<DriverDTO> toDto(List<Driver> entityList) {
         return List.of();
     }
 
-    @Override
-    public void partialUpdate(Driver entity, DriverDTO dto) {
+    public static void partialUpdate(Driver entity, DriverDTO dto) {
 
     }
 }

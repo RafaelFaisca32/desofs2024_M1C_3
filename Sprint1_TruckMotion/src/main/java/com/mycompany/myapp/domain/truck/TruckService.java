@@ -26,13 +26,11 @@ public class TruckService {
 
     private final ITruckRepository truckRepository;
 
-    private final TruckMapper truckMapper;
 
     private static final String ENTITY_NAME = "truck";
 
-    public TruckService(ITruckRepository truckRepository, TruckMapper truckMapper) {
+    public TruckService(ITruckRepository truckRepository) {
         this.truckRepository = truckRepository;
-        this.truckMapper = truckMapper;
     }
 
     /**
@@ -43,9 +41,9 @@ public class TruckService {
      */
     public TruckDTO save(TruckDTO truckDTO) {
         log.debug("Request to save Truck : {}", truckDTO);
-        Truck truck = truckMapper.toEntity(truckDTO);
+        Truck truck = TruckMapper.toEntity(truckDTO);
         truck = truckRepository.save(truck);
-        return truckMapper.toDto(truck);
+        return TruckMapper.toDto(truck);
     }
 
     /**
@@ -61,9 +59,9 @@ public class TruckService {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Truck truck = truckMapper.toEntity(truckDTO);
+        Truck truck = TruckMapper.toEntity(truckDTO);
         truck = truckRepository.save(truck);
-        return truckMapper.toDto(truck);
+        return TruckMapper.toDto(truck);
     }
 
     /**
@@ -80,12 +78,12 @@ public class TruckService {
         return truckRepository
             .findById(truckDTO.getId())
             .map(existingTruck -> {
-                truckMapper.partialUpdate(existingTruck, truckDTO);
+                TruckMapper.partialUpdate(existingTruck, truckDTO);
 
                 return existingTruck;
             })
             .map(truckRepository::save)
-            .map(truckMapper::toDto);
+            .map(TruckMapper::toDto);
     }
 
     /**
@@ -96,7 +94,7 @@ public class TruckService {
     @Transactional(readOnly = true)
     public List<TruckDTO> findAll() {
         log.debug("Request to get all Trucks");
-        return truckRepository.findAll().stream().map(truckMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        return truckRepository.findAll().stream().map(TruckMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -108,7 +106,7 @@ public class TruckService {
         log.debug("Request to get all trucks where Driver is null");
         return StreamSupport.stream(truckRepository.findAll().spliterator(), false)
             .filter(truck -> truck.getDriver() == null)
-            .map(truckMapper::toDto)
+            .map(TruckMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -121,7 +119,7 @@ public class TruckService {
     @Transactional(readOnly = true)
     public Optional<TruckDTO> findOne(UUID id) {
         log.debug("Request to get Truck : {}", id);
-        return truckRepository.findById(id).map(truckMapper::toDto);
+        return truckRepository.findById(id).map(TruckMapper::toDto);
     }
 
     /**

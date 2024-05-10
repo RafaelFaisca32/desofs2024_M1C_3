@@ -44,6 +44,16 @@ public class Customer implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
+    public Customer(){
+
+    }
+
+    public Customer(CustomerId id, Company company, ApplicationUser applicationUser) {
+        this.id = id;
+        this.company = company;
+        this.applicationUser = applicationUser;
+    }
+
     public CustomerId getId() {
         return new CustomerId(this.id.value());
     }

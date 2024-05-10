@@ -26,13 +26,10 @@ public class DriverService {
 
     private final IDriverRepository driverRepository;
 
-    private final DriverMapper driverMapper;
-
     private static final String ENTITY_NAME = "driver";
 
-    public DriverService(IDriverRepository driverRepository, DriverMapper driverMapper) {
+    public DriverService(IDriverRepository driverRepository) {
         this.driverRepository = driverRepository;
-        this.driverMapper = driverMapper;
     }
 
     /**
@@ -43,9 +40,9 @@ public class DriverService {
      */
     public DriverDTO save(DriverDTO driverDTO) {
         log.debug("Request to save Driver : {}", driverDTO);
-        Driver driver = driverMapper.toEntity(driverDTO);
+        Driver driver = DriverMapper.toEntity(driverDTO);
         driver = driverRepository.save(driver);
-        return driverMapper.toDto(driver);
+        return DriverMapper.toDto(driver);
     }
 
     /**
@@ -59,9 +56,9 @@ public class DriverService {
         if (!driverRepository.existsById(driverDTO.getId())) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-        Driver driver = driverMapper.toEntity(driverDTO);
+        Driver driver = DriverMapper.toEntity(driverDTO);
         driver = driverRepository.save(driver);
-        return driverMapper.toDto(driver);
+        return DriverMapper.toDto(driver);
     }
 
     /**
@@ -80,12 +77,12 @@ public class DriverService {
         return driverRepository
             .findById(driverDTO.getId())
             .map(existingDriver -> {
-                driverMapper.partialUpdate(existingDriver, driverDTO);
+                DriverMapper.partialUpdate(existingDriver, driverDTO);
 
                 return existingDriver;
             })
             .map(driverRepository::save)
-            .map(driverMapper::toDto);
+            .map(DriverMapper::toDto);
     }
 
     /**
@@ -96,7 +93,7 @@ public class DriverService {
     @Transactional(readOnly = true)
     public List<DriverDTO> findAll() {
         log.debug("Request to get all Drivers");
-        return driverRepository.findAll().stream().map(driverMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        return driverRepository.findAll().stream().map(DriverMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -108,7 +105,7 @@ public class DriverService {
         log.debug("Request to get all drivers where Transport is null");
         return StreamSupport.stream(driverRepository.findAll().spliterator(), false)
             .filter(driver -> driver.getTransport() == null)
-            .map(driverMapper::toDto)
+            .map(DriverMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -121,7 +118,7 @@ public class DriverService {
     @Transactional(readOnly = true)
     public Optional<DriverDTO> findOne(UUID id) {
         log.debug("Request to get Driver : {}", id);
-        return driverRepository.findById(id).map(driverMapper::toDto);
+        return driverRepository.findById(id).map(DriverMapper::toDto);
     }
 
     /**

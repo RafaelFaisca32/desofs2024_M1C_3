@@ -13,36 +13,29 @@ import java.util.UUID;
 
 import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
 import org.mapstruct.*;
-import org.springframework.stereotype.Service;
 
 /**
  * Mapper for the entity {@link ServiceRequest} and its DTO {@link ServiceRequestDTO}.
  */
-@Service
-public class ServiceRequestMapper implements EntityMapper<ServiceRequestDTO,ServiceRequest> {
+public final class ServiceRequestMapper {
 
-    @Override
-    public ServiceRequest toEntity(ServiceRequestDTO dto) {
+    public static ServiceRequest toEntity(ServiceRequestDTO dto) {
         return null;
     }
 
-    @Override
-    public ServiceRequestDTO toDto(ServiceRequest entity) {
+    public static ServiceRequestDTO toDto(ServiceRequest entity) {
         return null;
     }
 
-    @Override
-    public List<ServiceRequest> toEntity(List<ServiceRequestDTO> dtoList) {
+    public static List<ServiceRequest> toEntity(List<ServiceRequestDTO> dtoList) {
         return List.of();
     }
 
-    @Override
-    public List<ServiceRequestDTO> toDto(List<ServiceRequest> entityList) {
+    public static List<ServiceRequestDTO> toDto(List<ServiceRequest> entityList) {
         return List.of();
     }
 
-    @Override
-    public void partialUpdate(ServiceRequest entity, ServiceRequestDTO dto) {
+    public static void partialUpdate(ServiceRequest entity, ServiceRequestDTO dto) {
 
     }
 }

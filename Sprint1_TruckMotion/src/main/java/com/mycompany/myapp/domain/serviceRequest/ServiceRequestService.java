@@ -26,13 +26,11 @@ public class ServiceRequestService {
 
     private final IServiceRequestRepository serviceRequestRepository;
 
-    private final ServiceRequestMapper serviceRequestMapper;
 
     private static final String ENTITY_NAME = "serviceRequest";
 
-    public ServiceRequestService(IServiceRequestRepository serviceRequestRepository, ServiceRequestMapper serviceRequestMapper) {
+    public ServiceRequestService(IServiceRequestRepository serviceRequestRepository) {
         this.serviceRequestRepository = serviceRequestRepository;
-        this.serviceRequestMapper = serviceRequestMapper;
     }
 
     /**
@@ -43,9 +41,9 @@ public class ServiceRequestService {
      */
     public ServiceRequestDTO save(ServiceRequestDTO serviceRequestDTO) {
         log.debug("Request to save ServiceRequest : {}", serviceRequestDTO);
-        ServiceRequest serviceRequest = serviceRequestMapper.toEntity(serviceRequestDTO);
+        ServiceRequest serviceRequest = ServiceRequestMapper.toEntity(serviceRequestDTO);
         serviceRequest = serviceRequestRepository.save(serviceRequest);
-        return serviceRequestMapper.toDto(serviceRequest);
+        return ServiceRequestMapper.toDto(serviceRequest);
     }
 
     /**
@@ -61,9 +59,9 @@ public class ServiceRequestService {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        ServiceRequest serviceRequest = serviceRequestMapper.toEntity(serviceRequestDTO);
+        ServiceRequest serviceRequest = ServiceRequestMapper.toEntity(serviceRequestDTO);
         serviceRequest = serviceRequestRepository.save(serviceRequest);
-        return serviceRequestMapper.toDto(serviceRequest);
+        return ServiceRequestMapper.toDto(serviceRequest);
     }
 
     /**
@@ -83,12 +81,12 @@ public class ServiceRequestService {
         return serviceRequestRepository
             .findById(serviceRequestDTO.getId())
             .map(existingServiceRequest -> {
-                serviceRequestMapper.partialUpdate(existingServiceRequest, serviceRequestDTO);
+                ServiceRequestMapper.partialUpdate(existingServiceRequest, serviceRequestDTO);
 
                 return existingServiceRequest;
             })
             .map(serviceRequestRepository::save)
-            .map(serviceRequestMapper::toDto);
+            .map(ServiceRequestMapper::toDto);
     }
 
     /**
@@ -102,7 +100,7 @@ public class ServiceRequestService {
         return serviceRequestRepository
             .findAll()
             .stream()
-            .map(serviceRequestMapper::toDto)
+            .map(ServiceRequestMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -115,7 +113,7 @@ public class ServiceRequestService {
         log.debug("Request to get all serviceRequests where Transport is null");
         return StreamSupport.stream(serviceRequestRepository.findAll().spliterator(), false)
             .filter(serviceRequest -> serviceRequest.getTransport() == null)
-            .map(serviceRequestMapper::toDto)
+            .map(ServiceRequestMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -128,7 +126,7 @@ public class ServiceRequestService {
     @Transactional(readOnly = true)
     public Optional<ServiceRequestDTO> findOne(UUID id) {
         log.debug("Request to get ServiceRequest : {}", id);
-        return serviceRequestRepository.findById(id).map(serviceRequestMapper::toDto);
+        return serviceRequestRepository.findById(id).map(ServiceRequestMapper::toDto);
     }
 
     /**

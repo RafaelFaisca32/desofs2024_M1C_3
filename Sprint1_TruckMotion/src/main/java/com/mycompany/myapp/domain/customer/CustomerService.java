@@ -25,15 +25,11 @@ public class CustomerService {
     private final Logger log = LoggerFactory.getLogger(CustomerService.class);
 
     private final ICustomerRepository customerRepository;
-
-    private final CustomerMapper customerMapper;
-
     private static final String ENTITY_NAME = "customer";
 
 
-    public CustomerService(ICustomerRepository customerRepository, CustomerMapper customerMapper) {
+    public CustomerService(ICustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.customerMapper = customerMapper;
     }
 
     /**
@@ -44,9 +40,9 @@ public class CustomerService {
      */
     public CustomerDTO save(CustomerDTO customerDTO) {
         log.debug("Request to save Customer : {}", customerDTO);
-        Customer customer = customerMapper.toEntity(customerDTO);
+        Customer customer = CustomerMapper.toEntity(customerDTO);
         customer = customerRepository.save(customer);
-        return customerMapper.toDto(customer);
+        return CustomerMapper.toDto(customer);
     }
 
     /**
@@ -57,14 +53,14 @@ public class CustomerService {
      */
     public CustomerDTO update(CustomerDTO customerDTO) {
 
-        if (!customerRepository.existsById(customerDTO.getId())) {
+        if (!customerRepository.existsById( customerDTO.getId() )) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         log.debug("Request to update Customer : {}", customerDTO);
-        Customer customer = customerMapper.toEntity(customerDTO);
+        Customer customer = CustomerMapper.toEntity(customerDTO);
         customer = customerRepository.save(customer);
-        return customerMapper.toDto(customer);
+        return CustomerMapper.toDto(customer);
     }
 
     /**
@@ -83,12 +79,12 @@ public class CustomerService {
         return customerRepository
             .findById(customerDTO.getId())
             .map(existingCustomer -> {
-                customerMapper.partialUpdate(existingCustomer, customerDTO);
+                CustomerMapper.partialUpdate(existingCustomer, customerDTO);
 
                 return existingCustomer;
             })
             .map(customerRepository::save)
-            .map(customerMapper::toDto);
+            .map(CustomerMapper::toDto);
     }
 
     /**
@@ -99,7 +95,7 @@ public class CustomerService {
     @Transactional(readOnly = true)
     public List<CustomerDTO> findAll() {
         log.debug("Request to get all Customers");
-        return customerRepository.findAll().stream().map(customerMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        return customerRepository.findAll().stream().map(CustomerMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -111,7 +107,7 @@ public class CustomerService {
         log.debug("Request to get all customers where ServiceRequest is null");
         return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
             .filter(customer -> customer.getServiceRequest() == null)
-            .map(customerMapper::toDto)
+            .map(CustomerMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -124,7 +120,7 @@ public class CustomerService {
     @Transactional(readOnly = true)
     public Optional<CustomerDTO> findOne(UUID id) {
         log.debug("Request to get Customer : {}", id);
-        return customerRepository.findById(id).map(customerMapper::toDto);
+        return customerRepository.findById(id).map(CustomerMapper::toDto);
     }
 
     /**

@@ -8,17 +8,10 @@ import org.junit.jupiter.api.Test;
 
 class TransportMapperTest {
 
-    private TransportMapper transportMapper;
-
-    @BeforeEach
-    void setUp() {
-        transportMapper = new TransportMapper();
-    }
-
     @Test
     void shouldConvertToDtoAndBack() {
         var expected = getTransportSample1();
-        var actual = transportMapper.toEntity(transportMapper.toDto(expected));
+        var actual = TransportMapper.toEntity(TransportMapper.toDto(expected));
         assertTransportAllPropertiesEquals(expected, actual);
     }
 }

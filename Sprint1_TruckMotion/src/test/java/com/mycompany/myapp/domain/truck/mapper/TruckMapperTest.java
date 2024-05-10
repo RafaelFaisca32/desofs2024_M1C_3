@@ -7,18 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TruckMapperTest {
-
-    private TruckMapper truckMapper;
-
-    @BeforeEach
-    void setUp() {
-        truckMapper = new TruckMapper();
-    }
-
     @Test
     void shouldConvertToDtoAndBack() {
         var expected = getTruckSample1();
-        var actual = truckMapper.toEntity(truckMapper.toDto(expected));
+        var actual = TruckMapper.toEntity(TruckMapper.toDto(expected));
         assertTruckAllPropertiesEquals(expected, actual);
     }
 }

@@ -27,17 +27,13 @@ public class ApplicationUserService {
 
     private final ApplicationUserRepository applicationUserRepository;
 
-    private final ApplicationUserMapper applicationUserMapper;
-
     private final UserRepository userRepository;
 
     public ApplicationUserService(
         ApplicationUserRepository applicationUserRepository,
-        ApplicationUserMapper applicationUserMapper,
         UserRepository userRepository
     ) {
         this.applicationUserRepository = applicationUserRepository;
-        this.applicationUserMapper = applicationUserMapper;
         this.userRepository = userRepository;
     }
 
@@ -49,11 +45,11 @@ public class ApplicationUserService {
      */
     public ApplicationUserDTO save(ApplicationUserDTO applicationUserDTO) {
         log.debug("Request to save ApplicationUser : {}", applicationUserDTO);
-        ApplicationUser applicationUser = applicationUserMapper.toEntity(applicationUserDTO);
+        ApplicationUser applicationUser = ApplicationUserMapper.toEntity(applicationUserDTO);
         Long userId = applicationUser.getInternalUser().getId();
         userRepository.findById(userId).ifPresent(applicationUser::internalUser);
         applicationUser = applicationUserRepository.save(applicationUser);
-        return applicationUserMapper.toDto(applicationUser);
+        return ApplicationUserMapper.toDto(applicationUser);
     }
 
     /**
@@ -64,9 +60,9 @@ public class ApplicationUserService {
      */
     public ApplicationUserDTO update(ApplicationUserDTO applicationUserDTO) {
         log.debug("Request to update ApplicationUser : {}", applicationUserDTO);
-        ApplicationUser applicationUser = applicationUserMapper.toEntity(applicationUserDTO);
+        ApplicationUser applicationUser = ApplicationUserMapper.toEntity(applicationUserDTO);
         applicationUser = applicationUserRepository.save(applicationUser);
-        return applicationUserMapper.toDto(applicationUser);
+        return ApplicationUserMapper.toDto(applicationUser);
     }
 
     /**
@@ -81,12 +77,12 @@ public class ApplicationUserService {
         return applicationUserRepository
             .findById(applicationUserDTO.getId())
             .map(existingApplicationUser -> {
-                applicationUserMapper.partialUpdate(existingApplicationUser, applicationUserDTO);
+                ApplicationUserMapper.partialUpdate(existingApplicationUser, applicationUserDTO);
 
                 return existingApplicationUser;
             })
             .map(applicationUserRepository::save)
-            .map(applicationUserMapper::toDto);
+            .map(ApplicationUserMapper::toDto);
     }
 
     /**
@@ -100,7 +96,7 @@ public class ApplicationUserService {
         return applicationUserRepository
             .findAll()
             .stream()
-            .map(applicationUserMapper::toDto)
+            .map(ApplicationUserMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -110,7 +106,7 @@ public class ApplicationUserService {
      * @return the list of entities.
      */
     public Page<ApplicationUserDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return applicationUserRepository.findAllWithEagerRelationships(pageable).map(applicationUserMapper::toDto);
+        return applicationUserRepository.findAllWithEagerRelationships(pageable).map(ApplicationUserMapper::toDto);
     }
 
     /**
@@ -122,7 +118,7 @@ public class ApplicationUserService {
         log.debug("Request to get all applicationUsers where Driver is null");
         return StreamSupport.stream(applicationUserRepository.findAll().spliterator(), false)
             .filter(applicationUser -> applicationUser.getDriver() == null)
-            .map(applicationUserMapper::toDto)
+            .map(ApplicationUserMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -135,7 +131,7 @@ public class ApplicationUserService {
         log.debug("Request to get all applicationUsers where Manager is null");
         return StreamSupport.stream(applicationUserRepository.findAll().spliterator(), false)
             .filter(applicationUser -> applicationUser.getManager() == null)
-            .map(applicationUserMapper::toDto)
+            .map(ApplicationUserMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -148,7 +144,7 @@ public class ApplicationUserService {
         log.debug("Request to get all applicationUsers where Customer is null");
         return StreamSupport.stream(applicationUserRepository.findAll().spliterator(), false)
             .filter(applicationUser -> applicationUser.getCustomer() == null)
-            .map(applicationUserMapper::toDto)
+            .map(ApplicationUserMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -161,7 +157,7 @@ public class ApplicationUserService {
     @Transactional(readOnly = true)
     public Optional<ApplicationUserDTO> findOne(Long id) {
         log.debug("Request to get ApplicationUser : {}", id);
-        return applicationUserRepository.findOneWithEagerRelationships(id).map(applicationUserMapper::toDto);
+        return applicationUserRepository.findOneWithEagerRelationships(id).map(ApplicationUserMapper::toDto);
     }
 
     /**

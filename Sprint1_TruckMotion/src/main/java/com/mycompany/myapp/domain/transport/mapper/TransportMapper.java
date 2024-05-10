@@ -14,36 +14,29 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.mapstruct.*;
-import org.springframework.stereotype.Service;
 
 /**
  * Mapper for the entity {@link Transport} and its DTO {@link TransportDTO}.
  */
-@Service
-public class TransportMapper implements EntityMapper<TransportDTO,Transport> {
+public final class TransportMapper {
 
-    @Override
-    public Transport toEntity(TransportDTO dto) {
+    public static Transport toEntity(TransportDTO dto) {
         return null;
     }
 
-    @Override
-    public TransportDTO toDto(Transport entity) {
+    public static TransportDTO toDto(Transport entity) {
         return null;
     }
 
-    @Override
-    public List<Transport> toEntity(List<TransportDTO> dtoList) {
+    public static List<Transport> toEntity(List<TransportDTO> dtoList) {
         return List.of();
     }
 
-    @Override
-    public List<TransportDTO> toDto(List<Transport> entityList) {
+    public static List<TransportDTO> toDto(List<Transport> entityList) {
         return List.of();
     }
 
-    @Override
-    public void partialUpdate(Transport entity, TransportDTO dto) {
+    public static void partialUpdate(Transport entity, TransportDTO dto) {
 
     }
 }

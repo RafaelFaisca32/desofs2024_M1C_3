@@ -7,8 +7,8 @@ import com.mycompany.myapp.domain.user.ApplicationUser;
 import com.mycompany.myapp.domain.customer.Customer;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
+import com.mycompany.myapp.domain.user.mapper.ApplicationUserMapper;
 import org.mapstruct.*;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,31 +16,35 @@ import java.util.UUID;
 /**
  * Mapper for the entity {@link Customer} and its DTO {@link CustomerDTO}.
  */
-@Service
-public class CustomerMapper implements EntityMapper<CustomerDTO,Customer> {
 
-    @Override
-    public Customer toEntity(CustomerDTO dto) {
-        return null;
+public final class CustomerMapper {
+
+    public static Customer toEntity(CustomerDTO dto) {
+        CustomerId id = new CustomerId(dto.getId());
+        Company company = new Company(dto.getCompany());
+        ApplicationUser applicationUser = ApplicationUserMapper.toEntity(dto.getApplicationUser());
+        return new Customer(id,company,applicationUser);
     }
 
-    @Override
-    public CustomerDTO toDto(Customer entity) {
-        return null;
+    public static CustomerDTO toDto(Customer entity) {
+        ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(entity.getApplicationUser());
+        return new CustomerDTO(entity.getId().value(),entity.getCompany().value(),applicationUserDTO);
     }
 
-    @Override
-    public List<Customer> toEntity(List<CustomerDTO> dtoList) {
-        return List.of();
+    public static List<Customer> toEntity(List<CustomerDTO> dtoList) {
+        return dtoList.stream().map(CustomerMapper::toEntity).toList();
     }
 
-    @Override
-    public List<CustomerDTO> toDto(List<Customer> entityList) {
-        return List.of();
+    public static List<CustomerDTO> toDto(List<Customer> entityList) {
+        return entityList.stream().map(CustomerMapper::toDto).toList();
     }
 
-    @Override
-    public void partialUpdate(Customer entity, CustomerDTO dto) {
-
+    public static void partialUpdate(Customer entity, CustomerDTO dto) {
+        if(dto.getCompany() != null){
+            entity.company(new Company(dto.getCompany()));
+        }
+        if(dto.getApplicationUser() != null){
+            entity.applicationUser(ApplicationUserMapper.toEntity(dto.getApplicationUser()));
+        }
     }
 }

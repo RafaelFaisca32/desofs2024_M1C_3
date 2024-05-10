@@ -26,13 +26,11 @@ public class LocationService {
 
     private final ILocationRepository locationRepository;
 
-    private final LocationMapper locationMapper;
 
     private static final String ENTITY_NAME = "location";
 
-    public LocationService(ILocationRepository locationRepository, LocationMapper locationMapper) {
+    public LocationService(ILocationRepository locationRepository) {
         this.locationRepository = locationRepository;
-        this.locationMapper = locationMapper;
     }
 
     /**
@@ -43,9 +41,9 @@ public class LocationService {
      */
     public LocationDTO save(LocationDTO locationDTO) {
         log.debug("Request to save Location : {}", locationDTO);
-        Location location = locationMapper.toEntity(locationDTO);
+        Location location = LocationMapper.toEntity(locationDTO);
         location = locationRepository.save(location);
-        return locationMapper.toDto(location);
+        return LocationMapper.toDto(location);
     }
 
     /**
@@ -59,9 +57,9 @@ public class LocationService {
         if (!locationRepository.existsById(locationDTO.getId())) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-        Location location = locationMapper.toEntity(locationDTO);
+        Location location = LocationMapper.toEntity(locationDTO);
         location = locationRepository.save(location);
-        return locationMapper.toDto(location);
+        return LocationMapper.toDto(location);
     }
 
     /**
@@ -80,12 +78,12 @@ public class LocationService {
         return locationRepository
             .findById(locationDTO.getId())
             .map(existingLocation -> {
-                locationMapper.partialUpdate(existingLocation, locationDTO);
+                LocationMapper.partialUpdate(existingLocation, locationDTO);
 
                 return existingLocation;
             })
             .map(locationRepository::save)
-            .map(locationMapper::toDto);
+            .map(LocationMapper::toDto);
     }
 
     /**
@@ -96,7 +94,7 @@ public class LocationService {
     @Transactional(readOnly = true)
     public List<LocationDTO> findAll() {
         log.debug("Request to get all Locations");
-        return locationRepository.findAll().stream().map(locationMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        return locationRepository.findAll().stream().map(LocationMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -108,7 +106,7 @@ public class LocationService {
         log.debug("Request to get all locations where ServiceRequest is null");
         return StreamSupport.stream(locationRepository.findAll().spliterator(), false)
             .filter(location -> location.getServiceRequest() == null)
-            .map(locationMapper::toDto)
+            .map(LocationMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -121,7 +119,7 @@ public class LocationService {
         log.debug("Request to get all locations where Transport is null");
         return StreamSupport.stream(locationRepository.findAll().spliterator(), false)
             .filter(location -> location.getTransport() == null)
-            .map(locationMapper::toDto)
+            .map(LocationMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -134,7 +132,7 @@ public class LocationService {
     @Transactional(readOnly = true)
     public Optional<LocationDTO> findOne(UUID id) {
         log.debug("Request to get Location : {}", id);
-        return locationRepository.findById(id).map(locationMapper::toDto);
+        return locationRepository.findById(id).map(LocationMapper::toDto);
     }
 
     /**

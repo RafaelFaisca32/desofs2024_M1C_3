@@ -25,13 +25,10 @@ public class TransportService {
 
     private final ITransportRepository transportRepository;
 
-    private final TransportMapper transportMapper;
-
     private static final String ENTITY_NAME = "transport";
 
-    public TransportService(ITransportRepository transportRepository, TransportMapper transportMapper) {
+    public TransportService(ITransportRepository transportRepository) {
         this.transportRepository = transportRepository;
-        this.transportMapper = transportMapper;
     }
 
     /**
@@ -42,9 +39,9 @@ public class TransportService {
      */
     public TransportDTO save(TransportDTO transportDTO) {
         log.debug("Request to save Transport : {}", transportDTO);
-        Transport transport = transportMapper.toEntity(transportDTO);
+        Transport transport = TransportMapper.toEntity(transportDTO);
         transport = transportRepository.save(transport);
-        return transportMapper.toDto(transport);
+        return TransportMapper.toDto(transport);
     }
 
     /**
@@ -58,9 +55,9 @@ public class TransportService {
         if (!transportRepository.existsById(transportDTO.getId())) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-        Transport transport = transportMapper.toEntity(transportDTO);
+        Transport transport = TransportMapper.toEntity(transportDTO);
         transport = transportRepository.save(transport);
-        return transportMapper.toDto(transport);
+        return TransportMapper.toDto(transport);
     }
 
     /**
@@ -79,12 +76,12 @@ public class TransportService {
         return transportRepository
             .findById(transportDTO.getId())
             .map(existingTransport -> {
-                transportMapper.partialUpdate(existingTransport, transportDTO);
+                TransportMapper.partialUpdate(existingTransport, transportDTO);
 
                 return existingTransport;
             })
             .map(transportRepository::save)
-            .map(transportMapper::toDto);
+            .map(TransportMapper::toDto);
     }
 
     /**
@@ -95,7 +92,7 @@ public class TransportService {
     @Transactional(readOnly = true)
     public List<TransportDTO> findAll() {
         log.debug("Request to get all Transports");
-        return transportRepository.findAll().stream().map(transportMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        return transportRepository.findAll().stream().map(TransportMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -107,7 +104,7 @@ public class TransportService {
     @Transactional(readOnly = true)
     public Optional<TransportDTO> findOne(UUID id) {
         log.debug("Request to get Transport : {}", id);
-        return transportRepository.findById(id).map(transportMapper::toDto);
+        return transportRepository.findById(id).map(TransportMapper::toDto);
     }
 
     /**

@@ -13,31 +13,26 @@ import java.util.List;
 /**
  * Mapper for the entity {@link ApplicationUser} and its DTO {@link ApplicationUserDTO}.
  */
-@Service
-public class ApplicationUserMapper implements EntityMapper<ApplicationUserDTO, ApplicationUser> {
 
-    @Override
-    public ApplicationUser toEntity(ApplicationUserDTO dto) {
+public final class ApplicationUserMapper{
+
+    public static ApplicationUser toEntity(ApplicationUserDTO dto) {
         return null;
     }
 
-    @Override
-    public ApplicationUserDTO toDto(ApplicationUser entity) {
+    public static ApplicationUserDTO toDto(ApplicationUser entity) {
         return null;
     }
 
-    @Override
-    public List<ApplicationUser> toEntity(List<ApplicationUserDTO> dtoList) {
+    public static List<ApplicationUser> toEntity(List<ApplicationUserDTO> dtoList) {
         return List.of();
     }
 
-    @Override
-    public List<ApplicationUserDTO> toDto(List<ApplicationUser> entityList) {
+    public static List<ApplicationUserDTO> toDto(List<ApplicationUser> entityList) {
         return List.of();
     }
 
-    @Override
-    public void partialUpdate(ApplicationUser entity, ApplicationUserDTO dto) {
+    public static void partialUpdate(ApplicationUser entity, ApplicationUserDTO dto) {
 
     }
 }

@@ -8,17 +8,11 @@ import org.junit.jupiter.api.Test;
 
 class DriverMapperTest {
 
-    private DriverMapper driverMapper;
-
-    @BeforeEach
-    void setUp() {
-        driverMapper = new DriverMapper();
-    }
 
     @Test
     void shouldConvertToDtoAndBack() {
         var expected = getDriverSample1();
-        var actual = driverMapper.toEntity(driverMapper.toDto(expected));
+        var actual = DriverMapper.toEntity(DriverMapper.toDto(expected));
         assertDriverAllPropertiesEquals(expected, actual);
     }
 }

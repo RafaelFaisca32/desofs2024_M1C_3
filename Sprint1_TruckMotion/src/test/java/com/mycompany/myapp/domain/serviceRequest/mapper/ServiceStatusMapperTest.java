@@ -8,17 +8,10 @@ import org.junit.jupiter.api.Test;
 
 class ServiceStatusMapperTest {
 
-    private ServiceStatusMapper serviceStatusMapper;
-
-    @BeforeEach
-    void setUp() {
-        serviceStatusMapper = new ServiceStatusMapper();
-    }
-
     @Test
     void shouldConvertToDtoAndBack() {
         var expected = getServiceStatusSample1();
-        var actual = serviceStatusMapper.toEntity(serviceStatusMapper.toDto(expected));
+        var actual = ServiceStatusMapper.toEntity(ServiceStatusMapper.toDto(expected));
         assertServiceStatusAllPropertiesEquals(expected, actual);
     }
 }

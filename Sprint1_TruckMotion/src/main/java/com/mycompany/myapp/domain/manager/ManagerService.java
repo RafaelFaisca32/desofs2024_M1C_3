@@ -25,13 +25,10 @@ public class ManagerService {
 
     private final IManagerRepository managerRepository;
 
-    private final ManagerMapper managerMapper;
-
     private static final String ENTITY_NAME = "manager";
 
-    public ManagerService(IManagerRepository managerRepository, ManagerMapper managerMapper) {
+    public ManagerService(IManagerRepository managerRepository) {
         this.managerRepository = managerRepository;
-        this.managerMapper = managerMapper;
     }
 
     /**
@@ -42,9 +39,9 @@ public class ManagerService {
      */
     public ManagerDTO save(ManagerDTO managerDTO) {
         log.debug("Request to save Manager : {}", managerDTO);
-        Manager manager = managerMapper.toEntity(managerDTO);
+        Manager manager = ManagerMapper.toEntity(managerDTO);
         manager = managerRepository.save(manager);
-        return managerMapper.toDto(manager);
+        return ManagerMapper.toDto(manager);
     }
 
     /**
@@ -60,9 +57,9 @@ public class ManagerService {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Manager manager = managerMapper.toEntity(managerDTO);
+        Manager manager = ManagerMapper.toEntity(managerDTO);
         manager = managerRepository.save(manager);
-        return managerMapper.toDto(manager);
+        return ManagerMapper.toDto(manager);
     }
 
     /**
@@ -81,12 +78,12 @@ public class ManagerService {
         return managerRepository
             .findById(managerDTO.getId())
             .map(existingManager -> {
-                managerMapper.partialUpdate(existingManager, managerDTO);
+                ManagerMapper.partialUpdate(existingManager, managerDTO);
 
                 return existingManager;
             })
             .map(managerRepository::save)
-            .map(managerMapper::toDto);
+            .map(ManagerMapper::toDto);
     }
 
     /**
@@ -97,7 +94,7 @@ public class ManagerService {
     @Transactional(readOnly = true)
     public List<ManagerDTO> findAll() {
         log.debug("Request to get all Managers");
-        return managerRepository.findAll().stream().map(managerMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        return managerRepository.findAll().stream().map(ManagerMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -109,7 +106,7 @@ public class ManagerService {
     @Transactional(readOnly = true)
     public Optional<ManagerDTO> findOne(UUID id) {
         log.debug("Request to get Manager : {}", id);
-        return managerRepository.findById(id).map(managerMapper::toDto);
+        return managerRepository.findById(id).map(ManagerMapper::toDto);
     }
 
     /**

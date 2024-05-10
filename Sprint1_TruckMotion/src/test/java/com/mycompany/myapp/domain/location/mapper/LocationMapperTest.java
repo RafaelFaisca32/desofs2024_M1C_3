@@ -8,17 +8,10 @@ import org.junit.jupiter.api.Test;
 
 class LocationMapperTest {
 
-    private LocationMapper locationMapper;
-
-    @BeforeEach
-    void setUp() {
-        locationMapper = new LocationMapper();
-    }
-
     @Test
     void shouldConvertToDtoAndBack() {
         var expected = getLocationSample1();
-        var actual = locationMapper.toEntity(locationMapper.toDto(expected));
+        var actual = LocationMapper.toEntity(LocationMapper.toDto(expected));
         assertLocationAllPropertiesEquals(expected, actual);
     }
 }
