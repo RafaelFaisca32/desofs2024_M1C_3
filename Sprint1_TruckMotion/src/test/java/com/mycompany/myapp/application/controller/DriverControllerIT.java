@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.driver.Driver;
+import com.mycompany.myapp.domain.driver.DriverId;
 import com.mycompany.myapp.domain.driver.IDriverRepository;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.driver.mapper.DriverMapper;
@@ -40,9 +41,6 @@ class DriverControllerIT {
 
     @Autowired
     private IDriverRepository driverRepository;
-
-    @Autowired
-    private DriverMapper driverMapper;
 
     @Autowired
     private EntityManager em;
@@ -84,7 +82,7 @@ class DriverControllerIT {
     void createDriver() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the Driver
-        DriverDTO driverDTO = driverMapper.toDto(driver);
+        DriverDTO driverDTO = DriverMapper.toDto(driver);
         var returnedDriverDTO = om.readValue(
             restDriverMockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(driverDTO)))
@@ -97,7 +95,7 @@ class DriverControllerIT {
 
         // Validate the Driver in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
-        var returnedDriver = driverMapper.toEntity(returnedDriverDTO);
+        var returnedDriver = DriverMapper.toEntity(returnedDriverDTO);
         assertDriverUpdatableFieldsEquals(returnedDriver, getPersistedDriver(returnedDriver));
     }
 
@@ -106,7 +104,7 @@ class DriverControllerIT {
     void createDriverWithExistingId() throws Exception {
         // Create the Driver with an existing ID
         driverRepository.saveAndFlush(driver);
-        DriverDTO driverDTO = driverMapper.toDto(driver);
+        DriverDTO driverDTO = DriverMapper.toDto(driver);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
@@ -166,7 +164,7 @@ class DriverControllerIT {
         Driver updatedDriver = driverRepository.findById(driver.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedDriver are not directly saved in db
         em.detach(updatedDriver);
-        DriverDTO driverDTO = driverMapper.toDto(updatedDriver);
+        DriverDTO driverDTO = DriverMapper.toDto(updatedDriver);
 
         restDriverMockMvc
             .perform(
@@ -183,10 +181,10 @@ class DriverControllerIT {
     @Transactional
     void putNonExistingDriver() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        driver.setId(UUID.randomUUID());
+        driver.setId(new DriverId(UUID.randomUUID()));
 
         // Create the Driver
-        DriverDTO driverDTO = driverMapper.toDto(driver);
+        DriverDTO driverDTO = DriverMapper.toDto(driver);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDriverMockMvc
@@ -203,10 +201,10 @@ class DriverControllerIT {
     @Transactional
     void putWithIdMismatchDriver() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        driver.setId(UUID.randomUUID());
+        driver.setId(new DriverId(UUID.randomUUID()));
 
         // Create the Driver
-        DriverDTO driverDTO = driverMapper.toDto(driver);
+        DriverDTO driverDTO = DriverMapper.toDto(driver);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDriverMockMvc
@@ -223,10 +221,10 @@ class DriverControllerIT {
     @Transactional
     void putWithMissingIdPathParamDriver() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        driver.setId(UUID.randomUUID());
+        driver.setId(new DriverId(UUID.randomUUID()));
 
         // Create the Driver
-        DriverDTO driverDTO = driverMapper.toDto(driver);
+        DriverDTO driverDTO = DriverMapper.toDto(driver);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDriverMockMvc
@@ -293,10 +291,10 @@ class DriverControllerIT {
     @Transactional
     void patchNonExistingDriver() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        driver.setId(UUID.randomUUID());
+        driver.setId(new DriverId(UUID.randomUUID()));
 
         // Create the Driver
-        DriverDTO driverDTO = driverMapper.toDto(driver);
+        DriverDTO driverDTO = DriverMapper.toDto(driver);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDriverMockMvc
@@ -315,10 +313,10 @@ class DriverControllerIT {
     @Transactional
     void patchWithIdMismatchDriver() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        driver.setId(UUID.randomUUID());
+        driver.setId(new DriverId(UUID.randomUUID()));
 
         // Create the Driver
-        DriverDTO driverDTO = driverMapper.toDto(driver);
+        DriverDTO driverDTO = DriverMapper.toDto(driver);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDriverMockMvc
@@ -337,10 +335,10 @@ class DriverControllerIT {
     @Transactional
     void patchWithMissingIdPathParamDriver() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        driver.setId(UUID.randomUUID());
+        driver.setId(new DriverId(UUID.randomUUID()));
 
         // Create the Driver
-        DriverDTO driverDTO = driverMapper.toDto(driver);
+        DriverDTO driverDTO = DriverMapper.toDto(driver);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDriverMockMvc

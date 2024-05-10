@@ -18,10 +18,10 @@ public class Driver implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+    @EmbeddedId
     @GeneratedValue
     @Column(name = "id")
-    private UUID id;
+    private DriverId id;
 
     @JsonIgnoreProperties(value = { "driver" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
@@ -39,16 +39,22 @@ public class Driver implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public UUID getId() {
-        return this.id;
+    public DriverId getId() {
+        return new DriverId(this.id.value());
     }
 
-    public Driver id(UUID id) {
+    public Driver id(DriverId id) {
         this.setId(id);
         return this;
     }
+    public Driver(){}
+    public Driver(DriverId id, Truck truck, ApplicationUser applicationUser) {
+        this.id = id;
+        this.truck = truck;
+        this.applicationUser = applicationUser;
+    }
 
-    public void setId(UUID id) {
+    public void setId(DriverId id) {
         this.id = id;
     }
 

@@ -53,7 +53,8 @@ public class DriverService {
      */
     public DriverDTO update(DriverDTO driverDTO) {
         log.debug("Request to update Driver : {}", driverDTO);
-        if (!driverRepository.existsById(driverDTO.getId())) {
+        DriverId id = new DriverId(driverDTO.getId());
+        if (!driverRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
         Driver driver = DriverMapper.toEntity(driverDTO);
@@ -69,13 +70,13 @@ public class DriverService {
      */
     public Optional<DriverDTO> partialUpdate(DriverDTO driverDTO) {
         log.debug("Request to partially update Driver : {}", driverDTO);
-
-        if (!driverRepository.existsById(driverDTO.getId())) {
+        DriverId id = new DriverId(driverDTO.getId());
+        if (!driverRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         return driverRepository
-            .findById(driverDTO.getId())
+            .findById(id)
             .map(existingDriver -> {
                 DriverMapper.partialUpdate(existingDriver, driverDTO);
 
@@ -118,7 +119,8 @@ public class DriverService {
     @Transactional(readOnly = true)
     public Optional<DriverDTO> findOne(UUID id) {
         log.debug("Request to get Driver : {}", id);
-        return driverRepository.findById(id).map(DriverMapper::toDto);
+        DriverId dId = new DriverId(id);
+        return driverRepository.findById(dId).map(DriverMapper::toDto);
     }
 
     /**
@@ -128,6 +130,7 @@ public class DriverService {
      */
     public void delete(UUID id) {
         log.debug("Request to delete Driver : {}", id);
-        driverRepository.deleteById(id);
+        DriverId dId = new DriverId(id);
+        driverRepository.deleteById(dId);
     }
 }

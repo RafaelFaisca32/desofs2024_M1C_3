@@ -14,11 +14,11 @@ import java.util.List;
 public final class TruckMapper {
 
     public static Truck toEntity(TruckDTO dto) {
-        return null;
+        return new Truck();
     }
 
     public static TruckDTO toDto(Truck entity) {
-        return null;
+        return new TruckDTO();
     }
 
     public static List<Truck> toEntity(List<TruckDTO> dtoList) {

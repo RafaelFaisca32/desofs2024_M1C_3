@@ -44,6 +44,13 @@ public class DriverDTO implements Serializable {
         this.applicationUser = applicationUser;
     }
 
+    public DriverDTO(){}
+    public DriverDTO(UUID id, TruckDTO truck, ApplicationUserDTO applicationUser) {
+        this.id = id;
+        this.truck = truck;
+        this.applicationUser = applicationUser;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
