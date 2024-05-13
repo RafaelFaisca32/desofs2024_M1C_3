@@ -26,6 +26,7 @@ public final class DriverMapper {
     }
 
     public static DriverDTO toDto(Driver entity) {
+        if(entity == null) return null;
         TruckDTO truckDTO = TruckMapper.toDto(entity.getTruck());
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(entity.getApplicationUser());
         return new DriverDTO(entity.getId().value(),truckDTO,applicationUserDTO);
@@ -41,10 +42,10 @@ public final class DriverMapper {
 
     public static void partialUpdate(Driver entity, DriverDTO dto) {
         if(dto.getTruck() != null){
-            entity.truck(entity.getTruck());
+            entity.setTruck(entity.getTruck());
         }
         if(dto.getApplicationUser() != null){
-            entity.applicationUser(entity.getApplicationUser());
+            entity.setApplicationUser(entity.getApplicationUser());
         }
     }
 }

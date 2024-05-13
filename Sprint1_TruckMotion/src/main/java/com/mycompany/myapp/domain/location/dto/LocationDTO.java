@@ -63,6 +63,16 @@ public class LocationDTO implements Serializable {
         this.customer = customer;
     }
 
+    public LocationDTO(UUID id, Float coordX, Float coordY, Float coordZ, CustomerDTO customer) {
+        this.id = id;
+        this.coordX = coordX;
+        this.coordY = coordY;
+        this.coordZ = coordZ;
+        this.customer = customer;
+    }
+
+    public LocationDTO(){}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -9,13 +9,13 @@ public interface ILocationRepository {
 
     Location save(Location location);
 
-    Optional<Location> findById(UUID id);
+    Optional<Location> findById(LocationId id);
 
-    void deleteById(UUID id);
+    void deleteById(LocationId id);
 
     Location saveAndFlush(Location location);
 
     long count();
 
-    boolean existsById(UUID id);
+    boolean existsById(LocationId id);
 }

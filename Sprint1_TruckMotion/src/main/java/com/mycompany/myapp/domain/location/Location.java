@@ -18,19 +18,13 @@ public class Location implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+    @EmbeddedId
     @GeneratedValue
     @Column(name = "id")
-    private UUID id;
+    private LocationId id;
 
-    @Column(name = "coord_x")
-    private Float coordX;
-
-    @Column(name = "coord_y")
-    private Float coordY;
-
-    @Column(name = "coord_z")
-    private Float coordZ;
+    @Embedded
+    private GeographicalCoordinates coord;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "applicationUser", "locations", "serviceRequest" }, allowSetters = true)
@@ -44,58 +38,40 @@ public class Location implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "location")
     private Transport transport;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    public UUID getId() {
-        return this.id;
+    public Location(LocationId id, GeographicalCoordinates coord, Customer customer) {
+        this.id = id;
+        this.coord = coord;
+        this.customer = customer;
     }
 
-    public Location id(UUID id) {
+    public Location() {}
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public LocationId getId() {
+        return new LocationId(this.id.value());
+    }
+
+    public Location id(LocationId id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(UUID id) {
+
+    public void setId(LocationId id) {
         this.id = id;
     }
 
-    public Float getCoordX() {
-        return this.coordX;
+    public GeographicalCoordinates getCoord(){
+        return this.coord;
+    }
+    public void setCoord(GeographicalCoordinates coord){
+        this.coord = coord;
     }
 
-    public Location coordX(Float coordX) {
-        this.setCoordX(coordX);
+    public Location coord(GeographicalCoordinates coord){
+        this.setCoord(coord);
         return this;
-    }
-
-    public void setCoordX(Float coordX) {
-        this.coordX = coordX;
-    }
-
-    public Float getCoordY() {
-        return this.coordY;
-    }
-
-    public Location coordY(Float coordY) {
-        this.setCoordY(coordY);
-        return this;
-    }
-
-    public void setCoordY(Float coordY) {
-        this.coordY = coordY;
-    }
-
-    public Float getCoordZ() {
-        return this.coordZ;
-    }
-
-    public Location coordZ(Float coordZ) {
-        this.setCoordZ(coordZ);
-        return this;
-    }
-
-    public void setCoordZ(Float coordZ) {
-        this.coordZ = coordZ;
     }
 
     public Customer getCustomer() {
@@ -173,9 +149,7 @@ public class Location implements Serializable {
     public String toString() {
         return "Location{" +
             "id=" + getId() +
-            ", coordX=" + getCoordX() +
-            ", coordY=" + getCoordY() +
-            ", coordZ=" + getCoordZ() +
+            ", coords=" + getCoord() +
             "}";
     }
 }

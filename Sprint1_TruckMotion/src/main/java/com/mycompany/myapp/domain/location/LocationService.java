@@ -54,7 +54,8 @@ public class LocationService {
      */
     public LocationDTO update(LocationDTO locationDTO) {
         log.debug("Request to update Location : {}", locationDTO);
-        if (!locationRepository.existsById(locationDTO.getId())) {
+        LocationId id = new LocationId(locationDTO.getId());
+        if (!locationRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
         Location location = LocationMapper.toEntity(locationDTO);
@@ -70,13 +71,13 @@ public class LocationService {
      */
     public Optional<LocationDTO> partialUpdate(LocationDTO locationDTO) {
         log.debug("Request to partially update Location : {}", locationDTO);
-
-        if (!locationRepository.existsById(locationDTO.getId())) {
+        LocationId id = new LocationId(locationDTO.getId());
+        if (!locationRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         return locationRepository
-            .findById(locationDTO.getId())
+            .findById(id)
             .map(existingLocation -> {
                 LocationMapper.partialUpdate(existingLocation, locationDTO);
 
@@ -132,7 +133,8 @@ public class LocationService {
     @Transactional(readOnly = true)
     public Optional<LocationDTO> findOne(UUID id) {
         log.debug("Request to get Location : {}", id);
-        return locationRepository.findById(id).map(LocationMapper::toDto);
+        LocationId lId = new LocationId(id);
+        return locationRepository.findById(lId).map(LocationMapper::toDto);
     }
 
     /**
@@ -142,6 +144,7 @@ public class LocationService {
      */
     public void delete(UUID id) {
         log.debug("Request to delete Location : {}", id);
-        locationRepository.deleteById(id);
+        LocationId lId = new LocationId(id);
+        locationRepository.deleteById(lId);
     }
 }

@@ -27,6 +27,7 @@ public final class CustomerMapper {
     }
 
     public static CustomerDTO toDto(Customer entity) {
+        if(entity == null) return null;
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(entity.getApplicationUser());
         return new CustomerDTO(entity.getId().value(),entity.getCompany().value(),applicationUserDTO);
     }
@@ -41,10 +42,10 @@ public final class CustomerMapper {
 
     public static void partialUpdate(Customer entity, CustomerDTO dto) {
         if(dto.getCompany() != null){
-            entity.company(new Company(dto.getCompany()));
+            entity.setCompany(new Company(dto.getCompany()));
         }
         if(dto.getApplicationUser() != null){
-            entity.applicationUser(ApplicationUserMapper.toEntity(dto.getApplicationUser()));
+            entity.setApplicationUser(ApplicationUserMapper.toEntity(dto.getApplicationUser()));
         }
     }
 }

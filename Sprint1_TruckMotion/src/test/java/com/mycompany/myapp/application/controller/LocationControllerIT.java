@@ -9,8 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.domain.location.GeographicalCoordinates;
 import com.mycompany.myapp.domain.location.ILocationRepository;
 import com.mycompany.myapp.domain.location.Location;
+import com.mycompany.myapp.domain.location.LocationId;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.location.mapper.LocationMapper;
 import jakarta.persistence.EntityManager;
@@ -51,9 +53,6 @@ class LocationControllerIT {
     private ILocationRepository locationRepository;
 
     @Autowired
-    private LocationMapper locationMapper;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -68,7 +67,7 @@ class LocationControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Location createEntity(EntityManager em) {
-        Location location = new Location().coordX(DEFAULT_COORD_X).coordY(DEFAULT_COORD_Y).coordZ(DEFAULT_COORD_Z);
+        Location location = new Location().coord(new GeographicalCoordinates( DEFAULT_COORD_X,DEFAULT_COORD_Y,DEFAULT_COORD_Z));
         return location;
     }
 
@@ -79,7 +78,7 @@ class LocationControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Location createUpdatedEntity(EntityManager em) {
-        Location location = new Location().coordX(UPDATED_COORD_X).coordY(UPDATED_COORD_Y).coordZ(UPDATED_COORD_Z);
+        Location location = new Location().coord(new GeographicalCoordinates(UPDATED_COORD_X,UPDATED_COORD_Y,UPDATED_COORD_Z));
         return location;
     }
 
@@ -93,7 +92,7 @@ class LocationControllerIT {
     void createLocation() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the Location
-        LocationDTO locationDTO = locationMapper.toDto(location);
+        LocationDTO locationDTO = LocationMapper.toDto(location);
         var returnedLocationDTO = om.readValue(
             restLocationMockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(locationDTO)))
@@ -106,7 +105,7 @@ class LocationControllerIT {
 
         // Validate the Location in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
-        var returnedLocation = locationMapper.toEntity(returnedLocationDTO);
+        var returnedLocation = LocationMapper.toEntity(returnedLocationDTO);
         assertLocationUpdatableFieldsEquals(returnedLocation, getPersistedLocation(returnedLocation));
     }
 
@@ -115,7 +114,7 @@ class LocationControllerIT {
     void createLocationWithExistingId() throws Exception {
         // Create the Location with an existing ID
         locationRepository.saveAndFlush(location);
-        LocationDTO locationDTO = locationMapper.toDto(location);
+        LocationDTO locationDTO = LocationMapper.toDto(location);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
@@ -181,8 +180,8 @@ class LocationControllerIT {
         Location updatedLocation = locationRepository.findById(location.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedLocation are not directly saved in db
         em.detach(updatedLocation);
-        updatedLocation.coordX(UPDATED_COORD_X).coordY(UPDATED_COORD_Y).coordZ(UPDATED_COORD_Z);
-        LocationDTO locationDTO = locationMapper.toDto(updatedLocation);
+        updatedLocation.coord(new GeographicalCoordinates(UPDATED_COORD_X,UPDATED_COORD_Y,UPDATED_COORD_Z));
+        LocationDTO locationDTO = LocationMapper.toDto(updatedLocation);
 
         restLocationMockMvc
             .perform(
@@ -201,10 +200,10 @@ class LocationControllerIT {
     @Transactional
     void putNonExistingLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(UUID.randomUUID());
+        location.setId(new LocationId(UUID.randomUUID()));
 
         // Create the Location
-        LocationDTO locationDTO = locationMapper.toDto(location);
+        LocationDTO locationDTO = LocationMapper.toDto(location);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restLocationMockMvc
@@ -223,10 +222,10 @@ class LocationControllerIT {
     @Transactional
     void putWithIdMismatchLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(UUID.randomUUID());
+        location.setId(new LocationId(UUID.randomUUID()));
 
         // Create the Location
-        LocationDTO locationDTO = locationMapper.toDto(location);
+        LocationDTO locationDTO = LocationMapper.toDto(location);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restLocationMockMvc
@@ -243,10 +242,10 @@ class LocationControllerIT {
     @Transactional
     void putWithMissingIdPathParamLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(UUID.randomUUID());
+        location.setId(new LocationId( UUID.randomUUID()));
 
         // Create the Location
-        LocationDTO locationDTO = locationMapper.toDto(location);
+        LocationDTO locationDTO = LocationMapper.toDto(location);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restLocationMockMvc
@@ -295,7 +294,7 @@ class LocationControllerIT {
         Location partialUpdatedLocation = new Location();
         partialUpdatedLocation.setId(location.getId());
 
-        partialUpdatedLocation.coordX(UPDATED_COORD_X).coordY(UPDATED_COORD_Y).coordZ(UPDATED_COORD_Z);
+        partialUpdatedLocation.coord(new GeographicalCoordinates(UPDATED_COORD_X,UPDATED_COORD_Y,UPDATED_COORD_Z));
 
         restLocationMockMvc
             .perform(
@@ -315,10 +314,10 @@ class LocationControllerIT {
     @Transactional
     void patchNonExistingLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(UUID.randomUUID());
+        location.setId(new LocationId(UUID.randomUUID()));
 
         // Create the Location
-        LocationDTO locationDTO = locationMapper.toDto(location);
+        LocationDTO locationDTO = LocationMapper.toDto(location);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restLocationMockMvc
@@ -337,10 +336,10 @@ class LocationControllerIT {
     @Transactional
     void patchWithIdMismatchLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(UUID.randomUUID());
+        location.setId(new LocationId(UUID.randomUUID()));
 
         // Create the Location
-        LocationDTO locationDTO = locationMapper.toDto(location);
+        LocationDTO locationDTO = LocationMapper.toDto(location);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restLocationMockMvc
@@ -359,10 +358,10 @@ class LocationControllerIT {
     @Transactional
     void patchWithMissingIdPathParamLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(UUID.randomUUID());
+        location.setId(new LocationId(UUID.randomUUID()));
 
         // Create the Location
-        LocationDTO locationDTO = locationMapper.toDto(location);
+        LocationDTO locationDTO = LocationMapper.toDto(location);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restLocationMockMvc

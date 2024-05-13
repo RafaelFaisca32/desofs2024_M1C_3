@@ -47,9 +47,7 @@ public class LocationAsserts {
     public static void assertLocationUpdatableFieldsEquals(Location expected, Location actual) {
         assertThat(expected)
             .as("Verify Location relevant properties")
-            .satisfies(e -> assertThat(e.getCoordX()).as("check coordX").isEqualTo(actual.getCoordX()))
-            .satisfies(e -> assertThat(e.getCoordY()).as("check coordY").isEqualTo(actual.getCoordY()))
-            .satisfies(e -> assertThat(e.getCoordZ()).as("check coordZ").isEqualTo(actual.getCoordZ()));
+            .satisfies(e -> assertThat(e.getCoord()).as("check coordX").isEqualTo(actual.getCoord()));
     }
 
     /**
