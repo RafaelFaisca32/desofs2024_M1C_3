@@ -34,7 +34,7 @@ jobs:
       - name: Analyze code with SonarQube
         working-directory: ./Sprint1_TruckMotion
         run: |
-          ./mvnw -ntp initialize sonar:sonar -Dsonar.host.url=http://localhost:9000/
+          ./mvnw -ntp initialize sonar:sonar -Dsonar.host.url=http://localhost:9001
       - name: Package application
         working-directory: ./Sprint1_TruckMotion
         run: npm run java:jar:prod
