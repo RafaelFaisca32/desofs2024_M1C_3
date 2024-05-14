@@ -54,6 +54,8 @@ export const ServiceRequestDetail = () => {
           <dd>{serviceRequestEntity.location ? serviceRequestEntity.location.id : ''}</dd>
           <dt>Customer</dt>
           <dd>{serviceRequestEntity.customer ? serviceRequestEntity.customer.id : ''}</dd>
+          <dt>Status</dt>
+          <dd>{serviceRequestEntity.status ? serviceRequestEntity.status.status : ''}</dd>
         </dl>
         <Button tag={Link} to="/service-request" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

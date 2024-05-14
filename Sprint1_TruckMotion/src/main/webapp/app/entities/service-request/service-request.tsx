@@ -107,6 +107,9 @@ export const ServiceRequest = () => {
                 <th>
                   Customer <FontAwesomeIcon icon="sort" />
                 </th>
+                <th>
+                  Status <FontAwesomeIcon icon="sort" />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -133,6 +136,13 @@ export const ServiceRequest = () => {
                   <td>
                     {serviceRequest.customer ? (
                       <Link to={`/customer/${serviceRequest.customer.id}`}>{serviceRequest.customer.id}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
+                  <td>
+                    {serviceRequest.status ? (
+                      <Link to={`/status/${serviceRequest.status.id}`}>{serviceRequest.status.status}</Link>
                     ) : (
                       ''
                     )}

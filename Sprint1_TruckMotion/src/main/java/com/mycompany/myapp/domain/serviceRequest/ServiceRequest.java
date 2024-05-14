@@ -22,24 +22,25 @@ public class ServiceRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @EmbeddedId
     @GeneratedValue
     @Column(name = "id")
-    private UUID id;
+    private ServiceRequestId id;
 
     @Column(name = "items")
-    private String items;
+    private ServiceRequestItems items;
 
     @Column(name = "service_name")
-    private String serviceName;
+    private ServiceRequestName serviceName;
 
     @Column(name = "total_weight_of_items")
-    private Float totalWeightOfItems;
+    private ServiceRequestTotalWeightOfItems totalWeightOfItems;
 
     @Column(name = "price")
-    private Float price;
+    private ServiceRequestPrice price;
 
     @Column(name = "date")
-    private ZonedDateTime date;
+    private ServiceRequestDate date;
 
     @JsonIgnoreProperties(value = { "customer", "serviceRequest", "transport" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
@@ -61,81 +62,95 @@ public class ServiceRequest implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public UUID getId() {
-        return this.id;
+
+    public ServiceRequest(ServiceRequestId id, ServiceRequestItems items, ServiceRequestName serviceName, ServiceRequestTotalWeightOfItems totalWeightOfItems, ServiceRequestPrice price, ServiceRequestDate date) {
+        this.id = id;
+        this.items = items;
+        this.serviceName = serviceName;
+        this.totalWeightOfItems = totalWeightOfItems;
+        this.price = price;
+        this.date = date;
     }
 
-    public ServiceRequest id(UUID id) {
+    public ServiceRequest() {
+
+    }
+
+    public ServiceRequestId getId() {
+        return new ServiceRequestId(id.value());
+    }
+
+    public ServiceRequest id(ServiceRequestId id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(UUID id) {
+    public void setId(ServiceRequestId id) {
         this.id = id;
     }
 
-    public String getItems() {
-        return this.items;
+    public ServiceRequestItems getItems() {
+        return new ServiceRequestItems(this.items.value());
     }
 
-    public ServiceRequest items(String items) {
+    public ServiceRequest items(ServiceRequestItems items) {
         this.setItems(items);
         return this;
     }
 
-    public void setItems(String items) {
+    public void setItems(ServiceRequestItems items) {
         this.items = items;
     }
 
-    public String getServiceName() {
-        return this.serviceName;
+    public ServiceRequestName getServiceName() {
+        return new ServiceRequestName(this.serviceName.value());
     }
 
-    public ServiceRequest serviceName(String serviceName) {
+    public ServiceRequest serviceName(ServiceRequestName serviceName) {
         this.setServiceName(serviceName);
         return this;
     }
 
-    public void setServiceName(String serviceName) {
+    public void setServiceName(ServiceRequestName serviceName) {
         this.serviceName = serviceName;
     }
 
-    public Float getTotalWeightOfItems() {
-        return this.totalWeightOfItems;
+    public ServiceRequestTotalWeightOfItems getTotalWeightOfItems() {
+        return new ServiceRequestTotalWeightOfItems(totalWeightOfItems.value());
     }
 
-    public ServiceRequest totalWeightOfItems(Float totalWeightOfItems) {
+    public ServiceRequest totalWeightOfItems(ServiceRequestTotalWeightOfItems totalWeightOfItems) {
         this.setTotalWeightOfItems(totalWeightOfItems);
         return this;
     }
 
-    public void setTotalWeightOfItems(Float totalWeightOfItems) {
+    public void setTotalWeightOfItems(ServiceRequestTotalWeightOfItems totalWeightOfItems) {
         this.totalWeightOfItems = totalWeightOfItems;
     }
 
-    public Float getPrice() {
-        return this.price;
+    public ServiceRequestPrice getPrice() {
+        return new ServiceRequestPrice(price.value());
     }
 
-    public ServiceRequest price(Float price) {
+    public ServiceRequest price(ServiceRequestPrice price) {
         this.setPrice(price);
         return this;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(ServiceRequestPrice price) {
         this.price = price;
     }
 
-    public ZonedDateTime getDate() {
-        return this.date;
+    public ServiceRequestDate getDate() {
+        return new ServiceRequestDate(date.value());
     }
 
-    public ServiceRequest date(ZonedDateTime date) {
+    public ServiceRequest date(ServiceRequestDate date) {
         this.setDate(date);
         return this;
     }
 
-    public void setDate(ZonedDateTime date) {
+    public void setDate(ServiceRequestDate date) {
         this.date = date;
     }
 
