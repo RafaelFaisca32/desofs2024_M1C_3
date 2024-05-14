@@ -20,10 +20,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-      - uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       - name: Install Node.js packages
         working-directory: ./Sprint1_TruckMotion
         run: npm install
@@ -35,6 +31,11 @@ jobs:
       - name: Run frontend test
         working-directory: ./Sprint1_TruckMotion
         run: npm run ci:frontend:test
+      - name: Run SonarQube
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       - name: Package application
         working-directory: ./Sprint1_TruckMotion
         run: npm run java:jar:prod
