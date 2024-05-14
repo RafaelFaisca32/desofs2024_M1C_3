@@ -9,7 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.domain.transport.TransportId;
 import com.mycompany.myapp.domain.truck.ITruckRepository;
+import com.mycompany.myapp.domain.truck.Make;
+import com.mycompany.myapp.domain.truck.Model;
 import com.mycompany.myapp.domain.truck.Truck;
 import com.mycompany.myapp.domain.truck.dto.TruckDTO;
 import com.mycompany.myapp.domain.truck.mapper.TruckMapper;
@@ -65,7 +68,7 @@ class TruckControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Truck createEntity(EntityManager em) {
-        Truck truck = new Truck().make(DEFAULT_MAKE).model(DEFAULT_MODEL);
+        Truck truck = new Truck().make(new Make(DEFAULT_MAKE)).model(new Model(DEFAULT_MODEL));
         return truck;
     }
 
@@ -76,7 +79,7 @@ class TruckControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Truck createUpdatedEntity(EntityManager em) {
-        Truck truck = new Truck().make(UPDATED_MAKE).model(UPDATED_MODEL);
+        Truck truck = new Truck().make(new Make(UPDATED_MAKE)).model(new Model(UPDATED_MODEL));
         return truck;
     }
 
@@ -173,10 +176,10 @@ class TruckControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the truck
-        Truck updatedTruck = truckRepository.findById(truck.getId()).orElseThrow();
+        Truck updatedTruck = truckRepository.findById(truck.getId().value()).orElseThrow();
         // Disconnect from session so that the updates on updatedTruck are not directly saved in db
         em.detach(updatedTruck);
-        updatedTruck.make(UPDATED_MAKE).model(UPDATED_MODEL);
+        updatedTruck.make(new Make(UPDATED_MAKE)).model(new Model(UPDATED_MODEL));
         TruckDTO truckDTO = truckMapper.toDto(updatedTruck);
 
         restTruckMockMvc
@@ -194,7 +197,7 @@ class TruckControllerIT {
     @Transactional
     void putNonExistingTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(UUID.randomUUID());
+        truck.setId(new TransportId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -214,7 +217,7 @@ class TruckControllerIT {
     @Transactional
     void putWithIdMismatchTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(UUID.randomUUID());
+        truck.setId(new TransportId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -234,7 +237,7 @@ class TruckControllerIT {
     @Transactional
     void putWithMissingIdPathParamTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(UUID.randomUUID());
+        truck.setId(new TransportId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -260,7 +263,7 @@ class TruckControllerIT {
         Truck partialUpdatedTruck = new Truck();
         partialUpdatedTruck.setId(truck.getId());
 
-        partialUpdatedTruck.model(UPDATED_MODEL);
+        partialUpdatedTruck.model(new Model(UPDATED_MODEL));
 
         restTruckMockMvc
             .perform(
@@ -288,7 +291,7 @@ class TruckControllerIT {
         Truck partialUpdatedTruck = new Truck();
         partialUpdatedTruck.setId(truck.getId());
 
-        partialUpdatedTruck.make(UPDATED_MAKE).model(UPDATED_MODEL);
+        partialUpdatedTruck.make(new Make(UPDATED_MAKE)).model(new Model(UPDATED_MODEL));
 
         restTruckMockMvc
             .perform(
@@ -308,7 +311,7 @@ class TruckControllerIT {
     @Transactional
     void patchNonExistingTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(UUID.randomUUID());
+        truck.setId(new TransportId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -330,7 +333,7 @@ class TruckControllerIT {
     @Transactional
     void patchWithIdMismatchTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(UUID.randomUUID());
+        truck.setId(new TransportId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -352,7 +355,7 @@ class TruckControllerIT {
     @Transactional
     void patchWithMissingIdPathParamTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(UUID.randomUUID());
+        truck.setId(new TransportId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -400,7 +403,7 @@ class TruckControllerIT {
     }
 
     protected Truck getPersistedTruck(Truck truck) {
-        return truckRepository.findById(truck.getId()).orElseThrow();
+        return truckRepository.findById(truck.getId().value()).orElseThrow();
     }
 
     protected void assertPersistedTruckToMatchAllProperties(Truck expectedTruck) {

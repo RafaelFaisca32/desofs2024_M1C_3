@@ -2,7 +2,9 @@ package com.mycompany.myapp.domain.truck;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.driver.Driver;
+import com.mycompany.myapp.domain.transport.TransportId;
 import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -19,13 +21,13 @@ public class Truck implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private UUID id;
+    private TransportId id;
 
     @Column(name = "make")
-    private String make;
+    private Make make;
 
     @Column(name = "model")
-    private String model;
+    private Model model;
 
     @JsonIgnoreProperties(value = { "truck", "applicationUser", "transport" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "truck")
@@ -33,42 +35,42 @@ public class Truck implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public UUID getId() {
-        return this.id;
+    public TransportId getId() {
+        return new TransportId(this.id.value());
     }
 
-    public Truck id(UUID id) {
+    public Truck id(TransportId id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(UUID id) {
+    public void setId(TransportId id) {
         this.id = id;
     }
 
-    public String getMake() {
+    public Make getMake() {
         return this.make;
     }
 
-    public Truck make(String make) {
+    public Truck make(Make make) {
         this.setMake(make);
         return this;
     }
 
-    public void setMake(String make) {
+    public void setMake(Make make) {
         this.make = make;
     }
 
-    public String getModel() {
+    public Model getModel() {
         return this.model;
     }
 
-    public Truck model(String model) {
+    public Truck model(Model model) {
         this.setModel(model);
         return this;
     }
 
-    public void setModel(String model) {
+    public void setModel(Model model) {
         this.model = model;
     }
 
