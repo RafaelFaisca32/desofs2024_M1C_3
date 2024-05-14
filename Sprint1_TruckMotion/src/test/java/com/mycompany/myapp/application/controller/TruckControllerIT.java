@@ -10,10 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.transport.TransportId;
-import com.mycompany.myapp.domain.truck.ITruckRepository;
-import com.mycompany.myapp.domain.truck.Make;
-import com.mycompany.myapp.domain.truck.Model;
-import com.mycompany.myapp.domain.truck.Truck;
+import com.mycompany.myapp.domain.truck.*;
 import com.mycompany.myapp.domain.truck.dto.TruckDTO;
 import com.mycompany.myapp.domain.truck.mapper.TruckMapper;
 import jakarta.persistence.EntityManager;
@@ -197,7 +194,7 @@ class TruckControllerIT {
     @Transactional
     void putNonExistingTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(new TransportId());
+        truck.setId(new TruckId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -217,7 +214,7 @@ class TruckControllerIT {
     @Transactional
     void putWithIdMismatchTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(new TransportId());
+        truck.setId(new TruckId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -237,7 +234,7 @@ class TruckControllerIT {
     @Transactional
     void putWithMissingIdPathParamTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(new TransportId());
+        truck.setId(new TruckId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -311,7 +308,7 @@ class TruckControllerIT {
     @Transactional
     void patchNonExistingTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(new TransportId());
+        truck.setId(new TruckId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -333,7 +330,7 @@ class TruckControllerIT {
     @Transactional
     void patchWithIdMismatchTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(new TransportId());
+        truck.setId(new TruckId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);
@@ -355,7 +352,7 @@ class TruckControllerIT {
     @Transactional
     void patchWithMissingIdPathParamTruck() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        truck.setId(new TransportId());
+        truck.setId(new TruckId());
 
         // Create the Truck
         TruckDTO truckDTO = truckMapper.toDto(truck);

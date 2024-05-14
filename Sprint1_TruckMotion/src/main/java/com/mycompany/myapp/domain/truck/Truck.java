@@ -21,7 +21,7 @@ public class Truck implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private TransportId id;
+    private TruckId id;
 
     @Column(name = "make")
     private Make make;
@@ -35,16 +35,16 @@ public class Truck implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public TransportId getId() {
-        return new TransportId(this.id.value());
+    public TruckId getId() {
+        return new TruckId(this.id.value());
     }
 
-    public Truck id(TransportId id) {
+    public Truck id(TruckId id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(TransportId id) {
+    public void setId(TruckId id) {
         this.id = id;
     }
 

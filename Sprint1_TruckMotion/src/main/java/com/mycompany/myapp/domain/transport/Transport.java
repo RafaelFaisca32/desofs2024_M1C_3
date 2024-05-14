@@ -22,7 +22,7 @@ public class Transport implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private UUID id;
+    private TransportId id;
 
     @Column(name = "start_time")
     private ZonedDateTime startTime;
@@ -47,16 +47,16 @@ public class Transport implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public UUID getId() {
+    public TransportId getId() {
         return this.id;
     }
 
-    public Transport id(UUID id) {
+    public Transport id(TransportId id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(UUID id) {
+    public void setId(TransportId id) {
         this.id = id;
     }
 

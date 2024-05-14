@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.transport.ITransportRepository;
 import com.mycompany.myapp.domain.transport.Transport;
+import com.mycompany.myapp.domain.transport.TransportId;
 import com.mycompany.myapp.domain.transport.dto.TransportDTO;
 import com.mycompany.myapp.domain.transport.mapper.TransportMapper;
 import jakarta.persistence.EntityManager;
@@ -178,7 +179,7 @@ class TransportControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the transport
-        Transport updatedTransport = transportRepository.findById(transport.getId()).orElseThrow();
+        Transport updatedTransport = transportRepository.findById(transport.getId().value()).orElseThrow();
         // Disconnect from session so that the updates on updatedTransport are not directly saved in db
         em.detach(updatedTransport);
         updatedTransport.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME);
@@ -201,7 +202,7 @@ class TransportControllerIT {
     @Transactional
     void putNonExistingTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(UUID.randomUUID());
+        transport.setId(new TransportId());
 
         // Create the Transport
         TransportDTO transportDTO = transportMapper.toDto(transport);
@@ -223,7 +224,7 @@ class TransportControllerIT {
     @Transactional
     void putWithIdMismatchTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(UUID.randomUUID());
+        transport.setId(new TransportId());
 
         // Create the Transport
         TransportDTO transportDTO = transportMapper.toDto(transport);
@@ -245,7 +246,7 @@ class TransportControllerIT {
     @Transactional
     void putWithMissingIdPathParamTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(UUID.randomUUID());
+        transport.setId(new TransportId());
 
         // Create the Transport
         TransportDTO transportDTO = transportMapper.toDto(transport);
@@ -322,7 +323,7 @@ class TransportControllerIT {
     @Transactional
     void patchNonExistingTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(UUID.randomUUID());
+        transport.setId(new TransportId());
 
         // Create the Transport
         TransportDTO transportDTO = transportMapper.toDto(transport);
@@ -344,7 +345,7 @@ class TransportControllerIT {
     @Transactional
     void patchWithIdMismatchTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(UUID.randomUUID());
+        transport.setId(new TransportId());
 
         // Create the Transport
         TransportDTO transportDTO = transportMapper.toDto(transport);
@@ -366,7 +367,7 @@ class TransportControllerIT {
     @Transactional
     void patchWithMissingIdPathParamTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(UUID.randomUUID());
+        transport.setId(new TransportId());
 
         // Create the Transport
         TransportDTO transportDTO = transportMapper.toDto(transport);
@@ -414,7 +415,7 @@ class TransportControllerIT {
     }
 
     protected Transport getPersistedTransport(Transport transport) {
-        return transportRepository.findById(transport.getId()).orElseThrow();
+        return transportRepository.findById(transport.getId().value()).orElseThrow();
     }
 
     protected void assertPersistedTransportToMatchAllProperties(Transport expectedTransport) {
