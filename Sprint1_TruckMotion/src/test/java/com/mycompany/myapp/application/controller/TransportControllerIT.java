@@ -54,9 +54,6 @@ class TransportControllerIT {
     private ITransportRepository transportRepository;
 
     @Autowired
-    private TransportMapper transportMapper;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -96,7 +93,7 @@ class TransportControllerIT {
     void createTransport() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the Transport
-        TransportDTO transportDTO = transportMapper.toDto(transport);
+        TransportDTO transportDTO = TransportMapper.toDto(transport);
         var returnedTransportDTO = om.readValue(
             restTransportMockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(transportDTO)))
@@ -109,7 +106,7 @@ class TransportControllerIT {
 
         // Validate the Transport in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
-        var returnedTransport = transportMapper.toEntity(returnedTransportDTO);
+        var returnedTransport = TransportMapper.toEntity(returnedTransportDTO);
         assertTransportUpdatableFieldsEquals(returnedTransport, getPersistedTransport(returnedTransport));
     }
 
@@ -118,7 +115,7 @@ class TransportControllerIT {
     void createTransportWithExistingId() throws Exception {
         // Create the Transport with an existing ID
         transportRepository.saveAndFlush(transport);
-        TransportDTO transportDTO = transportMapper.toDto(transport);
+        TransportDTO transportDTO = TransportMapper.toDto(transport);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
@@ -179,11 +176,11 @@ class TransportControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the transport
-        Transport updatedTransport = transportRepository.findById(transport.getId().value()).orElseThrow();
+        Transport updatedTransport = transportRepository.findById(new TransportId(transport.getId().value())).orElseThrow();
         // Disconnect from session so that the updates on updatedTransport are not directly saved in db
         em.detach(updatedTransport);
         updatedTransport.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME);
-        TransportDTO transportDTO = transportMapper.toDto(updatedTransport);
+        TransportDTO transportDTO = TransportMapper.toDto(updatedTransport);
 
         restTransportMockMvc
             .perform(
@@ -205,7 +202,7 @@ class TransportControllerIT {
         transport.setId(new TransportId());
 
         // Create the Transport
-        TransportDTO transportDTO = transportMapper.toDto(transport);
+        TransportDTO transportDTO = TransportMapper.toDto(transport);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTransportMockMvc
@@ -227,7 +224,7 @@ class TransportControllerIT {
         transport.setId(new TransportId());
 
         // Create the Transport
-        TransportDTO transportDTO = transportMapper.toDto(transport);
+        TransportDTO transportDTO = TransportMapper.toDto(transport);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTransportMockMvc
@@ -249,7 +246,7 @@ class TransportControllerIT {
         transport.setId(new TransportId());
 
         // Create the Transport
-        TransportDTO transportDTO = transportMapper.toDto(transport);
+        TransportDTO transportDTO = TransportMapper.toDto(transport);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTransportMockMvc
@@ -326,7 +323,7 @@ class TransportControllerIT {
         transport.setId(new TransportId());
 
         // Create the Transport
-        TransportDTO transportDTO = transportMapper.toDto(transport);
+        TransportDTO transportDTO = TransportMapper.toDto(transport);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTransportMockMvc
@@ -348,7 +345,7 @@ class TransportControllerIT {
         transport.setId(new TransportId());
 
         // Create the Transport
-        TransportDTO transportDTO = transportMapper.toDto(transport);
+        TransportDTO transportDTO = TransportMapper.toDto(transport);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTransportMockMvc
@@ -370,7 +367,7 @@ class TransportControllerIT {
         transport.setId(new TransportId());
 
         // Create the Transport
-        TransportDTO transportDTO = transportMapper.toDto(transport);
+        TransportDTO transportDTO = TransportMapper.toDto(transport);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTransportMockMvc
@@ -415,7 +412,7 @@ class TransportControllerIT {
     }
 
     protected Transport getPersistedTransport(Transport transport) {
-        return transportRepository.findById(transport.getId().value()).orElseThrow();
+        return transportRepository.findById(new TransportId(transport.getId().value())).orElseThrow();
     }
 
     protected void assertPersistedTransportToMatchAllProperties(Transport expectedTransport) {
