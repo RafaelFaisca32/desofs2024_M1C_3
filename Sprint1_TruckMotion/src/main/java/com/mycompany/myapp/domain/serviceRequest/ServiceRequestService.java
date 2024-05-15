@@ -55,7 +55,7 @@ public class ServiceRequestService {
     public ServiceRequestDTO update(ServiceRequestDTO serviceRequestDTO) {
         log.debug("Request to update ServiceRequest : {}", serviceRequestDTO);
 
-        if (!serviceRequestRepository.existsById(serviceRequestDTO.getId())) {
+        if (!serviceRequestRepository.existsById(new ServiceRequestId(serviceRequestDTO.getId()))) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
@@ -73,13 +73,13 @@ public class ServiceRequestService {
     public Optional<ServiceRequestDTO> partialUpdate(ServiceRequestDTO serviceRequestDTO) {
         log.debug("Request to partially update ServiceRequest : {}", serviceRequestDTO);
 
-        if (!serviceRequestRepository.existsById(serviceRequestDTO.getId())) {
+        if (!serviceRequestRepository.existsById(new ServiceRequestId(serviceRequestDTO.getId()))) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
 
         return serviceRequestRepository
-            .findById(serviceRequestDTO.getId())
+            .findById(new ServiceRequestId(serviceRequestDTO.getId()))
             .map(existingServiceRequest -> {
                 ServiceRequestMapper.partialUpdate(existingServiceRequest, serviceRequestDTO);
 
@@ -126,7 +126,7 @@ public class ServiceRequestService {
     @Transactional(readOnly = true)
     public Optional<ServiceRequestDTO> findOne(UUID id) {
         log.debug("Request to get ServiceRequest : {}", id);
-        return serviceRequestRepository.findById(id).map(ServiceRequestMapper::toDto);
+        return serviceRequestRepository.findById(new ServiceRequestId(id)).map(ServiceRequestMapper::toDto);
     }
 
     /**
@@ -136,6 +136,6 @@ public class ServiceRequestService {
      */
     public void delete(UUID id) {
         log.debug("Request to delete ServiceRequest : {}", id);
-        serviceRequestRepository.deleteById(id);
+        serviceRequestRepository.deleteById(new ServiceRequestId(id));
     }
 }
