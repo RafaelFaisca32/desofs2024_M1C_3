@@ -9,13 +9,13 @@ public interface IServiceRequestRepository {
 
     ServiceRequest save(ServiceRequest serviceRequest);
 
-    Optional<ServiceRequest> findById(UUID id);
+    Optional<ServiceRequest> findById(ServiceRequestId id);
 
-    void deleteById(UUID id);
+    void deleteById(ServiceRequestId id);
 
     ServiceRequest saveAndFlush(ServiceRequest serviceRequest);
 
     long count();
 
-    boolean existsById(UUID id);
+    boolean existsById(ServiceRequestId id);
 }

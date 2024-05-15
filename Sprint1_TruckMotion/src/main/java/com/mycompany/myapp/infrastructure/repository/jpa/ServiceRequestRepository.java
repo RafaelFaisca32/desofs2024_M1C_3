@@ -3,6 +3,8 @@ package com.mycompany.myapp.infrastructure.repository.jpa;
 import com.mycompany.myapp.domain.serviceRequest.IServiceRequestRepository;
 import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
 import java.util.UUID;
+
+import com.mycompany.myapp.domain.serviceRequest.ServiceRequestId;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, UUID>, IServiceRequestRepository {}
+public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, ServiceRequestId>, IServiceRequestRepository {}
