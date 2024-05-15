@@ -27,9 +27,6 @@ const EntitiesMenu = () => {
       <MenuItem icon="asterisk" to="/service-request">
         Service Request
       </MenuItem>
-      <MenuItem icon="asterisk" to="/service-status">
-        Service Status
-      </MenuItem>
       <MenuItem icon="asterisk" to="/transport">
         Transport
       </MenuItem>

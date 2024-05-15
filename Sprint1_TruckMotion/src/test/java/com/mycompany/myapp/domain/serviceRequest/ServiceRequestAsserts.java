@@ -52,7 +52,7 @@ public class ServiceRequestAsserts {
             .satisfies(e -> assertThat(e.getServiceName()).as("check serviceName").isEqualTo(actual.getServiceName()))
             .satisfies(e -> assertThat(e.getTotalWeightOfItems()).as("check totalWeightOfItems").isEqualTo(actual.getTotalWeightOfItems()))
             .satisfies(e -> assertThat(e.getPrice()).as("check price").isEqualTo(actual.getPrice()))
-            .satisfies(e -> assertThat(e.getDate()).as("check date").usingComparator(zonedDataTimeSameInstant).isEqualTo(actual.getDate()));
+            .satisfies(e -> assertThat(e.getDate()).as("check date").isEqualTo(actual.getDate()).isEqualTo(actual.getDate()));
     }
 
     /**

@@ -10,8 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
-import com.mycompany.myapp.domain.serviceRequest.IServiceRequestRepository;
-import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
+import com.mycompany.myapp.domain.serviceRequest.*;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
 import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceRequestMapper;
 import jakarta.persistence.EntityManager;
@@ -62,9 +61,6 @@ class ServiceRequestControllerIT {
     private IServiceRequestRepository serviceRequestRepository;
 
     @Autowired
-    private ServiceRequestMapper serviceRequestMapper;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -80,11 +76,11 @@ class ServiceRequestControllerIT {
      */
     public static ServiceRequest createEntity(EntityManager em) {
         ServiceRequest serviceRequest = new ServiceRequest()
-            .items(DEFAULT_ITEMS)
-            .serviceName(DEFAULT_SERVICE_NAME)
-            .totalWeightOfItems(DEFAULT_TOTAL_WEIGHT_OF_ITEMS)
-            .price(DEFAULT_PRICE)
-            .date(DEFAULT_DATE);
+            .items(new ServiceRequestItems(DEFAULT_ITEMS))
+            .serviceName(new ServiceRequestName(DEFAULT_SERVICE_NAME))
+            .totalWeightOfItems(new ServiceRequestTotalWeightOfItems(DEFAULT_TOTAL_WEIGHT_OF_ITEMS))
+            .price(new ServiceRequestPrice(DEFAULT_PRICE))
+            .date(new ServiceRequestDate(DEFAULT_DATE));
         return serviceRequest;
     }
 
@@ -96,11 +92,11 @@ class ServiceRequestControllerIT {
      */
     public static ServiceRequest createUpdatedEntity(EntityManager em) {
         ServiceRequest serviceRequest = new ServiceRequest()
-            .items(UPDATED_ITEMS)
-            .serviceName(UPDATED_SERVICE_NAME)
-            .totalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS)
-            .price(UPDATED_PRICE)
-            .date(UPDATED_DATE);
+            .items(new ServiceRequestItems(UPDATED_ITEMS))
+            .serviceName(new ServiceRequestName(UPDATED_SERVICE_NAME))
+            .totalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS))
+            .price(new ServiceRequestPrice(UPDATED_PRICE))
+            .date(new ServiceRequestDate(UPDATED_DATE));
         return serviceRequest;
     }
 
@@ -114,7 +110,7 @@ class ServiceRequestControllerIT {
     void createServiceRequest() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the ServiceRequest
-        ServiceRequestDTO serviceRequestDTO = serviceRequestMapper.toDto(serviceRequest);
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
         var returnedServiceRequestDTO = om.readValue(
             restServiceRequestMockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(serviceRequestDTO)))
@@ -127,7 +123,7 @@ class ServiceRequestControllerIT {
 
         // Validate the ServiceRequest in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
-        var returnedServiceRequest = serviceRequestMapper.toEntity(returnedServiceRequestDTO);
+        var returnedServiceRequest = ServiceRequestMapper.toEntity(returnedServiceRequestDTO);
         assertServiceRequestUpdatableFieldsEquals(returnedServiceRequest, getPersistedServiceRequest(returnedServiceRequest));
     }
 
@@ -136,7 +132,7 @@ class ServiceRequestControllerIT {
     void createServiceRequestWithExistingId() throws Exception {
         // Create the ServiceRequest with an existing ID
         serviceRequestRepository.saveAndFlush(serviceRequest);
-        ServiceRequestDTO serviceRequestDTO = serviceRequestMapper.toDto(serviceRequest);
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
@@ -203,16 +199,16 @@ class ServiceRequestControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the serviceRequest
-        ServiceRequest updatedServiceRequest = serviceRequestRepository.findById(serviceRequest.getId()).orElseThrow();
+        ServiceRequest updatedServiceRequest = serviceRequestRepository.findById(serviceRequest.getId().value()).orElseThrow();
         // Disconnect from session so that the updates on updatedServiceRequest are not directly saved in db
         em.detach(updatedServiceRequest);
         updatedServiceRequest
-            .items(UPDATED_ITEMS)
-            .serviceName(UPDATED_SERVICE_NAME)
-            .totalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS)
-            .price(UPDATED_PRICE)
-            .date(UPDATED_DATE);
-        ServiceRequestDTO serviceRequestDTO = serviceRequestMapper.toDto(updatedServiceRequest);
+            .items(new ServiceRequestItems(UPDATED_ITEMS))
+            .serviceName(new ServiceRequestName(UPDATED_SERVICE_NAME))
+            .totalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS))
+            .price(new ServiceRequestPrice(UPDATED_PRICE))
+            .date(new ServiceRequestDate(UPDATED_DATE));
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(updatedServiceRequest);
 
         restServiceRequestMockMvc
             .perform(
@@ -231,10 +227,10 @@ class ServiceRequestControllerIT {
     @Transactional
     void putNonExistingServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(UUID.randomUUID());
+        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
 
         // Create the ServiceRequest
-        ServiceRequestDTO serviceRequestDTO = serviceRequestMapper.toDto(serviceRequest);
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restServiceRequestMockMvc
@@ -253,10 +249,10 @@ class ServiceRequestControllerIT {
     @Transactional
     void putWithIdMismatchServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(UUID.randomUUID());
+        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
 
         // Create the ServiceRequest
-        ServiceRequestDTO serviceRequestDTO = serviceRequestMapper.toDto(serviceRequest);
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restServiceRequestMockMvc
@@ -275,10 +271,10 @@ class ServiceRequestControllerIT {
     @Transactional
     void putWithMissingIdPathParamServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(UUID.randomUUID());
+        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
 
         // Create the ServiceRequest
-        ServiceRequestDTO serviceRequestDTO = serviceRequestMapper.toDto(serviceRequest);
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restServiceRequestMockMvc
@@ -301,7 +297,7 @@ class ServiceRequestControllerIT {
         ServiceRequest partialUpdatedServiceRequest = new ServiceRequest();
         partialUpdatedServiceRequest.setId(serviceRequest.getId());
 
-        partialUpdatedServiceRequest.serviceName(UPDATED_SERVICE_NAME).totalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS).date(UPDATED_DATE);
+        partialUpdatedServiceRequest.serviceName(new ServiceRequestName(UPDATED_SERVICE_NAME)).totalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS)).date(new ServiceRequestDate(UPDATED_DATE));
 
         restServiceRequestMockMvc
             .perform(
@@ -333,11 +329,11 @@ class ServiceRequestControllerIT {
         partialUpdatedServiceRequest.setId(serviceRequest.getId());
 
         partialUpdatedServiceRequest
-            .items(UPDATED_ITEMS)
-            .serviceName(UPDATED_SERVICE_NAME)
-            .totalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS)
-            .price(UPDATED_PRICE)
-            .date(UPDATED_DATE);
+            .items(new ServiceRequestItems(UPDATED_ITEMS))
+            .serviceName(new ServiceRequestName(UPDATED_SERVICE_NAME))
+            .totalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS))
+            .price(new ServiceRequestPrice(UPDATED_PRICE))
+            .date(new ServiceRequestDate(UPDATED_DATE));
 
         restServiceRequestMockMvc
             .perform(
@@ -357,10 +353,10 @@ class ServiceRequestControllerIT {
     @Transactional
     void patchNonExistingServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(UUID.randomUUID());
+        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
 
         // Create the ServiceRequest
-        ServiceRequestDTO serviceRequestDTO = serviceRequestMapper.toDto(serviceRequest);
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restServiceRequestMockMvc
@@ -379,10 +375,10 @@ class ServiceRequestControllerIT {
     @Transactional
     void patchWithIdMismatchServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(UUID.randomUUID());
+        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
 
         // Create the ServiceRequest
-        ServiceRequestDTO serviceRequestDTO = serviceRequestMapper.toDto(serviceRequest);
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restServiceRequestMockMvc
@@ -401,10 +397,10 @@ class ServiceRequestControllerIT {
     @Transactional
     void patchWithMissingIdPathParamServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(UUID.randomUUID());
+        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
 
         // Create the ServiceRequest
-        ServiceRequestDTO serviceRequestDTO = serviceRequestMapper.toDto(serviceRequest);
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restServiceRequestMockMvc
@@ -449,7 +445,7 @@ class ServiceRequestControllerIT {
     }
 
     protected ServiceRequest getPersistedServiceRequest(ServiceRequest serviceRequest) {
-        return serviceRequestRepository.findById(serviceRequest.getId()).orElseThrow();
+        return serviceRequestRepository.findById(serviceRequest.getId().value()).orElseThrow();
     }
 
     protected void assertPersistedServiceRequestToMatchAllProperties(ServiceRequest expectedServiceRequest) {

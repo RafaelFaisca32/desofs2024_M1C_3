@@ -31,6 +31,21 @@ public class ServiceRequestDTO implements Serializable {
 
     private CustomerDTO customer;
 
+    private ServiceStatusDTO status;
+
+    public ServiceRequestDTO(UUID id, String items, String serviceName, Float totalWeightOfItems, Float price, ZonedDateTime date, LocationDTO location, CustomerDTO customer) {
+        this.id = id;
+        this.items = items;
+        this.serviceName = serviceName;
+        this.totalWeightOfItems = totalWeightOfItems;
+        this.price = price;
+        this.date = date;
+        this.location = location;
+        this.customer = customer;
+    }
+
+    public ServiceRequestDTO(){}
+
     public UUID getId() {
         return id;
     }
@@ -95,6 +110,14 @@ public class ServiceRequestDTO implements Serializable {
         this.customer = customer;
     }
 
+    public ServiceStatusDTO getStatus() {
+        return status;
+    }
+
+    public void setStatus(ServiceStatusDTO status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -128,6 +151,7 @@ public class ServiceRequestDTO implements Serializable {
             ", date='" + getDate() + "'" +
             ", location=" + getLocation() +
             ", customer=" + getCustomer() +
+            ", status=" + getStatus() +
             "}";
     }
 }
