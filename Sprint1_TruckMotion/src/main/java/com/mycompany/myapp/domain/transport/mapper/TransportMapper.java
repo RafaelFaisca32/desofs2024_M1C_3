@@ -32,8 +32,8 @@ public final class TransportMapper {
 
     public static TransportDTO toDto(Transport entity) {
         if(entity == null) return null;
-
-        return new TransportDTO(entity.getId().value(),entity.getStartTime(),entity.getEndTime());
+        return null;
+        //return new TransportDTO(entity.getId().value(),entity.getStartTime(),entity.getEndTime());
     }
 
     public static List<Transport> toEntity(List<TransportDTO> dtoList) {
