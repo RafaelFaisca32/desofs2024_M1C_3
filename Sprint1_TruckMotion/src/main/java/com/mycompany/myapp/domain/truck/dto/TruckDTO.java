@@ -40,6 +40,16 @@ public class TruckDTO implements Serializable {
         this.model = model;
     }
 
+    public TruckDTO() {
+
+    }
+
+    public TruckDTO(UUID id, String make, String model) {
+        this.id = id;
+        this.make = make;
+        this.model = model;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
