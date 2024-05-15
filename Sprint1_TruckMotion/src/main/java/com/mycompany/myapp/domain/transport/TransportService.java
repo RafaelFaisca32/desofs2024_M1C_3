@@ -52,7 +52,7 @@ public class TransportService {
      */
     public TransportDTO update(TransportDTO transportDTO) {
         log.debug("Request to update Transport : {}", transportDTO);
-        if (!transportRepository.existsById(transportDTO.getId())) {
+        if (!transportRepository.existsById(new TransportId(transportDTO.getId()))) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
         Transport transport = TransportMapper.toEntity(transportDTO);
@@ -69,12 +69,12 @@ public class TransportService {
     public Optional<TransportDTO> partialUpdate(TransportDTO transportDTO) {
         log.debug("Request to partially update Transport : {}", transportDTO);
 
-        if (!transportRepository.existsById(transportDTO.getId())) {
+        if (!transportRepository.existsById(new TransportId(transportDTO.getId()))) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
         return transportRepository
-            .findById(transportDTO.getId())
+            .findById(new TransportId(transportDTO.getId()))
             .map(existingTransport -> {
                 TransportMapper.partialUpdate(existingTransport, transportDTO);
 
@@ -104,7 +104,7 @@ public class TransportService {
     @Transactional(readOnly = true)
     public Optional<TransportDTO> findOne(UUID id) {
         log.debug("Request to get Transport : {}", id);
-        return transportRepository.findById(id).map(TransportMapper::toDto);
+        return transportRepository.findById(new TransportId(id)).map(TransportMapper::toDto);
     }
 
     /**
@@ -114,6 +114,6 @@ public class TransportService {
      */
     public void delete(UUID id) {
         log.debug("Request to delete Transport : {}", id);
-        transportRepository.deleteById(id);
+        transportRepository.deleteById(new TransportId(id));
     }
 }

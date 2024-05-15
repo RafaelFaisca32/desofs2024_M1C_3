@@ -2,8 +2,11 @@ package com.mycompany.myapp.domain.transport.mapper;
 
 import com.mycompany.myapp.domain.driver.Driver;
 import com.mycompany.myapp.domain.driver.DriverId;
+import com.mycompany.myapp.domain.driver.mapper.DriverMapper;
 import com.mycompany.myapp.domain.location.Location;
+import com.mycompany.myapp.domain.location.mapper.LocationMapper;
 import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
+import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceRequestMapper;
 import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
 import com.mycompany.myapp.domain.transport.Transport;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
@@ -27,24 +30,40 @@ public final class TransportMapper {
         TransportId id = new TransportId(dto.getId());
         ZonedDateTime startTime = dto.getStartTime();
         ZonedDateTime endTime = dto.getEndTime();
-        return new Transport(id,startTime,endTime);
+        Location location = LocationMapper.toEntity(dto.getLocation());
+        Driver driver = DriverMapper.toEntity(dto.getDriver());
+        ServiceRequest serviceRequest = ServiceRequestMapper.toEntity(dto.getServiceRequest());
+        return new Transport(id,startTime,endTime,location,driver,serviceRequest);
     }
 
     public static TransportDTO toDto(Transport entity) {
         if(entity == null) return null;
-        return null;
-        //return new TransportDTO(entity.getId().value(),entity.getStartTime(),entity.getEndTime());
+        LocationDTO locationDTO = LocationMapper.toDto(entity.getLocation());
+        DriverDTO driverDTO = DriverMapper.toDto(entity.getDriver());
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(entity.getServiceRequest());
+        return new TransportDTO(entity.getId().value(),entity.getStartTime(),entity.getEndTime(),locationDTO,driverDTO,serviceRequestDTO);
     }
 
     public static List<Transport> toEntity(List<TransportDTO> dtoList) {
-        return List.of();
+        return dtoList.stream().map(TransportMapper::toEntity).toList();
     }
 
     public static List<TransportDTO> toDto(List<Transport> entityList) {
-        return List.of();
+        return entityList.stream().map(TransportMapper::toDto).toList();
     }
 
     public static void partialUpdate(Transport entity, TransportDTO dto) {
+        if(dto.getStartTime() != null) {
+            entity.setStartTime(dto.getStartTime());
+        }
+        if(dto.getEndTime() != null) {
+            entity.setEndTime(dto.getEndTime());
+        }
+        if(entity.getLocation() != null) {
+
+        }
+
+
 
     }
 }

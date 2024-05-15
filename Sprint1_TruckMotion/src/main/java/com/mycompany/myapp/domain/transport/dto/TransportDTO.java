@@ -76,6 +76,19 @@ public class TransportDTO implements Serializable {
         this.serviceRequest = serviceRequest;
     }
 
+    public TransportDTO() {
+
+    }
+
+    public TransportDTO(UUID id, ZonedDateTime startTime, ZonedDateTime endTime, LocationDTO location, DriverDTO driver, ServiceRequestDTO serviceRequest) {
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+        this.driver = driver;
+        this.serviceRequest = serviceRequest;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
