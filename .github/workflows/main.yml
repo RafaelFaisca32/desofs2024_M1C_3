@@ -31,14 +31,27 @@ jobs:
       # - name: Run frontend test
       #   working-directory: ./Sprint1_TruckMotion
       #   run: npm run ci:frontend:test
-      # - name: Run SonarQube
-      #   uses: sonarsource/sonarqube-scan-action@master
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      - name: Package application
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
         working-directory: ./Sprint1_TruckMotion
-        run: npm run java:jar:prod
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DskipTests -Dsonar.projectKey=RafaelFaisca32_desofs2024_M1C_3
+      # - name: Package application
+      #   working-directory: ./Sprint1_TruckMotion
+      #   run: npm run java:jar:prod
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -47,7 +60,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build and push
-        working-directory: ./Sprint1_TruckMotion/.devcontainer/
         uses: docker/build-push-action@v5
         with:
           context: .

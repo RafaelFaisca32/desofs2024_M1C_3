@@ -60,7 +60,7 @@ public final class TransportMapper {
             entity.setEndTime(dto.getEndTime());
         }
         if(entity.getLocation() != null) {
-            
+
         }
 
 
