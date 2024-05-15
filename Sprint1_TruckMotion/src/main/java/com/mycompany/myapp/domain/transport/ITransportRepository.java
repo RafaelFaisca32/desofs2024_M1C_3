@@ -9,13 +9,13 @@ public interface ITransportRepository {
 
     Transport save(Transport transport);
 
-    Optional<Transport> findById(UUID id);
+    Optional<Transport> findById(TransportId id);
 
-    void deleteById(UUID id);
+    void deleteById(TransportId id);
 
     Transport saveAndFlush(Transport transport);
 
     long count();
 
-    boolean existsById(UUID id);
+    boolean existsById(TransportId id);
 }

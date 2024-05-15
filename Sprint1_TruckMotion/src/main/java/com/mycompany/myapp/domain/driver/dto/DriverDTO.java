@@ -45,6 +45,7 @@ public class DriverDTO implements Serializable {
     }
 
     public DriverDTO(){}
+
     public DriverDTO(UUID id, TruckDTO truck, ApplicationUserDTO applicationUser) {
         this.id = id;
         this.truck = truck;

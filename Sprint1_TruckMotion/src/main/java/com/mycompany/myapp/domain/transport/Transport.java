@@ -51,10 +51,13 @@ public class Transport implements Serializable {
 
     }
 
-    public Transport(TransportId id, ZonedDateTime endTime, ZonedDateTime startTime) {
+    public Transport(TransportId id, ZonedDateTime startTime, ZonedDateTime endTime, Location location, Driver driver, ServiceRequest serviceRequest) {
         this.id = id;
-        this.endTime = endTime;
         this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+        this.driver = driver;
+        this.serviceRequest = serviceRequest;
     }
 
     public TransportId getId() {
