@@ -199,7 +199,7 @@ class ServiceRequestControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the serviceRequest
-        ServiceRequest updatedServiceRequest = serviceRequestRepository.findById(serviceRequest.getId().value()).orElseThrow();
+        ServiceRequest updatedServiceRequest = serviceRequestRepository.findById(serviceRequest.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedServiceRequest are not directly saved in db
         em.detach(updatedServiceRequest);
         updatedServiceRequest
@@ -445,7 +445,7 @@ class ServiceRequestControllerIT {
     }
 
     protected ServiceRequest getPersistedServiceRequest(ServiceRequest serviceRequest) {
-        return serviceRequestRepository.findById(serviceRequest.getId().value()).orElseThrow();
+        return serviceRequestRepository.findById(serviceRequest.getId()).orElseThrow();
     }
 
     protected void assertPersistedServiceRequestToMatchAllProperties(ServiceRequest expectedServiceRequest) {
