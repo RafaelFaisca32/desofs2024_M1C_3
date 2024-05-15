@@ -47,6 +47,16 @@ public class Transport implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
+    public Transport(){
+
+    }
+
+    public Transport(TransportId id, ZonedDateTime endTime, ZonedDateTime startTime) {
+        this.id = id;
+        this.endTime = endTime;
+        this.startTime = startTime;
+    }
+
     public TransportId getId() {
         return this.id;
     }
