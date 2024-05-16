@@ -21,42 +21,46 @@ import org.springframework.stereotype.Service;
 public class UserMapper {
 
     public List<UserDTO> usersToUserDTOs(List<User> users) {
+        if(users == null) return List.of();
         return users.stream().filter(Objects::nonNull).map(this::userToUserDTO).toList();
     }
 
     public UserDTO userToUserDTO(User user) {
+        if(user == null) return null;
         return new UserDTO(user);
     }
 
     public List<AdminUserDTO> usersToAdminUserDTOs(List<User> users) {
+        if(users == null) return List.of();
         return users.stream().filter(Objects::nonNull).map(this::userToAdminUserDTO).toList();
     }
 
     public AdminUserDTO userToAdminUserDTO(User user) {
+        if(user == null) return null;
         return new AdminUserDTO(user);
     }
 
     public List<User> userDTOsToUsers(List<AdminUserDTO> userDTOs) {
+        if(userDTOs == null) return List.of();
         return userDTOs.stream().filter(Objects::nonNull).map(this::userDTOToUser).toList();
     }
 
     public User userDTOToUser(AdminUserDTO userDTO) {
-        if (userDTO == null) {
-            return null;
-        } else {
-            User user = new User();
-            user.setId(userDTO.getId());
-            user.setLogin(userDTO.getLogin());
-            user.setFirstName(userDTO.getFirstName());
-            user.setLastName(userDTO.getLastName());
-            user.setEmail(userDTO.getEmail());
-            user.setImageUrl(userDTO.getImageUrl());
-            user.setActivated(userDTO.isActivated());
-            user.setLangKey(userDTO.getLangKey());
-            Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
-            user.setAuthorities(authorities);
-            return user;
-        }
+        if (userDTO == null) return null;
+
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setLogin(userDTO.getLogin());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setImageUrl(userDTO.getImageUrl());
+        user.setActivated(userDTO.isActivated());
+        user.setLangKey(userDTO.getLangKey());
+        Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
+        user.setAuthorities(authorities);
+        return user;
+
     }
 
     private Set<Authority> authoritiesFromStrings(Set<String> authoritiesAsString) {
@@ -77,11 +81,16 @@ public class UserMapper {
     }
 
     public User userFromId(Long id) {
-        if (id == null) {
-            return null;
-        }
+        if (id == null) return null;
         User user = new User();
         user.setId(id);
+        return user;
+    }
+
+    public User userFromDTO(UserDTO dto){
+        if(dto == null) return null;
+        User user = new User();
+        user.setId(dto.getId());
         return user;
     }
 
@@ -89,9 +98,7 @@ public class UserMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     public UserDTO toDtoId(User user) {
-        if (user == null) {
-            return null;
-        }
+        if (user == null) return null;
         UserDTO userDto = new UserDTO();
         userDto.setId(user.getId());
         return userDto;
@@ -101,9 +108,7 @@ public class UserMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     public Set<UserDTO> toDtoIdSet(Set<User> users) {
-        if (users == null) {
-            return Collections.emptySet();
-        }
+        if (users == null) return Collections.emptySet();
 
         Set<UserDTO> userSet = new HashSet<>();
         for (User userEntity : users) {
@@ -118,9 +123,8 @@ public class UserMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "login", source = "login")
     public UserDTO toDtoLogin(User user) {
-        if (user == null) {
-            return null;
-        }
+        if (user == null) return null;
+
         UserDTO userDto = new UserDTO();
         userDto.setId(user.getId());
         userDto.setLogin(user.getLogin());
@@ -132,9 +136,7 @@ public class UserMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "login", source = "login")
     public Set<UserDTO> toDtoLoginSet(Set<User> users) {
-        if (users == null) {
-            return Collections.emptySet();
-        }
+        if (users == null) return Collections.emptySet();
 
         Set<UserDTO> userSet = new HashSet<>();
         for (User userEntity : users) {

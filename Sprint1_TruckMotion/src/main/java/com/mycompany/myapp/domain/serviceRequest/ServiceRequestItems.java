@@ -3,6 +3,8 @@ package com.mycompany.myapp.domain.serviceRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.util.Objects;
+
 @Embeddable
 public class ServiceRequestItems {
     @Column(name = "items")
@@ -26,5 +28,10 @@ public class ServiceRequestItems {
         if (o == null || getClass() != o.getClass()) return false;
         ServiceRequestItems items1 = (ServiceRequestItems) o;
         return items.equals(items1.items);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(items);
     }
 }

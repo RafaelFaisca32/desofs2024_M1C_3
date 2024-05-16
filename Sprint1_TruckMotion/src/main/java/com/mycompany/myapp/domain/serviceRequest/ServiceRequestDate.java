@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 @Embeddable
 public class ServiceRequestDate {
@@ -28,5 +29,10 @@ public class ServiceRequestDate {
         if (o == null || getClass() != o.getClass()) return false;
         ServiceRequestDate date1 = (ServiceRequestDate) o;
         return date.equals(date1.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(date);
     }
 }
