@@ -74,9 +74,6 @@ class ApplicationUserControllerIT {
     @Mock
     private ApplicationUserRepository applicationUserRepositoryMock;
 
-    @Autowired
-    private ApplicationUserMapper applicationUserMapper;
-
     @Mock
     private ApplicationUserService applicationUserServiceMock;
 
@@ -138,7 +135,7 @@ class ApplicationUserControllerIT {
     void createApplicationUser() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the ApplicationUser
-        ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(applicationUser);
+        ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
         var returnedApplicationUserDTO = om.readValue(
             restApplicationUserMockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(applicationUserDTO)))
@@ -151,7 +148,7 @@ class ApplicationUserControllerIT {
 
         // Validate the ApplicationUser in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
-        var returnedApplicationUser = applicationUserMapper.toEntity(returnedApplicationUserDTO);
+        var returnedApplicationUser = ApplicationUserMapper.toEntity(returnedApplicationUserDTO);
         assertApplicationUserUpdatableFieldsEquals(returnedApplicationUser, getPersistedApplicationUser(returnedApplicationUser));
 
         assertApplicationUserMapsIdRelationshipPersistedValue(applicationUser, returnedApplicationUser);
@@ -162,7 +159,7 @@ class ApplicationUserControllerIT {
     void createApplicationUserWithExistingId() throws Exception {
         // Create the ApplicationUser with an existing ID
         applicationUser.setId(1L);
-        ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(applicationUser);
+        ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
@@ -194,7 +191,7 @@ class ApplicationUserControllerIT {
 
         // Update the User with new association value
         updatedApplicationUser.setInternalUser(user);
-        ApplicationUserDTO updatedApplicationUserDTO = applicationUserMapper.toDto(updatedApplicationUser);
+        ApplicationUserDTO updatedApplicationUserDTO = ApplicationUserMapper.toDto(updatedApplicationUser);
         assertThat(updatedApplicationUserDTO).isNotNull();
 
         // Update the entity
@@ -289,7 +286,7 @@ class ApplicationUserControllerIT {
         // Disconnect from session so that the updates on updatedApplicationUser are not directly saved in db
         em.detach(updatedApplicationUser);
         updatedApplicationUser.name(UPDATED_NAME).birthDate(UPDATED_BIRTH_DATE).email(UPDATED_EMAIL).gender(UPDATED_GENDER);
-        ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(updatedApplicationUser);
+        ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(updatedApplicationUser);
 
         restApplicationUserMockMvc
             .perform(
@@ -311,7 +308,7 @@ class ApplicationUserControllerIT {
         applicationUser.setId(longCount.incrementAndGet());
 
         // Create the ApplicationUser
-        ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(applicationUser);
+        ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restApplicationUserMockMvc
@@ -333,7 +330,7 @@ class ApplicationUserControllerIT {
         applicationUser.setId(longCount.incrementAndGet());
 
         // Create the ApplicationUser
-        ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(applicationUser);
+        ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restApplicationUserMockMvc
@@ -355,7 +352,7 @@ class ApplicationUserControllerIT {
         applicationUser.setId(longCount.incrementAndGet());
 
         // Create the ApplicationUser
-        ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(applicationUser);
+        ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restApplicationUserMockMvc
@@ -435,7 +432,7 @@ class ApplicationUserControllerIT {
         applicationUser.setId(longCount.incrementAndGet());
 
         // Create the ApplicationUser
-        ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(applicationUser);
+        ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restApplicationUserMockMvc
@@ -457,7 +454,7 @@ class ApplicationUserControllerIT {
         applicationUser.setId(longCount.incrementAndGet());
 
         // Create the ApplicationUser
-        ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(applicationUser);
+        ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restApplicationUserMockMvc
@@ -479,7 +476,7 @@ class ApplicationUserControllerIT {
         applicationUser.setId(longCount.incrementAndGet());
 
         // Create the ApplicationUser
-        ApplicationUserDTO applicationUserDTO = applicationUserMapper.toDto(applicationUser);
+        ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restApplicationUserMockMvc

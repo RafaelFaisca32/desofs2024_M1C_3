@@ -27,7 +27,7 @@ public final class TruckMapper {
         TruckId id = new TruckId(dto.getId());
         Make make = new Make(dto.getMake());
         Model model = new Model(dto.getModel());
-        return new Truck(model,make,id);
+        return new Truck(id,make,model);
     }
 
     public static TruckDTO toDto(Truck entity) {
