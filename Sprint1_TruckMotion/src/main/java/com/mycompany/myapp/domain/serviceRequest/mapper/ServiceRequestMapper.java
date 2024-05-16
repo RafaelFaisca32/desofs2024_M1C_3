@@ -21,7 +21,7 @@ public final class ServiceRequestMapper {
 
     public static ServiceRequest toEntity(ServiceRequestDTO dto) {
         if(dto == null) return null;
-        ServiceRequestId serviceRequestId = new ServiceRequestId(dto.getId());
+        ServiceRequestId serviceRequestId = new ServiceRequestId();
         ServiceRequestItems serviceRequestItems = new ServiceRequestItems(dto.getItems());
         ServiceRequestName serviceRequestName = new ServiceRequestName(dto.getServiceName());
         ServiceRequestTotalWeightOfItems serviceRequestTotalWeightOfItems = new ServiceRequestTotalWeightOfItems(dto.getTotalWeightOfItems());

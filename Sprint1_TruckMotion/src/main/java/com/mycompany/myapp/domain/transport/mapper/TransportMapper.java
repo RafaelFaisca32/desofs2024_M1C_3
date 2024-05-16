@@ -28,7 +28,7 @@ public final class TransportMapper {
 
     public static Transport toEntity(TransportDTO dto) {
         if(dto == null) return null;
-        TransportId id = new TransportId(dto.getId());
+        TransportId id = new TransportId();
         ZonedDateTime startTime = dto.getStartTime();
         ZonedDateTime endTime = dto.getEndTime();
         Location location = LocationMapper.toEntity(dto.getLocation());

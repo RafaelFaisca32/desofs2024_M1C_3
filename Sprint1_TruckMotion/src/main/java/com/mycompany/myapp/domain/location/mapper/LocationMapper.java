@@ -24,7 +24,7 @@ public final class LocationMapper {
 
     public static Location toEntity(LocationDTO dto) {
         if(dto == null) return null;
-        LocationId id = new LocationId(dto.getId());
+        LocationId id = new LocationId();
         GeographicalCoordinates coord = new GeographicalCoordinates(dto.getCoordX(),dto.getCoordY(),dto.getCoordZ());
         Customer customer = CustomerMapper.toEntity(dto.getCustomer());
         return new Location(id,coord,customer);

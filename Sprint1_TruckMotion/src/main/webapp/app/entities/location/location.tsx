@@ -82,8 +82,8 @@ export const Location = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  Id <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th >
+                  Location Number <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
                 <th className="hand" onClick={sort('coordX')}>
                   Coord X <FontAwesomeIcon icon={getSortIconByFieldName('coordX')} />
@@ -95,7 +95,7 @@ export const Location = () => {
                   Coord Z <FontAwesomeIcon icon={getSortIconByFieldName('coordZ')} />
                 </th>
                 <th>
-                  Customer <FontAwesomeIcon icon="sort" />
+                  Customer Company <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -105,13 +105,13 @@ export const Location = () => {
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
                     <Button tag={Link} to={`/location/${location.id}`} color="link" size="sm">
-                      {location.id}
+                      {i}
                     </Button>
                   </td>
                   <td>{location.coordX}</td>
                   <td>{location.coordY}</td>
                   <td>{location.coordZ}</td>
-                  <td>{location.customer ? <Link to={`/customer/${location.customer.id}`}>{location.customer.id}</Link> : ''}</td>
+                  <td>{location.customer ? <Link to={`/customer/${location.customer.id}`}>{location.customer.company}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/location/${location.id}`} color="info" size="sm" data-cy="entityDetailsButton">

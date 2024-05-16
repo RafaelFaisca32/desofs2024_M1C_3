@@ -82,11 +82,11 @@ export const Driver = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  Id <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th >
+                  Driver Number <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
                 <th>
-                  Truck <FontAwesomeIcon icon="sort" />
+                  Truck Make And Model<FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   Application User <FontAwesomeIcon icon="sort" />
@@ -99,13 +99,13 @@ export const Driver = () => {
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
                     <Button tag={Link} to={`/driver/${driver.id}`} color="link" size="sm">
-                      {driver.id}
+                      {i}
                     </Button>
                   </td>
-                  <td>{driver.truck ? <Link to={`/truck/${driver.truck.id}`}>{driver.truck.id}</Link> : ''}</td>
+                  <td>{driver.truck ? <Link to={`/truck/${driver.truck.id}`}>{driver.truck.make +" "+ driver.truck.model}</Link> : ''}</td>
                   <td>
                     {driver.applicationUser ? (
-                      <Link to={`/application-user/${driver.applicationUser.id}`}>{driver.applicationUser.id}</Link>
+                      <Link to={`/application-user/${driver.applicationUser.id}`}>{driver.applicationUser.name}</Link>
                     ) : (
                       ''
                     )}

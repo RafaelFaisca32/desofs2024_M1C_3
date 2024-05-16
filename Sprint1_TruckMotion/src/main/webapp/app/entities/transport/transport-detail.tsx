@@ -25,10 +25,6 @@ export const TransportDetail = () => {
         <h2 data-cy="transportDetailsHeading">Transport</h2>
         <dl className="jh-entity-details">
           <dt>
-            <span id="id">Id</span>
-          </dt>
-          <dd>{transportEntity.id}</dd>
-          <dt>
             <span id="startTime">Start Time</span>
           </dt>
           <dd>
@@ -38,12 +34,10 @@ export const TransportDetail = () => {
             <span id="endTime">End Time</span>
           </dt>
           <dd>{transportEntity.endTime ? <TextFormat value={transportEntity.endTime} type="date" format={APP_DATE_FORMAT} /> : null}</dd>
-          <dt>Location</dt>
-          <dd>{transportEntity.location ? transportEntity.location.id : ''}</dd>
-          <dt>Driver</dt>
-          <dd>{transportEntity.driver ? transportEntity.driver.id : ''}</dd>
-          <dt>Service Request</dt>
-          <dd>{transportEntity.serviceRequest ? transportEntity.serviceRequest.id : ''}</dd>
+          <dt>Location Coordinates(x,y,z)</dt>
+          <dd>{transportEntity.location ? transportEntity.location.coordX +"--" +transportEntity.location.coordY+"--" +transportEntity.location.coordZ : ''}</dd>
+          <dt>Service Request Name</dt>
+          <dd>{transportEntity.serviceRequest ? transportEntity.serviceRequest.serviceName : ''}</dd>
         </dl>
         <Button tag={Link} to="/transport" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

@@ -105,7 +105,6 @@ export const TransportUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? <ValidatedField name="id" required readOnly id="transport-id" label="Id" validate={{ required: true }} /> : null}
               <ValidatedField
                 label="Start Time"
                 id="transport-startTime"
@@ -127,7 +126,7 @@ export const TransportUpdate = () => {
                 {locations
                   ? locations.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.coordX +"--"+otherEntity.coordY+"--"+ otherEntity.coordZ}
                       </option>
                     ))
                   : null}
@@ -153,7 +152,7 @@ export const TransportUpdate = () => {
                 {serviceRequests
                   ? serviceRequests.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.serviceName}
                       </option>
                     ))
                   : null}

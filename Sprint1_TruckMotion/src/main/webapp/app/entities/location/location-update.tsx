@@ -95,7 +95,6 @@ export const LocationUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? <ValidatedField name="id" required readOnly id="location-id" label="Id" validate={{ required: true }} /> : null}
               <ValidatedField label="Coord X" id="location-coordX" name="coordX" data-cy="coordX" type="text" />
               <ValidatedField label="Coord Y" id="location-coordY" name="coordY" data-cy="coordY" type="text" />
               <ValidatedField label="Coord Z" id="location-coordZ" name="coordZ" data-cy="coordZ" type="text" />
@@ -104,7 +103,7 @@ export const LocationUpdate = () => {
                 {customers
                   ? customers.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.company}
                       </option>
                     ))
                   : null}

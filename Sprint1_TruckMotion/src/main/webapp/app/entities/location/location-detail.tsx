@@ -24,10 +24,6 @@ export const LocationDetail = () => {
         <h2 data-cy="locationDetailsHeading">Location</h2>
         <dl className="jh-entity-details">
           <dt>
-            <span id="id">Id</span>
-          </dt>
-          <dd>{locationEntity.id}</dd>
-          <dt>
             <span id="coordX">Coord X</span>
           </dt>
           <dd>{locationEntity.coordX}</dd>
@@ -40,7 +36,7 @@ export const LocationDetail = () => {
           </dt>
           <dd>{locationEntity.coordZ}</dd>
           <dt>Customer</dt>
-          <dd>{locationEntity.customer ? locationEntity.customer.id : ''}</dd>
+          <dd>{locationEntity.customer ? locationEntity.customer.company : ''}</dd>
         </dl>
         <Button tag={Link} to="/location" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

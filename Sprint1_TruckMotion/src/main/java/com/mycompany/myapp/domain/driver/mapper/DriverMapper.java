@@ -21,7 +21,7 @@ public final class DriverMapper {
 
     public static Driver toEntity(DriverDTO dto) {
         if(dto == null) return null;
-        DriverId id = new DriverId(dto.getId());
+        DriverId id = new DriverId();
         Truck truck = TruckMapper.toEntity(dto.getTruck());
         ApplicationUser applicationUser = ApplicationUserMapper.toEntity(dto.getApplicationUser());
         return new Driver(id,truck,applicationUser);

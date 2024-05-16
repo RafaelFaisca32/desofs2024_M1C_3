@@ -83,8 +83,8 @@ export const Transport = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  Id <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th >
+                  Transport option <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
                 </th>
                 <th className="hand" onClick={sort('startTime')}>
                   Start Time <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
@@ -93,13 +93,10 @@ export const Transport = () => {
                   End Time <FontAwesomeIcon icon={getSortIconByFieldName('endTime')} />
                 </th>
                 <th>
-                  Location <FontAwesomeIcon icon="sort" />
+                  Location Coordinates(x,y,z)<FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  Driver <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  Service Request <FontAwesomeIcon icon="sort" />
+                  Service Request Name <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -109,16 +106,15 @@ export const Transport = () => {
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
                     <Button tag={Link} to={`/transport/${transport.id}`} color="link" size="sm">
-                      {transport.id}
+                      {i}
                     </Button>
                   </td>
                   <td>{transport.startTime ? <TextFormat type="date" value={transport.startTime} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{transport.endTime ? <TextFormat type="date" value={transport.endTime} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{transport.location ? <Link to={`/location/${transport.location.id}`}>{transport.location.id}</Link> : ''}</td>
-                  <td>{transport.driver ? <Link to={`/driver/${transport.driver.id}`}>{transport.driver.id}</Link> : ''}</td>
+                  <td>{transport.location ? <Link to={`/location/${transport.location.id}`}>{transport.location.coordX +"--" +transport.location.coordY+"--" +transport.location.coordZ}</Link> : ''}</td>
                   <td>
                     {transport.serviceRequest ? (
-                      <Link to={`/service-request/${transport.serviceRequest.id}`}>{transport.serviceRequest.id}</Link>
+                      <Link to={`/service-request/${transport.serviceRequest.id}`}>{transport.serviceRequest.serviceName}</Link>
                     ) : (
                       ''
                     )}

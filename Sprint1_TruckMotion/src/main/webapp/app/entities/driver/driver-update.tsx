@@ -91,13 +91,12 @@ export const DriverUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? <ValidatedField name="id" required readOnly id="driver-id" label="Id" validate={{ required: true }} /> : null}
               <ValidatedField id="driver-truck" name="truck" data-cy="truck" label="Truck" type="select">
                 <option value="" key="0" />
                 {trucks
                   ? trucks.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.make + " " + otherEntity.model}
                       </option>
                     ))
                   : null}
@@ -113,7 +112,7 @@ export const DriverUpdate = () => {
                 {applicationUsers
                   ? applicationUsers.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.name}
                       </option>
                     ))
                   : null}

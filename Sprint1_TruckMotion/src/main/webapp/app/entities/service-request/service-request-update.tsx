@@ -102,9 +102,6 @@ export const ServiceRequestUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? (
-                <ValidatedField name="id" required readOnly id="service-request-id" label="Id" validate={{ required: true }} />
-              ) : null}
               <ValidatedField label="Items" id="service-request-items" name="items" data-cy="items" type="text" />
               <ValidatedField label="Service Name" id="service-request-serviceName" name="serviceName" data-cy="serviceName" type="text" />
               <ValidatedField
@@ -128,7 +125,7 @@ export const ServiceRequestUpdate = () => {
                 {locations
                   ? locations.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.coordX +"--"+otherEntity.coordY+"--"+ otherEntity.coordZ}
                       </option>
                     ))
                   : null}
@@ -138,7 +135,7 @@ export const ServiceRequestUpdate = () => {
                 {customers
                   ? customers.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.company}
                       </option>
                     ))
                   : null}

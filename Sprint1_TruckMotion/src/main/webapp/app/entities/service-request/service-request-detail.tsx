@@ -25,10 +25,6 @@ export const ServiceRequestDetail = () => {
         <h2 data-cy="serviceRequestDetailsHeading">Service Request</h2>
         <dl className="jh-entity-details">
           <dt>
-            <span id="id">Id</span>
-          </dt>
-          <dd>{serviceRequestEntity.id}</dd>
-          <dt>
             <span id="items">Items</span>
           </dt>
           <dd>{serviceRequestEntity.items}</dd>
@@ -50,10 +46,10 @@ export const ServiceRequestDetail = () => {
           <dd>
             {serviceRequestEntity.date ? <TextFormat value={serviceRequestEntity.date} type="date" format={APP_DATE_FORMAT} /> : null}
           </dd>
-          <dt>Location</dt>
-          <dd>{serviceRequestEntity.location ? serviceRequestEntity.location.id : ''}</dd>
-          <dt>Customer</dt>
-          <dd>{serviceRequestEntity.customer ? serviceRequestEntity.customer.id : ''}</dd>
+          <dt>Location Coordinates(x,y,z)</dt>
+          <dd>{serviceRequestEntity.location ?  serviceRequestEntity.location.coordX +"--" +serviceRequestEntity.location.coordY+"--" +serviceRequestEntity.location.coordZ : ''}</dd>
+          <dt>Customer Company</dt>
+          <dd>{serviceRequestEntity.customer ? serviceRequestEntity.customer.company : ''}</dd>
           <dt>Status</dt>
           <dd>{serviceRequestEntity.status ? serviceRequestEntity.status.status : ''}</dd>
         </dl>

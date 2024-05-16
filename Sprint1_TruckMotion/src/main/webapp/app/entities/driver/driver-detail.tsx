@@ -23,14 +23,10 @@ export const DriverDetail = () => {
       <Col md="8">
         <h2 data-cy="driverDetailsHeading">Driver</h2>
         <dl className="jh-entity-details">
-          <dt>
-            <span id="id">Id</span>
-          </dt>
-          <dd>{driverEntity.id}</dd>
-          <dt>Truck</dt>
-          <dd>{driverEntity.truck ? driverEntity.truck.id : ''}</dd>
+          <dt>Truck Make and Model</dt>
+          <dd>{driverEntity.truck ? driverEntity.truck.make +" "+ driverEntity.truck.model : ''}</dd>
           <dt>Application User</dt>
-          <dd>{driverEntity.applicationUser ? driverEntity.applicationUser.id : ''}</dd>
+          <dd>{driverEntity.applicationUser ? driverEntity.applicationUser.name : ''}</dd>
         </dl>
         <Button tag={Link} to="/driver" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

@@ -83,8 +83,8 @@ export const ServiceRequest = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  Id <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th>
+                  Service Request Number <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
                 <th className="hand" onClick={sort('items')}>
                   Items <FontAwesomeIcon icon={getSortIconByFieldName('items')} />
@@ -102,10 +102,10 @@ export const ServiceRequest = () => {
                   Date <FontAwesomeIcon icon={getSortIconByFieldName('date')} />
                 </th>
                 <th>
-                  Location <FontAwesomeIcon icon="sort" />
+                Location Coordinates(x,y,z) <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  Customer <FontAwesomeIcon icon="sort" />
+                  Customer Company <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   Status <FontAwesomeIcon icon="sort" />
@@ -118,7 +118,7 @@ export const ServiceRequest = () => {
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
                     <Button tag={Link} to={`/service-request/${serviceRequest.id}`} color="link" size="sm">
-                      {serviceRequest.id}
+                      {i}
                     </Button>
                   </td>
                   <td>{serviceRequest.items}</td>
@@ -128,14 +128,14 @@ export const ServiceRequest = () => {
                   <td>{serviceRequest.date ? <TextFormat type="date" value={serviceRequest.date} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>
                     {serviceRequest.location ? (
-                      <Link to={`/location/${serviceRequest.location.id}`}>{serviceRequest.location.id}</Link>
+                      <Link to={`/location/${serviceRequest.location.id}`}>{serviceRequest.location.coordX +"--" +serviceRequest.location.coordY+"--" +serviceRequest.location.coordZ}</Link>
                     ) : (
                       ''
                     )}
                   </td>
                   <td>
                     {serviceRequest.customer ? (
-                      <Link to={`/customer/${serviceRequest.customer.id}`}>{serviceRequest.customer.id}</Link>
+                      <Link to={`/customer/${serviceRequest.customer.id}`}>{serviceRequest.customer.company}</Link>
                     ) : (
                       ''
                     )}
