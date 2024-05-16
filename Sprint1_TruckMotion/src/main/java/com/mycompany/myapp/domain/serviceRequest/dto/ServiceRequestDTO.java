@@ -45,6 +45,8 @@ public class ServiceRequestDTO implements Serializable {
         this.status = status;
     }
 
+    public ServiceRequestDTO(UUID id){this.id = id;}
+
     public ServiceRequestDTO(){}
 
     public UUID getId() {

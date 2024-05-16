@@ -29,7 +29,7 @@ public final class ServiceStatusMapper {
 
     public static ServiceStatusDTO toDto(ServiceStatus entity) {
         if (entity == null) return null;
-        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(entity.getServiceRequest());
+        ServiceRequestDTO serviceRequestDTO = new ServiceRequestDTO(entity.getServiceRequest().getId().value());
         return new ServiceStatusDTO(
             entity.getId().value(),
             entity.getDate().value(),

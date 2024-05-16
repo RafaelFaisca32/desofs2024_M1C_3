@@ -97,8 +97,9 @@ public class ServiceRequestService {
     @Transactional(readOnly = true)
     public List<ServiceRequestDTO> findAll() {
         log.debug("Request to get all ServiceRequests");
-        return serviceRequestRepository
-            .findAll()
+        List<ServiceRequest> list = serviceRequestRepository
+            .findAll();
+        return list
             .stream()
             .map(ServiceRequestMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
