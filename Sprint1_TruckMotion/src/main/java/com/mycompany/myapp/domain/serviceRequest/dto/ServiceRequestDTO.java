@@ -33,7 +33,7 @@ public class ServiceRequestDTO implements Serializable {
 
     private ServiceStatusDTO status;
 
-    public ServiceRequestDTO(UUID id, String items, String serviceName, Float totalWeightOfItems, Float price, ZonedDateTime date, LocationDTO location, CustomerDTO customer) {
+    public ServiceRequestDTO(UUID id, String items, String serviceName, Float totalWeightOfItems, Float price, ZonedDateTime date, LocationDTO location, CustomerDTO customer,ServiceStatusDTO status) {
         this.id = id;
         this.items = items;
         this.serviceName = serviceName;
@@ -42,6 +42,7 @@ public class ServiceRequestDTO implements Serializable {
         this.date = date;
         this.location = location;
         this.customer = customer;
+        this.status = status;
     }
 
     public ServiceRequestDTO(){}

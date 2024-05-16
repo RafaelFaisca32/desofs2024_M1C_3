@@ -24,6 +24,16 @@ public class ServiceStatusDTO implements Serializable {
 
     private ServiceRequestDTO serviceRequest;
 
+    public ServiceStatusDTO(){}
+
+    public ServiceStatusDTO(UUID id, ZonedDateTime date, String observations, Status status, ServiceRequestDTO serviceRequest) {
+        this.id = id;
+        this.date = date;
+        this.observations = observations;
+        this.status = status;
+        this.serviceRequest = serviceRequest;
+    }
+
     public UUID getId() {
         return id;
     }
