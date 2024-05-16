@@ -17,15 +17,16 @@ public class ServiceStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @EmbeddedId
     @GeneratedValue
     @Column(name = "id")
-    private UUID id;
+    private ServiceStatusId id;
 
     @Column(name = "date")
-    private ZonedDateTime date;
+    private ServiceRequestDate date;
 
     @Column(name = "observations")
-    private String observations;
+    private ServiceStatusObservations observations;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -37,42 +38,52 @@ public class ServiceStatus implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public UUID getId() {
-        return this.id;
+    public ServiceStatus(){}
+
+    public ServiceStatus(ServiceStatusId id, ServiceRequestDate date, ServiceStatusObservations observations, Status status, ServiceRequest serviceRequest) {
+        this.id = id;
+        this.date = date;
+        this.observations = observations;
+        this.status = status;
+        this.serviceRequest = serviceRequest;
     }
 
-    public ServiceStatus id(UUID id) {
+    public ServiceStatusId getId() {
+        return new ServiceStatusId(this.id.value());
+    }
+
+    public ServiceStatus id(ServiceStatusId id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(UUID id) {
+    public void setId(ServiceStatusId id) {
         this.id = id;
     }
 
-    public ZonedDateTime getDate() {
-        return this.date;
+    public ServiceRequestDate getDate() {
+        return new ServiceRequestDate(this.date.value());
     }
 
-    public ServiceStatus date(ZonedDateTime date) {
+    public ServiceStatus date(ServiceRequestDate date) {
         this.setDate(date);
         return this;
     }
 
-    public void setDate(ZonedDateTime date) {
+    public void setDate(ServiceRequestDate date) {
         this.date = date;
     }
 
-    public String getObservations() {
-        return this.observations;
+    public ServiceStatusObservations getObservations() {
+        return new ServiceStatusObservations(this.observations.value());
     }
 
-    public ServiceStatus observations(String observations) {
+    public ServiceStatus observations(ServiceStatusObservations observations) {
         this.setObservations(observations);
         return this;
     }
 
-    public void setObservations(String observations) {
+    public void setObservations(ServiceStatusObservations observations) {
         this.observations = observations;
     }
 

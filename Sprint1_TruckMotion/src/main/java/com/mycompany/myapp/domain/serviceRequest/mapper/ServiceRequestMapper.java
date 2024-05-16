@@ -7,9 +7,7 @@ import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceStatusDTO;
@@ -36,15 +34,32 @@ public final class ServiceRequestMapper {
         if (entity == null) return null;
         CustomerDTO customerDTO = CustomerMapper.toDto(entity.getCustomer());
         LocationDTO locationDTO = LocationMapper.toDto(entity.getLocation());
-        return new ServiceRequestDTO(
-            entity.getId().value(),
-            entity.getItems().value(),
-            entity.getServiceName().value(),
-            entity.getTotalWeightOfItems().value(),
-            entity.getPrice().value(),
-            entity.getDate().value(),
-            locationDTO,
-            customerDTO);
+        if (entity.getServiceStatuses() != null && !entity.getServiceStatuses().isEmpty()) {
+            List<ServiceStatus> statusList = new ArrayList<>(entity.getServiceStatuses());
+            statusList.sort(Comparator.comparing(status -> ((ServiceStatus) status).getDate().value()).reversed());
+
+            return new ServiceRequestDTO(
+                entity.getId().value(),
+                entity.getItems().value(),
+                entity.getServiceName().value(),
+                entity.getTotalWeightOfItems().value(),
+                entity.getPrice().value(),
+                entity.getDate().value(),
+                locationDTO,
+                customerDTO,
+                ServiceStatusMapper.toDto(statusList.get(0)));
+        } else {
+            return new ServiceRequestDTO(
+                entity.getId().value(),
+                entity.getItems().value(),
+                entity.getServiceName().value(),
+                entity.getTotalWeightOfItems().value(),
+                entity.getPrice().value(),
+                entity.getDate().value(),
+                locationDTO,
+                customerDTO,
+                null);
+        }
     }
 
     public static List<ServiceRequest> toEntity(List<ServiceRequestDTO> dtoList) {

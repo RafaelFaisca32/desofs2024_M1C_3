@@ -52,7 +52,7 @@ public class ServiceRequest implements Serializable {
     @JoinColumn(unique = true)
     private Customer customer;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "serviceRequest")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "serviceRequest")
     @JsonIgnoreProperties(value = { "serviceRequest" }, allowSetters = true)
     private Set<ServiceStatus> serviceStatuses = new HashSet<>();
 
@@ -253,12 +253,12 @@ public class ServiceRequest implements Serializable {
     @Override
     public String toString() {
         return "ServiceRequest{" +
-            "id=" + getId() +
-            ", items='" + getItems() + "'" +
-            ", serviceName='" + getServiceName() + "'" +
-            ", totalWeightOfItems=" + getTotalWeightOfItems() +
-            ", price=" + getPrice() +
-            ", date='" + getDate() + "'" +
+            "id=" + getId().value() +
+            ", items='" + getItems().value() + "'" +
+            ", serviceName='" + getServiceName().value() + "'" +
+            ", totalWeightOfItems=" + getTotalWeightOfItems().value() +
+            ", price=" + getPrice().value() +
+            ", date='" + getDate().value() + "'" +
             "}";
     }
 }
