@@ -47,7 +47,9 @@ public class Driver implements Serializable {
         this.setId(id);
         return this;
     }
-    public Driver(){}
+    public Driver(){
+        this.id = new DriverId();
+    }
     public Driver(DriverId id, Truck truck, ApplicationUser applicationUser) {
         this.id = id;
         this.truck = truck;

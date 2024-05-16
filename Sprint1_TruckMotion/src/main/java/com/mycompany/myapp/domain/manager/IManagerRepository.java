@@ -9,9 +9,9 @@ public interface IManagerRepository {
 
     Manager save(Manager customer);
 
-    Optional<Manager> findById(UUID id);
+    Optional<Manager> findById(ManagerId id);
 
-    void deleteById(UUID id);
+    void deleteById(ManagerId id);
 
     Manager saveAndFlush(Manager manager);
 

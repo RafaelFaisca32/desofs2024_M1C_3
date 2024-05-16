@@ -23,6 +23,7 @@ import org.mapstruct.*;
 public final class LocationMapper {
 
     public static Location toEntity(LocationDTO dto) {
+        if(dto == null) return null;
         LocationId id = new LocationId(dto.getId());
         GeographicalCoordinates coord = new GeographicalCoordinates(dto.getCoordX(),dto.getCoordY(),dto.getCoordZ());
         Customer customer = CustomerMapper.toEntity(dto.getCustomer());
@@ -37,14 +38,17 @@ public final class LocationMapper {
     }
 
     public static List<Location> toEntity(List<LocationDTO> dtoList) {
-        return dtoList.stream().map(LocationMapper::toEntity).toList();
+        if(dtoList == null) return List.of();
+        return dtoList.stream().filter(Objects::nonNull).map(LocationMapper::toEntity).toList();
     }
 
     public static List<LocationDTO> toDto(List<Location> entityList) {
-        return entityList.stream().map(LocationMapper::toDto).toList();
+        if(entityList == null) return List.of();
+        return entityList.stream().filter(Objects::nonNull).map(LocationMapper::toDto).toList();
     }
 
     public static void partialUpdate(Location entity, LocationDTO dto) {
+        if(entity == null || dto == null) return;
         if(dto.getCustomer() != null){
             entity.setCustomer(CustomerMapper.toEntity(dto.getCustomer()));
         }

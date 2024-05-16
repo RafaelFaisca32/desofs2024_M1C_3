@@ -22,6 +22,7 @@ import org.mapstruct.*;
 public final class ServiceRequestMapper {
 
     public static ServiceRequest toEntity(ServiceRequestDTO dto) {
+        if(dto == null) return null;
         ServiceRequestId serviceRequestId = new ServiceRequestId(dto.getId());
         ServiceRequestItems serviceRequestItems = new ServiceRequestItems(dto.getItems());
         ServiceRequestName serviceRequestName = new ServiceRequestName(dto.getServiceName());
@@ -47,32 +48,18 @@ public final class ServiceRequestMapper {
     }
 
     public static List<ServiceRequest> toEntity(List<ServiceRequestDTO> dtoList) {
-        return dtoList.stream().map(dto -> {
-                try {
-                    return ServiceRequestMapper.toEntity(dto);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            })
-            .filter(entity -> entity != null)
-            .collect(Collectors.toList());
+        if(dtoList == null) return List.of();
+        return dtoList.stream().filter(Objects::nonNull).map(ServiceRequestMapper::toEntity).toList();
+
     }
 
     public static List<ServiceRequestDTO> toDto(List<ServiceRequest> entityList) {
-        return entityList.stream().map(entity -> {
-                try {
-                    return ServiceRequestMapper.toDto(entity);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            })
-            .filter(entity -> entity != null)
-            .collect(Collectors.toList());
+        if(entityList == null) return List.of();
+        return entityList.stream().filter(Objects::nonNull).map(ServiceRequestMapper::toDto).toList();
     }
 
     public static void partialUpdate(ServiceRequest entity, ServiceRequestDTO dto) {
+        if(entity == null || dto == null ) return;
         if(dto.getCustomer() != null){
             entity.setCustomer(CustomerMapper.toEntity(dto.getCustomer()));
         }

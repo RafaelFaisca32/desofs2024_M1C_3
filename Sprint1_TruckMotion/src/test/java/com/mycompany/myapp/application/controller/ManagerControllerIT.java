@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.manager.IManagerRepository;
 import com.mycompany.myapp.domain.manager.Manager;
+import com.mycompany.myapp.domain.manager.ManagerId;
 import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
 import com.mycompany.myapp.domain.manager.mapper.ManagerMapper;
 import jakarta.persistence.EntityManager;
@@ -40,9 +41,6 @@ class ManagerControllerIT {
 
     @Autowired
     private IManagerRepository managerRepository;
-
-    @Autowired
-    private ManagerMapper managerMapper;
 
     @Autowired
     private EntityManager em;
@@ -84,7 +82,7 @@ class ManagerControllerIT {
     void createManager() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the Manager
-        ManagerDTO managerDTO = managerMapper.toDto(manager);
+        ManagerDTO managerDTO = ManagerMapper.toDto(manager);
         var returnedManagerDTO = om.readValue(
             restManagerMockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(managerDTO)))
@@ -97,7 +95,7 @@ class ManagerControllerIT {
 
         // Validate the Manager in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
-        var returnedManager = managerMapper.toEntity(returnedManagerDTO);
+        var returnedManager = ManagerMapper.toEntity(returnedManagerDTO);
         assertManagerUpdatableFieldsEquals(returnedManager, getPersistedManager(returnedManager));
     }
 
@@ -106,7 +104,7 @@ class ManagerControllerIT {
     void createManagerWithExistingId() throws Exception {
         // Create the Manager with an existing ID
         managerRepository.saveAndFlush(manager);
-        ManagerDTO managerDTO = managerMapper.toDto(manager);
+        ManagerDTO managerDTO = ManagerMapper.toDto(manager);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
@@ -166,7 +164,7 @@ class ManagerControllerIT {
         Manager updatedManager = managerRepository.findById(manager.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedManager are not directly saved in db
         em.detach(updatedManager);
-        ManagerDTO managerDTO = managerMapper.toDto(updatedManager);
+        ManagerDTO managerDTO = ManagerMapper.toDto(updatedManager);
 
         restManagerMockMvc
             .perform(
@@ -183,10 +181,10 @@ class ManagerControllerIT {
     @Transactional
     void putNonExistingManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(UUID.randomUUID());
+        manager.setId(new ManagerId());
 
         // Create the Manager
-        ManagerDTO managerDTO = managerMapper.toDto(manager);
+        ManagerDTO managerDTO = ManagerMapper.toDto(manager);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restManagerMockMvc
@@ -203,10 +201,10 @@ class ManagerControllerIT {
     @Transactional
     void putWithIdMismatchManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(UUID.randomUUID());
+        manager.setId(new ManagerId());
 
         // Create the Manager
-        ManagerDTO managerDTO = managerMapper.toDto(manager);
+        ManagerDTO managerDTO = ManagerMapper.toDto(manager);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restManagerMockMvc
@@ -223,10 +221,10 @@ class ManagerControllerIT {
     @Transactional
     void putWithMissingIdPathParamManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(UUID.randomUUID());
+        manager.setId(new ManagerId());
 
         // Create the Manager
-        ManagerDTO managerDTO = managerMapper.toDto(manager);
+        ManagerDTO managerDTO = ManagerMapper.toDto(manager);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restManagerMockMvc
@@ -293,10 +291,10 @@ class ManagerControllerIT {
     @Transactional
     void patchNonExistingManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(UUID.randomUUID());
+        manager.setId(new ManagerId());
 
         // Create the Manager
-        ManagerDTO managerDTO = managerMapper.toDto(manager);
+        ManagerDTO managerDTO = ManagerMapper.toDto(manager);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restManagerMockMvc
@@ -315,10 +313,10 @@ class ManagerControllerIT {
     @Transactional
     void patchWithIdMismatchManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(UUID.randomUUID());
+        manager.setId(new ManagerId());
 
         // Create the Manager
-        ManagerDTO managerDTO = managerMapper.toDto(manager);
+        ManagerDTO managerDTO = ManagerMapper.toDto(manager);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restManagerMockMvc
@@ -337,10 +335,10 @@ class ManagerControllerIT {
     @Transactional
     void patchWithMissingIdPathParamManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(UUID.randomUUID());
+        manager.setId(new ManagerId());
 
         // Create the Manager
-        ManagerDTO managerDTO = managerMapper.toDto(manager);
+        ManagerDTO managerDTO = ManagerMapper.toDto(manager);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restManagerMockMvc

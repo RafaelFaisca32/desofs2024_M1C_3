@@ -44,7 +44,9 @@ public class Location implements Serializable {
         this.customer = customer;
     }
 
-    public Location() {}
+    public Location() {
+        this.id = new LocationId();
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 

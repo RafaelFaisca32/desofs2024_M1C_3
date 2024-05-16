@@ -11,6 +11,7 @@ import com.mycompany.myapp.domain.user.mapper.ApplicationUserMapper;
 import org.mapstruct.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -20,6 +21,7 @@ import java.util.UUID;
 public final class CustomerMapper {
 
     public static Customer toEntity(CustomerDTO dto) {
+        if(dto == null) return null;
         CustomerId id = new CustomerId(dto.getId());
         Company company = new Company(dto.getCompany());
         ApplicationUser applicationUser = ApplicationUserMapper.toEntity(dto.getApplicationUser());
@@ -33,14 +35,17 @@ public final class CustomerMapper {
     }
 
     public static List<Customer> toEntity(List<CustomerDTO> dtoList) {
-        return dtoList.stream().map(CustomerMapper::toEntity).toList();
+        if(dtoList == null) return List.of();
+        return dtoList.stream().filter(Objects::nonNull).map(CustomerMapper::toEntity).toList();
     }
 
     public static List<CustomerDTO> toDto(List<Customer> entityList) {
-        return entityList.stream().map(CustomerMapper::toDto).toList();
+        if(entityList == null) return List.of();
+        return entityList.stream().filter(Objects::nonNull).map(CustomerMapper::toDto).toList();
     }
 
     public static void partialUpdate(Customer entity, CustomerDTO dto) {
+        if(entity == null || dto == null) return;
         if(dto.getCompany() != null){
             entity.setCompany(new Company(dto.getCompany()));
         }

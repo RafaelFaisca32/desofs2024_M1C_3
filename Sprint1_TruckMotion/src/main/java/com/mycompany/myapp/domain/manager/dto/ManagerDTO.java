@@ -33,6 +33,14 @@ public class ManagerDTO implements Serializable {
         this.applicationUser = applicationUser;
     }
 
+    public ManagerDTO() {
+    }
+
+    public ManagerDTO(UUID id, ApplicationUserDTO applicationUser) {
+        this.id = id;
+        this.applicationUser = applicationUser;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

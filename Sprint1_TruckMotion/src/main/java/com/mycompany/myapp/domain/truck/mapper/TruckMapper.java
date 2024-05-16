@@ -14,6 +14,7 @@ import com.mycompany.myapp.domain.user.mapper.ApplicationUserMapper;
 import org.mapstruct.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Mapper for the entity {@link truck} and its DTO {@link TruckDTO}.
@@ -22,6 +23,7 @@ import java.util.List;
 public final class TruckMapper {
 
     public static Truck toEntity(TruckDTO dto) {
+        if(dto == null) return null;
         TruckId id = new TruckId(dto.getId());
         Make make = new Make(dto.getMake());
         Model model = new Model(dto.getModel());
@@ -34,19 +36,21 @@ public final class TruckMapper {
     }
 
     public static List<Truck> toEntity(List<TruckDTO> dtoList) {
-        return dtoList.stream().map(TruckMapper::toEntity).toList();
+        if(dtoList == null) return List.of();
+        return dtoList.stream().filter(Objects::nonNull).map(TruckMapper::toEntity).toList();
     }
 
     public static List<TruckDTO> toDto(List<Truck> entityList) {
-        return entityList.stream().map(TruckMapper::toDto).toList();
+        if(entityList == null) List.of();
+        return entityList.stream().filter(Objects::nonNull).map(TruckMapper::toDto).toList();
     }
 
     public static void partialUpdate(Truck entity, TruckDTO dto) {
         if(dto.getMake() != null){
-            entity.setMake(entity.getMake());
+            entity.setMake(new Make(dto.getMake()));
         }
         if(dto.getModel() != null){
-            entity.setModel(entity.getModel());
+            entity.setModel(new Model(dto.getModel()));
         }
     }
 }

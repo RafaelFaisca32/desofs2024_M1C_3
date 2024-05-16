@@ -16,10 +16,10 @@ public class Manager implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+    @EmbeddedId
     @GeneratedValue
     @Column(name = "id")
-    private UUID id;
+    private ManagerId id;
 
     @JsonIgnoreProperties(value = { "internalUser", "driver", "manager", "customer" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
@@ -27,17 +27,24 @@ public class Manager implements Serializable {
     private ApplicationUser applicationUser;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+    public Manager(){
+        this.id = new ManagerId();
+    }
+    public Manager(ManagerId id, ApplicationUser applicationUser) {
+        this.id = id;
+        this.applicationUser = applicationUser;
+    }
 
-    public UUID getId() {
+    public ManagerId getId() {
         return this.id;
     }
 
-    public Manager id(UUID id) {
+    public Manager id(ManagerId id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(UUID id) {
+    public void setId(ManagerId id) {
         this.id = id;
     }
 

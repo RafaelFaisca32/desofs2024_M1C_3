@@ -76,7 +76,7 @@ public class ManagerService {
         }
 
         return managerRepository
-            .findById(managerDTO.getId())
+            .findById(new ManagerId(managerDTO.getId()))
             .map(existingManager -> {
                 ManagerMapper.partialUpdate(existingManager, managerDTO);
 
@@ -106,7 +106,8 @@ public class ManagerService {
     @Transactional(readOnly = true)
     public Optional<ManagerDTO> findOne(UUID id) {
         log.debug("Request to get Manager : {}", id);
-        return managerRepository.findById(id).map(ManagerMapper::toDto);
+        ManagerId mId = new ManagerId(id);
+        return managerRepository.findById(mId).map(ManagerMapper::toDto);
     }
 
     /**
@@ -116,6 +117,7 @@ public class ManagerService {
      */
     public void delete(UUID id) {
         log.debug("Request to delete Manager : {}", id);
-        managerRepository.deleteById(id);
+        ManagerId mId = new ManagerId(id);
+        managerRepository.deleteById(mId);
     }
 }

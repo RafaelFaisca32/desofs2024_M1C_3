@@ -27,6 +27,7 @@ import org.mapstruct.*;
 public final class TransportMapper {
 
     public static Transport toEntity(TransportDTO dto) {
+        if(dto == null) return null;
         TransportId id = new TransportId(dto.getId());
         ZonedDateTime startTime = dto.getStartTime();
         ZonedDateTime endTime = dto.getEndTime();
@@ -45,22 +46,31 @@ public final class TransportMapper {
     }
 
     public static List<Transport> toEntity(List<TransportDTO> dtoList) {
-        return dtoList.stream().map(TransportMapper::toEntity).toList();
+        if(dtoList == null) return List.of();
+        return dtoList.stream().filter(Objects::nonNull).map(TransportMapper::toEntity).toList();
     }
 
     public static List<TransportDTO> toDto(List<Transport> entityList) {
-        return entityList.stream().map(TransportMapper::toDto).toList();
+        if(entityList == null) return List.of();
+        return entityList.stream().filter(Objects::nonNull).map(TransportMapper::toDto).toList();
     }
 
     public static void partialUpdate(Transport entity, TransportDTO dto) {
+        if(entity == null || dto == null) return;
         if(dto.getStartTime() != null) {
             entity.setStartTime(dto.getStartTime());
         }
         if(dto.getEndTime() != null) {
             entity.setEndTime(dto.getEndTime());
         }
-        if(entity.getLocation() != null) {
-
+        if(dto.getLocation() != null) {
+            entity.setLocation(LocationMapper.toEntity(dto.getLocation()));
+        }
+        if(dto.getDriver() != null) {
+            entity.setDriver(DriverMapper.toEntity(dto.getDriver()));
+        }
+        if(dto.getServiceRequest() != null){
+            entity.setServiceRequest(ServiceRequestMapper.toEntity(dto.getServiceRequest()));
         }
 
 

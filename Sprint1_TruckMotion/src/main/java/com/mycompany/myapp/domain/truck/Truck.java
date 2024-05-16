@@ -36,7 +36,7 @@ public class Truck implements Serializable {
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Truck() {
-
+        this.id = new TruckId();
     }
 
     public Truck(Model model, Make make, TruckId id) {

@@ -10,6 +10,7 @@ import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.truck.dto.TruckDTO;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.mycompany.myapp.domain.user.mapper.ApplicationUserMapper;
 
@@ -19,6 +20,7 @@ import com.mycompany.myapp.domain.user.mapper.ApplicationUserMapper;
 public final class DriverMapper {
 
     public static Driver toEntity(DriverDTO dto) {
+        if(dto == null) return null;
         DriverId id = new DriverId(dto.getId());
         Truck truck = TruckMapper.toEntity(dto.getTruck());
         ApplicationUser applicationUser = ApplicationUserMapper.toEntity(dto.getApplicationUser());
@@ -33,14 +35,17 @@ public final class DriverMapper {
     }
 
     public static List<Driver> toEntity(List<DriverDTO> dtoList) {
-        return dtoList.stream().map(DriverMapper::toEntity).toList();
+        if(dtoList == null) return List.of();
+        return dtoList.stream().filter(Objects::nonNull).map(DriverMapper::toEntity).toList();
     }
 
     public static List<DriverDTO> toDto(List<Driver> entityList) {
-        return entityList.stream().map(DriverMapper::toDto).toList();
+        if(entityList == null) return List.of();
+        return entityList.stream().filter(Objects::nonNull).map(DriverMapper::toDto).toList();
     }
 
     public static void partialUpdate(Driver entity, DriverDTO dto) {
+        if(entity == null || dto == null) return;
         if(dto.getTruck() != null){
             entity.setTruck(TruckMapper.toEntity(dto.getTruck()));
         }
