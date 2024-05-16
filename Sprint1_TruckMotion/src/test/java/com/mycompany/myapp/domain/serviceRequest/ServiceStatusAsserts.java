@@ -1,5 +1,7 @@
 package com.mycompany.myapp.domain.serviceRequest;
 
+import java.time.ZonedDateTime;
+
 import static com.mycompany.myapp.domain.AssertUtils.zonedDataTimeSameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,7 +50,7 @@ public class ServiceStatusAsserts {
     public static void assertServiceStatusUpdatableFieldsEquals(ServiceStatus expected, ServiceStatus actual) {
         assertThat(expected)
             .as("Verify ServiceStatus relevant properties")
-            .satisfies(e -> assertThat(e.getDate()).as("check date").usingComparator(zonedDataTimeSameInstant).isEqualTo(actual.getDate()))
+            .satisfies(e -> assertThat(e.getDate()).as("check date").isEqualTo(actual.getDate()).isEqualTo(actual.getDate()))
             .satisfies(e -> assertThat(e.getObservations()).as("check observations").isEqualTo(actual.getObservations()))
             .satisfies(e -> assertThat(e.getStatus()).as("check status").isEqualTo(actual.getStatus()));
     }
