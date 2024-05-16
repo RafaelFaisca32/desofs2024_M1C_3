@@ -39,10 +39,11 @@ public class Truck implements Serializable {
         this.id = new TruckId();
     }
 
-    public Truck(Model model, Make make, TruckId id) {
+    public Truck(TruckId id,Make make,Model model) {
+        this.id = id;
         this.model = model;
         this.make = make;
-        this.id = id;
+
     }
 
     public TruckId getId() {
