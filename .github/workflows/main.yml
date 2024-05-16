@@ -48,7 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DskipTests -Dsonar.projectKey=RafaelFaisca32_desofs2024_M1C_3
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DskipTests -Dsonar.projectKey=RafaelFaisca32_desofs2024_M1C_3 -Dsonar.issuesReport.html.enable=true
       # - name: Package application
       #   working-directory: ./Sprint1_TruckMotion
       #   run: npm run java:jar:prod
@@ -65,7 +65,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/truckmotion:${GITHUB_REF#refs/tags/#:refs/heads/main}
+          tags: ${{ secrets.DOCKER_USERNAME }}/truckmotion:latest
       # - name: Build and publish docker image
       #   working-directory: ./Sprint1_TruckMotion
       #   if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
