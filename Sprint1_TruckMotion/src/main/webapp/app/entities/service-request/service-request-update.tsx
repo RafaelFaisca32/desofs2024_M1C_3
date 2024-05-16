@@ -66,6 +66,7 @@ export const ServiceRequestUpdate = () => {
       ...values,
       location: locations.find(it => it.id.toString() === values.location?.toString()),
       customer: customers.find(it => it.id.toString() === values.customer?.toString()),
+      status: status != serviceRequestEntity.statusInitial ? {status: status} : null,
     };
 
     if (isNew) {
@@ -85,6 +86,8 @@ export const ServiceRequestUpdate = () => {
           date: convertDateTimeFromServer(serviceRequestEntity.date),
           location: serviceRequestEntity?.location?.id,
           customer: serviceRequestEntity?.customer?.id,
+          status: serviceRequestEntity.status?.status,
+          statusInitial: serviceRequestEntity.status?.status,
         };
 
   return (
@@ -142,6 +145,12 @@ export const ServiceRequestUpdate = () => {
                       </option>
                     ))
                   : null}
+              </ValidatedField>
+              <ValidatedField id="service-request-status" name="status" data-cy="status" label="Status" type="select">
+                <option value="PENDING" key="PENDING">PENDING</option>
+                <option value="ACTIVE" key="ACTIVE">ACTIVE</option>
+                <option value="FINISHED" key="FINISHED">FINISHED</option>
+                <option value="CANCELED" key="CANCELED">CANCELED</option>
               </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/service-request" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
