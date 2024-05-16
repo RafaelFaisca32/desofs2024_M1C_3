@@ -65,7 +65,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/truckmotion:${GIT_TAG#:refs/heads/main}
+          tags: ${{ secrets.DOCKER_USERNAME }}/truckmotion:${GITHUB_REF#refs/tags/#:refs/heads/main}
       # - name: Build and publish docker image
       #   working-directory: ./Sprint1_TruckMotion
       #   if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
