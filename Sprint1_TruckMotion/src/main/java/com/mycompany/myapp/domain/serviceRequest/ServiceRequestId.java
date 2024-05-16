@@ -3,6 +3,7 @@ package com.mycompany.myapp.domain.serviceRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Embeddable
@@ -28,5 +29,10 @@ public class ServiceRequestId {
         if (o == null || getClass() != o.getClass()) return false;
         ServiceRequestId serviceRequestId = (ServiceRequestId) o;
         return id.equals(serviceRequestId.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

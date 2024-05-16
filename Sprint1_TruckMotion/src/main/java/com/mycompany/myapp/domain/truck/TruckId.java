@@ -30,4 +30,8 @@ public class TruckId {
         return Objects.equals(id, truckId.id);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

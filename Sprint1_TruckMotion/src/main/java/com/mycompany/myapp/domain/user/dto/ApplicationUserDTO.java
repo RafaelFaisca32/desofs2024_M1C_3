@@ -73,6 +73,16 @@ public class ApplicationUserDTO implements Serializable {
         this.internalUser = internalUser;
     }
 
+    public ApplicationUserDTO(){}
+    public ApplicationUserDTO(Long id, String name, LocalDate birthDate, String email, Gender gender, UserDTO internalUser) {
+        this.id = id;
+        this.name = name;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.gender = gender;
+        this.internalUser = internalUser;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -2,6 +2,7 @@ package com.mycompany.myapp.domain.customer;
 
 import jakarta.persistence.Embeddable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Embeddable
@@ -26,5 +27,10 @@ public class CustomerId {
         if (o == null || getClass() != o.getClass()) return false;
         CustomerId customerId = (CustomerId) o;
         return id.equals(customerId.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

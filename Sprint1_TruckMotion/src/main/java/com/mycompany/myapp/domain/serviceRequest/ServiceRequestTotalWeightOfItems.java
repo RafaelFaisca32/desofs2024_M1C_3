@@ -3,6 +3,8 @@ package com.mycompany.myapp.domain.serviceRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.util.Objects;
+
 @Embeddable
 public class ServiceRequestTotalWeightOfItems {
     @Column(name = "total_weight_of_items")
@@ -29,5 +31,10 @@ public class ServiceRequestTotalWeightOfItems {
         if (o == null || getClass() != o.getClass()) return false;
         ServiceRequestTotalWeightOfItems totalWeightOfItems1 = (ServiceRequestTotalWeightOfItems) o;
         return totalWeightOfItems.equals(totalWeightOfItems1.totalWeightOfItems);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(totalWeightOfItems);
     }
 }

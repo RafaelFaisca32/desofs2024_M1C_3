@@ -3,6 +3,7 @@ package com.mycompany.myapp.domain.transport;
 import com.mycompany.myapp.domain.driver.DriverId;
 import jakarta.persistence.Embeddable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Embeddable
@@ -29,4 +30,8 @@ public class TransportId {
         return id.equals(transportId.id);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
