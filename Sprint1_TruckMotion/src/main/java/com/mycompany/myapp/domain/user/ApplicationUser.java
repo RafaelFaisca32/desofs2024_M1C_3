@@ -53,6 +53,17 @@ public class ApplicationUser implements Serializable {
     private Customer customer;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+    public ApplicationUser(){
+
+    }
+    public ApplicationUser(Long id, String name, LocalDate birthDate, String email, Gender gender, User internalUser) {
+        this.id = id;
+        this.name = name;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.gender = gender;
+        this.internalUser = internalUser;
+    }
 
     public Long getId() {
         return this.id;

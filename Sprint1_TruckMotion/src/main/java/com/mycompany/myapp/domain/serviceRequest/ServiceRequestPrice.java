@@ -3,6 +3,8 @@ package com.mycompany.myapp.domain.serviceRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.util.Objects;
+
 @Embeddable
 public class ServiceRequestPrice {
     @Column(name = "price")
@@ -29,5 +31,10 @@ public class ServiceRequestPrice {
         if (o == null || getClass() != o.getClass()) return false;
         ServiceRequestPrice price1 = (ServiceRequestPrice) o;
         return price.equals(price1.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(price);
     }
 }
