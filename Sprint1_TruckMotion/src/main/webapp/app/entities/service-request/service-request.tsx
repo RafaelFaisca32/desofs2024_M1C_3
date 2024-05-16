@@ -142,7 +142,7 @@ export const ServiceRequest = () => {
                   </td>
                   <td>
                     {serviceRequest.status ? (
-                      <Link to={`/status/${serviceRequest.status.id}`}>{serviceRequest.status.status}</Link>
+                      serviceRequest.status.status
                     ) : (
                       ''
                     )}

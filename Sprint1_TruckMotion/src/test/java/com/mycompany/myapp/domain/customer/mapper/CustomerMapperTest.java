@@ -12,6 +12,7 @@ class CustomerMapperTest {
     void shouldConvertToDtoAndBack() {
         var expected = getCustomerSample1();
         var actual = CustomerMapper.toEntity(CustomerMapper.toDto(expected));
+
         assertCustomerAllPropertiesEquals(expected, actual);
     }
 }

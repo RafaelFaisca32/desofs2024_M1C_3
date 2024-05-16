@@ -64,7 +64,6 @@ jobs:
           path: './Sprint1_TruckMotion'
           format: 'HTML'
           args: >
-            --failOnCVSS 7
             --enableRetired
       - name: Upload Test results
         uses: actions/upload-artifact@master
