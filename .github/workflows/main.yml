@@ -81,12 +81,12 @@ jobs:
           npm run java:docker
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v3
-      # - name: Build and push
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: "{{defaultContext}}:Sprint1_TruckMotion/"
-      #     push: true
-      #     tags: ${{ secrets.DOCKER_USERNAME }}/truckmotion:latest
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: "{{defaultContext}}:Sprint1_TruckMotion/"
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/truckmotion:latest
       # - name: Webhook for render deployment
       #   uses: distributhor/workflow-webhook@v3
       #   with:
