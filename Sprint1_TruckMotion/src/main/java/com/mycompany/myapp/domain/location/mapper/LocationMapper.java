@@ -24,16 +24,26 @@ public final class LocationMapper {
 
     public static Location toEntity(LocationDTO dto) {
         if(dto == null) return null;
-        LocationId id = new LocationId();
-        GeographicalCoordinates coord = new GeographicalCoordinates(dto.getCoordX(),dto.getCoordY(),dto.getCoordZ());
+
+        LocationId id = dto.getId() != null ? new LocationId(dto.getId()) : new LocationId();
+
+        GeographicalCoordinates coord =
+            new GeographicalCoordinates(dto.getCoordX(),dto.getCoordY(),dto.getCoordZ());
+
         Customer customer = CustomerMapper.toEntity(dto.getCustomer());
+
         return new Location(id,coord,customer);
     }
 
     public static LocationDTO toDto(Location entity) {
         if(entity == null) return null;
         CustomerDTO cDTO = CustomerMapper.toDto(entity.getCustomer());
-        return new LocationDTO(entity.getId().value(),entity.getCoord().xValue(),entity.getCoord().yValue(),entity.getCoord().zValue(),cDTO);
+        return new LocationDTO(
+            entity.getId() != null ? entity.getId().value() : null,
+            entity.getCoord() != null ? entity.getCoord().xValue() : null,
+            entity.getCoord() != null ? entity.getCoord().yValue() : null,
+            entity.getCoord() != null ? entity.getCoord().zValue() : null,
+            cDTO);
 
     }
 

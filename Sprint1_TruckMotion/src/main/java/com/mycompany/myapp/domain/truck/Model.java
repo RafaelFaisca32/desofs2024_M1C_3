@@ -18,7 +18,7 @@ public class Model {
         this.model = model;
     }
 
-    public String getModel() {
+    public String value() {
         return model;
     }
 
@@ -33,5 +33,10 @@ public class Model {
     @Override
     public int hashCode() {
         return Objects.hashCode(model);
+    }
+
+    @Override
+    public String toString() {
+        return model;
     }
 }

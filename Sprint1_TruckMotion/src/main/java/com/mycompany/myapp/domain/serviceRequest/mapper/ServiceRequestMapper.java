@@ -21,12 +21,19 @@ public final class ServiceRequestMapper {
 
     public static ServiceRequest toEntity(ServiceRequestDTO dto) {
         if(dto == null) return null;
-        ServiceRequestId serviceRequestId = new ServiceRequestId();
-        ServiceRequestItems serviceRequestItems = new ServiceRequestItems(dto.getItems());
-        ServiceRequestName serviceRequestName = new ServiceRequestName(dto.getServiceName());
-        ServiceRequestTotalWeightOfItems serviceRequestTotalWeightOfItems = new ServiceRequestTotalWeightOfItems(dto.getTotalWeightOfItems());
-        ServiceRequestPrice serviceRequestPrice = new ServiceRequestPrice(dto.getPrice());
-        ServiceRequestDate serviceRequestDate = new ServiceRequestDate(dto.getDate());
+        ServiceRequestId serviceRequestId =
+            dto.getId() != null ? new ServiceRequestId(dto.getId()) : new ServiceRequestId();
+        ServiceRequestItems serviceRequestItems =
+            new ServiceRequestItems(dto.getItems());
+        ServiceRequestName serviceRequestName =
+            new ServiceRequestName(dto.getServiceName());
+        ServiceRequestTotalWeightOfItems serviceRequestTotalWeightOfItems =
+            new ServiceRequestTotalWeightOfItems(dto.getTotalWeightOfItems());
+        ServiceRequestPrice serviceRequestPrice =
+            new ServiceRequestPrice(dto.getPrice());
+        ServiceRequestDate serviceRequestDate =
+            new ServiceRequestDate(dto.getDate());
+
         return new ServiceRequest(serviceRequestId, serviceRequestItems, serviceRequestName, serviceRequestTotalWeightOfItems, serviceRequestPrice, serviceRequestDate);
     }
 
@@ -34,32 +41,26 @@ public final class ServiceRequestMapper {
         if (entity == null) return null;
         CustomerDTO customerDTO = CustomerMapper.toDto(entity.getCustomer());
         LocationDTO locationDTO = LocationMapper.toDto(entity.getLocation());
+
+        ServiceStatusDTO serviceStatusDTO = null;
+
         if (entity.getServiceStatuses() != null && !entity.getServiceStatuses().isEmpty()) {
             List<ServiceStatus> statusList = new ArrayList<>(entity.getServiceStatuses());
             statusList.sort(Comparator.comparing(status -> ((ServiceStatus) status).getDate().value()).reversed());
-
-            return new ServiceRequestDTO(
-                entity.getId().value(),
-                entity.getItems().value(),
-                entity.getServiceName().value(),
-                entity.getTotalWeightOfItems().value(),
-                entity.getPrice().value(),
-                entity.getDate().value(),
-                locationDTO,
-                customerDTO,
-                ServiceStatusMapper.toDto(statusList.get(0)));
-        } else {
-            return new ServiceRequestDTO(
-                entity.getId().value(),
-                entity.getItems().value(),
-                entity.getServiceName().value(),
-                entity.getTotalWeightOfItems().value(),
-                entity.getPrice().value(),
-                entity.getDate().value(),
-                locationDTO,
-                customerDTO,
-                null);
+            serviceStatusDTO = ServiceStatusMapper.toDto(statusList.get(0));
         }
+
+        return new ServiceRequestDTO(
+            entity.getId() != null ? entity.getId().value() : null,
+            entity.getItems() != null ? entity.getItems().value() : null,
+            entity.getServiceName() != null ? entity.getServiceName().value() : null,
+            entity.getTotalWeightOfItems() != null ? entity.getTotalWeightOfItems().value() : null,
+            entity.getPrice() != null ? entity.getPrice().value() : null,
+            entity.getDate() != null ? entity.getDate().value() : null,
+            locationDTO,
+            customerDTO,
+            serviceStatusDTO
+        );
     }
 
     public static List<ServiceRequest> toEntity(List<ServiceRequestDTO> dtoList) {

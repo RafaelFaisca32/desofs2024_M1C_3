@@ -20,51 +20,42 @@ import org.mapstruct.*;
 public final class ServiceStatusMapper {
 
     public static ServiceStatus toEntity(ServiceStatusDTO dto) {
-        ServiceStatusId serviceStatusId = new ServiceStatusId(dto.getId());
-        ServiceRequestDate serviceRequestDate = new ServiceRequestDate(dto.getDate());
-        ServiceStatusObservations serviceStatusObservations = new ServiceStatusObservations(dto.getObservations());
-        ServiceRequest serviceRequest = ServiceRequestMapper.toEntity(dto.getServiceRequest());
+        if(dto == null) return null;
+        ServiceStatusId serviceStatusId =
+            dto.getId() != null ? new ServiceStatusId(dto.getId()) : new ServiceStatusId();
+        ServiceRequestDate serviceRequestDate =
+            new ServiceRequestDate(dto.getDate());
+        ServiceStatusObservations serviceStatusObservations =
+            new ServiceStatusObservations(dto.getObservations());
+        ServiceRequest serviceRequest =
+            ServiceRequestMapper.toEntity(dto.getServiceRequest());
+
         return new ServiceStatus(serviceStatusId, serviceRequestDate, serviceStatusObservations, dto.getStatus(), serviceRequest);
     }
 
     public static ServiceStatusDTO toDto(ServiceStatus entity) {
         if (entity == null) return null;
-        ServiceRequestDTO serviceRequestDTO = new ServiceRequestDTO(entity.getServiceRequest().getId().value());
+        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(entity.getServiceRequest());
         return new ServiceStatusDTO(
-            entity.getId().value(),
-            entity.getDate().value(),
-            entity.getObservations().value(),
+            entity.getId() != null ? entity.getId().value() : null,
+            entity.getDate() != null ? entity.getDate().value() : null,
+            entity.getObservations() != null ? entity.getObservations().value() : null,
             entity.getStatus(),
             serviceRequestDTO);
     }
 
     public static List<ServiceStatus> toEntity(List<ServiceStatusDTO> dtoList) {
-        return dtoList.stream().map(dto -> {
-                try {
-                    return ServiceStatusMapper.toEntity(dto);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            })
-            .filter(entity -> entity != null)
-            .collect(Collectors.toList());
+        return dtoList.stream().filter(Objects::nonNull).map(ServiceStatusMapper::toEntity).toList();
+
     }
 
     public static List<ServiceStatusDTO> toDto(List<ServiceStatus> entityList) {
-        return entityList.stream().map(entity -> {
-                try {
-                    return ServiceStatusMapper.toDto(entity);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            })
-            .filter(entity -> entity != null)
-            .collect(Collectors.toList());
+        return entityList.stream().filter(Objects::nonNull).map(ServiceStatusMapper::toDto).toList();
     }
 
     public static void partialUpdate(ServiceStatus entity, ServiceStatusDTO dto) {
+        if(entity == null || dto == null) return;
+
         if(dto.getServiceRequest() != null){
             entity.setServiceRequest(ServiceRequestMapper.toEntity(dto.getServiceRequest()));
         }

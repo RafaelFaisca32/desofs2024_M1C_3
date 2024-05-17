@@ -34,4 +34,9 @@ public class ServiceRequestItems {
     public int hashCode() {
         return Objects.hashCode(items);
     }
+
+    @Override
+    public String toString() {
+        return items;
+    }
 }

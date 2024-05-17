@@ -32,4 +32,9 @@ public class Company {
     public int hashCode() {
         return Objects.hashCode(company);
     }
+
+    @Override
+    public String toString() {
+        return company;
+    }
 }

@@ -77,7 +77,7 @@ public class ServiceRequest implements Serializable {
     }
 
     public ServiceRequestId getId() {
-        return new ServiceRequestId(id.value());
+        return this.id != null ? new ServiceRequestId(id.value()) : null;
     }
 
     public ServiceRequest id(ServiceRequestId id) {
@@ -90,7 +90,7 @@ public class ServiceRequest implements Serializable {
     }
 
     public ServiceRequestItems getItems() {
-        return new ServiceRequestItems(this.items.value());
+        return this.items != null ? new ServiceRequestItems(this.items.value()) : null;
     }
 
     public ServiceRequest items(ServiceRequestItems items) {
@@ -103,7 +103,7 @@ public class ServiceRequest implements Serializable {
     }
 
     public ServiceRequestName getServiceName() {
-        return new ServiceRequestName(this.serviceName.value());
+        return this.serviceName != null ? new ServiceRequestName(this.serviceName.value()) : null;
     }
 
     public ServiceRequest serviceName(ServiceRequestName serviceName) {
@@ -116,7 +116,8 @@ public class ServiceRequest implements Serializable {
     }
 
     public ServiceRequestTotalWeightOfItems getTotalWeightOfItems() {
-        return new ServiceRequestTotalWeightOfItems(totalWeightOfItems.value());
+        return this.totalWeightOfItems != null ?
+            new ServiceRequestTotalWeightOfItems(totalWeightOfItems.value()) : null;
     }
 
     public ServiceRequest totalWeightOfItems(ServiceRequestTotalWeightOfItems totalWeightOfItems) {
@@ -129,7 +130,7 @@ public class ServiceRequest implements Serializable {
     }
 
     public ServiceRequestPrice getPrice() {
-        return new ServiceRequestPrice(price.value());
+        return this.price != null ? new ServiceRequestPrice(price.value()) : null;
     }
 
     public ServiceRequest price(ServiceRequestPrice price) {
@@ -142,7 +143,7 @@ public class ServiceRequest implements Serializable {
     }
 
     public ServiceRequestDate getDate() {
-        return new ServiceRequestDate(date.value());
+        return this.date != null ? new ServiceRequestDate(date.value()) : null;
     }
 
     public ServiceRequest date(ServiceRequestDate date) {
@@ -252,13 +253,21 @@ public class ServiceRequest implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+
+        String id = this.id != null ? this.id.toString() : "null";
+        String items = this.items != null ? this.items.toString() : "null";
+        String serviceName = this.serviceName != null ? this.serviceName.toString() : "null";
+        String totalWeightOfItems = this.totalWeightOfItems != null ? this.totalWeightOfItems.toString() : "null";
+        String price = this.price != null ? this.price.toString() : "null";
+        String date = this.date != null ? this.date.toString() : "null";
+
         return "ServiceRequest{" +
-            "id=" + getId().value() +
-            ", items='" + getItems().value() + "'" +
-            ", serviceName='" + getServiceName().value() + "'" +
-            ", totalWeightOfItems=" + getTotalWeightOfItems().value() +
-            ", price=" + getPrice().value() +
-            ", date='" + getDate().value() + "'" +
+            "id=" + id +
+            ", items='" + items + "'" +
+            ", serviceName='" + serviceName + "'" +
+            ", totalWeightOfItems=" + totalWeightOfItems +
+            ", price=" + price +
+            ", date='" + date + "'" +
             "}";
     }
 }

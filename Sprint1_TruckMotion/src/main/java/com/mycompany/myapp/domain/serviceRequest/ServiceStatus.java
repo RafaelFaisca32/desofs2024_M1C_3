@@ -49,7 +49,7 @@ public class ServiceStatus implements Serializable {
     }
 
     public ServiceStatusId getId() {
-        return new ServiceStatusId(this.id.value());
+        return this.id != null ? new ServiceStatusId(this.id.value()) : null;
     }
 
     public ServiceStatus id(ServiceStatusId id) {
@@ -62,7 +62,7 @@ public class ServiceStatus implements Serializable {
     }
 
     public ServiceRequestDate getDate() {
-        return new ServiceRequestDate(this.date.value());
+        return this.date != null ? new ServiceRequestDate(this.date.value()) : null;
     }
 
     public ServiceStatus date(ServiceRequestDate date) {
@@ -75,7 +75,7 @@ public class ServiceStatus implements Serializable {
     }
 
     public ServiceStatusObservations getObservations() {
-        return new ServiceStatusObservations(this.observations.value());
+        return this.observations != null ? new ServiceStatusObservations(this.observations.value()) : null;
     }
 
     public ServiceStatus observations(ServiceStatusObservations observations) {
@@ -135,11 +135,17 @@ public class ServiceStatus implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+
+        String id = this.id != null ? this.id.toString() : " null";
+        String date = this.date != null ? this.date.toString() : "null";
+        String observations = this.observations != null ? this.observations.toString() : "null" ;
+        String status = this.status != null ? this.status.toString() : "null";
+
         return "ServiceStatus{" +
-            "id=" + getId() +
-            ", date='" + getDate() + "'" +
-            ", observations='" + getObservations() + "'" +
-            ", status='" + getStatus() + "'" +
+            "id=" + id +
+            ", date='" + date + "'" +
+            ", observations='" + observations + "'" +
+            ", status='" + status + "'" +
             "}";
     }
 }

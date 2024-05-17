@@ -52,4 +52,13 @@ public class GeographicalCoordinates {
     public int hashCode() {
         return Objects.hash(coordX, coordY, coordZ);
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+            "coordX=" + coordX +
+            ", coordY=" + coordY +
+            ", coordZ=" + coordZ +
+            '}';
+    }
 }

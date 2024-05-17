@@ -34,4 +34,9 @@ public class LocationId {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    @Override
+    public String toString() {
+        return id.toString();
+    }
 }

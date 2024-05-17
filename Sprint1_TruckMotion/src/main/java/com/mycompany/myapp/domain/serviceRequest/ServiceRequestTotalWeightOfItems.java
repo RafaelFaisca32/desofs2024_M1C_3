@@ -15,6 +15,10 @@ public class ServiceRequestTotalWeightOfItems {
     }
 
     public ServiceRequestTotalWeightOfItems(Float totalWeightOfItems) {
+        if(totalWeightOfItems == null){
+            totalWeightOfItems = 0F;
+        }
+
         if (totalWeightOfItems < 0){
             totalWeightOfItems = 0F;
         }
@@ -36,5 +40,10 @@ public class ServiceRequestTotalWeightOfItems {
     @Override
     public int hashCode() {
         return Objects.hashCode(totalWeightOfItems);
+    }
+
+    @Override
+    public String toString() {
+        return totalWeightOfItems.toString();
     }
 }

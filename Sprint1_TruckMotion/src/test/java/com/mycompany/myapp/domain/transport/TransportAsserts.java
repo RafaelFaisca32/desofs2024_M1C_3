@@ -52,11 +52,14 @@ public class TransportAsserts {
                 e ->
                     assertThat(e.getStartTime())
                         .as("check startTime")
-                        .usingComparator(zonedDataTimeSameInstant)
+                        //.usingComparator(zonedDataTimeSameInstant)
                         .isEqualTo(actual.getStartTime())
             )
             .satisfies(
-                e -> assertThat(e.getEndTime()).as("check endTime").usingComparator(zonedDataTimeSameInstant).isEqualTo(actual.getEndTime())
+                e ->
+                    assertThat(e.getEndTime()).as("check endTime").
+                        //usingComparator(zonedDataTimeSameInstant).
+                        isEqualTo(actual.getEndTime())
             );
     }
 

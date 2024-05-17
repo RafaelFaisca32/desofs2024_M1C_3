@@ -51,7 +51,7 @@ public class Location implements Serializable {
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public LocationId getId() {
-        return new LocationId(this.id.value());
+        return this.id != null ? new LocationId(this.id.value()) : null;
     }
 
     public Location id(LocationId id) {
@@ -65,7 +65,8 @@ public class Location implements Serializable {
     }
 
     public GeographicalCoordinates getCoord(){
-        return this.coord;
+        return this.coord != null ?
+            new GeographicalCoordinates(this.coord.xValue(),this.coord.yValue(),this.coord.zValue()) : null;
     }
     public void setCoord(GeographicalCoordinates coord){
         this.coord = coord;
@@ -149,9 +150,11 @@ public class Location implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+        String id = this.id != null ? this.id.toString() : "null";
+        String coords = this.coord != null ? this.coord.toString() : "null";
         return "Location{" +
-            "id=" + getId() +
-            ", coords=" + getCoord() +
+            "id=" + id +
+            ", coords=" + coords +
             "}";
     }
 }
