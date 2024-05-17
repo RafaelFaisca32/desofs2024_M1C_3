@@ -81,7 +81,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: "{{defaultContext}}:Sprint1_TruckMotion/.devcontainer"
-          file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/truckmotion:latest
       # - name: Webhook for render deployment
