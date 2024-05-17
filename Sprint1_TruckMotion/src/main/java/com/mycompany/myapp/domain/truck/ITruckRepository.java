@@ -9,13 +9,13 @@ public interface ITruckRepository {
 
     Truck save(Truck truck);
 
-    Optional<Truck> findById(UUID id);
+    Optional<Truck> findById(TruckId id);
 
-    void deleteById(UUID id);
+    void deleteById(TruckId id);
 
     Truck saveAndFlush(Truck customer);
 
     long count();
 
-    boolean existsById(UUID id);
+    boolean existsById(TruckId id);
 }

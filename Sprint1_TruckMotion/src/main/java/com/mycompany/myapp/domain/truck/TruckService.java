@@ -55,7 +55,7 @@ public class TruckService {
     public TruckDTO update(TruckDTO truckDTO) {
         log.debug("Request to update Truck : {}", truckDTO);
 
-        if (!truckRepository.existsById(truckDTO.getId())) {
+        if (!truckRepository.existsById(new TruckId(truckDTO.getId()))) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
@@ -72,11 +72,11 @@ public class TruckService {
      */
     public Optional<TruckDTO> partialUpdate(TruckDTO truckDTO) {
         log.debug("Request to partially update Truck : {}", truckDTO);
-        if (!truckRepository.existsById(truckDTO.getId())) {
+        if (!truckRepository.existsById(new TruckId(truckDTO.getId()))) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
         return truckRepository
-            .findById(truckDTO.getId())
+            .findById(new TruckId(truckDTO.getId()))
             .map(existingTruck -> {
                 TruckMapper.partialUpdate(existingTruck, truckDTO);
 
@@ -119,7 +119,8 @@ public class TruckService {
     @Transactional(readOnly = true)
     public Optional<TruckDTO> findOne(UUID id) {
         log.debug("Request to get Truck : {}", id);
-        return truckRepository.findById(id).map(TruckMapper::toDto);
+        TruckId tId =new TruckId(id);
+        return truckRepository.findById(tId).map(TruckMapper::toDto);
     }
 
     /**
@@ -129,6 +130,7 @@ public class TruckService {
      */
     public void delete(UUID id) {
         log.debug("Request to delete Truck : {}", id);
-        truckRepository.deleteById(id);
+        TruckId tId = new TruckId(id);
+        truckRepository.deleteById(tId);
     }
 }
