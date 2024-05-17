@@ -15,6 +15,9 @@ public class ServiceRequestPrice {
     }
 
     public ServiceRequestPrice(Float price) {
+        if(price == null) {
+            price = 0F;
+        }
         if (price < 0){
             price = 0F;
         }
@@ -36,5 +39,10 @@ public class ServiceRequestPrice {
     @Override
     public int hashCode() {
         return Objects.hashCode(price);
+    }
+
+    @Override
+    public String toString() {
+        return price.toString();
     }
 }

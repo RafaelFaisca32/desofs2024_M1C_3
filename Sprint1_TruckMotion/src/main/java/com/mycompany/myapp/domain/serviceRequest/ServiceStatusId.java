@@ -29,4 +29,9 @@ public class ServiceStatusId {
         ServiceStatusId serviceStatusId = (ServiceStatusId) o;
         return id.equals(serviceStatusId.id);
     }
+
+    @Override
+    public String toString() {
+        return id.toString();
+    }
 }

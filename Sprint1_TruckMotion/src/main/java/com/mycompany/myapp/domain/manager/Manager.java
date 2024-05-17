@@ -36,7 +36,7 @@ public class Manager implements Serializable {
     }
 
     public ManagerId getId() {
-        return this.id;
+        return this.id != null ? new ManagerId(this.id.value()) : null;
     }
 
     public Manager id(ManagerId id) {
@@ -83,8 +83,9 @@ public class Manager implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+        String id = this.id != null ? this.id.toString() : "null";
         return "Manager{" +
-            "id=" + getId() +
+            "id=" + id +
             "}";
     }
 }

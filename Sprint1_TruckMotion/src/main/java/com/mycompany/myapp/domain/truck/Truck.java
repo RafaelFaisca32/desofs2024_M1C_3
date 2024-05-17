@@ -18,14 +18,16 @@ public class Truck implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+    @EmbeddedId
     @GeneratedValue
     @Column(name = "id")
     private TruckId id;
 
+    @Embedded
     @Column(name = "make")
     private Make make;
 
+    @Embedded
     @Column(name = "model")
     private Model model;
 
@@ -47,7 +49,7 @@ public class Truck implements Serializable {
     }
 
     public TruckId getId() {
-        return new TruckId(this.id.value());
+        return this.id != null ? new TruckId(this.id.value()) : null;
     }
 
     public Truck id(TruckId id) {
@@ -60,7 +62,7 @@ public class Truck implements Serializable {
     }
 
     public Make getMake() {
-        return this.make;
+        return this.make != null ? new Make(this.make.value()) : null;
     }
 
     public Truck make(Make make) {
@@ -73,7 +75,7 @@ public class Truck implements Serializable {
     }
 
     public Model getModel() {
-        return this.model;
+        return this.model != null ? new Model(this.model.value()) : null;
     }
 
     public Truck model(Model model) {
@@ -126,10 +128,13 @@ public class Truck implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+        String id = this.id != null ? this.id.toString() : "null";
+        String make = this.make != null ? this.make.toString() : "null";
+        String model = this.model != null ? this.model.toString() : "null";
         return "Truck{" +
-            "id=" + getId() +
-            ", make='" + getMake() + "'" +
-            ", model='" + getModel() + "'" +
+            "id=" + id +
+            ", make='" + make + "'" +
+            ", model='" + model + "'" +
             "}";
     }
 }

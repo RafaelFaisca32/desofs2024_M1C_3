@@ -55,7 +55,7 @@ public class Customer implements Serializable {
     }
 
     public CustomerId getId() {
-        return new CustomerId(this.id.value());
+        return this.id != null ? new CustomerId(this.id.value()) : null;
     }
 
     public Customer id(CustomerId id) {
@@ -68,7 +68,7 @@ public class Customer implements Serializable {
     }
 
     public Company getCompany() {
-        return this.company;
+        return this.company != null ? new Company(this.company.value()) : null;
     }
 
     public Customer company(Company company) {
@@ -165,9 +165,13 @@ public class Customer implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+
+        String id = this.id != null ? this.id.toString() : "null";
+        String company = this.company != null ? this.company.toString() : "null";
+
         return "Customer{" +
-            "id=" + getId() +
-            ", company='" + getCompany() + "'" +
+            "id=" + id +
+            ", company='" + company + "'" +
             "}";
     }
 }

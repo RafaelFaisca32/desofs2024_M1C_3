@@ -21,9 +21,13 @@ public final class DriverMapper {
 
     public static Driver toEntity(DriverDTO dto) {
         if(dto == null) return null;
-        DriverId id = new DriverId();
+
+        DriverId id = dto.getId() != null ? new DriverId(dto.getId()) : new DriverId() ;
+
         Truck truck = TruckMapper.toEntity(dto.getTruck());
+
         ApplicationUser applicationUser = ApplicationUserMapper.toEntity(dto.getApplicationUser());
+
         return new Driver(id,truck,applicationUser);
     }
 
@@ -31,7 +35,11 @@ public final class DriverMapper {
         if(entity == null) return null;
         TruckDTO truckDTO = TruckMapper.toDto(entity.getTruck());
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(entity.getApplicationUser());
-        return new DriverDTO(entity.getId().value(),truckDTO,applicationUserDTO);
+
+        return new DriverDTO(
+            entity.getId() != null ? entity.getId().value() : null,
+            truckDTO,
+            applicationUserDTO);
     }
 
     public static List<Driver> toEntity(List<DriverDTO> dtoList) {

@@ -10,9 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
-import com.mycompany.myapp.domain.transport.ITransportRepository;
-import com.mycompany.myapp.domain.transport.Transport;
-import com.mycompany.myapp.domain.transport.TransportId;
+import com.mycompany.myapp.domain.transport.*;
 import com.mycompany.myapp.domain.transport.dto.TransportDTO;
 import com.mycompany.myapp.domain.transport.mapper.TransportMapper;
 import jakarta.persistence.EntityManager;
@@ -68,7 +66,7 @@ class TransportControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Transport createEntity(EntityManager em) {
-        Transport transport = new Transport().startTime(DEFAULT_START_TIME).endTime(DEFAULT_END_TIME);
+        Transport transport = new Transport().startTime(new TransportStartTime(DEFAULT_START_TIME)).endTime(new TransportEndTime(DEFAULT_END_TIME));
         return transport;
     }
 
@@ -79,7 +77,7 @@ class TransportControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Transport createUpdatedEntity(EntityManager em) {
-        Transport transport = new Transport().startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME);
+        Transport transport = new Transport().startTime(new TransportStartTime(UPDATED_START_TIME)).endTime(new TransportEndTime(UPDATED_END_TIME));
         return transport;
     }
 
@@ -179,7 +177,7 @@ class TransportControllerIT {
         Transport updatedTransport = transportRepository.findById(new TransportId(transport.getId().value())).orElseThrow();
         // Disconnect from session so that the updates on updatedTransport are not directly saved in db
         em.detach(updatedTransport);
-        updatedTransport.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME);
+        updatedTransport.startTime(new TransportStartTime(UPDATED_START_TIME)).endTime(new TransportEndTime(UPDATED_END_TIME));
         TransportDTO transportDTO = TransportMapper.toDto(updatedTransport);
 
         restTransportMockMvc
@@ -269,7 +267,7 @@ class TransportControllerIT {
         Transport partialUpdatedTransport = new Transport();
         partialUpdatedTransport.setId(transport.getId());
 
-        partialUpdatedTransport.startTime(UPDATED_START_TIME);
+        partialUpdatedTransport.startTime(new TransportStartTime(UPDATED_START_TIME));
 
         restTransportMockMvc
             .perform(
@@ -300,7 +298,7 @@ class TransportControllerIT {
         Transport partialUpdatedTransport = new Transport();
         partialUpdatedTransport.setId(transport.getId());
 
-        partialUpdatedTransport.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME);
+        partialUpdatedTransport.startTime(new TransportStartTime(UPDATED_START_TIME)).endTime(new TransportEndTime(UPDATED_END_TIME));
 
         restTransportMockMvc
             .perform(

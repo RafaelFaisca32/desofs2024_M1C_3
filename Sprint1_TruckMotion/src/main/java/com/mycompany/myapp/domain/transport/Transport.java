@@ -25,10 +25,10 @@ public class Transport implements Serializable {
     private TransportId id;
 
     @Column(name = "start_time")
-    private ZonedDateTime startTime;
+    private TransportStartTime startTime;
 
     @Column(name = "end_time")
-    private ZonedDateTime endTime;
+    private TransportEndTime endTime;
 
     @JsonIgnoreProperties(value = { "customer", "serviceRequest", "transport" }, allowSetters = true)
     @OneToOne(fetch = FetchType.EAGER)
@@ -51,7 +51,7 @@ public class Transport implements Serializable {
 
     }
 
-    public Transport(TransportId id, ZonedDateTime startTime, ZonedDateTime endTime, Location location, Driver driver, ServiceRequest serviceRequest) {
+    public Transport(TransportId id, TransportStartTime startTime, TransportEndTime endTime, Location location, Driver driver, ServiceRequest serviceRequest) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -61,7 +61,7 @@ public class Transport implements Serializable {
     }
 
     public TransportId getId() {
-        return this.id;
+        return this.id != null ? new TransportId(id.value()) : null;
     }
 
     public Transport id(TransportId id) {
@@ -73,29 +73,29 @@ public class Transport implements Serializable {
         this.id = id;
     }
 
-    public ZonedDateTime getStartTime() {
-        return this.startTime;
+    public TransportStartTime getStartTime() {
+        return this.startTime != null ? new TransportStartTime(this.startTime.value()) : null;
     }
 
-    public Transport startTime(ZonedDateTime startTime) {
+    public Transport startTime(TransportStartTime startTime) {
         this.setStartTime(startTime);
         return this;
     }
 
-    public void setStartTime(ZonedDateTime startTime) {
+    public void setStartTime(TransportStartTime startTime) {
         this.startTime = startTime;
     }
 
-    public ZonedDateTime getEndTime() {
-        return this.endTime;
+    public TransportEndTime getEndTime() {
+        return this.endTime != null ? new TransportEndTime(this.endTime.value()) : null;
     }
 
-    public Transport endTime(ZonedDateTime endTime) {
+    public Transport endTime(TransportEndTime endTime) {
         this.setEndTime(endTime);
         return this;
     }
 
-    public void setEndTime(ZonedDateTime endTime) {
+    public void setEndTime(TransportEndTime endTime) {
         this.endTime = endTime;
     }
 
@@ -160,10 +160,14 @@ public class Transport implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+        String id = this.id != null ? this.id.toString() : "null";
+        String startTime = this.startTime != null ? this.startTime.toString() : "null";
+        String endTime = this.endTime != null ? this.endTime.toString() : "null";
+
         return "Transport{" +
-            "id=" + getId() +
-            ", startTime='" + getStartTime() + "'" +
-            ", endTime='" + getEndTime() + "'" +
+            "id=" + id +
+            ", startTime='" + startTime + "'" +
+            ", endTime='" + endTime + "'" +
             "}";
     }
 }

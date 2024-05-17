@@ -20,14 +20,16 @@ public final class ManagerMapper{
 
     public static Manager toEntity(ManagerDTO dto) {
         if(dto == null) return null;
-        ManagerId id = new ManagerId(dto.getId());
+        ManagerId id = dto.getId() != null ? new ManagerId(dto.getId()) : new ManagerId();
         ApplicationUser applicationUser = ApplicationUserMapper.toEntity(dto.getApplicationUser());
         return new Manager(id,applicationUser);
     }
 
     public static ManagerDTO toDto(Manager entity) {
         if(entity == null) return null;
-        return new ManagerDTO(entity.getId().value(),ApplicationUserMapper.toDto(entity.getApplicationUser()));
+        return new ManagerDTO(
+            entity.getId() != null ? entity.getId().value() : null,
+            ApplicationUserMapper.toDto(entity.getApplicationUser()));
     }
 
     public static List<Manager> toEntity(List<ManagerDTO> dtoList) {

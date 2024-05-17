@@ -40,7 +40,7 @@ public class Driver implements Serializable {
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public DriverId getId() {
-        return new DriverId(this.id.value());
+        return this.id != null ? new DriverId(this.id.value()) : null;
     }
 
     public Driver id(DriverId id) {
@@ -127,8 +127,11 @@ public class Driver implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+
+        String id = this.id != null ? this.id.toString() : "null";
+
         return "Driver{" +
-            "id=" + getId() +
+            "id=" + id +
             "}";
     }
 }

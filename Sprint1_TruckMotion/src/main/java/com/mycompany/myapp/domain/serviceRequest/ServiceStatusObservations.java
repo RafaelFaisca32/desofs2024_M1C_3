@@ -27,4 +27,9 @@ public class ServiceStatusObservations {
         ServiceStatusObservations observations1 = (ServiceStatusObservations) o;
         return observations.equals(observations1.observations);
     }
+
+    @Override
+    public String toString() {
+        return observations;
+    }
 }

@@ -12,7 +12,9 @@ import com.mycompany.myapp.domain.transport.Transport;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
+import com.mycompany.myapp.domain.transport.TransportEndTime;
 import com.mycompany.myapp.domain.transport.TransportId;
+import com.mycompany.myapp.domain.transport.TransportStartTime;
 import com.mycompany.myapp.domain.transport.dto.TransportDTO;
 
 import java.time.ZonedDateTime;
@@ -28,9 +30,9 @@ public final class TransportMapper {
 
     public static Transport toEntity(TransportDTO dto) {
         if(dto == null) return null;
-        TransportId id = new TransportId();
-        ZonedDateTime startTime = dto.getStartTime();
-        ZonedDateTime endTime = dto.getEndTime();
+        TransportId id = dto.getId() != null ? new TransportId(dto.getId()) : new TransportId();
+        TransportStartTime startTime = new TransportStartTime(dto.getStartTime());
+        TransportEndTime endTime = new TransportEndTime(dto.getEndTime());
         Location location = LocationMapper.toEntity(dto.getLocation());
         Driver driver = DriverMapper.toEntity(dto.getDriver());
         ServiceRequest serviceRequest = ServiceRequestMapper.toEntity(dto.getServiceRequest());
@@ -42,7 +44,13 @@ public final class TransportMapper {
         LocationDTO locationDTO = LocationMapper.toDto(entity.getLocation());
         DriverDTO driverDTO = DriverMapper.toDto(entity.getDriver());
         ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(entity.getServiceRequest());
-        return new TransportDTO(entity.getId().value(),entity.getStartTime(),entity.getEndTime(),locationDTO,driverDTO,serviceRequestDTO);
+        return new TransportDTO(
+            entity.getId() != null ? entity.getId().value() : null,
+            entity.getStartTime() != null ? entity.getStartTime().value() : null,
+            entity.getEndTime() != null ? entity.getEndTime().value() : null,
+            locationDTO,
+            driverDTO,
+            serviceRequestDTO);
     }
 
     public static List<Transport> toEntity(List<TransportDTO> dtoList) {
@@ -58,10 +66,10 @@ public final class TransportMapper {
     public static void partialUpdate(Transport entity, TransportDTO dto) {
         if(entity == null || dto == null) return;
         if(dto.getStartTime() != null) {
-            entity.setStartTime(dto.getStartTime());
+            entity.setStartTime(new TransportStartTime(dto.getStartTime()));
         }
         if(dto.getEndTime() != null) {
-            entity.setEndTime(dto.getEndTime());
+            entity.setEndTime(new TransportEndTime(dto.getEndTime()));
         }
         if(dto.getLocation() != null) {
             entity.setLocation(LocationMapper.toEntity(dto.getLocation()));

@@ -18,7 +18,7 @@ public class Make {
         this.make = make;
     }
 
-    public String getMake() {
+    public String value() {
         return make;
     }
 
@@ -33,5 +33,10 @@ public class Make {
     @Override
     public int hashCode() {
         return Objects.hashCode(make);
+    }
+
+    @Override
+    public String toString() {
+        return make;
     }
 }
