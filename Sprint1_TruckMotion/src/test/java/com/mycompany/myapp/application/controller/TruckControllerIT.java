@@ -48,9 +48,6 @@ class TruckControllerIT {
     private ITruckRepository truckRepository;
 
     @Autowired
-    private TruckMapper truckMapper;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -90,7 +87,7 @@ class TruckControllerIT {
     void createTruck() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the Truck
-        TruckDTO truckDTO = truckMapper.toDto(truck);
+        TruckDTO truckDTO = TruckMapper.toDto(truck);
         var returnedTruckDTO = om.readValue(
             restTruckMockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(truckDTO)))
@@ -103,7 +100,7 @@ class TruckControllerIT {
 
         // Validate the Truck in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
-        var returnedTruck = truckMapper.toEntity(returnedTruckDTO);
+        var returnedTruck = TruckMapper.toEntity(returnedTruckDTO);
         assertTruckUpdatableFieldsEquals(returnedTruck, getPersistedTruck(returnedTruck));
     }
 
@@ -112,7 +109,7 @@ class TruckControllerIT {
     void createTruckWithExistingId() throws Exception {
         // Create the Truck with an existing ID
         truckRepository.saveAndFlush(truck);
-        TruckDTO truckDTO = truckMapper.toDto(truck);
+        TruckDTO truckDTO = TruckMapper.toDto(truck);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
@@ -173,11 +170,11 @@ class TruckControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the truck
-        Truck updatedTruck = truckRepository.findById(truck.getId().value()).orElseThrow();
+        Truck updatedTruck = truckRepository.findById(truck.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedTruck are not directly saved in db
         em.detach(updatedTruck);
         updatedTruck.make(new Make(UPDATED_MAKE)).model(new Model(UPDATED_MODEL));
-        TruckDTO truckDTO = truckMapper.toDto(updatedTruck);
+        TruckDTO truckDTO = TruckMapper.toDto(updatedTruck);
 
         restTruckMockMvc
             .perform(
@@ -197,7 +194,7 @@ class TruckControllerIT {
         truck.setId(new TruckId());
 
         // Create the Truck
-        TruckDTO truckDTO = truckMapper.toDto(truck);
+        TruckDTO truckDTO = TruckMapper.toDto(truck);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTruckMockMvc
@@ -217,7 +214,7 @@ class TruckControllerIT {
         truck.setId(new TruckId());
 
         // Create the Truck
-        TruckDTO truckDTO = truckMapper.toDto(truck);
+        TruckDTO truckDTO = TruckMapper.toDto(truck);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTruckMockMvc
@@ -237,7 +234,7 @@ class TruckControllerIT {
         truck.setId(new TruckId());
 
         // Create the Truck
-        TruckDTO truckDTO = truckMapper.toDto(truck);
+        TruckDTO truckDTO = TruckMapper.toDto(truck);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTruckMockMvc
@@ -311,7 +308,7 @@ class TruckControllerIT {
         truck.setId(new TruckId());
 
         // Create the Truck
-        TruckDTO truckDTO = truckMapper.toDto(truck);
+        TruckDTO truckDTO = TruckMapper.toDto(truck);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTruckMockMvc
@@ -333,7 +330,7 @@ class TruckControllerIT {
         truck.setId(new TruckId());
 
         // Create the Truck
-        TruckDTO truckDTO = truckMapper.toDto(truck);
+        TruckDTO truckDTO = TruckMapper.toDto(truck);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTruckMockMvc
@@ -355,7 +352,7 @@ class TruckControllerIT {
         truck.setId(new TruckId());
 
         // Create the Truck
-        TruckDTO truckDTO = truckMapper.toDto(truck);
+        TruckDTO truckDTO = TruckMapper.toDto(truck);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTruckMockMvc
@@ -400,7 +397,7 @@ class TruckControllerIT {
     }
 
     protected Truck getPersistedTruck(Truck truck) {
-        return truckRepository.findById(truck.getId().value()).orElseThrow();
+        return truckRepository.findById(truck.getId()).orElseThrow();
     }
 
     protected void assertPersistedTruckToMatchAllProperties(Truck expectedTruck) {
