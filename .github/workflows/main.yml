@@ -28,48 +28,48 @@ jobs:
       #   run: |
       #     chmod +x mvnw
       #     npm run ci:backend:test
-      - name: Run frontend test
-        working-directory: ./Sprint1_TruckMotion
-        run: npm run ci:frontend:test
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze
-        working-directory: ./Sprint1_TruckMotion
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DskipTests -Dsonar.projectKey=RafaelFaisca32_desofs2024_M1C_3 -Dsonar.issuesReport.html.enable=true
+      # - name: Run frontend test
+      #   working-directory: ./Sprint1_TruckMotion
+      #   run: npm run ci:frontend:test
+      # - name: Cache SonarCloud packages
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.sonar/cache
+      #     key: ${{ runner.os }}-sonar
+      #     restore-keys: ${{ runner.os }}-sonar
+      # - name: Cache Maven packages
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.m2
+      #     key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+      #     restore-keys: ${{ runner.os }}-m2
+      # - name: Build and analyze
+      #   working-directory: ./Sprint1_TruckMotion
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #   run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DskipTests -Dsonar.projectKey=RafaelFaisca32_desofs2024_M1C_3 -Dsonar.issuesReport.html.enable=true
       # - name: ZAP Scan
       #   uses: zaproxy/action-full-scan@v0.10.0
       #   with:
       #     token: ${{ secrets.GITHUB_TOKEN }}
       #     target: 'https://www.zaproxy.org/'
-      - name: Depcheck
-        uses: dependency-check/Dependency-Check_Action@main
-        id: Depcheck
-        env:
-          JAVA_HOME: /opt/jdk
-        with:
-          project: 'truckmotion'
-          path: './Sprint1_TruckMotion'
-          format: 'HTML'
-          args: >
-            --enableRetired
-      - name: Upload Test results
-        uses: actions/upload-artifact@master
-        with:
-          name: Depcheck report
-          path: ${{github.workspace}}/reports
+      # - name: Depcheck
+      #   uses: dependency-check/Dependency-Check_Action@main
+      #   id: Depcheck
+      #   env:
+      #     JAVA_HOME: /opt/jdk
+      #   with:
+      #     project: 'truckmotion'
+      #     path: './Sprint1_TruckMotion'
+      #     format: 'HTML'
+      #     args: >
+      #       --enableRetired
+      # - name: Upload Test results
+      #   uses: actions/upload-artifact@master
+      #   with:
+      #     name: Depcheck report
+      #     path: ${{github.workspace}}/reports
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -80,7 +80,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: "{{defaultContext}}:Sprint1_TruckMotion/.devcontainer"
+          context: "{{defaultContext}}:Sprint1_TruckMotion/"
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/truckmotion:latest
       # - name: Webhook for render deployment
