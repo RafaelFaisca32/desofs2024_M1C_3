@@ -435,11 +435,7 @@
                             </platforms>
                         </from>
                         <to>
-                            <image>docker.io/ryz32/truckmotion:latest</image>
-                            <auth>
-                                <username>ryz32</username>
-                                <password>MaioNovembro5</password>
-                            </auth>
+                            <image>ryz32/truckmotion:latest</image>
                         </to>
                         <container>
                             <entrypoint>
