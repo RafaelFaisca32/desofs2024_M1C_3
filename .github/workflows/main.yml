@@ -48,7 +48,7 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #   run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DskipTests -Dsonar.projectKey=RafaelFaisca32_desofs2024_M1C_3 -Dsonar.issuesReport.html.enable=true
+      #   run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DskipTests -Dsonar.projectKey=RafaelFaisca32_desofs2024_M1C_3
       # - name: ZAP Scan
       #   uses: zaproxy/action-full-scan@v0.10.0
       #   with:
@@ -83,7 +83,7 @@ jobs:
       #   uses: docker/setup-buildx-action@v3
       - name: Build and push
         run: |
-          docker push ryz32/truckmotion:latest
+          docker push ${{ secrets.DOCKER_HUB_REPO }}
       # - name: Webhook for render deployment
       #   uses: distributhor/workflow-webhook@v3
       #   with:
