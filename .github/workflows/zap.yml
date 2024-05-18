@@ -1,0 +1,17 @@
+name: ZAP Pipeline
+on:
+jobs:
+  pipeline:
+    name: TruckMotion ZAP pipeline post-deployment
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
+    timeout-minutes: 40
+    env:
+      JHI_DISABLE_WEBPACK_LOGS: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.10.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: 'https://truckmotion.onrender.com/'
