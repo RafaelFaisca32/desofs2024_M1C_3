@@ -1,6 +1,12 @@
 package com.mycompany.myapp.domain.serviceRequest.mapper;
 
+import com.mycompany.myapp.domain.customer.Company;
+import com.mycompany.myapp.domain.customer.Customer;
+import com.mycompany.myapp.domain.customer.CustomerId;
 import com.mycompany.myapp.domain.customer.mapper.CustomerMapper;
+import com.mycompany.myapp.domain.location.GeographicalCoordinates;
+import com.mycompany.myapp.domain.location.Location;
+import com.mycompany.myapp.domain.location.LocationId;
 import com.mycompany.myapp.domain.location.mapper.LocationMapper;
 import com.mycompany.myapp.domain.serviceRequest.*;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
@@ -12,6 +18,7 @@ import java.util.stream.Collectors;
 
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceStatusDTO;
 import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
+import com.mycompany.myapp.domain.user.ApplicationUser;
 import org.mapstruct.*;
 
 /**
@@ -34,7 +41,10 @@ public final class ServiceRequestMapper {
         ServiceRequestDate serviceRequestDate =
             new ServiceRequestDate(dto.getDate());
 
-        return new ServiceRequest(serviceRequestId, serviceRequestItems, serviceRequestName, serviceRequestTotalWeightOfItems, serviceRequestPrice, serviceRequestDate);
+        Location location = LocationMapper.toEntity(dto.getLocation());
+        Customer customer = CustomerMapper.toEntity(dto.getCustomer());
+
+        return new ServiceRequest(serviceRequestId, serviceRequestItems, serviceRequestName, serviceRequestTotalWeightOfItems, serviceRequestPrice, serviceRequestDate, location, customer);
     }
 
     public static ServiceRequestDTO toDto(ServiceRequest entity) {
@@ -77,10 +87,10 @@ public final class ServiceRequestMapper {
     public static void partialUpdate(ServiceRequest entity, ServiceRequestDTO dto) {
         if(entity == null || dto == null ) return;
         if(dto.getCustomer() != null){
-            entity.setCustomer(CustomerMapper.toEntity(dto.getCustomer()));
+            entity.setCustomer(new Customer(new CustomerId(dto.getCustomer().getId()),new Company(), new ApplicationUser()));
         }
         if(dto.getLocation() != null){
-            entity.setLocation(LocationMapper.toEntity(dto.getLocation()));
+            entity.setLocation(new Location(new LocationId(dto.getLocation().getId()),new GeographicalCoordinates(),new Customer()));
         }
         if(dto.getItems() != null){
             entity.setItems(new ServiceRequestItems(dto.getItems()));

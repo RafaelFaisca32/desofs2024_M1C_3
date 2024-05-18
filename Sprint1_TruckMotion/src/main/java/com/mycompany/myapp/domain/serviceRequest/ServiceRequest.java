@@ -43,16 +43,16 @@ public class ServiceRequest implements Serializable {
     private ServiceRequestDate date;
 
     @JsonIgnoreProperties(value = { "customer", "serviceRequest", "transport" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(unique = true)
     private Location location;
 
     @JsonIgnoreProperties(value = { "applicationUser", "locations", "serviceRequest" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(unique = true)
     private Customer customer;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "serviceRequest")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "serviceRequest", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = { "serviceRequest" }, allowSetters = true)
     private Set<ServiceStatus> serviceStatuses = new HashSet<>();
 
@@ -72,8 +72,23 @@ public class ServiceRequest implements Serializable {
         this.date = date;
     }
 
+    public ServiceRequest(ServiceRequestId id, ServiceRequestItems items, ServiceRequestName serviceName, ServiceRequestTotalWeightOfItems totalWeightOfItems, ServiceRequestPrice price, ServiceRequestDate date, Location location, Customer customer) {
+        this.id = id;
+        this.items = items;
+        this.serviceName = serviceName;
+        this.totalWeightOfItems = totalWeightOfItems;
+        this.price = price;
+        this.date = date;
+        this.location = location;
+        this.customer = customer;
+    }
+
     public ServiceRequest() {
 
+    }
+
+    public ServiceRequest(ServiceRequestId id) {
+        this.id = id;
     }
 
     public ServiceRequestId getId() {

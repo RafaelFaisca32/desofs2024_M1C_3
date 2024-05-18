@@ -28,14 +28,14 @@ public final class ServiceStatusMapper {
         ServiceStatusObservations serviceStatusObservations =
             new ServiceStatusObservations(dto.getObservations());
         ServiceRequest serviceRequest =
-            ServiceRequestMapper.toEntity(dto.getServiceRequest());
+            new ServiceRequest(new ServiceRequestId(dto.getServiceRequest().getId()), new ServiceRequestItems(),new ServiceRequestName(), new ServiceRequestTotalWeightOfItems(), new ServiceRequestPrice(), new ServiceRequestDate());
 
         return new ServiceStatus(serviceStatusId, serviceRequestDate, serviceStatusObservations, dto.getStatus(), serviceRequest);
     }
 
     public static ServiceStatusDTO toDto(ServiceStatus entity) {
         if (entity == null) return null;
-        ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(entity.getServiceRequest());
+        ServiceRequestDTO serviceRequestDTO = new ServiceRequestDTO(entity.getServiceRequest().getId().value());
         return new ServiceStatusDTO(
             entity.getId() != null ? entity.getId().value() : null,
             entity.getDate() != null ? entity.getDate().value() : null,

@@ -34,6 +34,14 @@ public class ServiceStatusDTO implements Serializable {
         this.serviceRequest = serviceRequest;
     }
 
+    public ServiceStatusDTO(String observations, Status status, ServiceRequestDTO serviceRequest) {
+        this.id = UUID.randomUUID();
+        this.date = ZonedDateTime.now();
+        this.observations = observations;
+        this.status = status;
+        this.serviceRequest = serviceRequest;
+    }
+
     public UUID getId() {
         return id;
     }

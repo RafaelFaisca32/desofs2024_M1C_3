@@ -17,7 +17,8 @@ public class Company {
     }
 
     //Needed for JPA
-    protected Company() {
+    public Company() {
+        this.company = "";
     }
 
     @Override

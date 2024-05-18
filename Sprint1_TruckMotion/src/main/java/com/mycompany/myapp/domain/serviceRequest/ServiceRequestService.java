@@ -1,6 +1,8 @@
 package com.mycompany.myapp.domain.serviceRequest;
 
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
+import com.mycompany.myapp.domain.serviceRequest.dto.ServiceStatusDTO;
+import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceStatusMapper;
 import com.mycompany.myapp.infrastructure.repository.jpa.ServiceRequestRepository;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
 import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceRequestMapper;
@@ -41,8 +43,21 @@ public class ServiceRequestService {
      */
     public ServiceRequestDTO save(ServiceRequestDTO serviceRequestDTO) {
         log.debug("Request to save ServiceRequest : {}", serviceRequestDTO);
-        ServiceRequest serviceRequest = ServiceRequestMapper.toEntity(serviceRequestDTO);
-        serviceRequest = serviceRequestRepository.save(serviceRequest);
+
+        ServiceRequest serviceRequest1 = ServiceRequestMapper.toEntity(serviceRequestDTO);
+        serviceRequestDTO.setId(serviceRequest1.getId().value());
+        if (serviceRequestDTO.getStatus() == null){
+            serviceRequestDTO.setStatus(new ServiceStatusDTO("",Status.PENDING,serviceRequestDTO));
+            serviceRequest1.getServiceStatuses().add(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
+        } else {
+            if (serviceRequestDTO.getStatus().getId() == null){
+                serviceRequestDTO.setStatus(new ServiceStatusDTO("",serviceRequestDTO.getStatus().getStatus(), serviceRequestDTO));
+                serviceRequest1.getServiceStatuses().add(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
+            }
+        }
+        ServiceRequestMapper.partialUpdate(serviceRequest1, serviceRequestDTO);
+
+        ServiceRequest serviceRequest = serviceRequestRepository.save(serviceRequest1);
         return ServiceRequestMapper.toDto(serviceRequest);
     }
 
@@ -58,9 +73,17 @@ public class ServiceRequestService {
         if (!serviceRequestRepository.existsById(new ServiceRequestId(serviceRequestDTO.getId()))) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+        ServiceRequest serviceRequest2 = ServiceRequestMapper.toEntity(serviceRequestDTO);
+        ServiceRequest serviceRequest1 = serviceRequestRepository.findById(new ServiceRequestId(serviceRequestDTO.getId())).get();
+        if (serviceRequestDTO.getStatus() != null) {
+            serviceRequestDTO.setStatus(new ServiceStatusDTO("", serviceRequestDTO.getStatus().getStatus(), new ServiceRequestDTO(serviceRequestDTO.getId())));
+            serviceRequest1.getServiceStatuses().add(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
+        }
 
-        ServiceRequest serviceRequest = ServiceRequestMapper.toEntity(serviceRequestDTO);
-        serviceRequest = serviceRequestRepository.save(serviceRequest);
+        ServiceRequestMapper.partialUpdate(serviceRequest1, serviceRequestDTO);
+        serviceRequest1.setLocation(serviceRequest2.getLocation());
+        serviceRequest1.setCustomer(serviceRequest2.getCustomer());
+        ServiceRequest serviceRequest = serviceRequestRepository.save(serviceRequest1);
         return ServiceRequestMapper.toDto(serviceRequest);
     }
 
