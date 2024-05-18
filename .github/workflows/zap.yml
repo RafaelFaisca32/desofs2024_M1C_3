@@ -1,5 +1,5 @@
 name: ZAP Pipeline
-on:
+on: [push]
 jobs:
   pipeline:
     name: TruckMotion ZAP pipeline post-deployment
