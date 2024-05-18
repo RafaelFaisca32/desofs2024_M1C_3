@@ -21,13 +21,13 @@
                 <constraints nullable="true" />
             </column>
             <column name="location_id" type="${uuidType}">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_transport__location_id" />
+                <constraints nullable="true" />
             </column>
             <column name="driver_id" type="${uuidType}">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_transport__driver_id" />
+                <constraints nullable="true" />
             </column>
             <column name="service_request_id" type="${uuidType}">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_transport__service_request_id" />
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
