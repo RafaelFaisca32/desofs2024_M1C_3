@@ -198,15 +198,15 @@ jobs:
           distribution: 'temurin'
           java-version: 17
       - name: Install Node.js packages
-        working-directory: ./Sprint1_TruckMotion
+        working-directory: ./Deliverables/Sprint1/Sprint1_TruckMotion
         run: npm install
       - name: Run backend test
-        working-directory: ./Sprint1_TruckMotion
+        working-directory: ./Deliverables/Sprint1/Sprint1_TruckMotion
         run: |
           chmod +x mvnw
           npm run ci:backend:test
       - name: Run frontend test
-        working-directory: ./Sprint1_TruckMotion
+        working-directory: ./Deliverables/Sprint1/Sprint1_TruckMotion
         run: npm run ci:frontend:test
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
@@ -221,7 +221,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
-        working-directory: ./Sprint1_TruckMotion
+        working-directory: ./Deliverables/Sprint1/Sprint1_TruckMotion
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -233,7 +233,7 @@ jobs:
           JAVA_HOME: /opt/jdk
         with:
           project: 'truckmotion'
-          path: './Sprint1_TruckMotion'
+          path: './Deliverables/Sprint1/Sprint1_TruckMotion'
           format: 'HTML'
           args: >
             --enableRetired
@@ -248,7 +248,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build Docker Image
-        working-directory: ./Sprint1_TruckMotion
+        working-directory: ./Deliverables/Sprint1/Sprint1_TruckMotion
         run: 
           npm run java:docker
       - name: Push Docker Image
