@@ -1,0 +1,17 @@
+name: ZAP Pipeline
+on: 
+    workflow_dispatch:
+jobs:
+  pipeline:
+    name: TruckMotion ZAP pipeline post-deployment
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    timeout-minutes: 40
+    env:
+      JHI_DISABLE_WEBPACK_LOGS: true
+    steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.10.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: 'https://truckmotion.onrender.com/'
