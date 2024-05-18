@@ -82,8 +82,8 @@ export const Truck = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  Id <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th >
+                  Truck Number 
                 </th>
                 <th className="hand" onClick={sort('make')}>
                   Make <FontAwesomeIcon icon={getSortIconByFieldName('make')} />
@@ -99,7 +99,7 @@ export const Truck = () => {
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
                     <Button tag={Link} to={`/truck/${truck.id}`} color="link" size="sm">
-                      {truck.id}
+                      {i}
                     </Button>
                   </td>
                   <td>{truck.make}</td>

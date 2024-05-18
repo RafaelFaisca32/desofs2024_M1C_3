@@ -45,7 +45,7 @@ export const ServiceRequestDeleteDialog = () => {
         Confirm delete operation
       </ModalHeader>
       <ModalBody id="truckMotionApp.serviceRequest.delete.question">
-        Are you sure you want to delete Service Request {serviceRequestEntity.id}?
+        Are you sure you want to delete Service Request {serviceRequestEntity.serviceName}?
       </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={handleClose}>

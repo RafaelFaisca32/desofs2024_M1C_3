@@ -82,8 +82,8 @@ export const Manager = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  Id <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th >
+                  Manager Number 
                 </th>
                 <th>
                   Application User <FontAwesomeIcon icon="sort" />
@@ -96,12 +96,12 @@ export const Manager = () => {
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
                     <Button tag={Link} to={`/manager/${manager.id}`} color="link" size="sm">
-                      {manager.id}
+                      {i}
                     </Button>
                   </td>
                   <td>
                     {manager.applicationUser ? (
-                      <Link to={`/application-user/${manager.applicationUser.id}`}>{manager.applicationUser.id}</Link>
+                      <Link to={`/application-user/${manager.applicationUser.id}`}>{manager.applicationUser.name}</Link>
                     ) : (
                       ''
                     )}

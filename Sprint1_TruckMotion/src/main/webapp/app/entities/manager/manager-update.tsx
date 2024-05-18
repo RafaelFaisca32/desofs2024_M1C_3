@@ -85,7 +85,6 @@ export const ManagerUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? <ValidatedField name="id" required readOnly id="manager-id" label="Id" validate={{ required: true }} /> : null}
               <ValidatedField
                 id="manager-applicationUser"
                 name="applicationUser"
@@ -97,7 +96,7 @@ export const ManagerUpdate = () => {
                 {applicationUsers
                   ? applicationUsers.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.name}
                       </option>
                     ))
                   : null}
