@@ -435,7 +435,7 @@
                             </platforms>
                         </from>
                         <to>
-                            <image>truckmotion:latest</image>
+                            <image>ryz32/truckmotion:latest</image>
                         </to>
                         <container>
                             <entrypoint>
