@@ -24,10 +24,6 @@ export const TruckDetail = () => {
         <h2 data-cy="truckDetailsHeading">Truck</h2>
         <dl className="jh-entity-details">
           <dt>
-            <span id="id">Id</span>
-          </dt>
-          <dd>{truckEntity.id}</dd>
-          <dt>
             <span id="make">Make</span>
           </dt>
           <dd>{truckEntity.make}</dd>

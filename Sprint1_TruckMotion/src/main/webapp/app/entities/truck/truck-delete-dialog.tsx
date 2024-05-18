@@ -44,7 +44,7 @@ export const TruckDeleteDialog = () => {
       <ModalHeader toggle={handleClose} data-cy="truckDeleteDialogHeading">
         Confirm delete operation
       </ModalHeader>
-      <ModalBody id="truckMotionApp.truck.delete.question">Are you sure you want to delete Truck {truckEntity.id}?</ModalBody>
+      <ModalBody id="truckMotionApp.truck.delete.question">Are you sure you want to delete Truck {truckEntity.make +" " + truckEntity.model}?</ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={handleClose}>
           <FontAwesomeIcon icon="ban" />
