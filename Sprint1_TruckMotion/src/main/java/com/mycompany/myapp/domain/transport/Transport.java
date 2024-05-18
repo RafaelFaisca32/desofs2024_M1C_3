@@ -19,15 +19,17 @@ public class Transport implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+    @EmbeddedId
     @GeneratedValue
     @Column(name = "id")
     private TransportId id;
 
     @Column(name = "start_time")
+    @Embedded
     private TransportStartTime startTime;
 
     @Column(name = "end_time")
+    @Embedded
     private TransportEndTime endTime;
 
     @JsonIgnoreProperties(value = { "customer", "serviceRequest", "transport" }, allowSetters = true)

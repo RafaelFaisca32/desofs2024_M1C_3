@@ -21,24 +21,24 @@ public class ServiceRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
     @EmbeddedId
     @GeneratedValue
     @Column(name = "id")
     private ServiceRequestId id;
 
+    @Embedded
     @Column(name = "items")
     private ServiceRequestItems items;
-
+    @Embedded
     @Column(name = "service_name")
     private ServiceRequestName serviceName;
-
+    @Embedded
     @Column(name = "total_weight_of_items")
     private ServiceRequestTotalWeightOfItems totalWeightOfItems;
-
+    @Embedded
     @Column(name = "price")
     private ServiceRequestPrice price;
-
+    @Embedded
     @Column(name = "date")
     private ServiceRequestDate date;
 

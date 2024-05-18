@@ -16,15 +16,16 @@ public class ServiceStatus implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
     @EmbeddedId
     @GeneratedValue
     @Column(name = "id")
     private ServiceStatusId id;
 
+    @Embedded
     @Column(name = "date")
     private ServiceRequestDate date;
 
+    @Embedded
     @Column(name = "observations")
     private ServiceStatusObservations observations;
 
