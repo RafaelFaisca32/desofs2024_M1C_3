@@ -28,7 +28,7 @@ jobs:
       - name: Initiate App
         working-directory: ./Sprint1_TruckMotion
         run: |
-          ./mvnw
+          ./mvnw &&
       - name: Run backend test
         working-directory: ./Sprint1_TruckMotion
         run: |
