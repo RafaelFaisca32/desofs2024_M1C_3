@@ -47,9 +47,6 @@ class CustomerControllerIT {
     private ICustomerRepository customerRepository;
 
     @Autowired
-    private CustomerMapper customerMapper;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -89,7 +86,7 @@ class CustomerControllerIT {
     void createCustomer() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the Customer
-        CustomerDTO customerDTO = customerMapper.toDto(customer);
+        CustomerDTO customerDTO = CustomerMapper.toDto(customer);
         var returnedCustomerDTO = om.readValue(
             restCustomerMockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(customerDTO)))
@@ -102,7 +99,7 @@ class CustomerControllerIT {
 
         // Validate the Customer in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
-        var returnedCustomer = customerMapper.toEntity(returnedCustomerDTO);
+        var returnedCustomer = CustomerMapper.toEntity(returnedCustomerDTO);
         assertCustomerUpdatableFieldsEquals(returnedCustomer, getPersistedCustomer(returnedCustomer));
     }
 
@@ -111,7 +108,7 @@ class CustomerControllerIT {
     void createCustomerWithExistingId() throws Exception {
         // Create the Customer with an existing ID
         customerRepository.saveAndFlush(customer);
-        CustomerDTO customerDTO = customerMapper.toDto(customer);
+        CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
@@ -174,7 +171,7 @@ class CustomerControllerIT {
         // Disconnect from session so that the updates on updatedCustomer are not directly saved in db
         em.detach(updatedCustomer);
         updatedCustomer.company(UPDATED_COMPANY);
-        CustomerDTO customerDTO = customerMapper.toDto(updatedCustomer);
+        CustomerDTO customerDTO = CustomerMapper.toDto(updatedCustomer);
 
         restCustomerMockMvc
             .perform(
@@ -196,7 +193,7 @@ class CustomerControllerIT {
         customer.setId(new CustomerId() );
 
         // Create the Customer
-        CustomerDTO customerDTO = customerMapper.toDto(customer);
+        CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCustomerMockMvc
@@ -218,7 +215,7 @@ class CustomerControllerIT {
         customer.setId(new CustomerId());
 
         // Create the Customer
-        CustomerDTO customerDTO = customerMapper.toDto(customer);
+        CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCustomerMockMvc
@@ -238,7 +235,7 @@ class CustomerControllerIT {
         customer.setId(new CustomerId());
 
         // Create the Customer
-        CustomerDTO customerDTO = customerMapper.toDto(customer);
+        CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCustomerMockMvc
@@ -310,7 +307,7 @@ class CustomerControllerIT {
         customer.setId(new CustomerId());
 
         // Create the Customer
-        CustomerDTO customerDTO = customerMapper.toDto(customer);
+        CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCustomerMockMvc
@@ -332,7 +329,7 @@ class CustomerControllerIT {
         customer.setId(new CustomerId());
 
         // Create the Customer
-        CustomerDTO customerDTO = customerMapper.toDto(customer);
+        CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCustomerMockMvc
@@ -354,7 +351,7 @@ class CustomerControllerIT {
         customer.setId(new CustomerId());
 
         // Create the Customer
-        CustomerDTO customerDTO = customerMapper.toDto(customer);
+        CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCustomerMockMvc
