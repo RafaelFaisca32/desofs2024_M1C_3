@@ -23,12 +23,6 @@ jobs:
       - name: Install Node.js packages
         working-directory: ./Sprint1_TruckMotion
         run: npm install
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Initiate App
-        working-directory: ./Sprint1_TruckMotion
-        run: |
-          ./mvnw &&
       - name: Run backend test
         working-directory: ./Sprint1_TruckMotion
         run: |
@@ -80,6 +74,8 @@ jobs:
         working-directory: ./Sprint1_TruckMotion
         run: 
           npm run java:docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Build and push
         run: |
           docker push ${{ secrets.DOCKER_HUB_REPO }}
