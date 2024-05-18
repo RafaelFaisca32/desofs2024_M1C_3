@@ -30,10 +30,10 @@
                 <constraints nullable="true" />
             </column>
             <column name="location_id" type="${uuidType}">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_service_request__location_id" />
+                <constraints nullable="true" />
             </column>
             <column name="customer_id" type="${uuidType}">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_service_request__customer_id" />
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>

@@ -33,7 +33,7 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/TruckMotion
+    url: jdbc:postgresql://vsgate-s1.dei.isep.ipp.pt:10406/truckmotion
     username: TruckMotion
     password:
     hikari:
