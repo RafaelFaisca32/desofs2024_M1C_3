@@ -26,6 +26,139 @@ Some basic UCs implementation were accomplished, such as creation/edition of use
 
 Adding to this, the security configuration was also achivied, including the authorization, authentication and encrypt algorithms for sensible data, such as passwords.
 
+# Security Configuration
+
+By integrating Spring Security, our application benefits from a comprehensive and customizable security framework. This includes CSP, CORS, JWT token authentication, and robust password encryption, ensuring the application is secure against various threats and vulnerabilities.
+
+The security configuration is managed in the `SecurityConfiguration.java` class. This setup includes Content Security Policy (CSP), Cross-Origin Resource Sharing (CORS), permission policies, and endpoint access controls.
+
+### Key Security Features
+
+1. **CSP and CORS Configuration**:
+   - **CSP (Content Security Policy)**: Protects against XSS (Cross-Site Scripting) attacks by specifying trusted sources for content. Defined in the YAML configuration as:
+     ```yaml
+     jhipster:
+       security:
+         content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
+     ```
+
+###### default-src 'self':
+
+- Only content (e.g., scripts, styles, images) from the same origin (the application's own domain) is allowed by default. This is a general fallback directive for other content types not explicitly specified.
+
+###### frame-src 'self' data::
+
+- Allows the application to display content in iframes from the same origin and from `data:` URIs. This can be useful for embedding small amounts of content directly within the HTML document.
+
+###### script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com:
+
+- Scripts can be loaded and executed from the same origin (self).
+- `unsafe-inline` allows inline JavaScript to be executed, which can pose security risks but may be necessary for certain functionalities.
+- `unsafe-eval` allows the use of eval() and similar methods for executing code, which can also pose security risks.
+- Scripts from https://storage.googleapis.com are explicitly allowed, enabling the application to load scripts stored there.
+
+###### style-src 'self' 'unsafe-inline':
+
+- Styles can be loaded from the same origin (`self`).
+- `unsafe-inline` allows inline CSS styles to be applied, which can be a security risk but may be necessary for certain functionalities.
+
+###### img-src 'self' data::
+
+- Images can be loaded from the same origin (`self`).
+- `data:` URIs are allowed for images, enabling the embedding of small images directly within the HTML document.
+
+###### font-src 'self' data::
+
+- Fonts can be loaded from the same origin (`self`).
+- `data:` URIs are allowed for fonts, enabling the embedding of fonts directly within the HTML document.
+
+###### Security Implications
+
+- 'self': Restricts most resources to be loaded only from the same origin, reducing the risk of cross-site scripting (XSS) and other injection attacks.
+- 'unsafe-inline' and 'unsafe-eval': While necessary for some applications, these directives significantly weaken the policy by allowing inline scripts and the use of eval(), which can make the application vulnerable to XSS attacks.
+- Specific External Sources: Allowing scripts from specific external sources (like https://storage.googleapis.com) ensures that only trusted sources are used.
+
+   - **CORS (Cross-Origin Resource Sharing)**: Controls how resources are shared between different origins to enhance security. Defined as:
+     ```yaml
+     jhipster:
+       cors:
+         allowed-origins: "http://localhost:8100,http://localhost:9000"
+         allowed-methods: "*"
+         allowed-headers: "*"
+         exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
+         allow-credentials: true
+         max-age: 1800
+     ```
+
+2. **Endpoint Authorization**:
+   - Configures which endpoints require authorization, which are public, and which require specific roles.
+   - Example configuration in `SecurityConfiguration.java`:
+     ```java
+     @Bean
+     public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+         http
+             .cors(withDefaults())
+             .csrf(csrf -> csrf.disable())
+             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
+             .headers(headers -> headers
+                 .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
+                 .frameOptions(FrameOptionsConfig::sameOrigin)
+                 .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                 .permissionsPolicy(permissions -> permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()"))
+             )
+             .authorizeHttpRequests(authz -> authz
+                 .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.txt"), mvc.pattern("/*.json"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
+                 .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
+                 .requestMatchers(mvc.pattern("/app/**")).permitAll()
+                 .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
+                 .requestMatchers(mvc.pattern("/content/**")).permitAll()
+                 .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
+                 .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
+                 .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
+                 .requestMatchers(mvc.pattern("/api/register")).permitAll()
+                 .requestMatchers(mvc.pattern("/api/activate")).permitAll()
+                 .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
+                 .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
+                 .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                 .requestMatchers(mvc.pattern("/api/**")).authenticated()
+                 .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                 .requestMatchers(mvc.pattern("/management/health")).permitAll()
+                 .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
+                 .requestMatchers(mvc.pattern("/management/info")).permitAll()
+                 .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
+                 .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+             )
+             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+             .exceptionHandling(exceptions -> exceptions
+                 .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                 .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+             )
+             .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
+         return http.build();
+     }
+     ```
+
+## Authentication and Authorization
+
+Our application uses JWT tokens with OAuth2 for authentication and authorization, configured in the `SecurityJwtConfiguration` class. This setup ensures secure token-based authentication.
+
+### Example JWT Token
+
+```plaintext
+eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxNjE1Mzc2MCwiYXV0aCI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MTYwNjczNjB9.qdt758QLnnIPeMlmCZyxMWTlKe8WbUw6Mi3dY1NIRErWoSzCKHs9ZpQ-8o3_rBD43LV53imloWpiKQlsBJJdfw
+```
+## Password Encryption
+
+For password encryption, we use the  `org.springframework.security.crypto.password.PasswordEncoder` from Spring Security. In the `UserService.java` class, passwords are encrypted using the AES-256 algorithm before being stored in the database. Decryption is also handled by the same library to ensure secure access.
+
+```java
+String encryptedPassword = passwordEncoder.encode(password);
+```
+
+## UUID for Identifiers
+All IDs in our application utilize the `UUID` class, which ensures unique and secure identification for entities
+
+
 ## GitHub Actions
 
 GitHub Actions is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline. You can create workflows that build and test every pull request to your repository, or deploy merged pull requests to production.
