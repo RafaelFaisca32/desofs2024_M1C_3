@@ -66,7 +66,7 @@ export const ServiceRequestUpdate = () => {
       ...values,
       location: locations.find(it => it.id.toString() === values.location?.toString()),
       customer: customers.find(it => it.id.toString() === values.customer?.toString()),
-      status: (values.status != values.statusInitial) ? {id:null, date:null, observations:null, status: values.status, serviceRequest:null} : null,
+      status: (values.status !== values.statusInitial) ? {id:null, date:null, observations:null, status: values.status, serviceRequest:null} : null,
     };
 
     if (isNew) {

@@ -53,7 +53,8 @@ public class ManagerService {
     public ManagerDTO update(ManagerDTO managerDTO) {
         log.debug("Request to update Manager : {}", managerDTO);
 
-        if (!managerRepository.existsById(managerDTO.getId())) {
+        Optional<Manager> managerExists = managerRepository.findById(new ManagerId(managerDTO.getId()));
+        if (managerExists.isEmpty()) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 

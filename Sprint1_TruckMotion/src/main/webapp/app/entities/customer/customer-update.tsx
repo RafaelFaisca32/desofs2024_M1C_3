@@ -85,7 +85,6 @@ export const CustomerUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? <ValidatedField name="id" required readOnly id="customer-id" label="Id" validate={{ required: true }} /> : null}
               <ValidatedField label="Company" id="customer-company" name="company" data-cy="company" type="text" />
               <ValidatedField
                 id="customer-applicationUser"
@@ -98,7 +97,7 @@ export const CustomerUpdate = () => {
                 {applicationUsers
                   ? applicationUsers.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.name}
                       </option>
                     ))
                   : null}

@@ -89,6 +89,8 @@ management:
           enabled: true
 
 spring:
+  liquibase:
+    enabled: false
   application:
     name: TruckMotion
   profiles:

@@ -23,12 +23,8 @@ export const ManagerDetail = () => {
       <Col md="8">
         <h2 data-cy="managerDetailsHeading">Manager</h2>
         <dl className="jh-entity-details">
-          <dt>
-            <span id="id">Id</span>
-          </dt>
-          <dd>{managerEntity.id}</dd>
           <dt>Application User</dt>
-          <dd>{managerEntity.applicationUser ? managerEntity.applicationUser.id : ''}</dd>
+          <dd>{managerEntity.applicationUser ? managerEntity.applicationUser.name : ''}</dd>
         </dl>
         <Button tag={Link} to="/manager" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

@@ -78,7 +78,6 @@ export const TruckUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? <ValidatedField name="id" required readOnly id="truck-id" label="Id" validate={{ required: true }} /> : null}
               <ValidatedField label="Make" id="truck-make" name="make" data-cy="make" type="text" />
               <ValidatedField label="Model" id="truck-model" name="model" data-cy="model" type="text" />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/truck" replace color="info">
