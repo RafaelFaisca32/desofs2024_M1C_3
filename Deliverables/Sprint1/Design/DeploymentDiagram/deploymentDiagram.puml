@@ -1,7 +1,10 @@
 @startuml deployment
 
-node "Frontend Server" as fs{
-    artifact "React Application"
+node "Application Server" as appServer{
+    artifact container {
+        artifact "React Application" as ra 
+        artifact "Java Spring Application" as jsa
+    }
 }
 
 node "Device" as user {
@@ -10,10 +13,6 @@ node "Device" as user {
 
 node "FileSystem Server" as fServer{
     artifact "FileSystem" as fileSystem
-}
-
-node "Backend Server" as backend{
-    artifact "Java Spring Application"
 }
 
 node "DB Server" as db {
@@ -25,11 +24,12 @@ node "Logging System Server" as lss {
     artifact "Logging System" as ls
 }
 
-fServer -- backend : "FTP"
-fs -- user : "HTTPs"
-fs -- gm : "HTTPs"
-backend -- fs : "HTTPs"
-db -- backend : "TCP/IPs"
-lss -- backend : "HTTPs"
+
+ra -- user : "HTTPs"
+ra -- gm : "HTTPs"
+db -- jsa : "TCP/IPs"
+lss -- jsa : "HTTPs"
+fServer -- jsa : "FTPs"
+jsa -- ra : "HTTPs"
 
 @enduml

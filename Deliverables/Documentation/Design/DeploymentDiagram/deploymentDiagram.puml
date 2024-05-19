@@ -25,11 +25,11 @@ node "Logging System Server" as lss {
     artifact "Logging System" as ls
 }
 
-fServer -- backend : "FTP"
+fServer -- backend : "FTPs"
 fs -- user : "HTTPs"
 fs -- gm : "HTTPs"
 backend -- fs : "HTTPs"
-db -- backend : "TCP/IP"
+db -- backend : "TCP/IPs"
 lss -- backend : "HTTPs"
 
 @enduml
