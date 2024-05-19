@@ -26,6 +26,24 @@ Some basic UCs implementation were accomplished, such as creation/edition of use
 
 Adding to this, the security configuration was also achivied, including the authorization, authentication and encrypt algorithms for sensible data, such as passwords.
 
+## Domain-driven Design
+As it was used JHipster to generate the application, the Domain-driven Design (DDD) wasn't implemented initially because one con about JHipster is that it is not compatible with this methodology.
+
+So, there were made some changes on the application in order to have DDD applied on it:
+- Resource Classes to Controller
+  - JHipster generates Resource classes instead of Controllers, so those classes was changed to Controller.
+- Repositories interfaces
+  - It was created interfaces in order to have a standardized interface for each Entity Root.
+- Value Objects
+  - JHipster is not compatible with the usage of Value Objects. So, it was necessary to change the entire domain to be able to use them.
+- Entity Roots
+  - As DDD wasn't implemented initially, the concept of Entity Root and Aggregates didn't exist aswell. So, this required some changes specially on ServiceRequest and ServiceStatus entity. Because the ServiceRequest entity, being the root, is responsible for every change on its aggregate.
+  - This included the removal of Repositories, Services and Controllers of ServiceStatus and the correction on ServiceRequest classes, in order to manage the ServiceStatus entity.
+- Correct separation of Folders
+  - The "application/controller" includes all the Controllers of each entity root.
+  - The "infrastructure/repository" was created to have the Interface repositories for each Entity Root.
+  - The "domain" folder includes the Service, Value objects and the Domain classes.
+
 # Security Configuration
 
 By integrating Spring Security, our application benefits from a comprehensive and customizable security framework. This includes CSP, CORS, JWT token authentication, and robust password encryption, ensuring the application is secure against various threats and vulnerabilities.
