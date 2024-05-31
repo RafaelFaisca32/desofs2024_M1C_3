@@ -1,0 +1,25 @@
+{
+  "annotations": {
+    "changelogDate": "20240501155952"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "make",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "model",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Truck",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

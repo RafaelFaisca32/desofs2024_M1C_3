@@ -1,0 +1,30 @@
+{
+  "annotations": {
+    "changelogDate": "20240501155955"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "date",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "observations",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValues": "ACTIVE,FINISHED,CANCELED,PENDING"
+    }
+  ],
+  "name": "ServiceStatus",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,48 @@
+package com.mycompany.myapp.domain.serviceRequest;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
+import java.util.Objects;
+
+@Embeddable
+public class ServiceRequestPrice {
+    @Column(name = "price")
+    private Float price;
+
+    public ServiceRequestPrice() {
+        this.price = 0F;
+    }
+
+    public ServiceRequestPrice(Float price) {
+        if(price == null) {
+            price = 0F;
+        }
+        if (price < 0){
+            price = 0F;
+        }
+        this.price = price;
+    }
+
+    public Float value(){
+        return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ServiceRequestPrice price1 = (ServiceRequestPrice) o;
+        return price.equals(price1.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(price);
+    }
+
+    @Override
+    public String toString() {
+        return price.toString();
+    }
+}

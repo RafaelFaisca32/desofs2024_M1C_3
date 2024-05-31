@@ -1,0 +1,30 @@
+{
+  "annotations": {
+    "changelogDate": "20240501155948"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID"
+    }
+  ],
+  "name": "Driver",
+  "relationships": [
+    {
+      "otherEntityName": "truck",
+      "relationshipName": "truck",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "applicationUser",
+      "relationshipName": "applicationUser",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,120 @@
+
+entity Driver {
+	id UUID
+}
+
+entity Manager {
+	id UUID
+}
+
+entity Customer {
+	id UUID
+    company String
+}
+
+entity ApplicationUser {
+	name String
+    birthDate LocalDate
+    email String
+    gender Gender
+}
+
+entity Truck {
+	id UUID
+	make String
+    model String
+}
+
+entity Location {
+	id UUID
+    coordX Float
+    coordY Float
+    coordZ Float
+}
+
+entity ServiceRequest {
+	id UUID
+    items String
+    serviceName String
+    totalWeightOfItems Float
+    price Float
+    date ZonedDateTime
+}
+
+entity ServiceStatus {
+	id UUID
+    date ZonedDateTime
+    observations String
+    status Status
+}
+
+entity Transport {
+	id UUID
+    startTime ZonedDateTime
+    endTime ZonedDateTime
+}
+
+enum Gender {
+    MALE, FEMALE, OTHER
+}
+
+enum Status {
+	ACTIVE, FINISHED, CANCELED, PENDING
+}
+
+relationship OneToOne {
+	Transport{location} to Location
+}
+
+relationship OneToOne {
+	Transport{driver} to Driver
+}
+
+relationship OneToOne {
+	Transport{serviceRequest} to ServiceRequest
+}
+
+relationship OneToMany {
+	ServiceRequest{serviceStatus} to ServiceStatus
+}
+
+relationship OneToOne {
+	ServiceRequest{location} to Location
+}
+
+relationship OneToOne {
+	Driver{truck} to Truck
+}
+
+relationship OneToOne {
+	Manager{applicationUser} to ApplicationUser
+}
+
+relationship OneToOne {
+	Customer{applicationUser} to ApplicationUser
+}
+
+relationship OneToOne {
+	Driver{applicationUser} to ApplicationUser
+}
+
+relationship OneToMany {
+	Customer{location} to Location
+}
+
+relationship OneToOne {
+	ServiceRequest{customer} to Customer
+}
+
+relationship OneToOne {
+	ApplicationUser{internalUser(login)} to @OnDelete("CASCADE") @Id User with builtInEntity
+}
+
+
+// Set pagination options
+
+// Use Data Transfer Objects (DTO)
+dto * with mapstruct
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
