@@ -58,9 +58,7 @@ public class ApplicationUserAsserts {
     public static void assertApplicationUserUpdatableFieldsEquals(ApplicationUser expected, ApplicationUser actual) {
         assertThat(expected)
             .as("Verify ApplicationUser relevant properties")
-            .satisfies(e -> assertThat(e.getName()).as("check name").isEqualTo(actual.getName()))
             .satisfies(e -> assertThat(e.getBirthDate()).as("check birthDate").isEqualTo(actual.getBirthDate()))
-            .satisfies(e -> assertThat(e.getEmail()).as("check email").isEqualTo(actual.getEmail()))
             .satisfies(e -> assertThat(e.getGender()).as("check gender").isEqualTo(actual.getGender()));
     }
 

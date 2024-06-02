@@ -5,6 +5,8 @@ import com.mycompany.myapp.domain.customer.Customer;
 import com.mycompany.myapp.domain.driver.Driver;
 import com.mycompany.myapp.domain.manager.Manager;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -22,45 +24,51 @@ public class ApplicationUser implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Embedded
+    @Column(name = "uuid_id")
+    private ApplicationUserId uuidId;
 
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
+    @NotNull
+    @Column(name = "birth_date", nullable = false)
+    @Embedded
+    private ApplicationUserBirthDate birthDate;
 
-    @Column(name = "email")
-    private String email;
-
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender")
+    @Column(name = "gender", nullable = false)
     private Gender gender;
 
-    @OneToOne(fetch = FetchType.LAZY)
+
+    @NotNull
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @MapsId
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id", nullable = false,updatable = true)
     private User internalUser;
 
     @JsonIgnoreProperties(value = { "truck", "applicationUser", "transport" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "applicationUser")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "applicationUser")
     private Driver driver;
 
     @JsonIgnoreProperties(value = { "applicationUser" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "applicationUser")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "applicationUser")
     private Manager manager;
 
     @JsonIgnoreProperties(value = { "applicationUser", "locations", "serviceRequest" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "applicationUser")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "applicationUser")
     private Customer customer;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public ApplicationUser(){
 
     }
-    public ApplicationUser(Long id, String name, LocalDate birthDate, String email, Gender gender, User internalUser) {
+    public ApplicationUser(Long id,
+                           ApplicationUserId uuidId,
+                           ApplicationUserBirthDate birthDate,
+                           Gender gender,
+                           User internalUser) {
         this.id = id;
-        this.name = name;
+        this.uuidId = uuidId;
         this.birthDate = birthDate;
-        this.email = email;
         this.gender = gender;
         this.internalUser = internalUser;
     }
@@ -68,53 +76,39 @@ public class ApplicationUser implements Serializable {
     public Long getId() {
         return this.id;
     }
+    public ApplicationUserId getUuidId() {
+        if(this.uuidId == null) return null;
 
+        return new ApplicationUserId(this.uuidId.value());
+    }
     public ApplicationUser id(Long id) {
         this.setId(id);
         return this;
+    }
+    public ApplicationUser uuidid(ApplicationUserId uuidId) {
+        this.setUuidId(uuidId);
+        return this;
+    }
+
+    public void setUuidId(ApplicationUserId uuidId) {
+        this.uuidId = uuidId;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return this.name;
+    public ApplicationUserBirthDate getBirthDate() {
+        return new ApplicationUserBirthDate(this.birthDate.value());
     }
 
-    public ApplicationUser name(String name) {
-        this.setName(name);
-        return this;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getBirthDate() {
-        return this.birthDate;
-    }
-
-    public ApplicationUser birthDate(LocalDate birthDate) {
+    public ApplicationUser birthDate(ApplicationUserBirthDate birthDate) {
         this.setBirthDate(birthDate);
         return this;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(ApplicationUserBirthDate birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public ApplicationUser email(String email) {
-        this.setEmail(email);
-        return this;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Gender getGender() {
@@ -224,9 +218,7 @@ public class ApplicationUser implements Serializable {
     public String toString() {
         return "ApplicationUser{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
             ", birthDate='" + getBirthDate() + "'" +
-            ", email='" + getEmail() + "'" +
             ", gender='" + getGender() + "'" +
             "}";
     }

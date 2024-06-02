@@ -10,11 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
-import com.mycompany.myapp.domain.user.ApplicationUser;
-import com.mycompany.myapp.domain.user.User;
-import com.mycompany.myapp.domain.user.Gender;
+import com.mycompany.myapp.domain.user.*;
 import com.mycompany.myapp.infrastructure.repository.jpa.ApplicationUserRepository;
-import com.mycompany.myapp.domain.user.ApplicationUserService;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
 import com.mycompany.myapp.domain.user.mapper.ApplicationUserMapper;
 import jakarta.persistence.EntityManager;
@@ -47,14 +44,9 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ApplicationUserControllerIT {
 
-    private static final String DEFAULT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final LocalDate DEFAULT_BIRTH_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_BIRTH_DATE = LocalDate.now(ZoneId.systemDefault());
-
-    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
-    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
+    private static final ApplicationUserBirthDate DEFAULT_BIRTH_DATE = new ApplicationUserBirthDate(LocalDate.ofEpochDay(0L));
+    private static final ApplicationUserBirthDate UPDATED_BIRTH_DATE = new ApplicationUserBirthDate(LocalDate.now(ZoneId.systemDefault()));
 
     private static final Gender DEFAULT_GENDER = Gender.MALE;
     private static final Gender UPDATED_GENDER = Gender.FEMALE;
@@ -93,9 +85,7 @@ class ApplicationUserControllerIT {
      */
     public static ApplicationUser createEntity(EntityManager em) {
         ApplicationUser applicationUser = new ApplicationUser()
-            .name(DEFAULT_NAME)
             .birthDate(DEFAULT_BIRTH_DATE)
-            .email(DEFAULT_EMAIL)
             .gender(DEFAULT_GENDER);
         // Add required entity
         User user = UserControllerIT.createEntity(em);
@@ -113,9 +103,7 @@ class ApplicationUserControllerIT {
      */
     public static ApplicationUser createUpdatedEntity(EntityManager em) {
         ApplicationUser applicationUser = new ApplicationUser()
-            .name(UPDATED_NAME)
             .birthDate(UPDATED_BIRTH_DATE)
-            .email(UPDATED_EMAIL)
             .gender(UPDATED_GENDER);
         // Add required entity
         User user = UserControllerIT.createEntity(em);
@@ -225,9 +213,7 @@ class ApplicationUserControllerIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(applicationUser.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].birthDate").value(hasItem(DEFAULT_BIRTH_DATE.toString())))
-            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].gender").value(hasItem(DEFAULT_GENDER.toString())));
     }
 
@@ -260,9 +246,7 @@ class ApplicationUserControllerIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(applicationUser.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.birthDate").value(DEFAULT_BIRTH_DATE.toString()))
-            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.gender").value(DEFAULT_GENDER.toString()));
     }
 
@@ -285,7 +269,7 @@ class ApplicationUserControllerIT {
         ApplicationUser updatedApplicationUser = applicationUserRepository.findById(applicationUser.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedApplicationUser are not directly saved in db
         em.detach(updatedApplicationUser);
-        updatedApplicationUser.name(UPDATED_NAME).birthDate(UPDATED_BIRTH_DATE).email(UPDATED_EMAIL).gender(UPDATED_GENDER);
+        updatedApplicationUser.birthDate(UPDATED_BIRTH_DATE).gender(UPDATED_GENDER);
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(updatedApplicationUser);
 
         restApplicationUserMockMvc
@@ -375,7 +359,7 @@ class ApplicationUserControllerIT {
         ApplicationUser partialUpdatedApplicationUser = new ApplicationUser();
         partialUpdatedApplicationUser.setId(applicationUser.getId());
 
-        partialUpdatedApplicationUser.name(UPDATED_NAME).birthDate(UPDATED_BIRTH_DATE).gender(UPDATED_GENDER);
+        partialUpdatedApplicationUser.birthDate(UPDATED_BIRTH_DATE).gender(UPDATED_GENDER);
 
         restApplicationUserMockMvc
             .perform(
@@ -406,7 +390,7 @@ class ApplicationUserControllerIT {
         ApplicationUser partialUpdatedApplicationUser = new ApplicationUser();
         partialUpdatedApplicationUser.setId(applicationUser.getId());
 
-        partialUpdatedApplicationUser.name(UPDATED_NAME).birthDate(UPDATED_BIRTH_DATE).email(UPDATED_EMAIL).gender(UPDATED_GENDER);
+        partialUpdatedApplicationUser.birthDate(UPDATED_BIRTH_DATE).gender(UPDATED_GENDER);
 
         restApplicationUserMockMvc
             .perform(

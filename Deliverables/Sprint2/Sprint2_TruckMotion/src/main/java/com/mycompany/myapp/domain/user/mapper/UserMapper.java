@@ -30,6 +30,11 @@ public class UserMapper {
         return new UserDTO(user);
     }
 
+    public UserDTO adminUserDTOToUserDTO(AdminUserDTO adminUserDTO) {
+        if(adminUserDTO == null) return null;
+        return new UserDTO(adminUserDTO.getId(),adminUserDTO.getLogin());
+    }
+
     public List<AdminUserDTO> usersToAdminUserDTOs(List<User> users) {
         if(users == null) return List.of();
         return users.stream().filter(Objects::nonNull).map(this::userToAdminUserDTO).toList();
