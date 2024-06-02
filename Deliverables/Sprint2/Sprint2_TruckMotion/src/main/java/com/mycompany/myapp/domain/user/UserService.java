@@ -188,15 +188,24 @@ public class UserService {
         applicationUserDTO.setInternalUser(userMapper.userToUserDTO(user));
 
         ApplicationUserDTO savedApplicationUserDTO = applicationUserService.save(applicationUserDTO);
-        if(driverDTO != null && userDTO.getAuthorities().contains(AuthoritiesConstants.DRIVER)){
+        if( driverDTO != null &&
+            userDTO.getAuthorities() != null &&
+            userDTO.getAuthorities().contains(AuthoritiesConstants.DRIVER)
+        ){
             driverDTO.setApplicationUser(savedApplicationUserDTO);
             driverService.save(driverDTO);
         }
-        if(customerDTO != null && userDTO.getAuthorities().contains(AuthoritiesConstants.CUSTOMER)){
+        if( customerDTO != null &&
+            userDTO.getAuthorities() != null &&
+            userDTO.getAuthorities().contains(AuthoritiesConstants.CUSTOMER)
+        ){
             customerDTO.setApplicationUser(savedApplicationUserDTO);
             customerService.save(customerDTO);
         }
-        if(managerDTO != null && userDTO.getAuthorities().contains(AuthoritiesConstants.MANAGER)){
+        if( managerDTO != null &&
+            userDTO.getAuthorities() != null &&
+            userDTO.getAuthorities().contains(AuthoritiesConstants.MANAGER)
+        ){
             managerDTO.setApplicationUser(savedApplicationUserDTO);
             managerService.save(managerDTO);
         }
