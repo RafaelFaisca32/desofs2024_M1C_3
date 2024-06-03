@@ -3,6 +3,8 @@ package com.mycompany.myapp.domain.serviceRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.customer.Customer;
 import com.mycompany.myapp.domain.location.Location;
+import com.mycompany.myapp.domain.serviceRequest.dto.ServiceStatusDTO;
+import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceStatusMapper;
 import com.mycompany.myapp.domain.transport.Transport;
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -241,6 +243,9 @@ public class ServiceRequest implements Serializable {
         this.transport = transport;
     }
 
+    public void updateRequestStatus(ServiceStatusDTO statusDTO){
+        this.serviceStatuses.add(ServiceStatusMapper.toEntity(statusDTO));
+    }
     public ServiceRequest transport(Transport transport) {
         this.setTransport(transport);
         return this;

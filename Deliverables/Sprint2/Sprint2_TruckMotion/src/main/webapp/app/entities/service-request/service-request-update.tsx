@@ -1,18 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
-import { isNumber, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-
-import { ILocation } from 'app/shared/model/location.model';
 import { getEntities as getLocations } from 'app/entities/location/location.reducer';
-import { ICustomer } from 'app/shared/model/customer.model';
 import { getEntities as getCustomers } from 'app/entities/customer/customer.reducer';
-import { IServiceRequest } from 'app/shared/model/service-request.model';
 import { getEntity, updateEntity, createEntity, reset } from './service-request.reducer';
 
 export const ServiceRequestUpdate = () => {
@@ -142,12 +137,6 @@ export const ServiceRequestUpdate = () => {
                       </option>
                     ))
                   : null}
-              </ValidatedField>
-              <ValidatedField id="service-request-status" name="status" data-cy="status" label="Status" type="select">
-                <option value="PENDING" key="PENDING">PENDING</option>
-                <option value="ACTIVE" key="ACTIVE">ACTIVE</option>
-                <option value="FINISHED" key="FINISHED">FINISHED</option>
-                <option value="CANCELED" key="CANCELED">CANCELED</option>
               </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/service-request" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />

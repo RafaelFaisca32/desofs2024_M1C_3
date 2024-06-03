@@ -73,6 +73,17 @@ export const deleteEntity = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
+export const updateEntityStatus = createAsyncThunk(
+  'serviceRequest/update_entity_status',
+  async ({ id, isApproved, driverId, startDate, endDate }: { id: string | number; isApproved: boolean, driverId :string, startDate : string , endDate : string }, thunkAPI) => {
+    const requestUrl = isApproved ? `${apiUrl}/${id}/${isApproved}/${driverId}/${startDate}/${endDate}` : `${apiUrl}/${id}/${isApproved}` ;
+    const result = await axios.put<IServiceRequest>(requestUrl, { isApproved, driverId, startDate, endDate });
+    thunkAPI.dispatch(getEntities({}));
+    return result.data;
+  },
+  { serializeError: serializeAxiosError },
+);
+
 // slice
 
 export const ServiceRequestSlice = createEntitySlice({

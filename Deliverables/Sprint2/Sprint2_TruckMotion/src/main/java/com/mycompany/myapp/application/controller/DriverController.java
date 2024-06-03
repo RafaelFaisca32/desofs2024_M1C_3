@@ -1,6 +1,7 @@
 package com.mycompany.myapp.application.controller;
 
 import com.mycompany.myapp.domain.driver.Driver;
+import com.mycompany.myapp.domain.driver.dto.AvailableDriverDTO;
 import com.mycompany.myapp.infrastructure.repository.jpa.DriverRepository;
 import com.mycompany.myapp.domain.driver.DriverService;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
@@ -133,6 +134,14 @@ public class DriverController {
         }
         log.debug("REST request to get all Drivers");
         return driverService.findAll();
+    }
+
+
+    @GetMapping("/freeDrivers/{startDate}/{endDate}")
+    public List<AvailableDriverDTO> getAllFreeDrivers( @PathVariable(value = "startDate", required = false) final String startDate,
+                                                       @PathVariable(value = "endDate", required = false) final String endDate) {
+
+        return driverService.findAllWhereTransportIsNullAtACertainTime(startDate,endDate);
     }
 
     /**

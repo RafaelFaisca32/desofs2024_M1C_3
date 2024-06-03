@@ -1,11 +1,25 @@
 package com.mycompany.myapp.domain.serviceRequest;
 
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
+import com.mycompany.myapp.domain.driver.Driver;
+import com.mycompany.myapp.domain.driver.DriverId;
+import com.mycompany.myapp.domain.driver.IDriverRepository;
+import com.mycompany.myapp.domain.driver.dto.DriverDTO;
+import com.mycompany.myapp.domain.driver.mapper.DriverMapper;
+import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceStatusDTO;
 import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceStatusMapper;
+import com.mycompany.myapp.domain.transport.TransportService;
+import com.mycompany.myapp.domain.transport.dto.TransportDTO;
+import com.mycompany.myapp.infrastructure.repository.jpa.DriverRepository;
 import com.mycompany.myapp.infrastructure.repository.jpa.ServiceRequestRepository;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
 import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceRequestMapper;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -28,11 +42,15 @@ public class ServiceRequestService {
 
     private final IServiceRequestRepository serviceRequestRepository;
 
-
+    private final TransportService transportService;
     private static final String ENTITY_NAME = "serviceRequest";
+    private final IDriverRepository driverRepository;
 
-    public ServiceRequestService(IServiceRequestRepository serviceRequestRepository) {
+    public ServiceRequestService(IServiceRequestRepository serviceRequestRepository, TransportService transportService,
+                                 IDriverRepository driverRepository) {
         this.serviceRequestRepository = serviceRequestRepository;
+        this.transportService = transportService;
+        this.driverRepository = driverRepository;
     }
 
     /**
@@ -161,5 +179,29 @@ public class ServiceRequestService {
     public void delete(UUID id) {
         log.debug("Request to delete ServiceRequest : {}", id);
         serviceRequestRepository.deleteById(new ServiceRequestId(id));
+    }
+    public void updateRequestServiceStatus(UUID id, boolean isApproved, UUID driverId, String startTime,String endTime) {
+        Optional<ServiceRequest> service = serviceRequestRepository.findById(new ServiceRequestId(id));
+        if(service.isPresent()){
+            ServiceRequest req = service.get();
+            ServiceRequestDTO reqDTO = ServiceRequestMapper.toDto(req);
+            if(isApproved){
+                req.updateRequestStatus(new ServiceStatusDTO(null,Status.ACTIVE,reqDTO));
+                Optional<Driver> driver = driverRepository.findById(new DriverId(driverId));
+                if(driver.isPresent()) {
+                    DriverDTO driverDTO = DriverMapper.toDto(driver.get());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+
+                    ZoneId zoneId = ZoneId.systemDefault();
+
+                    ZonedDateTime zonedStartTime = ZonedDateTime.of(LocalDateTime.parse(startTime, formatter), zoneId);
+                    ZonedDateTime zonedEndTime = ZonedDateTime.of(LocalDateTime.parse(endTime, formatter), zoneId);
+                    transportService.save(new TransportDTO(null,zonedStartTime, zonedEndTime, reqDTO.getLocation(),driverDTO, reqDTO));
+                }
+            }else{
+                req.updateRequestStatus(new ServiceStatusDTO(null,Status.CANCELED,reqDTO) );
+            }
+            serviceRequestRepository.save(req);
+        }
     }
 }

@@ -1,9 +1,18 @@
 package com.mycompany.myapp.domain.driver;
 
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
+import com.mycompany.myapp.domain.driver.dto.AvailableDriverDTO;
+import com.mycompany.myapp.domain.transport.ITransportRepository;
+import com.mycompany.myapp.domain.transport.TransportEndTime;
+import com.mycompany.myapp.domain.transport.TransportStartTime;
 import com.mycompany.myapp.infrastructure.repository.jpa.DriverRepository;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.driver.mapper.DriverMapper;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -25,11 +34,14 @@ public class DriverService {
     private final Logger log = LoggerFactory.getLogger(DriverService.class);
 
     private final IDriverRepository driverRepository;
+    private final ITransportRepository transportRepository;
+
 
     private static final String ENTITY_NAME = "driver";
 
-    public DriverService(IDriverRepository driverRepository) {
+    public DriverService(IDriverRepository driverRepository, ITransportRepository transportRepository) {
         this.driverRepository = driverRepository;
+        this.transportRepository = transportRepository;
     }
 
     /**
@@ -108,6 +120,23 @@ public class DriverService {
             .filter(driver -> driver.getTransport() == null)
             .map(DriverMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Transactional(readOnly = true)
+    public List<AvailableDriverDTO> findAllWhereTransportIsNullAtACertainTime(String startDate, String endDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        ZoneId zoneId = ZoneId.systemDefault();
+
+        TransportEndTime start = new TransportEndTime(ZonedDateTime.of(LocalDateTime.parse(startDate, formatter), zoneId));
+        TransportStartTime end = new TransportStartTime(ZonedDateTime.of(LocalDateTime.parse(endDate, formatter), zoneId));
+        List<Object[]> drivers = transportRepository.findFreeDrivers(start, end);
+        Object[] first = drivers.get(0);
+        String id = ((DriverId) first[0]).value().toString();
+        return drivers.stream()
+            .map(result ->  new AvailableDriverDTO(((DriverId) result[0]).value().toString(), (String) result[1]))
+            .collect(Collectors.toList());
+
+
     }
 
     /**

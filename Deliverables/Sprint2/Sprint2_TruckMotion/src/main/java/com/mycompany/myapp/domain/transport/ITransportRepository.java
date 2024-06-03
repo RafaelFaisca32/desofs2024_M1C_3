@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain.transport;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,4 +19,6 @@ public interface ITransportRepository {
     long count();
 
     boolean existsById(TransportId id);
+
+    List<Object[]> findFreeDrivers(TransportEndTime startDate, TransportStartTime endDate);
 }

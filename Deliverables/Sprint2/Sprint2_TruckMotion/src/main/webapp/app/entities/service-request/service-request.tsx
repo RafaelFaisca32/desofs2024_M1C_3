@@ -8,8 +8,10 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, SORT } from 'app/shared/util/pagination.constants';
 import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { updateEntityStatus } from './service-request.reducer';
 
 import { getEntities } from './service-request.reducer';
+import { useDispatch } from 'react-redux';
 
 export const ServiceRequest = () => {
   const dispatch = useAppDispatch();
@@ -21,6 +23,8 @@ export const ServiceRequest = () => {
 
   const serviceRequestList = useAppSelector(state => state.serviceRequest.entities);
   const loading = useAppSelector(state => state.serviceRequest.loading);
+
+ 
 
   const getAllEntities = () => {
     dispatch(
@@ -62,6 +66,10 @@ export const ServiceRequest = () => {
     } else {
       return order === ASC ? faSortUp : faSortDown;
     }
+  };
+
+  const updateStatus = (id: string, isApproved: boolean, driverId : string,  startDate : string , endDate : string) => {
+    dispatch(updateEntityStatus({ id, isApproved, driverId , startDate , endDate}));
   };
 
   return (
@@ -149,6 +157,12 @@ export const ServiceRequest = () => {
                   </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
+                      {serviceRequest.status ?  serviceRequest.status.status == 'PENDING' ? <><Button tag={Link} to={`/service-request/${serviceRequest.id}/statusUpdate`} color="success" size="sm" data-cy="entityDetailsButton">
+                        <FontAwesomeIcon icon="plus" /> <span className="d-none d-md-inline">Approve</span>
+                      </Button><Button onClick={() =>  updateStatus(serviceRequest.id, false, '', '', '')} color="danger" size="sm" data-cy="entityDetailsButton">
+                          <FontAwesomeIcon icon="ban" /> <span className="d-none d-md-inline">Reject</span>
+                        </Button></> : null : null}
+                    
                       <Button tag={Link} to={`/service-request/${serviceRequest.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                       </Button>
@@ -160,14 +174,6 @@ export const ServiceRequest = () => {
                         data-cy="entityEditButton"
                       >
                         <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                      </Button>
-                      <Button
-                        onClick={() => (window.location.href = `/service-request/${serviceRequest.id}/delete`)}
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
                       </Button>
                     </div>
                   </td>

@@ -14,6 +14,11 @@ const initialState: EntityState<IDriver> = {
   updateSuccess: false,
 };
 
+interface IAvailableDriverDTO {
+  id: string;
+  name: string;
+}
+
 const apiUrl = 'api/drivers';
 
 // Actions
@@ -22,6 +27,18 @@ export const getEntities = createAsyncThunk('driver/fetch_entity_list', async ({
   const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
   return axios.get<IDriver[]>(requestUrl);
 });
+
+export const fetchFreeDrivers = createAsyncThunk(
+  'driver/fetch_free_drivers',
+  async ({ startDate, endDate }: { startDate: string; endDate: string }) => {
+    const requestUrl = `${apiUrl}/freeDrivers/${startDate}/${endDate}`;
+    
+    const response = await axios.get<IAvailableDriverDTO[]>(requestUrl);
+    return response.data as IAvailableDriverDTO[];
+  }
+);
+
+
 
 export const getEntity = createAsyncThunk(
   'driver/fetch_entity',

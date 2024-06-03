@@ -1,10 +1,11 @@
 package com.mycompany.myapp.infrastructure.repository.jpa;
 
-import com.mycompany.myapp.domain.transport.ITransportRepository;
-import com.mycompany.myapp.domain.transport.Transport;
+import com.mycompany.myapp.domain.transport.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
-import com.mycompany.myapp.domain.transport.TransportId;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,13 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface TransportRepository extends JpaRepository<Transport, TransportId>, ITransportRepository {}
+public interface TransportRepository extends JpaRepository<Transport, TransportId>, ITransportRepository {
+
+    @Query("SELECT DISTINCT d.id,  CONCAT(u.internalUser.firstName, ' ', u.internalUser.lastName) as name " +
+        "FROM Driver d " +
+        "JOIN d.applicationUser u " +
+        "WHERE d.id NOT IN (" +
+        "SELECT t.driver.id FROM Transport t WHERE " +
+        "(t.startTime <= :endDate AND t.endTime >= :startDate))")
+    List<Object[]> findFreeDrivers(TransportEndTime startDate, TransportStartTime endDate);
+}

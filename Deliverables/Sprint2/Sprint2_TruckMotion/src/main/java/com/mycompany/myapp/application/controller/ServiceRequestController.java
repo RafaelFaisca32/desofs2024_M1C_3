@@ -88,6 +88,22 @@ public class ServiceRequestController {
             .body(serviceRequestDTO);
     }
 
+    @PutMapping({"/{id}/{isApproved}", "/{id}/{isApproved}/{driverId}/{startDate}/{endDate}"})
+    public ResponseEntity<ServiceRequestDTO> updateServiceRequestStatus(
+        @PathVariable(value = "id", required = true) final UUID id,
+        @PathVariable(value = "isApproved", required = true) final boolean isApproved,
+        @PathVariable(value = "driverId", required = false) final UUID driverId,
+        @PathVariable(value = "startDate", required = false) final String startDate,
+        @PathVariable(value = "endDate", required = false) final String endDate
+    ) {
+
+        log.debug("REST request to update ServiceRequest state : {}", id);
+        serviceRequestService.updateRequestServiceStatus(id,isApproved, driverId,startDate,endDate);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, String.valueOf(id)))
+            .body(null);
+    }
+
     /**
      * {@code PATCH  /service-requests/:id} : Partial updates given fields of an existing serviceRequest, field will ignore if it is null
      *

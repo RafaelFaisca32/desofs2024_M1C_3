@@ -7,6 +7,7 @@ import ServiceRequest from './service-request';
 import ServiceRequestDetail from './service-request-detail';
 import ServiceRequestUpdate from './service-request-update';
 import ServiceRequestDeleteDialog from './service-request-delete-dialog';
+import { ServiceRequestStatusUpdate } from './server-request-status-update';
 
 const ServiceRequestRoutes = () => (
   <ErrorBoundaryRoutes>
@@ -15,6 +16,7 @@ const ServiceRequestRoutes = () => (
     <Route path=":id">
       <Route index element={<ServiceRequestDetail />} />
       <Route path="edit" element={<ServiceRequestUpdate />} />
+      <Route path="statusUpdate" element={<ServiceRequestStatusUpdate></ServiceRequestStatusUpdate>}>   </Route>
       <Route path="delete" element={<ServiceRequestDeleteDialog />} />
     </Route>
   </ErrorBoundaryRoutes>
