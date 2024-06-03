@@ -6,6 +6,7 @@ import com.mycompany.myapp.domain.user.ApplicationUser;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A DTO for the {@link ApplicationUser} entity.
@@ -14,12 +15,9 @@ import java.util.Objects;
 public class ApplicationUserDTO implements Serializable {
 
     private Long id;
-
-    private String name;
+    private UUID uuidId;
 
     private LocalDate birthDate;
-
-    private String email;
 
     private Gender gender;
 
@@ -28,17 +26,15 @@ public class ApplicationUserDTO implements Serializable {
     public Long getId() {
         return id;
     }
+    public UUID getUuidId() {
+        return uuidId;
+    }
 
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setUuidId(UUID uuidId) {
+        this.uuidId = uuidId;
     }
 
     public LocalDate getBirthDate() {
@@ -47,14 +43,6 @@ public class ApplicationUserDTO implements Serializable {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Gender getGender() {
@@ -74,11 +62,10 @@ public class ApplicationUserDTO implements Serializable {
     }
 
     public ApplicationUserDTO(){}
-    public ApplicationUserDTO(Long id, String name, LocalDate birthDate, String email, Gender gender, UserDTO internalUser) {
+    public ApplicationUserDTO(Long id, UUID uuidId, LocalDate birthDate, Gender gender, UserDTO internalUser) {
         this.id = id;
-        this.name = name;
+        this.uuidId = uuidId;
         this.birthDate = birthDate;
-        this.email = email;
         this.gender = gender;
         this.internalUser = internalUser;
     }
@@ -109,9 +96,7 @@ public class ApplicationUserDTO implements Serializable {
     public String toString() {
         return "ApplicationUserDTO{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
             ", birthDate='" + getBirthDate() + "'" +
-            ", email='" + getEmail() + "'" +
             ", gender='" + getGender() + "'" +
             ", internalUser=" + getInternalUser() +
             "}";

@@ -24,6 +24,11 @@ public class UserDTO implements Serializable {
         this.login = user.getLogin();
     }
 
+    public UserDTO(Long id, String login) {
+        this.id = id;
+        this.login = login;
+    }
+
     public Long getId() {
         return id;
     }

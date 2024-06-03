@@ -1,7 +1,13 @@
 package com.mycompany.myapp.application.controller;
 
 import com.mycompany.myapp.config.Constants;
+import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
+import com.mycompany.myapp.domain.driver.dto.DriverDTO;
+import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
 import com.mycompany.myapp.domain.user.User;
+import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
+import com.mycompany.myapp.domain.user.dto.CreateUserDTO;
+import com.mycompany.myapp.domain.user.mapper.UserMapper;
 import com.mycompany.myapp.infrastructure.repository.jpa.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.domain.shared.MailService;
@@ -11,6 +17,7 @@ import com.mycompany.myapp.application.controller.errors.BadRequestAlertExceptio
 import com.mycompany.myapp.application.controller.errors.EmailAlreadyUsedException;
 import com.mycompany.myapp.application.controller.errors.LoginAlreadyUsedException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -86,9 +93,12 @@ public class UserController {
 
     private final MailService mailService;
 
-    public UserController(UserService userService, MailService mailService) {
+    private final UserMapper userMapper;
+
+    public UserController(UserService userService, MailService mailService, UserMapper userMapper) {
         this.userService = userService;
         this.mailService = mailService;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -105,18 +115,46 @@ public class UserController {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<User> createUser(@Valid @RequestBody AdminUserDTO userDTO) throws URISyntaxException {
-        log.debug("REST request to save User : {}", userDTO);
+    public ResponseEntity<User> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws URISyntaxException {
+
+        AdminUserDTO userDTO = createUserDTO.getAdminUserDTO();
+        ApplicationUserDTO applicationUserDTO = createUserDTO.getApplicationUserDTO();
+        DriverDTO driverDTO = createUserDTO.getDriverDTO();
+        CustomerDTO customerDTO = createUserDTO.getCustomerDTO();
+        ManagerDTO managerDTO = createUserDTO.getManagerDTO();
+
+
+        log.debug("REST request to save User : {}, " +
+                "with Application User : {}, " +
+                "with Driver : {}, " +
+                "with Customer : {}, " +
+                "with Manager : {}",
+            userDTO,applicationUserDTO,driverDTO,customerDTO,managerDTO);
+
 
         if (userDTO.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
+        } else if (applicationUserDTO == null) {
+            throw new BadRequestAlertException("User must contain Application User information", "userManagement", "noapplicationuserinfo");
+        } else if (userDTO.getAuthorities() == null) {
+            throw new BadRequestAlertException("User must contain at least 1 role", "userManagement", "nouserrole");
+        } else if (userDTO.getAuthorities().contains(AuthoritiesConstants.DRIVER) && driverDTO == null) {
+            throw new BadRequestAlertException("A driver must contain its information", "userManagement", "nodriverinfo");
+        } else if(userDTO.getAuthorities().contains(AuthoritiesConstants.MANAGER) && managerDTO == null) {
+            throw new BadRequestAlertException("A manager must contain its information", "userManagement", "nomanagerinfo");
+        } else if(userDTO.getAuthorities().contains(AuthoritiesConstants.CUSTOMER) && customerDTO == null){
+            throw new BadRequestAlertException("A customer must contain its information", "userManagement", "nocustomerinfo");
         } else if (userService.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
         } else if (userService.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            User newUser = userService.createUser(userDTO);
+
+
+            //User newUser = userService.createUser(userDTO);
+            User newUser = userService.createUserWithApplicationUser(userDTO,applicationUserDTO,driverDTO,customerDTO, managerDTO);
+
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
                 .headers(

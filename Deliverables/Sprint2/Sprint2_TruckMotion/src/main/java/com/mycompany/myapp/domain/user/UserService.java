@@ -1,6 +1,14 @@
 package com.mycompany.myapp.domain.user;
 
 import com.mycompany.myapp.config.Constants;
+import com.mycompany.myapp.domain.customer.CustomerService;
+import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
+import com.mycompany.myapp.domain.driver.DriverService;
+import com.mycompany.myapp.domain.driver.dto.DriverDTO;
+import com.mycompany.myapp.domain.manager.ManagerService;
+import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
+import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
+import com.mycompany.myapp.domain.user.mapper.UserMapper;
 import com.mycompany.myapp.infrastructure.repository.jpa.AuthorityRepository;
 import com.mycompany.myapp.infrastructure.repository.jpa.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
@@ -19,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.security.RandomUtil;
 
@@ -33,22 +42,43 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final UserMapper userMapper;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
 
     private final CacheManager cacheManager;
 
+    private final ApplicationUserService applicationUserService;
+
+    private final CustomerService customerService;
+
+    private final DriverService driverService;
+
+    private final ManagerService managerService;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        ApplicationUserService applicationUserService,
+        DriverService driverService,
+        ManagerService managerService,
+        CustomerService customerService,
+        UserMapper userMapper
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.applicationUserService = applicationUserService;
+        this.driverService = driverService;
+        this.managerService = managerService;
+        this.customerService = customerService;
+        this.userMapper = userMapper;
+
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -144,35 +174,75 @@ public class UserService {
         return true;
     }
 
-    public User createUser(AdminUserDTO userDTO) {
-        User user = new User();
-        user.setLogin(userDTO.getLogin().toLowerCase());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        if (userDTO.getEmail() != null) {
-            user.setEmail(userDTO.getEmail().toLowerCase());
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    public User createUserWithApplicationUser(AdminUserDTO userDTO,
+                                              ApplicationUserDTO applicationUserDTO,
+                                              DriverDTO driverDTO,
+                                              CustomerDTO customerDTO,
+                                              ManagerDTO managerDTO
+                                              )
+    {
+        User user = createUser(userDTO);
+
+        applicationUserDTO.setId(user.getId());
+        applicationUserDTO.setInternalUser(userMapper.userToUserDTO(user));
+
+        ApplicationUserDTO savedApplicationUserDTO = applicationUserService.save(applicationUserDTO);
+        if( driverDTO != null &&
+            userDTO.getAuthorities() != null &&
+            userDTO.getAuthorities().contains(AuthoritiesConstants.DRIVER)
+        ){
+            driverDTO.setApplicationUser(savedApplicationUserDTO);
+            driverService.save(driverDTO);
         }
-        user.setImageUrl(userDTO.getImageUrl());
-        if (userDTO.getLangKey() == null) {
-            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
-        } else {
-            user.setLangKey(userDTO.getLangKey());
+        if( customerDTO != null &&
+            userDTO.getAuthorities() != null &&
+            userDTO.getAuthorities().contains(AuthoritiesConstants.CUSTOMER)
+        ){
+            customerDTO.setApplicationUser(savedApplicationUserDTO);
+            customerService.save(customerDTO);
         }
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-        user.setPassword(encryptedPassword);
-        user.setResetKey(RandomUtil.generateResetKey());
-        user.setResetDate(Instant.now());
-        user.setActivated(true);
+        if( managerDTO != null &&
+            userDTO.getAuthorities() != null &&
+            userDTO.getAuthorities().contains(AuthoritiesConstants.MANAGER)
+        ){
+            managerDTO.setApplicationUser(savedApplicationUserDTO);
+            managerService.save(managerDTO);
+        }
+
+        return user;
+
+    }
+
+    private User newUser(AdminUserDTO userDTO){
+        Set<Authority> authorities = new HashSet<>();
         if (userDTO.getAuthorities() != null) {
-            Set<Authority> authorities = userDTO
+            authorities = userDTO
                 .getAuthorities()
                 .stream()
                 .map(authorityRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
-            user.setAuthorities(authorities);
         }
+
+        return new User(
+            userDTO.getLogin().toLowerCase(),
+            userDTO.getFirstName(),
+            userDTO.getLastName(),
+            userDTO.getEmail() != null ? userDTO.getEmail().toLowerCase() : null,
+            userDTO.getImageUrl(),
+            userDTO.getLangKey() == null ? Constants.DEFAULT_LANGUAGE : userDTO.getLangKey(),
+            passwordEncoder.encode(RandomUtil.generatePassword()),
+            RandomUtil.generateResetKey(),
+            Instant.now(),
+            true,
+            authorities
+        );
+    }
+
+    public User createUser(AdminUserDTO userDTO) {
+        User user = newUser(userDTO);
         userRepository.save(user);
         this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);

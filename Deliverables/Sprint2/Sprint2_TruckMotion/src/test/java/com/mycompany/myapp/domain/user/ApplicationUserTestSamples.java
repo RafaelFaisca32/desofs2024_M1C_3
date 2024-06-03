@@ -7,18 +7,18 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ApplicationUserTestSamples {
 
     private static final Random random = new Random();
-    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
 
     public static ApplicationUser getApplicationUserSample1() {
 
-        return new ApplicationUser().id(1L).name("name1").email("email1");
+        return new ApplicationUser().id(1L).uuidid(new ApplicationUserId(UUID.fromString("6d232e43-bf74-4885-98e7-572cb76243df")));
     }
 
     public static ApplicationUser getApplicationUserSample2() {
-        return new ApplicationUser().id(2L).name("name2").email("email2");
+        return new ApplicationUser().id(2L).uuidid(new ApplicationUserId(UUID.fromString("727e0286-8bbe-45e5-9402-f8e8ece80435")));
     }
 
     public static ApplicationUser getApplicationUserRandomSampleGenerator() {
-        return new ApplicationUser().id(longCount.incrementAndGet()).name(UUID.randomUUID().toString()).email(UUID.randomUUID().toString());
+        return new ApplicationUser().id(longCount.incrementAndGet()).uuidid(new ApplicationUserId(UUID.randomUUID()));
     }
 }
