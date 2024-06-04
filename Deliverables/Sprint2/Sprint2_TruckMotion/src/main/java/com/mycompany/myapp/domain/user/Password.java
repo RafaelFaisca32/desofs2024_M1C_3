@@ -7,7 +7,7 @@ public class Password {
     private String password;
 
     public Password(String password) {
-        this.password = password;
+        this.password = isPasswordValid(password);
     }
 
 
@@ -36,5 +36,15 @@ public class Password {
     @Override
     public String toString() {
         return password;
+    }
+
+    public String isPasswordValid(String password){
+        if(password.length() < 12){
+            throw new RuntimeException("Password needs to be at least 12 characters long");
+        } else if(password.length() > 128){
+            throw new RuntimeException("Password has more than 128 characters");
+        } else {
+            return password;
+        }
     }
 }

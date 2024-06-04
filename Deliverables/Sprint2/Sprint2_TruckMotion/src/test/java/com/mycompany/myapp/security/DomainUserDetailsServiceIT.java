@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import com.mycompany.myapp.IntegrationTest;
-import com.mycompany.myapp.domain.user.User;
+import com.mycompany.myapp.domain.user.*;
 import com.mycompany.myapp.infrastructure.repository.jpa.UserRepository;
 import java.util.Locale;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.shaded.org.checkerframework.checker.units.qual.A;
 
 /**
  * Integrations tests for {@link DomainUserDetailsService}.
@@ -40,33 +41,33 @@ class DomainUserDetailsServiceIT {
     @BeforeEach
     public void init() {
         User userOne = new User();
-        userOne.setLogin(USER_ONE_LOGIN);
-        userOne.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        userOne.setActivated(true);
-        userOne.setEmail(USER_ONE_EMAIL);
-        userOne.setFirstName("userOne");
-        userOne.setLastName("doe");
-        userOne.setLangKey("en");
+        userOne.setLogin(new Login(USER_ONE_LOGIN));
+        userOne.setPassword(new Password(RandomStringUtils.randomAlphanumeric(60)));
+        userOne.setActivated(new Activated(true));
+        userOne.setEmail(new Email(USER_ONE_EMAIL));
+        userOne.setFirstName(new FirstName("userOne"));
+        userOne.setLastName(new LastName("doe"));
+        userOne.setLangKey(new LangKey("en"));
         userRepository.save(userOne);
 
         User userTwo = new User();
-        userTwo.setLogin(USER_TWO_LOGIN);
-        userTwo.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        userTwo.setActivated(true);
-        userTwo.setEmail(USER_TWO_EMAIL);
-        userTwo.setFirstName("userTwo");
-        userTwo.setLastName("doe");
-        userTwo.setLangKey("en");
+        userTwo.setLogin(new Login(USER_TWO_LOGIN));
+        userTwo.setPassword(new Password(RandomStringUtils.randomAlphanumeric(60)));
+        userTwo.setActivated(new Activated(true));
+        userTwo.setEmail(new Email(USER_TWO_EMAIL));
+        userTwo.setFirstName(new FirstName("userTwo"));
+        userTwo.setLastName(new LastName("doe"));
+        userTwo.setLangKey(new LangKey("en"));
         userRepository.save(userTwo);
 
         User userThree = new User();
-        userThree.setLogin(USER_THREE_LOGIN);
-        userThree.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        userThree.setActivated(false);
-        userThree.setEmail(USER_THREE_EMAIL);
-        userThree.setFirstName("userThree");
-        userThree.setLastName("doe");
-        userThree.setLangKey("en");
+        userThree.setLogin(new Login(USER_THREE_LOGIN));
+        userThree.setPassword(new Password(RandomStringUtils.randomAlphanumeric(60)));
+        userThree.setActivated(new Activated(false));
+        userThree.setEmail(new Email(USER_THREE_EMAIL));
+        userThree.setFirstName(new FirstName("userThree"));
+        userThree.setLastName(new LastName("doe"));
+        userThree.setLangKey(new LangKey("en"));
         userRepository.save(userThree);
     }
 

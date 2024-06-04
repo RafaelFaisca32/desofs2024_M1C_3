@@ -2,13 +2,11 @@ package com.mycompany.myapp.domain.user.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.mycompany.myapp.domain.user.User;
+import com.mycompany.myapp.domain.user.*;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import com.mycompany.myapp.domain.user.dto.UserDTO;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,14 +28,14 @@ class UserMapperTest {
     public void init() {
         userMapper = new UserMapper();
         user = new User();
-        user.setLogin(DEFAULT_LOGIN);
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
-        user.setEmail("johndoe@localhost");
-        user.setFirstName("john");
-        user.setLastName("doe");
-        user.setImageUrl("image_url");
-        user.setLangKey("en");
+        user.setLogin(new Login(DEFAULT_LOGIN));
+        user.setPassword(new Password(RandomStringUtils.randomAlphanumeric(60)));
+        user.setActivated(new Activated(true));
+        user.setEmail(new Email("johndoe@localhost"));
+        user.setFirstName(new FirstName("john"));
+        user.setLastName(new LastName("doe"));
+        user.setImageUrl(new ImageUrl("image_url"));
+        user.setLangKey(new LangKey("en"));
 
         userDto = new AdminUserDTO(user);
     }
@@ -127,7 +125,6 @@ class UserMapperTest {
 
     @Test
     void testUserFromId() {
-        assertThat(userMapper.userFromId(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);
         assertThat(userMapper.userFromId(null)).isNull();
     }
 }

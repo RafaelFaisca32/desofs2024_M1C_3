@@ -8,8 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.application.controller.UserController;
-import com.mycompany.myapp.domain.user.Authority;
-import com.mycompany.myapp.domain.user.User;
+import com.mycompany.myapp.domain.user.*;
 import com.mycompany.myapp.infrastructure.repository.jpa.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
@@ -94,14 +93,14 @@ class UserControllerIT {
      */
     public static User createEntity(EntityManager em) {
         User user = new User();
-        user.setLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
-        user.setEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
-        user.setFirstName(DEFAULT_FIRSTNAME);
-        user.setLastName(DEFAULT_LASTNAME);
-        user.setImageUrl(DEFAULT_IMAGEURL);
-        user.setLangKey(DEFAULT_LANGKEY);
+        user.setLogin(new Login(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5)));
+        user.setPassword(new Password(RandomStringUtils.randomAlphanumeric(60)));
+        user.setActivated(new Activated(true));
+        user.setEmail(new Email(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL));
+        user.setFirstName(new FirstName(DEFAULT_FIRSTNAME));
+        user.setLastName(new LastName(DEFAULT_LASTNAME));
+        user.setImageUrl(new ImageUrl(DEFAULT_IMAGEURL));
+        user.setLangKey(new LangKey(DEFAULT_LANGKEY));
         return user;
     }
 
@@ -111,8 +110,8 @@ class UserControllerIT {
     public static User initTestUser(UserRepository userRepository, EntityManager em) {
         userRepository.deleteAll();
         User user = createEntity(em);
-        user.setLogin(DEFAULT_LOGIN);
-        user.setEmail(DEFAULT_EMAIL);
+        user.setLogin(new Login(DEFAULT_LOGIN));
+        user.setEmail(new Email(DEFAULT_EMAIL));
         return user;
     }
 
@@ -145,12 +144,12 @@ class UserControllerIT {
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeCreate + 1);
             User testUser = users.get(users.size() - 1);
-            assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
-            assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-            assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-            assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
-            assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-            assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+            assertThat(testUser.getLogin().getLogin()).isEqualTo(DEFAULT_LOGIN);
+            assertThat(testUser.getFirstName().getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+            assertThat(testUser.getLastName().getLastName()).isEqualTo(DEFAULT_LASTNAME);
+            assertThat(testUser.getEmail().getEmail()).isEqualTo(DEFAULT_EMAIL);
+            assertThat(testUser.getImageUrl().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+            assertThat(testUser.getLangKey().getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         });
     }
 
@@ -160,7 +159,7 @@ class UserControllerIT {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         AdminUserDTO user = new AdminUserDTO();
-        user.setId(DEFAULT_ID);
+        user.setId(new UUID(0L, DEFAULT_ID));
         user.setLogin(DEFAULT_LOGIN);
         user.setFirstName(DEFAULT_FIRSTNAME);
         user.setLastName(DEFAULT_LASTNAME);
@@ -290,12 +289,12 @@ class UserControllerIT {
         User updatedUser = userRepository.findById(user.getId()).orElseThrow();
 
         AdminUserDTO user = new AdminUserDTO();
-        user.setId(updatedUser.getId());
-        user.setLogin(updatedUser.getLogin());
+        user.setId(updatedUser.getId().value());
+        user.setLogin(updatedUser.getLogin().getLogin());
         user.setFirstName(UPDATED_FIRSTNAME);
         user.setLastName(UPDATED_LASTNAME);
         user.setEmail(UPDATED_EMAIL);
-        user.setActivated(updatedUser.isActivated());
+        user.setActivated(updatedUser.isActivated().getActivated());
         user.setImageUrl(UPDATED_IMAGEURL);
         user.setLangKey(UPDATED_LANGKEY);
         user.setCreatedBy(updatedUser.getCreatedBy());
@@ -311,12 +310,12 @@ class UserControllerIT {
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            User testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
-            assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
-            assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
-            assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
-            assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
+            User testUser = users.stream().filter(usr -> usr.getId().value().equals(updatedUser.getId().value())).findFirst().orElseThrow();
+            assertThat(testUser.getFirstName().getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
+            assertThat(testUser.getLastName().getLastName()).isEqualTo(UPDATED_LASTNAME);
+            assertThat(testUser.getEmail().getEmail()).isEqualTo(UPDATED_EMAIL);
+            assertThat(testUser.getImageUrl().getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
+            assertThat(testUser.getLangKey().getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
     }
 
@@ -331,12 +330,12 @@ class UserControllerIT {
         User updatedUser = userRepository.findById(user.getId()).orElseThrow();
 
         AdminUserDTO user = new AdminUserDTO();
-        user.setId(updatedUser.getId());
+        user.setId(updatedUser.getId().value());
         user.setLogin(UPDATED_LOGIN);
         user.setFirstName(UPDATED_FIRSTNAME);
         user.setLastName(UPDATED_LASTNAME);
         user.setEmail(UPDATED_EMAIL);
-        user.setActivated(updatedUser.isActivated());
+        user.setActivated(updatedUser.isActivated().getActivated());
         user.setImageUrl(UPDATED_IMAGEURL);
         user.setLangKey(UPDATED_LANGKEY);
         user.setCreatedBy(updatedUser.getCreatedBy());
@@ -352,13 +351,13 @@ class UserControllerIT {
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            User testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
-            assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
-            assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
-            assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
-            assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
-            assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
+            User testUser = users.stream().filter(usr -> usr.getId().value().equals(updatedUser.getId().value())).findFirst().orElseThrow();
+            assertThat(testUser.getLogin().getLogin()).isEqualTo(UPDATED_LOGIN);
+            assertThat(testUser.getFirstName().getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
+            assertThat(testUser.getLastName().getLastName()).isEqualTo(UPDATED_LASTNAME);
+            assertThat(testUser.getEmail().getEmail()).isEqualTo(UPDATED_EMAIL);
+            assertThat(testUser.getImageUrl().getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
+            assertThat(testUser.getLangKey().getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
     }
 
@@ -369,28 +368,28 @@ class UserControllerIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
-        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
-        anotherUser.setFirstName("java");
-        anotherUser.setLastName("hipster");
-        anotherUser.setImageUrl("");
-        anotherUser.setLangKey("en");
+        anotherUser.setLogin(new Login("jhipster"));
+        anotherUser.setPassword(new Password(RandomStringUtils.randomAlphanumeric(60)));
+        anotherUser.setActivated(new Activated(true));
+        anotherUser.setEmail(new Email("jhipster@localhost"));
+        anotherUser.setFirstName(new FirstName("java"));
+        anotherUser.setLastName(new LastName("hipster"));
+        anotherUser.setImageUrl(new ImageUrl(""));
+        anotherUser.setLangKey(new LangKey("en"));
         userRepository.saveAndFlush(anotherUser);
 
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).orElseThrow();
 
         AdminUserDTO user = new AdminUserDTO();
-        user.setId(updatedUser.getId());
-        user.setLogin(updatedUser.getLogin());
-        user.setFirstName(updatedUser.getFirstName());
-        user.setLastName(updatedUser.getLastName());
+        user.setId(updatedUser.getId().value());
+        user.setLogin(updatedUser.getLogin().getLogin());
+        user.setFirstName(updatedUser.getFirstName().getFirstName());
+        user.setLastName(updatedUser.getLastName().getLastName());
         user.setEmail("jhipster@localhost"); // this email should already be used by anotherUser
-        user.setActivated(updatedUser.isActivated());
-        user.setImageUrl(updatedUser.getImageUrl());
-        user.setLangKey(updatedUser.getLangKey());
+        user.setActivated(updatedUser.isActivated().getActivated());
+        user.setImageUrl(updatedUser.getImageUrl().getImageUrl());
+        user.setLangKey(updatedUser.getLangKey().getLangKey());
         user.setCreatedBy(updatedUser.getCreatedBy());
         user.setCreatedDate(updatedUser.getCreatedDate());
         user.setLastModifiedBy(updatedUser.getLastModifiedBy());
@@ -409,28 +408,28 @@ class UserControllerIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
-        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
-        anotherUser.setFirstName("java");
-        anotherUser.setLastName("hipster");
-        anotherUser.setImageUrl("");
-        anotherUser.setLangKey("en");
+        anotherUser.setLogin(new Login("jhipster"));
+        anotherUser.setPassword(new Password(RandomStringUtils.randomAlphanumeric(60)));
+        anotherUser.setActivated(new Activated(true));
+        anotherUser.setEmail(new Email("jhipster@localhost"));
+        anotherUser.setFirstName(new FirstName("java"));
+        anotherUser.setLastName(new LastName("hipster"));
+        anotherUser.setImageUrl(new ImageUrl(""));
+        anotherUser.setLangKey(new LangKey("en"));
         userRepository.saveAndFlush(anotherUser);
 
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).orElseThrow();
 
         AdminUserDTO user = new AdminUserDTO();
-        user.setId(updatedUser.getId());
+        user.setId(updatedUser.getId().value());
         user.setLogin("jhipster"); // this login should already be used by anotherUser
-        user.setFirstName(updatedUser.getFirstName());
-        user.setLastName(updatedUser.getLastName());
-        user.setEmail(updatedUser.getEmail());
-        user.setActivated(updatedUser.isActivated());
-        user.setImageUrl(updatedUser.getImageUrl());
-        user.setLangKey(updatedUser.getLangKey());
+        user.setFirstName(updatedUser.getFirstName().getFirstName());
+        user.setLastName(updatedUser.getLastName().getLastName());
+        user.setEmail(updatedUser.getEmail().getEmail());
+        user.setActivated(updatedUser.isActivated().getActivated());
+        user.setImageUrl(updatedUser.getImageUrl().getImageUrl());
+        user.setLangKey(updatedUser.getLangKey().getLangKey());
         user.setCreatedBy(updatedUser.getCreatedBy());
         user.setCreatedDate(updatedUser.getCreatedDate());
         user.setLastModifiedBy(updatedUser.getLastModifiedBy());
@@ -464,11 +463,11 @@ class UserControllerIT {
     void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(User.class);
         User user1 = new User();
-        user1.setId(DEFAULT_ID);
+        user1.setId(new UserId(new UUID(0L,DEFAULT_ID)));
         User user2 = new User();
         user2.setId(user1.getId());
         assertThat(user1).isEqualTo(user2);
-        user2.setId(2L);
+        user2.setId(new UserId(new UUID(0L,2L)));
         assertThat(user1).isNotEqualTo(user2);
         user1.setId(null);
         assertThat(user1).isNotEqualTo(user2);
@@ -477,7 +476,7 @@ class UserControllerIT {
     @Test
     void testUserDTOtoUser() {
         AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setId(DEFAULT_ID);
+        userDTO.setId(new UUID(0L,DEFAULT_ID));
         userDTO.setLogin(DEFAULT_LOGIN);
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
@@ -490,14 +489,14 @@ class UserControllerIT {
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.DRIVER));
 
         User user = userMapper.userDTOToUser(userDTO);
-        assertThat(user.getId()).isEqualTo(DEFAULT_ID);
-        assertThat(user.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-        assertThat(user.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-        assertThat(user.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(user.isActivated()).isTrue();
-        assertThat(user.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-        assertThat(user.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+        assertThat(user.getId().value()).isEqualTo(new UUID(0L,DEFAULT_ID));
+        assertThat(user.getLogin().getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(user.getFirstName().getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(user.getLastName().getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(user.getEmail().getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(user.isActivated().getActivated()).isTrue();
+        assertThat(user.getImageUrl().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        assertThat(user.getLangKey().getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         assertThat(user.getCreatedBy()).isNull();
         assertThat(user.getCreatedDate()).isNotNull();
         assertThat(user.getLastModifiedBy()).isNull();
@@ -507,7 +506,7 @@ class UserControllerIT {
 
     @Test
     void testUserToUserDTO() {
-        user.setId(DEFAULT_ID);
+        user.setId(new UserId(new UUID(0L,DEFAULT_ID)));
         user.setCreatedBy(DEFAULT_LOGIN);
         user.setCreatedDate(Instant.now());
         user.setLastModifiedBy(DEFAULT_LOGIN);
@@ -520,7 +519,7 @@ class UserControllerIT {
 
         AdminUserDTO userDTO = userMapper.userToAdminUserDTO(user);
 
-        assertThat(userDTO.getId()).isEqualTo(DEFAULT_ID);
+        assertThat(userDTO.getId()).isEqualTo(new UUID(0L,DEFAULT_ID));
         assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(userDTO.getLastName()).isEqualTo(DEFAULT_LASTNAME);
