@@ -9,7 +9,9 @@ import { ASC, DESC, SORT } from 'app/shared/util/pagination.constants';
 import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntities } from './transport.reducer';
+import { getEntities, partialUpdateEntity } from './transport.reducer';
+import { updateEntityStatus } from 'app/entities/service-request/service-request.reducer';
+import dayjs from 'dayjs';
 
 export const Transport = () => {
   const dispatch = useAppDispatch();
@@ -64,6 +66,16 @@ export const Transport = () => {
     }
   };
 
+  const startService = (id) => {
+    const updatedEntity = {
+      id,
+      startTime: dayjs(),
+      endTime: dayjs(),
+    };
+
+    dispatch(partialUpdateEntity(updatedEntity));
+  };
+
   return (
     <div>
       <h2 id="transport-heading" data-cy="TransportHeading">
@@ -82,63 +94,74 @@ export const Transport = () => {
         {transportList && transportList.length > 0 ? (
           <Table responsive>
             <thead>
-              <tr>
-                <th >
-                  Transport option <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
-                </th>
-                <th className="hand" onClick={sort('startTime')}>
-                  Start Time <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
-                </th>
-                <th className="hand" onClick={sort('endTime')}>
-                  End Time <FontAwesomeIcon icon={getSortIconByFieldName('endTime')} />
-                </th>
-                <th>
-                  Location Coordinates(x,y,z)<FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  Service Request Name <FontAwesomeIcon icon="sort" />
-                </th>
-                <th />
-              </tr>
+            <tr>
+              <th>
+                Transport option <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
+              </th>
+              <th className="hand" onClick={sort('startTime')}>
+                Start Time <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
+              </th>
+              <th className="hand" onClick={sort('endTime')}>
+                End Time <FontAwesomeIcon icon={getSortIconByFieldName('endTime')} />
+              </th>
+              <th>
+                Location Coordinates(x,y,z)<FontAwesomeIcon icon="sort" />
+              </th>
+              <th>
+                Service Request Name <FontAwesomeIcon icon="sort" />
+              </th>
+              <th />
+            </tr>
             </thead>
             <tbody>
-              {transportList.map((transport, i) => (
-                <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/transport/${transport.id}`} color="link" size="sm">
-                      {i}
+            {transportList.map((transport, i) => (
+              <tr key={`entity-${i}`} data-cy="entityTable">
+                <td>
+                  <Button tag={Link} to={`/transport/${transport.id}`} color="link" size="sm">
+                    {i}
+                  </Button>
+                </td>
+                <td>{transport.startTime ? <TextFormat type="date" value={transport.startTime} format={APP_DATE_FORMAT} /> : null}</td>
+                <td>{transport.endTime ? <TextFormat type="date" value={transport.endTime} format={APP_DATE_FORMAT} /> : null}</td>
+                <td>{transport.location ? <Link to={`/location/${transport.location.id}`}>{transport.location.coordX +"--" +transport.location.coordY+"--" +transport.location.coordZ}</Link> : ''}</td>
+                <td>
+                  {transport.serviceRequest ? (
+                    <Link to={`/service-request/${transport.serviceRequest.id}`}>{transport.serviceRequest.serviceName}</Link>
+                  ) : (
+                    ''
+                  )}
+                </td>
+                <td className="text-end">
+                  <div className="btn-group flex-btn-group-container">
+                    <Button
+                      onClick={() => startService(transport.id)}
+                      replace
+                      style={{
+                        backgroundColor: transport.startTime ? '#FFD700' : 'green', // Amarelo neutro
+                        borderColor: transport.startTime ? '#FFD700' : 'green',
+                        color: 'white',
+                      }}
+                    >
+                      <FontAwesomeIcon icon="plus" /> <span className="d-none d-md-inline">{transport.startTime ? 'In Progress' : 'Start Service'}</span>
                     </Button>
-                  </td>
-                  <td>{transport.startTime ? <TextFormat type="date" value={transport.startTime} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{transport.endTime ? <TextFormat type="date" value={transport.endTime} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{transport.location ? <Link to={`/location/${transport.location.id}`}>{transport.location.coordX +"--" +transport.location.coordY+"--" +transport.location.coordZ}</Link> : ''}</td>
-                  <td>
-                    {transport.serviceRequest ? (
-                      <Link to={`/service-request/${transport.serviceRequest.id}`}>{transport.serviceRequest.serviceName}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
-                  <td className="text-end">
-                    <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/transport/${transport.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                      </Button>
-                      <Button tag={Link} to={`/transport/${transport.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                      </Button>
-                      <Button
-                        onClick={() => (window.location.href = `/transport/${transport.id}/delete`)}
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    <Button tag={Link} to={`/transport/${transport.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                      <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                    </Button>
+                    <Button tag={Link} to={`/transport/${transport.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
+                      <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                    </Button>
+                    <Button
+                      onClick={() => (window.location.href = `/transport/${transport.id}/delete`)}
+                      color="danger"
+                      size="sm"
+                      data-cy="entityDeleteButton"
+                    >
+                      <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
             </tbody>
           </Table>
         ) : (
