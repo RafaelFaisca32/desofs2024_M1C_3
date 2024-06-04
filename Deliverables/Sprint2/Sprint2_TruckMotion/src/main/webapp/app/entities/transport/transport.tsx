@@ -70,6 +70,15 @@ export const Transport = () => {
     const updatedEntity = {
       id,
       startTime: dayjs(),
+      endTime: null,
+    };
+
+    dispatch(partialUpdateEntity(updatedEntity));
+  };
+
+  const endService = (id) => {
+    const updatedEntity = {
+      id,
       endTime: dayjs(),
     };
 
@@ -114,54 +123,69 @@ export const Transport = () => {
             </tr>
             </thead>
             <tbody>
-            {transportList.map((transport, i) => (
-              <tr key={`entity-${i}`} data-cy="entityTable">
-                <td>
-                  <Button tag={Link} to={`/transport/${transport.id}`} color="link" size="sm">
-                    {i}
-                  </Button>
-                </td>
-                <td>{transport.startTime ? <TextFormat type="date" value={transport.startTime} format={APP_DATE_FORMAT} /> : null}</td>
-                <td>{transport.endTime ? <TextFormat type="date" value={transport.endTime} format={APP_DATE_FORMAT} /> : null}</td>
-                <td>{transport.location ? <Link to={`/location/${transport.location.id}`}>{transport.location.coordX +"--" +transport.location.coordY+"--" +transport.location.coordZ}</Link> : ''}</td>
-                <td>
-                  {transport.serviceRequest ? (
-                    <Link to={`/service-request/${transport.serviceRequest.id}`}>{transport.serviceRequest.serviceName}</Link>
-                  ) : (
-                    ''
-                  )}
-                </td>
-                <td className="text-end">
-                  <div className="btn-group flex-btn-group-container">
-                    <Button
-                      onClick={() => startService(transport.id)}
-                      replace
-                      style={{
-                        backgroundColor: transport.startTime ? '#FFD700' : 'green', // Amarelo neutro
-                        borderColor: transport.startTime ? '#FFD700' : 'green',
-                        color: 'white',
-                      }}
-                    >
-                      <FontAwesomeIcon icon="plus" /> <span className="d-none d-md-inline">{transport.startTime ? 'In Progress' : 'Start Service'}</span>
+            {transportList.map((transport, i) => {
+              let buttonColor = 'green';
+              let buttonText = 'Start Service';
+              let onClickHandler = () => startService(transport.id);
+
+              if (transport.startTime && !transport.endTime) {
+                buttonColor = 'yellow';
+                buttonText = 'In Progress';
+                onClickHandler = () => endService(transport.id);
+              } else if (transport.startTime && transport.endTime) {
+                buttonColor = 'red';
+                buttonText = 'Completed';
+              }
+
+              return (
+                <tr key={`entity-${i}`} data-cy="entityTable">
+                  <td>
+                    <Button tag={Link} to={`/transport/${transport.id}`} color="link" size="sm">
+                      {i}
                     </Button>
-                    <Button tag={Link} to={`/transport/${transport.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                      <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                    </Button>
-                    <Button tag={Link} to={`/transport/${transport.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
-                      <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                    </Button>
-                    <Button
-                      onClick={() => (window.location.href = `/transport/${transport.id}/delete`)}
-                      color="danger"
-                      size="sm"
-                      data-cy="entityDeleteButton"
-                    >
-                      <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td>{transport.startTime ? <TextFormat type="date" value={transport.startTime} format={APP_DATE_FORMAT} /> : null}</td>
+                  <td>{transport.endTime ? <TextFormat type="date" value={transport.endTime} format={APP_DATE_FORMAT} /> : null}</td>
+                  <td>{transport.location ? <Link to={`/location/${transport.location.id}`}>{transport.location.coordX +"--" +transport.location.coordY+"--" +transport.location.coordZ}</Link> : ''}</td>
+                  <td>
+                    {transport.serviceRequest ? (
+                      <Link to={`/service-request/${transport.serviceRequest.id}`}>{transport.serviceRequest.serviceName}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
+                  <td className="text-end">
+                    <div className="btn-group flex-btn-group-container">
+                      <Button
+                        onClick={onClickHandler}
+                        replace
+                        style={{
+                          backgroundColor: buttonColor,
+                          borderColor: buttonColor,
+                          color: 'white',
+                        }}
+                      >
+                        <FontAwesomeIcon icon="plus" /> <span className="d-none d-md-inline">{buttonText}</span>
+                      </Button>
+                      <Button tag={Link} to={`/transport/${transport.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                      </Button>
+                      <Button tag={Link} to={`/transport/${transport.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
+                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                      </Button>
+                      <Button
+                        onClick={() => (window.location.href = `/transport/${transport.id}/delete`)}
+                        color="danger"
+                        size="sm"
+                        data-cy="entityDeleteButton"
+                      >
+                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
             </tbody>
           </Table>
         ) : (
