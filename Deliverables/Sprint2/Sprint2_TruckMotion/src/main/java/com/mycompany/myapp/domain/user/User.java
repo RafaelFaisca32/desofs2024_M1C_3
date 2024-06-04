@@ -3,6 +3,7 @@ package com.mycompany.myapp.domain.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mycompany.myapp.config.Constants;
 import com.mycompany.myapp.domain.shared.AbstractAuditingEntity;
+import com.mycompany.myapp.domain.transport.TransportId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -25,60 +26,60 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+    @EmbeddedId
+    @GeneratedValue
+    @Column(name = "id")
+    private UserId id;
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     @Column(length = 50, unique = true, nullable = false)
-    private String login;
+    private Login login;
 
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)
     @Column(name = "password_hash", length = 60, nullable = false)
-    private String password;
+    private Password password;
 
     @Size(max = 50)
     @Column(name = "first_name", length = 50)
-    private String firstName;
+    private FirstName firstName;
 
     @Size(max = 50)
     @Column(name = "last_name", length = 50)
-    private String lastName;
+    private LastName lastName;
 
     @Email
     @Size(min = 5, max = 254)
     @Column(length = 254, unique = true)
-    private String email;
+    private com.mycompany.myapp.domain.user.Email email;
 
     @NotNull
     @Column(nullable = false)
-    private boolean activated = false;
+    private Activated activated;
 
     @Size(min = 2, max = 10)
     @Column(name = "lang_key", length = 10)
-    private String langKey;
+    private LangKey langKey;
 
     @Size(max = 256)
     @Column(name = "image_url", length = 256)
-    private String imageUrl;
+    private ImageUrl imageUrl;
 
     @Size(max = 20)
     @Column(name = "activation_key", length = 20)
     @JsonIgnore
-    private String activationKey;
+    private ActivationKey activationKey;
 
     @Size(max = 20)
     @Column(name = "reset_key", length = 20)
     @JsonIgnore
-    private String resetKey;
+    private ResetKey resetKey;
 
     @Column(name = "reset_date")
-    private Instant resetDate = null;
+    private ResetDate resetDate = null;
 
     @JsonIgnore
     @ManyToMany
@@ -92,16 +93,16 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     public User(){}
 
-    public User(String login,
-                String firstName,
-                String lastName,
-                String email,
-                String imageUrl,
-                String langKey,
-                String password,
-                String resetKey,
-                Instant resetDate,
-                boolean activated,
+    public User(Login login,
+                FirstName firstName,
+                LastName lastName,
+                com.mycompany.myapp.domain.user.Email email,
+                ImageUrl imageUrl,
+                LangKey langKey,
+                Password password,
+                ResetKey resetKey,
+                ResetDate resetDate,
+                Activated activated,
                 Set<Authority> authorities
     )
     {
@@ -120,100 +121,100 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         }
     }
 
-    public Long getId() {
-        return id;
+    public UserId getId() {
+        return this.id != null ? new UserId(id.value()) : null;
     }
 
-    public void setId(Long id) {
+    public void setId(UserId id) {
         this.id = id;
     }
 
-    public String getLogin() {
+    public Login getLogin() {
         return login;
     }
 
     // Lowercase the login before saving it in database
-    public void setLogin(String login) {
-        this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
+    public void setLogin(Login login) {
+        this.login = new Login(StringUtils.lowerCase(login.getLogin(), Locale.ENGLISH));
     }
 
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(Password password) {
         this.password = password;
     }
 
-    public String getFirstName() {
+    public FirstName getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(FirstName firstName) {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
+    public LastName getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(LastName lastName) {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
+    public com.mycompany.myapp.domain.user.Email getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(com.mycompany.myapp.domain.user.Email email) {
         this.email = email;
     }
 
-    public String getImageUrl() {
+    public ImageUrl getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(ImageUrl imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isActivated() {
+    public Activated isActivated() {
         return activated;
     }
 
-    public void setActivated(boolean activated) {
+    public void setActivated(Activated activated) {
         this.activated = activated;
     }
 
-    public String getActivationKey() {
+    public ActivationKey getActivationKey() {
         return activationKey;
     }
 
-    public void setActivationKey(String activationKey) {
+    public void setActivationKey(ActivationKey activationKey) {
         this.activationKey = activationKey;
     }
 
-    public String getResetKey() {
+    public ResetKey getResetKey() {
         return resetKey;
     }
 
-    public void setResetKey(String resetKey) {
+    public void setResetKey(ResetKey resetKey) {
         this.resetKey = resetKey;
     }
 
-    public Instant getResetDate() {
+    public ResetDate getResetDate() {
         return resetDate;
     }
 
-    public void setResetDate(Instant resetDate) {
+    public void setResetDate(ResetDate resetDate) {
         this.resetDate = resetDate;
     }
 
-    public String getLangKey() {
+    public LangKey getLangKey() {
         return langKey;
     }
 
-    public void setLangKey(String langKey) {
+    public void setLangKey(LangKey langKey) {
         this.langKey = langKey;
     }
 

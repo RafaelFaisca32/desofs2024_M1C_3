@@ -1,5 +1,7 @@
 package com.mycompany.myapp.domain.user;
 
+import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
+import com.mycompany.myapp.application.controller.errors.LoginAlreadyUsedException;
 import com.mycompany.myapp.config.Constants;
 import com.mycompany.myapp.domain.customer.CustomerService;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
@@ -8,6 +10,7 @@ import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.manager.ManagerService;
 import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
+import com.mycompany.myapp.domain.user.dto.CreateUserDTO;
 import com.mycompany.myapp.domain.user.mapper.UserMapper;
 import com.mycompany.myapp.infrastructure.repository.jpa.AuthorityRepository;
 import com.mycompany.myapp.infrastructure.repository.jpa.UserRepository;
@@ -15,21 +18,27 @@ import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import com.mycompany.myapp.domain.user.dto.UserDTO;
+
+import java.awt.*;
+import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.security.RandomUtil;
+import tech.jhipster.web.util.HeaderUtil;
 
 /**
  * Service class for managing users.
@@ -87,7 +96,7 @@ public class UserService {
             .findOneByActivationKey(key)
             .map(user -> {
                 // activate given user for the registration key.
-                user.setActivated(true);
+                user.setActivated(new Activated(true));
                 user.setActivationKey(null);
                 this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
@@ -99,9 +108,9 @@ public class UserService {
         log.debug("Reset user password for reset key {}", key);
         return userRepository
             .findOneByResetKey(key)
-            .filter(user -> user.getResetDate().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
+            .filter(user -> user.getResetDate().getResetDate().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
             .map(user -> {
-                user.setPassword(passwordEncoder.encode(newPassword));
+                user.setPassword(new Password(passwordEncoder.encode(newPassword)));
                 user.setResetKey(null);
                 user.setResetDate(null);
                 this.clearUserCaches(user);
@@ -112,10 +121,10 @@ public class UserService {
     public Optional<User> requestPasswordReset(String mail) {
         return userRepository
             .findOneByEmailIgnoreCase(mail)
-            .filter(User::isActivated)
+            .filter(user -> user.isActivated().getActivated())
             .map(user -> {
-                user.setResetKey(RandomUtil.generateResetKey());
-                user.setResetDate(Instant.now());
+                user.setResetKey(new ResetKey(RandomUtil.generateResetKey()));
+                user.setResetDate(new ResetDate(Instant.now()));
                 this.clearUserCaches(user);
                 return user;
             });
@@ -140,20 +149,20 @@ public class UserService {
             });
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
+        newUser.setLogin(new Login(userDTO.getLogin().toLowerCase()));
         // new user gets initially a generated password
-        newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
+        newUser.setPassword(new Password(encryptedPassword));
+        newUser.setFirstName(new FirstName(userDTO.getFirstName()));
+        newUser.setLastName(new LastName(userDTO.getLastName()));
         if (userDTO.getEmail() != null) {
-            newUser.setEmail(userDTO.getEmail().toLowerCase());
+            newUser.setEmail(new Email(userDTO.getEmail().toLowerCase()));
         }
-        newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
+        newUser.setImageUrl(new ImageUrl(userDTO.getImageUrl()));
+        newUser.setLangKey(new LangKey(userDTO.getLangKey()));
         // new user is not active
-        newUser.setActivated(false);
+        newUser.setActivated(new Activated(false));
         // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        newUser.setActivationKey(new ActivationKey(RandomUtil.generateActivationKey()));
         Set<Authority> authorities = new HashSet<>();
         //TODO: Pass through parameter what type of User we are registering
         authorityRepository.findById(AuthoritiesConstants.DRIVER).ifPresent(authorities::add);
@@ -165,7 +174,7 @@ public class UserService {
     }
 
     private boolean removeNonActivatedUser(User existingUser) {
-        if (existingUser.isActivated()) {
+        if (existingUser.isActivated().getActivated()) {
             return false;
         }
         userRepository.delete(existingUser);
@@ -184,7 +193,7 @@ public class UserService {
     {
         User user = createUser(userDTO);
 
-        applicationUserDTO.setId(user.getId());
+        applicationUserDTO.setUuidId(user.getId().value());
         applicationUserDTO.setInternalUser(userMapper.userToUserDTO(user));
 
         ApplicationUserDTO savedApplicationUserDTO = applicationUserService.save(applicationUserDTO);
@@ -225,18 +234,17 @@ public class UserService {
                 .map(Optional::get)
                 .collect(Collectors.toSet());
         }
-
         return new User(
-            userDTO.getLogin().toLowerCase(),
-            userDTO.getFirstName(),
-            userDTO.getLastName(),
-            userDTO.getEmail() != null ? userDTO.getEmail().toLowerCase() : null,
-            userDTO.getImageUrl(),
-            userDTO.getLangKey() == null ? Constants.DEFAULT_LANGUAGE : userDTO.getLangKey(),
-            passwordEncoder.encode(RandomUtil.generatePassword()),
-            RandomUtil.generateResetKey(),
-            Instant.now(),
-            true,
+            new Login(userDTO.getLogin().toLowerCase()),
+            new FirstName(userDTO.getFirstName()),
+            new LastName(userDTO.getLastName()),
+            userDTO.getEmail() != null ? new Email(userDTO.getEmail().toLowerCase()) : null,
+            new ImageUrl(userDTO.getImageUrl()),
+            userDTO.getLangKey() == null ? new LangKey(Constants.DEFAULT_LANGUAGE) : new LangKey(userDTO.getLangKey()),
+            new Password(passwordEncoder.encode(RandomUtil.generatePassword())),
+            new ResetKey(RandomUtil.generateResetKey()),
+            new ResetDate(Instant.now()),
+            new Activated(true),
             authorities
         );
     }
@@ -256,20 +264,20 @@ public class UserService {
      * @return updated user.
      */
     public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
-        return Optional.of(userRepository.findById(userDTO.getId()))
+        return Optional.of(userRepository.findById(new UserId(userDTO.getId())))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(user -> {
                 this.clearUserCaches(user);
-                user.setLogin(userDTO.getLogin().toLowerCase());
-                user.setFirstName(userDTO.getFirstName());
-                user.setLastName(userDTO.getLastName());
+                user.setLogin(new Login(userDTO.getLogin().toLowerCase()));
+                user.setFirstName(new FirstName(userDTO.getFirstName()));
+                user.setLastName(new LastName(userDTO.getLastName()));
                 if (userDTO.getEmail() != null) {
-                    user.setEmail(userDTO.getEmail().toLowerCase());
+                    user.setEmail(new Email(userDTO.getEmail().toLowerCase()));
                 }
-                user.setImageUrl(userDTO.getImageUrl());
-                user.setActivated(userDTO.isActivated());
-                user.setLangKey(userDTO.getLangKey());
+                user.setImageUrl(new ImageUrl(userDTO.getImageUrl()));
+                user.setActivated(new Activated(userDTO.isActivated()));
+                user.setLangKey(new LangKey(userDTO.getLangKey()));
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO
@@ -310,13 +318,13 @@ public class UserService {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
+                user.setFirstName(new FirstName(firstName));
+                user.setLastName(new LastName(lastName));
                 if (email != null) {
-                    user.setEmail(email.toLowerCase());
+                    user.setEmail(new Email(email.toLowerCase()));
                 }
-                user.setLangKey(langKey);
-                user.setImageUrl(imageUrl);
+                user.setLangKey(new LangKey(langKey));
+                user.setImageUrl(new ImageUrl(imageUrl));
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
@@ -328,15 +336,54 @@ public class UserService {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
-                String currentEncryptedPassword = user.getPassword();
-                if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
+                Password currentEncryptedPassword = user.getPassword();
+                if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword.getPassword())) {
                     throw new InvalidPasswordException();
                 }
                 String encryptedPassword = passwordEncoder.encode(newPassword);
-                user.setPassword(encryptedPassword);
+                user.setPassword(new Password(encryptedPassword));
                 this.clearUserCaches(user);
                 log.debug("Changed password for User: {}", user);
             });
+    }
+
+    public User verifyAuthorizations(CreateUserDTO createUserDTO){
+        AdminUserDTO userDTO = createUserDTO.getAdminUserDTO();
+        ApplicationUserDTO applicationUserDTO = createUserDTO.getApplicationUserDTO();
+        DriverDTO driverDTO = createUserDTO.getDriverDTO();
+        CustomerDTO customerDTO = createUserDTO.getCustomerDTO();
+        ManagerDTO managerDTO = createUserDTO.getManagerDTO();
+
+
+        log.debug("REST request to save User : {}, " +
+                "with Application User : {}, " +
+                "with Driver : {}, " +
+                "with Customer : {}, " +
+                "with Manager : {}",
+            userDTO,applicationUserDTO,driverDTO,customerDTO,managerDTO);
+
+
+        if (userDTO.getId() != null) {
+            throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
+            // Lowercase the user login before comparing with database
+        } else if (applicationUserDTO == null) {
+            throw new BadRequestAlertException("User must contain Application User information", "userManagement", "noapplicationuserinfo");
+        } else if (userDTO.getAuthorities() == null) {
+            throw new BadRequestAlertException("User must contain at least 1 role", "userManagement", "nouserrole");
+        } else if (userDTO.getAuthorities().contains(AuthoritiesConstants.DRIVER) && driverDTO == null) {
+            throw new BadRequestAlertException("A driver must contain its information", "userManagement", "nodriverinfo");
+        } else if(userDTO.getAuthorities().contains(AuthoritiesConstants.MANAGER) && managerDTO == null) {
+            throw new BadRequestAlertException("A manager must contain its information", "userManagement", "nomanagerinfo");
+        } else if(userDTO.getAuthorities().contains(AuthoritiesConstants.CUSTOMER) && customerDTO == null){
+            throw new BadRequestAlertException("A customer must contain its information", "userManagement", "nocustomerinfo");
+        } else if (findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
+            throw new LoginAlreadyUsedException();
+        } else if (findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
+            throw new com.mycompany.myapp.application.controller.errors.EmailAlreadyUsedException();
+        } else {
+            //User newUser = userService.createUser(userDTO);
+            return createUserWithApplicationUser(userDTO,applicationUserDTO,driverDTO,customerDTO, managerDTO);
+        }
     }
 
     @Transactional(readOnly = true)

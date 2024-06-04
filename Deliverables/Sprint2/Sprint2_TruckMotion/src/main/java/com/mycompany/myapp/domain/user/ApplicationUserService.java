@@ -46,7 +46,7 @@ public class ApplicationUserService {
     public ApplicationUserDTO save(ApplicationUserDTO applicationUserDTO) {
         log.debug("Request to save ApplicationUser : {}", applicationUserDTO);
         ApplicationUser applicationUser = ApplicationUserMapper.toEntity(applicationUserDTO);
-        Long userId = applicationUser.getInternalUser().getId();
+        UserId userId = applicationUser.getInternalUser().getId();
         userRepository.findById(userId).ifPresent(applicationUser::internalUser);
         applicationUser = applicationUserRepository.save(applicationUser);
         return ApplicationUserMapper.toDto(applicationUser);

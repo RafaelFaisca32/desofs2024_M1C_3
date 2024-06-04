@@ -1,7 +1,6 @@
 package com.mycompany.myapp.domain.user.mapper;
 
-import com.mycompany.myapp.domain.user.Authority;
-import com.mycompany.myapp.domain.user.User;
+import com.mycompany.myapp.domain.user.*;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import com.mycompany.myapp.domain.user.dto.UserDTO;
 import java.util.*;
@@ -54,14 +53,14 @@ public class UserMapper {
         if (userDTO == null) return null;
 
         User user = new User();
-        user.setId(userDTO.getId());
-        user.setLogin(userDTO.getLogin());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setImageUrl(userDTO.getImageUrl());
-        user.setActivated(userDTO.isActivated());
-        user.setLangKey(userDTO.getLangKey());
+        user.setId(new UserId(userDTO.getId()));
+        user.setLogin(new Login(userDTO.getLogin()));
+        user.setFirstName(new FirstName(userDTO.getFirstName()));
+        user.setLastName(new LastName(userDTO.getLastName()));
+        user.setEmail(new Email(userDTO.getEmail()));
+        user.setImageUrl(new ImageUrl(userDTO.getImageUrl()));
+        user.setActivated(new Activated(userDTO.isActivated()));
+        user.setLangKey(new LangKey(userDTO.getLangKey()));
         Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
         user.setAuthorities(authorities);
         return user;
@@ -85,17 +84,17 @@ public class UserMapper {
         return authorities;
     }
 
-    public User userFromId(Long id) {
+    public User userFromId(UUID id) {
         if (id == null) return null;
         User user = new User();
-        user.setId(id);
+        user.setId(new UserId(id));
         return user;
     }
 
     public User userFromDTO(UserDTO dto){
         if(dto == null) return null;
         User user = new User();
-        user.setId(dto.getId());
+        user.setId(new UserId(dto.getId()));
         return user;
     }
 
@@ -105,7 +104,7 @@ public class UserMapper {
     public UserDTO toDtoId(User user) {
         if (user == null) return null;
         UserDTO userDto = new UserDTO();
-        userDto.setId(user.getId());
+        userDto.setId(user.getId().value());
         return userDto;
     }
 
@@ -131,8 +130,8 @@ public class UserMapper {
         if (user == null) return null;
 
         UserDTO userDto = new UserDTO();
-        userDto.setId(user.getId());
-        userDto.setLogin(user.getLogin());
+        userDto.setId(user.getId().value());
+        userDto.setLogin(user.getLogin().getLogin());
         return userDto;
     }
 

@@ -117,51 +117,14 @@ public class UserController {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<User> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws URISyntaxException {
 
-        AdminUserDTO userDTO = createUserDTO.getAdminUserDTO();
-        ApplicationUserDTO applicationUserDTO = createUserDTO.getApplicationUserDTO();
-        DriverDTO driverDTO = createUserDTO.getDriverDTO();
-        CustomerDTO customerDTO = createUserDTO.getCustomerDTO();
-        ManagerDTO managerDTO = createUserDTO.getManagerDTO();
+        User newUser = userService.verifyAuthorizations(createUserDTO);
 
-
-        log.debug("REST request to save User : {}, " +
-                "with Application User : {}, " +
-                "with Driver : {}, " +
-                "with Customer : {}, " +
-                "with Manager : {}",
-            userDTO,applicationUserDTO,driverDTO,customerDTO,managerDTO);
-
-
-        if (userDTO.getId() != null) {
-            throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
-            // Lowercase the user login before comparing with database
-        } else if (applicationUserDTO == null) {
-            throw new BadRequestAlertException("User must contain Application User information", "userManagement", "noapplicationuserinfo");
-        } else if (userDTO.getAuthorities() == null) {
-            throw new BadRequestAlertException("User must contain at least 1 role", "userManagement", "nouserrole");
-        } else if (userDTO.getAuthorities().contains(AuthoritiesConstants.DRIVER) && driverDTO == null) {
-            throw new BadRequestAlertException("A driver must contain its information", "userManagement", "nodriverinfo");
-        } else if(userDTO.getAuthorities().contains(AuthoritiesConstants.MANAGER) && managerDTO == null) {
-            throw new BadRequestAlertException("A manager must contain its information", "userManagement", "nomanagerinfo");
-        } else if(userDTO.getAuthorities().contains(AuthoritiesConstants.CUSTOMER) && customerDTO == null){
-            throw new BadRequestAlertException("A customer must contain its information", "userManagement", "nocustomerinfo");
-        } else if (userService.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
-            throw new LoginAlreadyUsedException();
-        } else if (userService.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
-            throw new EmailAlreadyUsedException();
-        } else {
-
-
-            //User newUser = userService.createUser(userDTO);
-            User newUser = userService.createUserWithApplicationUser(userDTO,applicationUserDTO,driverDTO,customerDTO, managerDTO);
-
-            mailService.sendCreationEmail(newUser);
-            return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
-                .headers(
-                    HeaderUtil.createAlert(applicationName, "A user is created with identifier " + newUser.getLogin(), newUser.getLogin())
-                )
-                .body(newUser);
-        }
+        mailService.sendCreationEmail(newUser);
+        return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin().getLogin()))
+            .headers(
+                HeaderUtil.createAlert(applicationName, "A user is created with identifier " + newUser.getLogin().getLogin(), newUser.getLogin().getLogin())
+            )
+            .body(newUser);
     }
 
     /**

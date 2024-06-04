@@ -2,6 +2,7 @@ package com.mycompany.myapp.domain.user.dto;
 
 import com.mycompany.myapp.domain.user.User;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * A DTO representing a user, with only the public attributes.
@@ -10,7 +11,7 @@ public class UserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private UUID id;
 
     private String login;
 
@@ -19,21 +20,21 @@ public class UserDTO implements Serializable {
     }
 
     public UserDTO(User user) {
-        this.id = user.getId();
+        this.id = user.getId().value();
         // Customize it here if you need, or not, firstName/lastName/etc
-        this.login = user.getLogin();
+        this.login = user.getLogin().getLogin();
     }
 
-    public UserDTO(Long id, String login) {
+    public UserDTO(UUID id, String login) {
         this.id = id;
         this.login = login;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

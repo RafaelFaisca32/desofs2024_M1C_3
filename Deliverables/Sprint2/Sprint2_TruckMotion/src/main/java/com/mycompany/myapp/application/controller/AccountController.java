@@ -102,7 +102,7 @@ public class AccountController {
             .orElseThrow(() -> new AccountResourceException("Current user login not found"));
 
         Optional<User> existingUser = userService.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.orElseThrow().getLogin().equalsIgnoreCase(userLogin))) {
+        if (existingUser.isPresent() && (!existingUser.orElseThrow().getLogin().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
         Optional<User> user = userService.findOneByLogin(userLogin);

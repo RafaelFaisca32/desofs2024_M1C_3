@@ -1,9 +1,13 @@
 package com.mycompany.myapp.infrastructure.repository.jpa;
 
+import com.mycompany.myapp.domain.truck.Truck;
+import com.mycompany.myapp.domain.truck.TruckId;
 import com.mycompany.myapp.domain.user.User;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
+import com.mycompany.myapp.domain.user.UserId;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -33,4 +37,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
     Page<User> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+
+    Optional<User> findById(UserId id);
 }
