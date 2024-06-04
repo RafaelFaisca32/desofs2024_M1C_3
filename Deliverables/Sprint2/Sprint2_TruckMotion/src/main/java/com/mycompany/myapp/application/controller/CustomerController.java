@@ -164,4 +164,11 @@ public class CustomerController {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/getByUserId/{userId}")
+    public ResponseEntity<CustomerDTO> getByUserId(@PathVariable("userId") Long userId) {
+        log.debug("REST request to get Customer By UserId : {}", userId);
+        Optional<CustomerDTO> customerDTO = customerService.getByUserId(userId);
+        return ResponseUtil.wrapOrNotFound(customerDTO);
+    }
 }
