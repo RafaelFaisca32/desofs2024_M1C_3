@@ -21,4 +21,6 @@ public interface ICustomerRepository {
 
     boolean existsById(CustomerId id);
     //boolean existsById(UUID id);
+
+    Optional<Customer> getByUserId(Long id);
 }

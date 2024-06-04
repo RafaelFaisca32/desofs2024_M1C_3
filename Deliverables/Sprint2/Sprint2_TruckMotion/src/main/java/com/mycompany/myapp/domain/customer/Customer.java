@@ -34,7 +34,7 @@ public class Customer implements Serializable {
     @JoinColumn(unique = true)
     private ApplicationUser applicationUser;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
     @JsonIgnoreProperties(value = { "customer", "serviceRequest", "transport" }, allowSetters = true)
     private Set<Location> locations = new HashSet<>();
 

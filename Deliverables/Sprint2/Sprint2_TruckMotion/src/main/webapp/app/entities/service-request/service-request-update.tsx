@@ -6,8 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntities as getLocations } from 'app/entities/location/location.reducer';
-import { getEntities as getCustomers } from 'app/entities/customer/customer.reducer';
+import { ILocation } from 'app/shared/model/location.model';
+import { ICustomer } from 'app/shared/model/customer.model';
+import { getEntityByUserId as getEntityByUserId } from 'app/entities/customer/customer.reducer';
+import { IServiceRequest } from 'app/shared/model/service-request.model';
 import { getEntity, updateEntity, createEntity, reset } from './service-request.reducer';
 
 export const ServiceRequestUpdate = () => {
@@ -18,8 +20,8 @@ export const ServiceRequestUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-  const locations = useAppSelector(state => state.location.entities);
-  const customers = useAppSelector(state => state.customer.entities);
+  const account = useAppSelector(state => state.authentication.account);
+  const customer = useAppSelector(state => state.customer.entity);
   const serviceRequestEntity = useAppSelector(state => state.serviceRequest.entity);
   const loading = useAppSelector(state => state.serviceRequest.loading);
   const updating = useAppSelector(state => state.serviceRequest.updating);
@@ -36,8 +38,7 @@ export const ServiceRequestUpdate = () => {
       dispatch(getEntity(id));
     }
 
-    dispatch(getLocations({}));
-    dispatch(getCustomers({}));
+    dispatch(getEntityByUserId(account.id));
   }, []);
 
   useEffect(() => {
@@ -59,8 +60,8 @@ export const ServiceRequestUpdate = () => {
     const entity = {
       ...serviceRequestEntity,
       ...values,
-      location: locations.find(it => it.id.toString() === values.location?.toString()),
-      customer: customers.find(it => it.id.toString() === values.customer?.toString()),
+      location: customer.locations.find(it => it.id.toString() === values.location?.toString()),
+      customer: customer,
       status: (values.status !== values.statusInitial) ? {id:null, date:null, observations:null, status: values.status, serviceRequest:null} : null,
     };
 
@@ -118,24 +119,19 @@ export const ServiceRequestUpdate = () => {
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               />
+              <ValidatedField id="service-request-customer" name="customer" data-cy="customer" label="Customer" type="select">
+                <option value={customer.id} key={customer.id}>
+                  {customer.company}
+                </option>
+              </ValidatedField>
               <ValidatedField id="service-request-location" name="location" data-cy="location" label="Location" type="select">
                 <option value="" key="0" />
-                {locations
-                  ? locations.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.coordX +"--"+otherEntity.coordY+"--"+ otherEntity.coordZ}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <ValidatedField id="service-request-customer" name="customer" data-cy="customer" label="Customer" type="select">
-                <option value="" key="0" />
-                {customers
-                  ? customers.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.company}
-                      </option>
-                    ))
+                {customer.locations
+                  ? customer.locations.map(otherEntity => (
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.coordX +"--"+otherEntity.coordY+"--"+ otherEntity.coordZ}
+                    </option>
+                  ))
                   : null}
               </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/service-request" replace color="info">

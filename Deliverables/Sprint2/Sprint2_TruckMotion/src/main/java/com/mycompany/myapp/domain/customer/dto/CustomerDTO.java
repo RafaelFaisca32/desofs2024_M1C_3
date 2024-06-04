@@ -1,10 +1,13 @@
 package com.mycompany.myapp.domain.customer.dto;
 
 import com.mycompany.myapp.domain.customer.Customer;
+import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -19,6 +22,7 @@ public class CustomerDTO implements Serializable {
 
     private ApplicationUserDTO applicationUser;
 
+    private Set<LocationDTO> locations = new HashSet<>();
     public UUID getId() {
         return id;
     }
@@ -43,10 +47,11 @@ public class CustomerDTO implements Serializable {
         this.applicationUser = applicationUser;
     }
 
-    public CustomerDTO(UUID id, String company, ApplicationUserDTO applicationUser) {
+    public CustomerDTO(UUID id, String company, ApplicationUserDTO applicationUser, Set<LocationDTO> locations) {
         this.id = id;
         this.company = company;
         this.applicationUser = applicationUser;
+        this.locations = locations;
     }
 
     public CustomerDTO() {

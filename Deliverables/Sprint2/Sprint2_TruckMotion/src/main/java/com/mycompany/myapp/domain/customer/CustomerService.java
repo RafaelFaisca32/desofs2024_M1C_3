@@ -134,4 +134,10 @@ public class CustomerService {
         CustomerId cId = new CustomerId(id);
         customerRepository.deleteById(cId);
     }
+
+    @Transactional(readOnly = true)
+    public Optional<CustomerDTO> getByUserId(Long userId) {
+        log.debug("Request to get Customer by UserId : {}", userId);
+        return customerRepository.getByUserId(userId).map(CustomerMapper::toDto);
+    }
 }

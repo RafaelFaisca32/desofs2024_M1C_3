@@ -23,6 +23,15 @@ export const getEntities = createAsyncThunk('customer/fetch_entity_list', async 
   return axios.get<ICustomer[]>(requestUrl);
 });
 
+export const getEntityByUserId = createAsyncThunk(
+  'customer/fetch_entity',
+  async (userId: string | number) => {
+    const requestUrl = `${apiUrl}/getByUserId/${userId}`;
+    return axios.get<ICustomer>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
 export const getEntity = createAsyncThunk(
   'customer/fetch_entity',
   async (id: string | number) => {
