@@ -124,6 +124,19 @@ public class TruckService {
     }
 
     /**
+     * Get one truck by id where Driver is {@code null}.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<TruckDTO> findOneWhereDriverIsNull(UUID id) {
+        log.debug("Request to get Truck without driver : {}", id);
+        TruckId tId =new TruckId(id);
+        return truckRepository.findById(tId).filter(truck -> truck.getDriver() == null).map(TruckMapper::toDto);
+    }
+
+    /**
      * Delete the truck by id.
      *
      * @param id the id of the entity.
