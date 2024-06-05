@@ -43,6 +43,14 @@ public class CustomerDTO implements Serializable {
         return applicationUser;
     }
 
+    public Set<LocationDTO> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(Set<LocationDTO> locations) {
+        this.locations = locations;
+    }
+
     public void setApplicationUser(ApplicationUserDTO applicationUser) {
         this.applicationUser = applicationUser;
     }
