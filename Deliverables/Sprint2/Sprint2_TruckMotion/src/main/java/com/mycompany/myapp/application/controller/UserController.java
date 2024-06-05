@@ -4,6 +4,7 @@ import com.mycompany.myapp.config.Constants;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
+import com.mycompany.myapp.domain.truck.dto.TruckDTO;
 import com.mycompany.myapp.domain.user.User;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
 import com.mycompany.myapp.domain.user.dto.CreateUserDTO;
@@ -122,6 +123,7 @@ public class UserController {
         DriverDTO driverDTO = createUserDTO.getDriverDTO();
         CustomerDTO customerDTO = createUserDTO.getCustomerDTO();
         ManagerDTO managerDTO = createUserDTO.getManagerDTO();
+
 
 
         log.debug("REST request to save User : {}, " +

@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain.user;
 
+import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import com.mycompany.myapp.config.Constants;
 import com.mycompany.myapp.domain.customer.CustomerService;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
@@ -7,6 +8,9 @@ import com.mycompany.myapp.domain.driver.DriverService;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.manager.ManagerService;
 import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
+import com.mycompany.myapp.domain.truck.Truck;
+import com.mycompany.myapp.domain.truck.TruckService;
+import com.mycompany.myapp.domain.truck.dto.TruckDTO;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
 import com.mycompany.myapp.domain.user.mapper.UserMapper;
 import com.mycompany.myapp.infrastructure.repository.jpa.AuthorityRepository;
@@ -58,6 +62,8 @@ public class UserService {
 
     private final ManagerService managerService;
 
+    private final TruckService truckService;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
@@ -67,6 +73,7 @@ public class UserService {
         DriverService driverService,
         ManagerService managerService,
         CustomerService customerService,
+        TruckService truckService,
         UserMapper userMapper
     ) {
         this.userRepository = userRepository;
@@ -77,6 +84,7 @@ public class UserService {
         this.driverService = driverService;
         this.managerService = managerService;
         this.customerService = customerService;
+        this.truckService = truckService;
         this.userMapper = userMapper;
 
     }
@@ -191,8 +199,18 @@ public class UserService {
         if( driverDTO != null &&
             userDTO.getAuthorities() != null &&
             userDTO.getAuthorities().contains(AuthoritiesConstants.DRIVER)
+
         ){
             driverDTO.setApplicationUser(savedApplicationUserDTO);
+
+            if(driverDTO.getTruck() != null){
+                Optional<TruckDTO> truckDTOOptional = truckService.findOneWhereDriverIsNull(driverDTO.getTruck().getId());
+                if(truckDTOOptional.isPresent()){
+                    throw new BadRequestAlertException("Truck selected for driver already as driver associated", "userManagementService", "truckalreadywithdriverassociated");
+                }
+            }
+
+
             driverService.save(driverDTO);
         }
         if( customerDTO != null &&
