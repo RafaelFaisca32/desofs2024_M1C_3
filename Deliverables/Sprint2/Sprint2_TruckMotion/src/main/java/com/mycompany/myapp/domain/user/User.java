@@ -26,6 +26,10 @@ public class User extends AbstractAuditingEntity<UserId> implements Serializable
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @Column(name = "id")
+    private Long id;
+
     @EmbeddedId
     @GeneratedValue
     @Column(name = "id")

@@ -1,7 +1,10 @@
 package com.mycompany.myapp.domain.user;
 
+import jakarta.persistence.Embeddable;
+
 import java.util.Objects;
 
+@Embeddable
 public class Activated {
 
     private Boolean activated;

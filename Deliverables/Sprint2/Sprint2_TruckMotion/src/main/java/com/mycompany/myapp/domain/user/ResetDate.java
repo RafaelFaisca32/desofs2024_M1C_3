@@ -1,8 +1,11 @@
 package com.mycompany.myapp.domain.user;
 
+import jakarta.persistence.Embeddable;
+
 import java.time.Instant;
 import java.util.Objects;
 
+@Embeddable
 public class ResetDate {
 
     private Instant resetDate;
