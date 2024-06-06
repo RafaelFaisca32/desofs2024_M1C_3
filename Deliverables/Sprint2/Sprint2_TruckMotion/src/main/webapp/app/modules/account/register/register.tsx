@@ -11,6 +11,8 @@ import { handleRegister, reset } from './register.reducer';
 export const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const dispatch = useAppDispatch();
 
   useEffect(
@@ -42,6 +44,14 @@ export const RegisterPage = () => {
   const updateConfirmPassword = event => {
     const transformedPassword = transformPassword(event.target.value);
     setConfirmPassword(transformedPassword);
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   const successMessage = useAppSelector(state => state.register.successMessage);
@@ -96,7 +106,7 @@ export const RegisterPage = () => {
               name="firstPassword"
               label="New password"
               placeholder="New password"
-              type="password"
+              type={showPassword ? 'text' : 'password'} // Toggle type based on showPassword state
               value={password}
               onChange={updatePassword}
               validate={{
@@ -106,12 +116,15 @@ export const RegisterPage = () => {
               }}
               data-cy="firstPassword"
             />
+            <Button color="info" onClick={toggleShowPassword}>
+              {showPassword ? 'Hide Password' : 'Show Password'}
+            </Button>
             <PasswordStrengthBar password={password} />
             <ValidatedField
               name="secondPassword"
               label="New password confirmation"
               placeholder="Confirm the new password"
-              type="password"
+              type={showConfirmPassword ? 'text' : 'password'} // Toggle type based on showConfirmPassword state
               value={confirmPassword}
               onChange={updateConfirmPassword}
               validate={{
@@ -122,6 +135,11 @@ export const RegisterPage = () => {
               }}
               data-cy="secondPassword"
             />
+            <Button color="info" onClick={toggleShowConfirmPassword}>
+              {showConfirmPassword ? 'Hide Confirm Password' : 'Show Confirm Password'}
+            </Button>
+            <br />
+            <br />
             <Button id="register-submit" color="primary" type="submit" data-cy="submit">
               Register
             </Button>

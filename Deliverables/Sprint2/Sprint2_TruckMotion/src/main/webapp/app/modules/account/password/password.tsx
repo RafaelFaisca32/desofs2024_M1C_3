@@ -100,6 +100,9 @@ export const PasswordPage = () => {
               }}
               data-cy="newPassword"
             />
+            <Button color="info" onClick={toggleShowPassword} className="mt-2">
+              {showPassword ? 'Hide Password' : 'Show Password'}
+            </Button>
             <PasswordStrengthBar password={password} />
             <ValidatedField
               name="confirmPassword"
@@ -116,12 +119,11 @@ export const PasswordPage = () => {
               }}
               data-cy="confirmPassword"
             />
-            <Button color="info" onClick={toggleShowPassword} className="mt-2">
-              {showPassword ? 'Hide Password' : 'Show Password'}
-            </Button>
             <Button color="info" onClick={toggleShowConfirmPassword} className="mt-2 ml-2">
               {showConfirmPassword ? 'Hide Confirm Password' : 'Show Confirm Password'}
             </Button>
+            <br />
+            <br />
             <Button color="success" type="submit" data-cy="submit" className="mt-2 ml-2">
               Save
             </Button>
