@@ -106,7 +106,7 @@ public class UserController {
      * mail with an activation link.
      * The user needs to be activated on creation.
      *
-     * @param userDTO the user to create.
+     * @param completeUserDTO the user to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
@@ -164,35 +164,46 @@ public class UserController {
     }
 
     /**
-     * {@code PUT /admin/users} : Updates an existing User.
+     * {@code PUT /admin/users/activate/{id}} : Activates an existing User.
      *
-     * @param userDTO the user to update.
+     * @param id id of the user to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
      */
-    @PutMapping({ "/users", "/users/{login}" })
+    @PutMapping({ "/users/activate/{id}" })
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<AdminUserDTO> updateUser(
-        @PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login,
-        @Valid @RequestBody AdminUserDTO userDTO
+    public ResponseEntity<AdminUserDTO> activateUser(
+        @PathVariable(name = "id") Long id
     ) {
-        log.debug("REST request to update User : {}", userDTO);
-        Optional<User> existingUser = userService.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
-            throw new EmailAlreadyUsedException();
-        }
-        existingUser = userService.findOneByLogin(userDTO.getLogin().toLowerCase());
-        if (existingUser.isPresent() && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
-            throw new LoginAlreadyUsedException();
-        }
-        Optional<AdminUserDTO> updatedUser = userService.updateUser(userDTO);
+
+        Optional<AdminUserDTO> updatedUser = userService.activateUser(id);
 
         return ResponseUtil.wrapOrNotFound(
             updatedUser,
-            HeaderUtil.createAlert(applicationName, "A user is updated with identifier " + userDTO.getLogin(), userDTO.getLogin())
+            HeaderUtil.createAlert(applicationName, "A user is activated with identifier " + id, id.toString())
         );
     }
+
+    /**
+     * {@code PUT /admin/deactivate/users} : Deactivates an existing User.
+     *
+     * @param id id of the user to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user.
+     */
+    @PutMapping({ "/users/deactivate/{id}" })
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<AdminUserDTO> validateUser(
+        @PathVariable(name = "id") Long id
+    ) {
+
+        Optional<AdminUserDTO> updatedUser = userService.deactivateUser(id);
+
+        return ResponseUtil.wrapOrNotFound(
+            updatedUser,
+            HeaderUtil.createAlert(applicationName, "A user is deactivated with identifier " + id, id.toString())
+        );
+    }
+
+
 
     /**
      * {@code GET /admin/users} : get all users with all the details - calling this are only allowed for the administrators.
@@ -236,6 +247,8 @@ public class UserController {
      * @param login the login of the user to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+    /*
+    DISABLED
     @DeleteMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
@@ -245,4 +258,5 @@ public class UserController {
             .headers(HeaderUtil.createAlert(applicationName, "A user is deleted with identifier " + login, login))
             .build();
     }
+     */
 }

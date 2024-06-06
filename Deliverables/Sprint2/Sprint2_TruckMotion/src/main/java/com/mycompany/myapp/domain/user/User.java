@@ -256,4 +256,12 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
             ", activationKey='" + activationKey + '\'' +
             "}";
     }
+
+    public void activate() {
+        this.activated = true;
+    }
+
+    public void deactivate(){
+        this.activated = false;
+    }
 }

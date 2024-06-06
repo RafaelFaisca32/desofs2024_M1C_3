@@ -382,7 +382,7 @@ public class UserService {
      * <p>
      * This is scheduled to get fired everyday, at 01:00 (am).
      */
-    @Scheduled(cron = "0 0 1 * * ?")
+    //@Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
         userRepository
             .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
@@ -415,5 +415,37 @@ public class UserService {
 
     public Optional<User> findOneByLogin(String userLogin) {
         return userRepository.findOneByLogin(userLogin);
+    }
+
+    public Optional<AdminUserDTO> activateUser(Long id) {
+        return Optional.of(userRepository.findById(id))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(user -> {
+                this.clearUserCaches(user);
+                user.activate();
+
+                userRepository.save(user);
+                this.clearUserCaches(user);
+                log.debug("Activated User: {}", user);
+                return user;
+            })
+            .map(AdminUserDTO::new);
+    }
+
+    public Optional<AdminUserDTO> deactivateUser(Long id) {
+        return Optional.of(userRepository.findById(id))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(user -> {
+                this.clearUserCaches(user);
+                user.deactivate();
+
+                userRepository.save(user);
+                this.clearUserCaches(user);
+                log.debug("Deactivated User: {}", user);
+                return user;
+            })
+            .map(AdminUserDTO::new);
     }
 }

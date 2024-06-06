@@ -4,7 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { getUser, deleteUser } from './user-management.reducer';
+import { getUser } from './user-management.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 export const UserManagementDeleteDialog = () => {
@@ -25,7 +25,7 @@ export const UserManagementDeleteDialog = () => {
   const user = useAppSelector(state => state.userManagement.user);
 
   const confirmDelete = event => {
-    dispatch(deleteUser(user.login));
+    //dispatch(deleteUser(user.login));
     handleClose(event);
   };
 

@@ -76,11 +76,20 @@ export const updateUser = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
-export const deleteUser = createAsyncThunk(
-  'userManagement/delete_user',
-  async (id: string, thunkAPI) => {
-    const requestUrl = `${adminUrl}/${id}`;
-    const result = await axios.delete<IUser>(requestUrl);
+export const activateUser = createAsyncThunk(
+  'userManagement/activate_user',
+  async (id: string | number, thunkAPI) => {
+    const result = await axios.put<IUser>(adminUrl + "/activate/" + id);
+    thunkAPI.dispatch(getUsersAsAdmin({}));
+    return result;
+  },
+  { serializeError: serializeAxiosError },
+);
+
+export const deactivateUser = createAsyncThunk(
+  'userManagement/deactivate_user',
+  async (id: string | number, thunkAPI) => {
+    const result = await axios.put<IUser>(adminUrl + "/deactivate/" + id);
     thunkAPI.dispatch(getUsersAsAdmin({}));
     return result;
   },
@@ -106,17 +115,13 @@ export const UserManagementSlice = createSlice({
         state.loading = false;
         state.user = action.payload.data;
       })
-      .addCase(deleteUser.fulfilled, state => {
-        state.updating = false;
-        state.updateSuccess = true;
-        state.user = defaultValue;
-      })
+
       .addMatcher(isFulfilled(getUsers, getUsersAsAdmin), (state, action) => {
         state.loading = false;
         state.users = action.payload.data;
         state.totalItems = parseInt(action.payload.headers['x-total-count'], 10);
       })
-      .addMatcher(isFulfilled(createUser, updateUser), (state, action) => {
+      .addMatcher(isFulfilled(createUser, updateUser, activateUser,deactivateUser), (state, action) => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
@@ -127,12 +132,12 @@ export const UserManagementSlice = createSlice({
         state.updateSuccess = false;
         state.loading = true;
       })
-      .addMatcher(isPending(createUser, updateUser, deleteUser), state => {
+      .addMatcher(isPending(createUser, updateUser, activateUser, deactivateUser), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;
       })
-      .addMatcher(isRejected(getUsers, getUsersAsAdmin, getUser, getRoles, createUser, updateUser, deleteUser), (state, action) => {
+      .addMatcher(isRejected(getUsers, getUsersAsAdmin, getUser, getRoles, createUser, updateUser, activateUser, deactivateUser), (state, action) => {
         state.loading = false;
         state.updating = false;
         state.updateSuccess = false;

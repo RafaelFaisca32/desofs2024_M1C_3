@@ -62,59 +62,57 @@ export const UserManagementUpdate = () => {
   };
 
   const saveUser = values => {
-    const user: IUser = {
-      id: values.id,
-      login: values.login,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      email: values.email,
-      activated: values.activated,
-      langKey: values.langKey == "" ? null : values.langKey,
-      authorities: values.authorities,
-      createdBy: values.createdBy,
-      createdDate: values.createdDate,
-      lastModifiedBy: values.lastModifiedBy,
-      lastModifiedDate: values.lastModifiedDate,
-      password: values.password
-    }
-    const applicationUser: IApplicationUser = {
-      id: values.id,
-      birthDate: values.birthDate,
-      gender: values.gender
-    }
 
-    let manager : IManager = null;
-    if( !!values.authorities.find(x => x == AUTHORITIES.MANAGER) ){
-      manager = {};
-    }
-    let driver : IDriver = null;
-    if(!!values.authorities.find(x => x == AUTHORITIES.DRIVER)){
-      driver = {
-        truck: { id: values.truck }
-      }
-    }
-    let customer : ICustomer = null;
-    if(!!values.authorities.find(x => x == AUTHORITIES.CUSTOMER)){
-      customer = {
-        company: values.company
-      }
-    }
-
-    const completeUser : ICompleteUser = {
-      userDTO: user,
-      applicationUserDTO: applicationUser,
-      managerDTO: manager,
-      driverDTO: driver,
-      customerDTO: customer
-    }
 
     if (isNew) {
+      const user: IUser = {
+        id: values.id,
+        login: values.login,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        activated: values.activated,
+        langKey: values.langKey == "" ? null : values.langKey,
+        authorities: values.authorities,
+        createdBy: values.createdBy,
+        createdDate: values.createdDate,
+        lastModifiedBy: values.lastModifiedBy,
+        lastModifiedDate: values.lastModifiedDate,
+        password: values.password
+      }
+      const applicationUser: IApplicationUser = {
+        id: values.id,
+        birthDate: values.birthDate,
+        gender: values.gender
+      }
+
+      let manager : IManager = null;
+      if( !!values.authorities.find(x => x == AUTHORITIES.MANAGER) ){
+        manager = {};
+      }
+      let driver : IDriver = null;
+      if(!!values.authorities.find(x => x == AUTHORITIES.DRIVER)){
+        driver = {
+          truck: { id: values.truck }
+        }
+      }
+      let customer : ICustomer = null;
+      if(!!values.authorities.find(x => x == AUTHORITIES.CUSTOMER)){
+        customer = {
+          company: values.company
+        }
+      }
+
+      const completeUser : ICompleteUser = {
+        userDTO: user,
+        applicationUserDTO: applicationUser,
+        managerDTO: manager,
+        driverDTO: driver,
+        customerDTO: customer
+      }
       dispatch(createUser(completeUser));
     }
-    //else {
-      //only readonly
-      //dispatch(updateUser(values));
-    //}
+
     handleClose();
   };
 
@@ -129,7 +127,7 @@ export const UserManagementUpdate = () => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          {isNew ? (<h1>Create a user</h1>) : (<h1>Edit a user</h1>) }
+          {isNew ? (<h1>Create a user</h1>) : (<h1>User</h1>) }
         </Col>
       </Row>
       <Row className="justify-content-center">

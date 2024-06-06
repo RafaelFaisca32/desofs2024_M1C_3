@@ -8,7 +8,7 @@ import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons'
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import { getUsersAsAdmin, updateUser } from './user-management.reducer';
+import {activateUser, deactivateUser, getUsersAsAdmin, updateUser} from './user-management.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 export const UserManagement = () => {
@@ -72,12 +72,19 @@ export const UserManagement = () => {
   };
 
   const toggleActive = user => () => {
-    dispatch(
-      updateUser({
-        ...user,
-        activated: !user.activated,
-      }),
-    );
+
+    let isActive = user.activated;
+    if(isActive){
+      dispatch(
+        deactivateUser(user.id),
+      );
+    } else {
+      dispatch(
+        activateUser(user.id),
+      );
+    }
+
+
   };
 
   const account = useAppSelector(state => state.authentication.account);
@@ -177,14 +184,6 @@ export const UserManagement = () => {
                   <Button tag={Link} to={user.login} color="info" size="sm">
                     <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                   </Button>
-                  <Button tag={Link} to={`${user.login}/edit`} color="primary" size="sm">
-                    <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                  </Button>
-                  { false && (
-                  <Button tag={Link} to={`${user.login}/delete`} color="danger" size="sm" disabled={account.login === user.login}>
-                    <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                  </Button> )
-                  }
                 </div>
               </td>
             </tr>
