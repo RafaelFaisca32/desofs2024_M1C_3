@@ -86,43 +86,53 @@ export const PasswordPage = () => {
               }}
               data-cy="currentPassword"
             />
-            <ValidatedField
-              name="newPassword"
-              label="New password"
-              placeholder="New password"
-              type={showPassword ? 'text' : 'password'} // Toggle type based on showPassword state
-              value={password}
-              onChange={updatePassword}
-              validate={{
-                required: { value: true, message: 'Your password is required.' },
-                minLength: { value: 12, message: 'Your password is required to be at least 12 characters.' },
-                maxLength: { value: 128, message: 'Your password cannot be longer than 128 characters.' },
-              }}
-              data-cy="newPassword"
-            />
+            <Row className="align-items-center">
+              <Col>
+                <ValidatedField
+                  name="newPassword"
+                  placeholder="New password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={updatePassword}
+                  validate={{
+                    required: { value: true, message: 'Your password is required.' },
+                    minLength: { value: 12, message: 'Your password is required to be at least 12 characters.' },
+                    maxLength: { value: 128, message: 'Your password cannot be longer than 128 characters.' },
+                  }}
+                  data-cy="newPassword"
+                />
+              </Col>
+              <Col>
+                <Button color="info" onClick={toggleShowPassword} className="ml-2">
+                  {showPassword ? 'Hide' : 'Show'}
+                </Button>
+              </Col>
+            </Row>
             <PasswordStrengthBar password={password} />
-            <ValidatedField
-              name="confirmPassword"
-              label="New password confirmation"
-              placeholder="Confirm the new password"
-              type={showConfirmPassword ? 'text' : 'password'} // Toggle type based on showConfirmPassword state
-              value={confirmPassword}
-              onChange={updateConfirmPassword}
-              validate={{
-                required: { value: true, message: 'Your confirmation password is required.' },
-                minLength: { value: 12, message: 'Your confirmation password is required to be at least 12 characters.' },
-                maxLength: { value: 128, message: 'Your confirmation password cannot be longer than 128 characters.' },
-                validate: v => v === password || 'The password and its confirmation do not match!',
-              }}
-              data-cy="confirmPassword"
-            />
-            <Button color="info" onClick={toggleShowPassword} className="mt-2">
-              {showPassword ? 'Hide Password' : 'Show Password'}
-            </Button>
-            <Button color="info" onClick={toggleShowConfirmPassword} className="mt-2 ml-2">
-              {showConfirmPassword ? 'Hide Confirm Password' : 'Show Confirm Password'}
-            </Button>
-            <Button color="success" type="submit" data-cy="submit" className="mt-2 ml-2">
+            <Row className="align-items-center">
+              <Col>
+                <ValidatedField
+                  name="confirmPassword"
+                  placeholder="Confirm the new password"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={updateConfirmPassword}
+                  validate={{
+                    required: { value: true, message: 'Your confirmation password is required.' },
+                    minLength: { value: 12, message: 'Your confirmation password is required to be at least 12 characters.' },
+                    maxLength: { value: 128, message: 'Your confirmation password cannot be longer than 128 characters.' },
+                    validate: v => v === password || 'The password and its confirmation do not match!',
+                  }}
+                  data-cy="confirmPassword"
+                />
+              </Col>
+              <Col>
+                <Button color="info" onClick={toggleShowConfirmPassword} className="ml-2">
+                  {showConfirmPassword ? 'Hide' : 'Show'}
+                </Button>
+              </Col>
+            </Row>
+            <Button color="success" type="submit" data-cy="submit" className="mt-3">
               Save
             </Button>
           </ValidatedForm>
