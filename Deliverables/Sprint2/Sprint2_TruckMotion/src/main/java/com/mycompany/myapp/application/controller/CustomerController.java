@@ -1,7 +1,6 @@
 package com.mycompany.myapp.application.controller;
 
 import com.mycompany.myapp.domain.customer.Customer;
-import com.mycompany.myapp.infrastructure.repository.jpa.CustomerRepository;
 import com.mycompany.myapp.domain.customer.CustomerService;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
@@ -166,9 +165,9 @@ public class CustomerController {
     }
 
     @GetMapping("/getByUserId/{userId}")
-    public ResponseEntity<CustomerDTO> getByUserId(@PathVariable("userId") Long userId) {
+    public CustomerDTO getByUserId(@PathVariable("userId") Long userId) {
         log.debug("REST request to get Customer By UserId : {}", userId);
         Optional<CustomerDTO> customerDTO = customerService.getByUserId(userId);
-        return ResponseUtil.wrapOrNotFound(customerDTO);
+        return customerDTO.get();
     }
 }

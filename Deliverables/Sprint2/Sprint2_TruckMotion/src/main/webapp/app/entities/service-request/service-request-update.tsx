@@ -119,7 +119,7 @@ export const ServiceRequestUpdate = () => {
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               />
-              <ValidatedField id="service-request-customer" name="customer" data-cy="customer" label="Customer" type="select">
+              <ValidatedField id="service-request-customer" name="customer" data-cy="customer" label="Customer" type="select" hidden={true}>
                 <option value={customer.id} key={customer.id}>
                   {customer.company}
                 </option>
