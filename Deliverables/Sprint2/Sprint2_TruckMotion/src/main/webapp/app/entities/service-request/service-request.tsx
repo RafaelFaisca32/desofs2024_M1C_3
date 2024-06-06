@@ -10,7 +10,7 @@ import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { updateEntityStatus } from './service-request.reducer';
 
-import { getEntities } from './service-request.reducer';
+import { getEntitiesByUserLoggedIn } from './service-request.reducer';
 import { useDispatch } from 'react-redux';
 
 export const ServiceRequest = () => {
@@ -24,11 +24,11 @@ export const ServiceRequest = () => {
   const serviceRequestList = useAppSelector(state => state.serviceRequest.entities);
   const loading = useAppSelector(state => state.serviceRequest.loading);
 
- 
+
 
   const getAllEntities = () => {
     dispatch(
-      getEntities({
+      getEntitiesByUserLoggedIn({
         sort: `${sortState.sort},${sortState.order}`,
       }),
     );
@@ -162,7 +162,7 @@ export const ServiceRequest = () => {
                       </Button><Button onClick={() =>  updateStatus(serviceRequest.id, false, '', '', '')} color="danger" size="sm" data-cy="entityDetailsButton">
                           <FontAwesomeIcon icon="ban" /> <span className="d-none d-md-inline">Reject</span>
                         </Button></> : null : null}
-                    
+
                       <Button tag={Link} to={`/service-request/${serviceRequest.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                       </Button>

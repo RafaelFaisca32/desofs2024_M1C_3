@@ -204,4 +204,13 @@ public class ServiceRequestService {
             serviceRequestRepository.save(req);
         }
     }
+
+    @Transactional(readOnly = true)
+    public List<ServiceRequestDTO> getByUserId(Long userId) {
+        log.debug("Request to get Service Requests by UserId : {}", userId);
+        return StreamSupport.stream(serviceRequestRepository.getByUserId(userId).spliterator(), false)
+            .filter(serviceRequest -> serviceRequest.getTransport() == null)
+            .map(ServiceRequestMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 }

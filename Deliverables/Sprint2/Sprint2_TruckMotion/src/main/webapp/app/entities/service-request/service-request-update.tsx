@@ -8,7 +8,7 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { ILocation } from 'app/shared/model/location.model';
 import { ICustomer } from 'app/shared/model/customer.model';
-import { getEntityByUserId as getEntityByUserId } from 'app/entities/customer/customer.reducer';
+import { getEntityByLoggedInUser as getEntityByLoggedInUser } from 'app/entities/customer/customer.reducer';
 import { IServiceRequest } from 'app/shared/model/service-request.model';
 import { getEntity, updateEntity, createEntity, reset } from './service-request.reducer';
 
@@ -20,7 +20,6 @@ export const ServiceRequestUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-  const account = useAppSelector(state => state.authentication.account);
   const customer = useAppSelector(state => state.customer.entity);
   const serviceRequestEntity = useAppSelector(state => state.serviceRequest.entity);
   const loading = useAppSelector(state => state.serviceRequest.loading);
@@ -38,7 +37,7 @@ export const ServiceRequestUpdate = () => {
       dispatch(getEntity(id));
     }
 
-    dispatch(getEntityByUserId(account.id));
+    dispatch(getEntityByLoggedInUser());
   }, []);
 
   useEffect(() => {

@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.mycompany.myapp.domain.user.UserService;
+import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,9 +36,11 @@ public class CustomerController {
     private String applicationName;
 
     private final CustomerService customerService;
+    private final UserService userService;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, UserService userService) {
         this.customerService = customerService;
+        this.userService = userService;
     }
 
     /**
@@ -164,10 +169,18 @@ public class CustomerController {
             .build();
     }
 
-    @GetMapping("/getByUserId/{userId}")
-    public CustomerDTO getByUserId(@PathVariable("userId") Long userId) {
-        log.debug("REST request to get Customer By UserId : {}", userId);
-        Optional<CustomerDTO> customerDTO = customerService.getByUserId(userId);
-        return customerDTO.get();
+    @GetMapping("/getByLoggedInUser")
+    public CustomerDTO getByLoggedInUser() {
+        log.debug("REST request to get Customer By LoggedIn User");
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+        if (adminUserDTO != null) {
+            Optional<CustomerDTO> customerDTO = customerService.getByUserId(adminUserDTO.getId());
+            return customerDTO.get();
+        }
+        else {
+            return null;
+        }
     }
 }
