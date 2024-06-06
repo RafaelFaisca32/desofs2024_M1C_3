@@ -351,11 +351,18 @@ public class UserService {
                 if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
                     throw new InvalidPasswordException();
                 }
+                passwordChecker(newPassword);
                 String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
                 this.clearUserCaches(user);
                 log.debug("Changed password for User: {}", user);
             });
+    }
+
+    private void passwordChecker(String password){
+        if(password.length() < 12 ||password.length() > 128){
+            throw new InvalidPasswordException();
+        }
     }
 
     @Transactional(readOnly = true)
