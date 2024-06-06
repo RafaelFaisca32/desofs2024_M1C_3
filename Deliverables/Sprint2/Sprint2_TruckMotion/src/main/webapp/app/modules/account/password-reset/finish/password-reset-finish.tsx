@@ -15,6 +15,7 @@ export const PasswordResetFinishPage = () => {
   const key = searchParams.get('key');
 
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   useEffect(
     () => () => {
@@ -23,9 +24,29 @@ export const PasswordResetFinishPage = () => {
     [],
   );
 
-  const handleValidSubmit = ({ newPassword }) => dispatch(handlePasswordResetFinish({ key, newPassword }));
+  const handleValidSubmit = ({ newPassword, confirmPassword }) => {
+    const transformedFirstPassword = transformPassword(newPassword);
+    const transformedSecondPassword = transformPassword(confirmPassword);
+    if (transformedFirstPassword !== transformedSecondPassword) {
+      toast.error("The password and its confirmation do not match!");
+      return;
+    }
+    dispatch(handlePasswordResetFinish({ key, newPassword }));
+  }
 
-  const updatePassword = event => setPassword(event.target.value);
+  const transformPassword = (password) => {
+    return password.replace(/\s{2,}/g, ' ');
+  };
+
+  const updatePassword = event => {
+    const transformedPassword = transformPassword(event.target.value);
+    setPassword(transformedPassword);
+  };
+
+  const updateConfirmPassword = event => {
+    const transformedPassword = transformPassword(event.target.value);
+    setConfirmPassword(transformedPassword);
+  };
 
   const getResetForm = () => {
     return (
@@ -35,12 +56,13 @@ export const PasswordResetFinishPage = () => {
           label="New password"
           placeholder="New password"
           type="password"
+          value={password}
+          onChange={updatePassword}
           validate={{
             required: { value: true, message: 'Your password is required.' },
             minLength: { value: 12, message: 'Your password is required to be at least 12 characters.' },
             maxLength: { value: 128, message: 'Your password cannot be longer than 128 characters.' },
           }}
-          onChange={updatePassword}
           data-cy="resetPassword"
         />
         <PasswordStrengthBar password={password} />
@@ -49,6 +71,8 @@ export const PasswordResetFinishPage = () => {
           label="New password confirmation"
           placeholder="Confirm the new password"
           type="password"
+          value={confirmPassword}
+          onChange={updateConfirmPassword}
           validate={{
             required: { value: true, message: 'Your confirmation password is required.' },
             minLength: { value: 12, message: 'Your confirmation password is required to be at least 12 characters.' },
