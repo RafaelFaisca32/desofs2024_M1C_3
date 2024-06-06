@@ -112,7 +112,7 @@ public class UserController {
      * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
      */
     @PostMapping("/users")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("  hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")  or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<User> createUser(@Valid @RequestBody CompleteUserDTO completeUserDTO) throws URISyntaxException {
 
         AdminUserDTO userDTO = completeUserDTO.getAdminUserDTO();
@@ -170,7 +170,7 @@ public class UserController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user.
      */
     @PutMapping({ "/users/activate/{id}" })
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("  hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")  or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<AdminUserDTO> activateUser(
         @PathVariable(name = "id") Long id
     ) {
@@ -212,7 +212,7 @@ public class UserController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
     @GetMapping("/users")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("  hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")  or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<List<AdminUserDTO>> getAllUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all User for an admin");
         if (!onlyContainsAllowedProperties(pageable)) {
@@ -235,7 +235,7 @@ public class UserController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the "login" user, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/users/{login}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("  hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")  or hasAuthority(\"" + AuthoritiesConstants.MANAGER + "\")")
     public ResponseEntity<AdminUserDTO> getUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(AdminUserDTO::new));
