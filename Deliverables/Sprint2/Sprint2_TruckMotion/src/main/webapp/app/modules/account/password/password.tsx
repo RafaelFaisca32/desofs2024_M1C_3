@@ -47,6 +47,14 @@ export const PasswordPage = () => {
     setConfirmPassword(transformedPassword);
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   const account = useAppSelector(state => state.authentication.account);
   const successMessage = useAppSelector(state => state.password.successMessage);
   const errorMessage = useAppSelector(state => state.password.errorMessage);
@@ -82,7 +90,7 @@ export const PasswordPage = () => {
               name="newPassword"
               label="New password"
               placeholder="New password"
-              type="password"
+              type={showPassword ? 'text' : 'password'} // Toggle type based on showPassword state
               value={password}
               onChange={updatePassword}
               validate={{
@@ -97,7 +105,7 @@ export const PasswordPage = () => {
               name="confirmPassword"
               label="New password confirmation"
               placeholder="Confirm the new password"
-              type="password"
+              type={showConfirmPassword ? 'text' : 'password'} // Toggle type based on showConfirmPassword state
               value={confirmPassword}
               onChange={updateConfirmPassword}
               validate={{
@@ -108,7 +116,13 @@ export const PasswordPage = () => {
               }}
               data-cy="confirmPassword"
             />
-            <Button color="success" type="submit" data-cy="submit">
+            <Button color="info" onClick={toggleShowPassword} className="mt-2">
+              {showPassword ? 'Hide Password' : 'Show Password'}
+            </Button>
+            <Button color="info" onClick={toggleShowConfirmPassword} className="mt-2 ml-2">
+              {showConfirmPassword ? 'Hide Confirm Password' : 'Show Confirm Password'}
+            </Button>
+            <Button color="success" type="submit" data-cy="submit" className="mt-2 ml-2">
               Save
             </Button>
           </ValidatedForm>
