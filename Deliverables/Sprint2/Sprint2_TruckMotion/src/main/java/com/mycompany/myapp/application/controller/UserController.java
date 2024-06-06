@@ -4,12 +4,10 @@ import com.mycompany.myapp.config.Constants;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
-import com.mycompany.myapp.domain.truck.dto.TruckDTO;
 import com.mycompany.myapp.domain.user.User;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
-import com.mycompany.myapp.domain.user.dto.CreateUserDTO;
+import com.mycompany.myapp.domain.user.dto.CompleteUserDTO;
 import com.mycompany.myapp.domain.user.mapper.UserMapper;
-import com.mycompany.myapp.infrastructure.repository.jpa.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.domain.shared.MailService;
 import com.mycompany.myapp.domain.user.UserService;
@@ -18,7 +16,6 @@ import com.mycompany.myapp.application.controller.errors.BadRequestAlertExceptio
 import com.mycompany.myapp.application.controller.errors.EmailAlreadyUsedException;
 import com.mycompany.myapp.application.controller.errors.LoginAlreadyUsedException;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -116,13 +113,13 @@ public class UserController {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<User> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws URISyntaxException {
+    public ResponseEntity<User> createUser(@Valid @RequestBody CompleteUserDTO completeUserDTO) throws URISyntaxException {
 
-        AdminUserDTO userDTO = createUserDTO.getAdminUserDTO();
-        ApplicationUserDTO applicationUserDTO = createUserDTO.getApplicationUserDTO();
-        DriverDTO driverDTO = createUserDTO.getDriverDTO();
-        CustomerDTO customerDTO = createUserDTO.getCustomerDTO();
-        ManagerDTO managerDTO = createUserDTO.getManagerDTO();
+        AdminUserDTO userDTO = completeUserDTO.getAdminUserDTO();
+        ApplicationUserDTO applicationUserDTO = completeUserDTO.getApplicationUserDTO();
+        DriverDTO driverDTO = completeUserDTO.getDriverDTO();
+        CustomerDTO customerDTO = completeUserDTO.getCustomerDTO();
+        ManagerDTO managerDTO = completeUserDTO.getManagerDTO();
 
 
 

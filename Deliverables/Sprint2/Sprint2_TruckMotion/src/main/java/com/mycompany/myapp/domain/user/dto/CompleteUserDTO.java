@@ -7,7 +7,7 @@ import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-public class CreateUserDTO {
+public class CompleteUserDTO {
 
     @NotNull
     @JsonProperty("userDTO")

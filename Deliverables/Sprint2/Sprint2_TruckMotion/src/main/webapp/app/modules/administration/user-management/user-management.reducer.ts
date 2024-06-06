@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 
-import { IUser, defaultValue } from 'app/shared/model/user.model';
+import {IUser, defaultValue, ICompleteUser} from 'app/shared/model/user.model';
 import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
+import {ITruck} from "app/shared/model/truck.model";
 
 const initialState = {
   loading: false,
@@ -19,6 +20,16 @@ const apiUrl = 'api/users';
 const adminUrl = 'api/admin/users';
 
 // Async Actions
+
+export const fetchFreeTrucks = createAsyncThunk(
+  'driver/fetch_free_trucks',
+  async () => {
+    const requestUrl = `api/trucks?filter=driver-is-null`;
+
+    const response = await axios.get<ITruck[]>(requestUrl);
+    return response.data as ITruck[];
+  }
+);
 
 export const getUsers = createAsyncThunk('userManagement/fetch_users', async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
@@ -47,8 +58,8 @@ export const getUser = createAsyncThunk(
 
 export const createUser = createAsyncThunk(
   'userManagement/create_user',
-  async (user: IUser, thunkAPI) => {
-    const result = await axios.post<IUser>(adminUrl, user);
+  async (completeUser: ICompleteUser, thunkAPI) => {
+    const result = await axios.post<IUser>(adminUrl, completeUser);
     thunkAPI.dispatch(getUsersAsAdmin({}));
     return result;
   },

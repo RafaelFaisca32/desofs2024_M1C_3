@@ -180,9 +180,11 @@ export const UserManagement = () => {
                   <Button tag={Link} to={`${user.login}/edit`} color="primary" size="sm">
                     <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
                   </Button>
+                  ( false && (
                   <Button tag={Link} to={`${user.login}/delete`} color="danger" size="sm" disabled={account.login === user.login}>
                     <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                  </Button>
+                  </Button> )
+                  )
                 </div>
               </td>
             </tr>

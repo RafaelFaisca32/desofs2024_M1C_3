@@ -3,9 +3,15 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
 import { ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
+import { Gender } from 'app/shared/model/enumerations/gender.model';
+import { AUTHORITIES } from 'app/config/constants';
+import {getUser, getRoles, updateUser, createUser, reset, fetchFreeTrucks} from './user-management.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import {ICompleteUser, IUser} from "app/shared/model/user.model";
+import {IApplicationUser} from "app/shared/model/application-user.model";
+import {IManager} from "app/shared/model/manager.model";
+import {IDriver} from "app/shared/model/driver.model";
+import {ICustomer} from "app/shared/model/customer.model";
 
 export const UserManagementUpdate = () => {
   const dispatch = useAppDispatch();
@@ -15,6 +21,23 @@ export const UserManagementUpdate = () => {
   const { login } = useParams<'login'>();
   const isNew = login === undefined;
 
+  const [selectedRoles, setSelectedRoles] = useState([])
+  const [trucks, setTrucks] = useState([]);
+
+  const handleRolesChange = (event) =>{
+    const options = event.target.options;
+    const selectedValues = [];
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        selectedValues.push(options[i].value);
+      }
+    }
+    setSelectedRoles(selectedValues);
+
+  }
+
+  const isRoleSelected = (role: string) => !!selectedRoles.find(element => element === role);
+
   useEffect(() => {
     if (isNew) {
       dispatch(reset());
@@ -22,6 +45,13 @@ export const UserManagementUpdate = () => {
       dispatch(getUser(login));
     }
     dispatch(getRoles());
+    dispatch(fetchFreeTrucks())
+      .then((response: any) => {
+        setTrucks(response.payload);
+      })
+    .catch((error: any) => {
+      setTrucks([])
+    });
     return () => {
       dispatch(reset());
     };
@@ -32,11 +62,59 @@ export const UserManagementUpdate = () => {
   };
 
   const saveUser = values => {
-    if (isNew) {
-      dispatch(createUser(values));
-    } else {
-      dispatch(updateUser(values));
+    const user: IUser = {
+      id: values.id,
+      login: values.login,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      activated: values.activated,
+      langKey: values.langKey == "" ? null : values.langKey,
+      authorities: values.authorities,
+      createdBy: values.createdBy,
+      createdDate: values.createdDate,
+      lastModifiedBy: values.lastModifiedBy,
+      lastModifiedDate: values.lastModifiedDate,
+      password: values.password
     }
+    const applicationUser: IApplicationUser = {
+      id: values.id,
+      birthDate: values.birthDate,
+      gender: values.gender
+    }
+
+    let manager : IManager = null;
+    if( !!values.authorities.find(x => x == AUTHORITIES.MANAGER) ){
+      manager = {};
+    }
+    let driver : IDriver = null;
+    if(!!values.authorities.find(x => x == AUTHORITIES.DRIVER)){
+      driver = {
+        truck: { id: values.truck }
+      }
+    }
+    let customer : ICustomer = null;
+    if(!!values.authorities.find(x => x == AUTHORITIES.CUSTOMER)){
+      customer = {
+        company: values.company
+      }
+    }
+
+    const completeUser : ICompleteUser = {
+      userDTO: user,
+      applicationUserDTO: applicationUser,
+      managerDTO: manager,
+      driverDTO: driver,
+      customerDTO: customer
+    }
+
+    if (isNew) {
+      dispatch(createUser(completeUser));
+    }
+    //else {
+      //only readonly
+      //dispatch(updateUser(values));
+    //}
     handleClose();
   };
 
@@ -45,12 +123,13 @@ export const UserManagementUpdate = () => {
   const loading = useAppSelector(state => state.userManagement.loading);
   const updating = useAppSelector(state => state.userManagement.updating);
   const authorities = useAppSelector(state => state.userManagement.authorities);
+  const genderValues = Object.keys(Gender);
 
   return (
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h1>Create or edit a user</h1>
+          {isNew ? (<h1>Create a user</h1>) : (<h1>Edit a user</h1>) }
         </Col>
       </Row>
       <Row className="justify-content-center">
@@ -59,7 +138,7 @@ export const UserManagementUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm onSubmit={saveUser} defaultValues={user}>
-              {user.id ? <ValidatedField type="text" name="id" required readOnly label="ID" validate={{ required: true }} /> : null}
+              {user.id ? <ValidatedField type="text" name="id" required hidden={true} readOnly label="ID" validate={{ required: true }} /> : null}
               <ValidatedField
                 type="text"
                 name="login"
@@ -127,25 +206,54 @@ export const UserManagementUpdate = () => {
                   validate: v => isEmail(v) || 'Your email is invalid.',
                 }}
               />
+              <ValidatedField label="Birth Date" id="application-user-birthDate" name="birthDate" data-cy="birthDate" type="date" />
+              <ValidatedField label="Gender" id="application-user-gender" name="gender" data-cy="gender" type="select">
+                {genderValues.map(gender => (
+                  <option value={gender} key={gender}>
+                    {gender}
+                  </option>
+                ))}
+              </ValidatedField>
               <ValidatedField type="checkbox" name="activated" check value={true} disabled={!user.id} label="Activated" />
-              <ValidatedField type="select" name="authorities" multiple label="Profiles">
+              <ValidatedField type="select" name="authorities" multiple label="Profiles" onChange={handleRolesChange}>
                 {authorities.map(role => (
                   <option value={role} key={role}>
                     {role}
                   </option>
                 ))}
               </ValidatedField>
+              { isRoleSelected(AUTHORITIES.MANAGER) && null}
+              { isRoleSelected(AUTHORITIES.DRIVER) && (
+                <ValidatedField id="driver-truck" name="truck" data-cy="truck" label="Truck" type="select">
+                  <option value="" key="0" />
+                  {trucks
+                    ? trucks.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.make + " " + otherEntity.model}
+                      </option>
+                    ))
+                    : null}
+                </ValidatedField>
+              )}
+              { isRoleSelected(AUTHORITIES.CUSTOMER) && (
+                <ValidatedField label="Company" id="customer-company" name="company" data-cy="company" type="text" />
+              )}
               <Button tag={Link} to="/admin/user-management" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">Back</span>
               </Button>
               &nbsp;
-              <Button color="primary" type="submit" disabled={isInvalid || updating}>
-                <FontAwesomeIcon icon="save" />
-                &nbsp; Save
-              </Button>
+              { isNew &&
+                (
+                <Button color="primary" type="submit" disabled={isInvalid || updating}>
+                  <FontAwesomeIcon icon="save" />
+                  &nbsp; Save
+                </Button>
+                )
+              }
             </ValidatedForm>
+
           )}
         </Col>
       </Row>

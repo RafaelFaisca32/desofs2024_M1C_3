@@ -205,7 +205,7 @@ public class UserService {
 
             if(driverDTO.getTruck() != null){
                 Optional<TruckDTO> truckDTOOptional = truckService.findOneWhereDriverIsNull(driverDTO.getTruck().getId());
-                if(truckDTOOptional.isPresent()){
+                if(truckDTOOptional.isEmpty()){
                     throw new BadRequestAlertException("Truck selected for driver already as driver associated", "userManagementService", "truckalreadywithdriverassociated");
                 }
             }

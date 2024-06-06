@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice, isPending, isRejected } from '@reduxjs/t
 
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { AppThunk } from 'app/config/store';
+import {ITruck} from "app/shared/model/truck.model";
 
 const initialState = {
   loading: false,
