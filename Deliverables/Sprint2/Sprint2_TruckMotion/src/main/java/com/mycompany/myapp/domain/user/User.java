@@ -30,6 +30,10 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Embedded
+    @Column(name = "uuid_id")
+    private UserId uuidId;
+
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
@@ -93,6 +97,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     public User(){}
 
     public User(String login,
+                UserId userId,
                 String firstName,
                 String lastName,
                 String email,
@@ -106,6 +111,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     )
     {
         this.login = login;
+        this.uuidId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -118,6 +124,21 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         if(authorities != null){
             this.authorities.addAll(authorities);
         }
+    }
+
+    public UserId getUuidId() {
+        if(this.uuidId == null) return null;
+
+        return new UserId(this.uuidId.value());
+    }
+
+    public User uuidid(UserId uuidId) {
+        this.setUuidId(uuidId);
+        return this;
+    }
+
+    public void setUuidId(UserId uuidId) {
+        this.uuidId = uuidId;
     }
 
     public Long getId() {

@@ -8,18 +8,18 @@ import java.util.UUID;
 @Embeddable
 public class UserId {
 
-    private UUID id;
+    private UUID uuidId;
 
     public UserId() {
-        this.id = UUID.randomUUID();
+        this.uuidId = UUID.randomUUID();
     }
 
     public UserId(UUID id) {
-        this.id = id;
+        this.uuidId = id;
     }
 
     public UUID value() {
-        return id;
+        return uuidId;
     }
 
     @Override
@@ -27,16 +27,16 @@ public class UserId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserId userId = (UserId) o;
-        return Objects.equals(id, userId.id);
+        return Objects.equals(uuidId, userId.uuidId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(uuidId);
     }
 
     @Override
     public String toString() {
-        return id.toString();
+        return uuidId.toString();
     }
 }

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -17,6 +18,8 @@ public class AdminUserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+
+    private UUID uuidId;
 
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -59,6 +62,7 @@ public class AdminUserDTO implements Serializable {
 
     public AdminUserDTO(User user) {
         this.id = user.getId();
+        this.uuidId = user.getUuidId().value();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
@@ -71,6 +75,14 @@ public class AdminUserDTO implements Serializable {
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
+    }
+
+    public UUID getUuidId() {
+        return uuidId;
+    }
+
+    public void setUuidId(UUID id) {
+        this.uuidId = uuidId;
     }
 
     public Long getId() {

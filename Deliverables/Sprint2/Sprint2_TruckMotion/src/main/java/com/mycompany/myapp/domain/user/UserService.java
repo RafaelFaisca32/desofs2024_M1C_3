@@ -246,6 +246,7 @@ public class UserService {
 
         return new User(
             userDTO.getLogin().toLowerCase(),
+            new UserId(userDTO.getUuidId()),
             userDTO.getFirstName(),
             userDTO.getLastName(),
             userDTO.getEmail() != null ? userDTO.getEmail().toLowerCase() : null,
