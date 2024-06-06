@@ -16,6 +16,8 @@ export const PasswordResetFinishPage = () => {
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(
     () => () => {
@@ -48,6 +50,14 @@ export const PasswordResetFinishPage = () => {
     setConfirmPassword(transformedPassword);
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   const getResetForm = () => {
     return (
       <ValidatedForm onSubmit={handleValidSubmit}>
@@ -55,7 +65,7 @@ export const PasswordResetFinishPage = () => {
           name="newPassword"
           label="New password"
           placeholder="New password"
-          type="password"
+          type={showPassword ? 'text' : 'password'} // Toggle type based on showPassword state
           value={password}
           onChange={updatePassword}
           validate={{
@@ -65,12 +75,15 @@ export const PasswordResetFinishPage = () => {
           }}
           data-cy="resetPassword"
         />
+        <Button color="info" onClick={toggleShowPassword} className="mt-2">
+          {showPassword ? 'Hide Password' : 'Show Password'}
+        </Button>
         <PasswordStrengthBar password={password} />
         <ValidatedField
           name="confirmPassword"
           label="New password confirmation"
           placeholder="Confirm the new password"
-          type="password"
+          type={showConfirmPassword ? 'text' : 'password'} // Toggle type based on showConfirmPassword state
           value={confirmPassword}
           onChange={updateConfirmPassword}
           validate={{
@@ -81,6 +94,11 @@ export const PasswordResetFinishPage = () => {
           }}
           data-cy="confirmResetPassword"
         />
+        <Button color="info" onClick={toggleShowConfirmPassword} className="mt-2 ml-2">
+          {showConfirmPassword ? 'Hide Confirm Password' : 'Show Confirm Password'}
+        </Button>
+        <br />
+        <br />
         <Button color="success" type="submit" data-cy="submit">
           Validate new password
         </Button>
