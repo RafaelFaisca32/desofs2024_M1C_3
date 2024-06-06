@@ -10,20 +10,39 @@ import { handleRegister, reset } from './register.reducer';
 
 export const RegisterPage = () => {
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const dispatch = useAppDispatch();
 
   useEffect(
     () => () => {
       dispatch(reset());
     },
-    [],
+    [dispatch],
   );
 
-  const handleValidSubmit = ({ username, email, firstPassword }) => {
-    dispatch(handleRegister({ login: username, email, password: firstPassword, langKey: 'en' }));
+  const transformPassword = (password) => {
+    return password.replace(/\s{2,}/g, ' ');
   };
 
-  const updatePassword = event => setPassword(event.target.value);
+  const handleValidSubmit = ({ username, email, firstPassword, secondPassword }) => {
+    const transformedFirstPassword = transformPassword(firstPassword);
+    const transformedSecondPassword = transformPassword(secondPassword);
+    if (transformedFirstPassword !== transformedSecondPassword) {
+      toast.error("The password and its confirmation do not match!");
+      return;
+    }
+    dispatch(handleRegister({ login: username, email, password: transformedFirstPassword, langKey: 'en' }));
+  };
+
+  const updatePassword = event => {
+    const transformedPassword = transformPassword(event.target.value);
+    setPassword(transformedPassword);
+  };
+
+  const updateConfirmPassword = event => {
+    const transformedPassword = transformPassword(event.target.value);
+    setConfirmPassword(transformedPassword);
+  };
 
   const successMessage = useAppSelector(state => state.register.successMessage);
 
@@ -78,11 +97,12 @@ export const RegisterPage = () => {
               label="New password"
               placeholder="New password"
               type="password"
+              value={password}
               onChange={updatePassword}
               validate={{
                 required: { value: true, message: 'Your password is required.' },
-                minLength: { value: 4, message: 'Your password is required to be at least 4 characters.' },
-                maxLength: { value: 50, message: 'Your password cannot be longer than 50 characters.' },
+                minLength: { value: 12, message: 'Your password is required to be at least 12 characters.' },
+                maxLength: { value: 128, message: 'Your password cannot be longer than 128 characters.' },
               }}
               data-cy="firstPassword"
             />
@@ -92,10 +112,12 @@ export const RegisterPage = () => {
               label="New password confirmation"
               placeholder="Confirm the new password"
               type="password"
+              value={confirmPassword}
+              onChange={updateConfirmPassword}
               validate={{
                 required: { value: true, message: 'Your confirmation password is required.' },
-                minLength: { value: 4, message: 'Your confirmation password is required to be at least 4 characters.' },
-                maxLength: { value: 50, message: 'Your confirmation password cannot be longer than 50 characters.' },
+                minLength: { value: 12, message: 'Your confirmation password is required to be at least 12 characters.' },
+                maxLength: { value: 128, message: 'Your confirmation password cannot be longer than 128 characters.' },
                 validate: v => v === password || 'The password and its confirmation do not match!',
               }}
               data-cy="secondPassword"

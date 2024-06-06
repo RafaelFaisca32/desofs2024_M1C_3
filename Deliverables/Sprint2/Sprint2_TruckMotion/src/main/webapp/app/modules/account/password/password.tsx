@@ -10,6 +10,7 @@ import { savePassword, reset } from './password.reducer';
 
 export const PasswordPage = () => {
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -22,6 +23,10 @@ export const PasswordPage = () => {
 
   const handleValidSubmit = ({ currentPassword, newPassword }) => {
     dispatch(savePassword({ currentPassword, newPassword }));
+  };
+
+  const transformPassword = (password) => {
+    return password.replace(/\s{2,}/g, ' ');
   };
 
   const updatePassword = event => setPassword(event.target.value);
@@ -64,8 +69,8 @@ export const PasswordPage = () => {
               type="password"
               validate={{
                 required: { value: true, message: 'Your password is required.' },
-                minLength: { value: 4, message: 'Your password is required to be at least 4 characters.' },
-                maxLength: { value: 50, message: 'Your password cannot be longer than 50 characters.' },
+                minLength: { value: 12, message: 'Your password is required to be at least 12 characters.' },
+                maxLength: { value: 128, message: 'Your password cannot be longer than 128 characters.' },
               }}
               onChange={updatePassword}
               data-cy="newPassword"
@@ -78,8 +83,8 @@ export const PasswordPage = () => {
               type="password"
               validate={{
                 required: { value: true, message: 'Your confirmation password is required.' },
-                minLength: { value: 4, message: 'Your confirmation password is required to be at least 4 characters.' },
-                maxLength: { value: 50, message: 'Your confirmation password cannot be longer than 50 characters.' },
+                minLength: { value: 12, message: 'Your confirmation password is required to be at least 12 characters.' },
+                maxLength: { value: 128, message: 'Your confirmation password cannot be longer than 128 characters.' },
                 validate: v => v === password || 'The password and its confirmation do not match!',
               }}
               data-cy="confirmPassword"
