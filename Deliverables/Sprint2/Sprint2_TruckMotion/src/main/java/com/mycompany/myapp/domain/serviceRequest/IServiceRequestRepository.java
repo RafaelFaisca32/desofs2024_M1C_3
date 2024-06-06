@@ -18,4 +18,6 @@ public interface IServiceRequestRepository {
     long count();
 
     boolean existsById(ServiceRequestId id);
+
+    List<ServiceRequest> getByUserId(Long userId);
 }

@@ -137,7 +137,7 @@ public class CustomerService {
 
     @Transactional(readOnly = true)
     public Optional<CustomerDTO> getByUserId(Long userId) {
-        log.debug("Request to get Customer by UserId : {}", userId);
+        log.debug("Request to get Customer by LoggedIn User : {}", userId);
         return customerRepository.getByUserId(userId).map(CustomerMapper::toDto);
     }
 }
