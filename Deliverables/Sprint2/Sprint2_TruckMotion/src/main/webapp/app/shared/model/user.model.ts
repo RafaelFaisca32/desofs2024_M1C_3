@@ -5,6 +5,7 @@ import {ICustomer} from "app/shared/model/customer.model";
 
 export interface IUser {
   id?: any;
+  uuidId?: string;
   login?: string;
   firstName?: string;
   lastName?: string;
@@ -29,6 +30,7 @@ export interface ICompleteUser {
 
 export const defaultValue: Readonly<IUser> = {
   id: '',
+  uuidId: null,
   login: '',
   firstName: '',
   lastName: '',

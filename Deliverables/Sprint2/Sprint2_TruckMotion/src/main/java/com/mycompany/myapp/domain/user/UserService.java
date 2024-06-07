@@ -196,6 +196,7 @@ public class UserService {
 
         applicationUserDTO.setId(user.getId());
         applicationUserDTO.setInternalUser(userMapper.userToUserDTO(user));
+        applicationUserDTO.setUuidId(user.getUuidId().value());
 
         ApplicationUserDTO savedApplicationUserDTO = applicationUserService.save(applicationUserDTO);
         if( driverDTO != null &&
@@ -248,7 +249,7 @@ public class UserService {
 
         return new User(
             userDTO.getLogin().toLowerCase(),
-            new UserId(userDTO.getUuidId()),
+            new UserId(),
             userDTO.getFirstName(),
             userDTO.getLastName(),
             userDTO.getEmail() != null ? userDTO.getEmail().toLowerCase() : null,
