@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ValidatedField } from 'react-jhipster';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert, Row, Col, Form } from 'reactstrap';
 import { Link } from 'react-router-dom';
@@ -12,6 +12,13 @@ export interface ILoginModalProps {
 }
 
 const LoginModal = (props: ILoginModalProps) => {
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const login = ({ username, password, rememberMe }) => {
     props.handleLogin(username, password, rememberMe);
   };
@@ -58,7 +65,7 @@ const LoginModal = (props: ILoginModalProps) => {
               />
               <ValidatedField
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 label="Password"
                 placeholder="Your password"
                 required
@@ -68,6 +75,11 @@ const LoginModal = (props: ILoginModalProps) => {
                 error={errors.password as FieldError}
                 isTouched={touchedFields.password}
               />
+              <Button onClick={togglePasswordVisibility}>
+                {showPassword ? 'Hide' : 'Show'}
+              </Button>
+              <br />
+              <br />
               <ValidatedField name="rememberMe" type="checkbox" check label="Remember me" value={true} register={register} />
             </Col>
           </Row>
