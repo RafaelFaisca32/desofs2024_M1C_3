@@ -75,7 +75,7 @@ const LoginModal = (props: ILoginModalProps) => {
                 error={errors.password as FieldError}
                 isTouched={touchedFields.password}
               />
-              <Button onClick={togglePasswordVisibility}>
+              <Button color="info" onClick={togglePasswordVisibility}>
                 {showPassword ? 'Hide' : 'Show'}
               </Button>
               <br />
