@@ -11,6 +11,9 @@ import { AdminMenu, EntitiesMenu, AccountMenu } from '../menus';
 export interface IHeaderProps {
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isManager: boolean;
+  isDriver: boolean;
+  isCustomer: boolean;
   ribbonEnv: string;
   isInProduction: boolean;
   isOpenAPIEnabled: boolean;
@@ -41,7 +44,7 @@ const Header = (props: IHeaderProps) => {
           <Nav id="header-tabs" className="ms-auto" navbar>
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
-            {props.isAuthenticated && props.isAdmin && <AdminMenu showOpenAPI={props.isOpenAPIEnabled} />}
+            {props.isAuthenticated && (props.isAdmin || props.isManager) && <AdminMenu isAdmin={props.isAdmin} showOpenAPI={props.isOpenAPIEnabled} />}
             <AccountMenu isAuthenticated={props.isAuthenticated} />
           </Nav>
         </Collapse>

@@ -29,6 +29,9 @@ export const App = () => {
 
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const isAdmin = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
+  const isManager = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.MANAGER]));
+  const isDriver = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.DRIVER]));
+  const isCustomer = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.CUSTOMER]));
   const ribbonEnv = useAppSelector(state => state.applicationProfile.ribbonEnv);
   const isInProduction = useAppSelector(state => state.applicationProfile.inProduction);
   const isOpenAPIEnabled = useAppSelector(state => state.applicationProfile.isOpenAPIEnabled);
@@ -42,6 +45,9 @@ export const App = () => {
           <Header
             isAuthenticated={isAuthenticated}
             isAdmin={isAdmin}
+            isManager={isManager}
+            isCustomer={isCustomer}
+            isDriver={isDriver}
             ribbonEnv={ribbonEnv}
             isInProduction={isInProduction}
             isOpenAPIEnabled={isOpenAPIEnabled}

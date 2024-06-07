@@ -4,23 +4,22 @@ import { DropdownItem } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavDropdown } from './menu-components';
 
-const adminMenuItems = () => (
+const adminMenuItems = (isAdmin: boolean) => (
   <>
     <MenuItem icon="users" to="/admin/user-management">
       User management
     </MenuItem>
-    <MenuItem icon="tachometer-alt" to="/admin/metrics">
-      Metrics
-    </MenuItem>
-    <MenuItem icon="heart" to="/admin/health">
-      Health
-    </MenuItem>
-    <MenuItem icon="cogs" to="/admin/configuration">
-      Configuration
-    </MenuItem>
-    <MenuItem icon="tasks" to="/admin/logs">
-      Logs
-    </MenuItem>
+    {isAdmin && (
+      <><MenuItem icon="tachometer-alt" to="/admin/metrics">
+        Metrics
+      </MenuItem><MenuItem icon="heart" to="/admin/health">
+        Health
+      </MenuItem><MenuItem icon="cogs" to="/admin/configuration">
+        Configuration
+      </MenuItem><MenuItem icon="tasks" to="/admin/logs">
+        Logs
+      </MenuItem></> )
+    }
     {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
   </>
 );
@@ -31,10 +30,10 @@ const openAPIItem = () => (
   </MenuItem>
 );
 
-export const AdminMenu = ({ showOpenAPI }) => (
+export const AdminMenu = ({ showOpenAPI , isAdmin}) => (
   <NavDropdown icon="users-cog" name="Administration" id="admin-menu" data-cy="adminMenu">
-    {adminMenuItems()}
-    {showOpenAPI && openAPIItem()}
+    {adminMenuItems(isAdmin)}
+    {showOpenAPI && isAdmin && openAPIItem()}
   </NavDropdown>
 );
 
