@@ -1,5 +1,6 @@
 package com.mycompany.myapp.infrastructure.repository.jpa;
 
+import com.mycompany.myapp.domain.location.Location;
 import com.mycompany.myapp.domain.transport.*;
 
 import java.time.LocalDateTime;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -23,4 +25,10 @@ public interface TransportRepository extends JpaRepository<Transport, TransportI
         "SELECT t.driver.id FROM Transport t WHERE " +
         "(t.startTime <= :endDate AND t.endTime >= :startDate))")
     List<Object[]> findFreeDrivers(TransportEndTime startDate, TransportStartTime endDate);
+
+    @Query("SELECT c FROM Transport c " +
+        "JOIN c.driver au " +
+        "JOIN au.applicationUser u " +
+        "WHERE u.id = :userId" )
+    List<Transport> getByUserId(@Param("userId") Long userId);
 }

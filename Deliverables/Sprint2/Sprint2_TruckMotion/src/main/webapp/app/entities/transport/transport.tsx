@@ -9,7 +9,7 @@ import { ASC, DESC, SORT } from 'app/shared/util/pagination.constants';
 import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntities, partialUpdateEntity } from './transport.reducer';
+import { getEntitiesByUserLoggedIn, partialUpdateEntity } from './transport.reducer';
 import { updateEntityStatus } from 'app/entities/service-request/service-request.reducer';
 import dayjs from 'dayjs';
 
@@ -26,7 +26,7 @@ export const Transport = () => {
 
   const getAllEntities = () => {
     dispatch(
-      getEntities({
+      getEntitiesByUserLoggedIn({
         sort: `${sortState.sort},${sortState.order}`,
       }),
     );
@@ -99,78 +99,78 @@ export const Transport = () => {
         {transportList && transportList.length > 0 ? (
           <Table responsive>
             <thead>
-            <tr>
-              <th>
-                Transport option <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
-              </th>
-              <th className="hand" onClick={sort('startTime')}>
-                Start Time <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
-              </th>
-              <th className="hand" onClick={sort('endTime')}>
-                End Time <FontAwesomeIcon icon={getSortIconByFieldName('endTime')} />
-              </th>
-              <th>
-                Location Coordinates(x,y,z)<FontAwesomeIcon icon="sort" />
-              </th>
-              <th>
-                Service Request Name <FontAwesomeIcon icon="sort" />
-              </th>
-              <th />
-            </tr>
+              <tr>
+                <th>
+                  Transport option <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
+                </th>
+                <th className="hand" onClick={sort('startTime')}>
+                  Start Time <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
+                </th>
+                <th className="hand" onClick={sort('endTime')}>
+                  End Time <FontAwesomeIcon icon={getSortIconByFieldName('endTime')} />
+                </th>
+                <th>
+                  Location Coordinates(x,y,z)<FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  Service Request Name <FontAwesomeIcon icon="sort" />
+                </th>
+                <th />
+              </tr>
             </thead>
             <tbody>
-            {transportList.map((transport, i) => {
-              let buttonColor = 'green';
-              let buttonText = 'Start Service';
-              let onClickHandler = () => startService(transport.id);
+              {transportList.map((transport, i) => {
+                let buttonColor = 'green';
+                let buttonText = 'Start Service';
+                let onClickHandler = () => startService(transport.id);
 
-              if (transport.startTime && !transport.endTime) {
-                buttonColor = 'yellow';
-                buttonText = 'In Progress';
-                onClickHandler = () => endService(transport.id);
-              } else if (transport.startTime && transport.endTime) {
-                buttonColor = 'red';
-                buttonText = 'Completed';
-              }
+                if (transport.startTime && !transport.endTime) {
+                  buttonColor = 'yellow';
+                  buttonText = 'In Progress';
+                  onClickHandler = () => endService(transport.id);
+                } else if (transport.startTime && transport.endTime) {
+                  buttonColor = 'red';
+                  buttonText = 'Completed';
+                }
 
-              return (
-                <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/transport/${transport.id}`} color="link" size="sm">
-                      {i}
-                    </Button>
-                  </td>
-                  <td>{transport.startTime ? <TextFormat type="date" value={transport.startTime} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{transport.endTime ? <TextFormat type="date" value={transport.endTime} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{transport.location ? <Link to={`/location/${transport.location.id}`}>{transport.location.coordX +"--" +transport.location.coordY+"--" +transport.location.coordZ}</Link> : ''}</td>
-                  <td>
-                    {transport.serviceRequest ? (
-                      <Link to={`/service-request/${transport.serviceRequest.id}`}>{transport.serviceRequest.serviceName}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
-                  <td className="text-end">
-                    <div className="btn-group flex-btn-group-container">
-                      <Button
-                        onClick={onClickHandler}
-                        replace
-                        style={{
-                          backgroundColor: buttonColor,
-                          borderColor: buttonColor,
-                          color: 'white',
-                        }}
-                      >
-                        <FontAwesomeIcon icon="plus" /> <span className="d-none d-md-inline">{buttonText}</span>
+                return (
+                  <tr key={`entity-${i}`} data-cy="entityTable">
+                    <td>
+                      <Button tag={Link} to={`/transport/${transport.id}`} color="link" size="sm">
+                        {i}
                       </Button>
-                      <Button tag={Link} to={`/transport/${transport.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                    </td>
+                    <td>{transport.startTime ? <TextFormat type="date" value={transport.startTime} format={APP_DATE_FORMAT} /> : null}</td>
+                    <td>{transport.endTime ? <TextFormat type="date" value={transport.endTime} format={APP_DATE_FORMAT} /> : null}</td>
+                    <td>{transport.location ? <Link to={`/location/${transport.location.id}`}>{transport.location.coordX + "--" + transport.location.coordY + "--" + transport.location.coordZ}</Link> : ''}</td>
+                    <td>
+                      {transport.serviceRequest ? (
+                        <Link to={`/service-request/${transport.serviceRequest.id}`}>{transport.serviceRequest.serviceName}</Link>
+                      ) : (
+                        ''
+                      )}
+                    </td>
+                    <td className="text-end">
+                      <div className="btn-group flex-btn-group-container">
+                        <Button
+                          onClick={onClickHandler}
+                          replace
+                          style={{
+                            backgroundColor: buttonColor,
+                            borderColor: buttonColor,
+                            color: 'white',
+                          }}
+                        >
+                          <FontAwesomeIcon icon="plus" /> <span className="d-none d-md-inline">{buttonText}</span>
+                        </Button>
+                        <Button tag={Link} to={`/transport/${transport.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                          <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </Table>
         ) : (

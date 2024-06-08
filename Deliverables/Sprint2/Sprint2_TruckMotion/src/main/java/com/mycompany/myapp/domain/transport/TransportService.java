@@ -1,6 +1,8 @@
 package com.mycompany.myapp.domain.transport;
 
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
+import com.mycompany.myapp.domain.location.dto.LocationDTO;
+import com.mycompany.myapp.domain.location.mapper.LocationMapper;
 import com.mycompany.myapp.infrastructure.repository.jpa.TransportRepository;
 import com.mycompany.myapp.domain.transport.dto.TransportDTO;
 import com.mycompany.myapp.domain.transport.mapper.TransportMapper;
@@ -9,6 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -115,5 +119,13 @@ public class TransportService {
     public void delete(UUID id) {
         log.debug("Request to delete Transport : {}", id);
         transportRepository.deleteById(new TransportId(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<TransportDTO> getByUserId(Long userId) {
+        log.debug("Request to get Transport by UserId : {}", userId);
+        return StreamSupport.stream(transportRepository.getByUserId(userId).spliterator(), false)
+            .map(TransportMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 }

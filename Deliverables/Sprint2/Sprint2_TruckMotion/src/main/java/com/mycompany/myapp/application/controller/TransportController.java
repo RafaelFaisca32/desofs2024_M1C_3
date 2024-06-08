@@ -1,16 +1,18 @@
 package com.mycompany.myapp.application.controller;
 
+import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.transport.Transport;
+import com.mycompany.myapp.domain.user.User;
+import com.mycompany.myapp.domain.user.UserService;
+import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import com.mycompany.myapp.infrastructure.repository.jpa.TransportRepository;
 import com.mycompany.myapp.domain.transport.TransportService;
 import com.mycompany.myapp.domain.transport.dto.TransportDTO;
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,9 +36,11 @@ public class TransportController {
     private String applicationName;
 
     private final TransportService transportService;
+    private final UserService userService;
 
-    public TransportController(TransportService transportService) {
+    public TransportController(TransportService transportService, UserService userService) {
         this.transportService = transportService;
+        this.userService = userService;
     }
 
     /**
@@ -124,5 +128,24 @@ public class TransportController {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/getByUserLoggedIn")
+    public List<TransportDTO> getAllTransportsByLoggedInUser(@RequestParam(name = "filter", required = false) String filter) {
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+        log.debug("REST request to get all Transports By LoggedIn User");
+
+        List<TransportDTO> listRet = new ArrayList<>();
+
+        if (adminUserDTO != null) {
+            if (adminUserDTO.getAuthorities().contains("ROLE_MANAGER") || adminUserDTO.getAuthorities().contains("ROLE_ADMIN"))
+                listRet = transportService.findAll();
+            else if (adminUserDTO.getAuthorities().contains("ROLE_DRIVER"))
+                listRet = transportService.getByUserId(adminUserDTO.getId());
+        }
+
+        return listRet;
     }
 }

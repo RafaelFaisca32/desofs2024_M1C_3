@@ -1,5 +1,7 @@
 package com.mycompany.myapp.domain.transport;
 
+import com.mycompany.myapp.domain.location.Location;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +23,6 @@ public interface ITransportRepository {
     boolean existsById(TransportId id);
 
     List<Object[]> findFreeDrivers(TransportEndTime startDate, TransportStartTime endDate);
+
+    List<Transport> getByUserId(Long userId);
 }
