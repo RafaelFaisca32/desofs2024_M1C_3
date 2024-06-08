@@ -144,7 +144,7 @@ public class LocationController {
         AdminUserDTO adminUserDTO = userService
             .getUserWithAuthorities()
             .map(AdminUserDTO::new).get();
-        log.debug("REST request to get all ServiceRequests By LoggedIn User");
+        log.debug("REST request to get all Locations By LoggedIn User");
 
         List<LocationDTO> listRet = new ArrayList<>();
 
