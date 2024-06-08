@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * A Location.
@@ -95,7 +94,7 @@ public class Location implements Serializable {
         }
         this.serviceRequests = serviceRequests != null ? new HashSet<>(serviceRequests) : null; }
 
-    public Set<Transport> getTransport() {
+    public Set<Transport> getTransports() {
         return this.transports != null ? new HashSet<>(this.transports) : null;
     }
 

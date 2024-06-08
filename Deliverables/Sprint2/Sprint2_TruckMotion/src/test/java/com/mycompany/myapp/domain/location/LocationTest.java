@@ -63,11 +63,11 @@ class LocationTest {
         Transport transportBack = getTransportRandomSampleGenerator();
 
         location.updateTransport(new HashSet<>(Set.of(transportBack)));
-        assertThat(location.getTransport()).isEqualTo(transportBack);
+        assertThat(location.getTransports()).isEqualTo(transportBack);
         assertThat(transportBack.getLocation()).isEqualTo(location);
 
         location.updateTransport(null);
-        assertThat(location.getTransport()).isNull();
+        assertThat(location.getTransports()).isNull();
         assertThat(transportBack.getLocation()).isNull();
     }
 }
