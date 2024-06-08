@@ -43,7 +43,7 @@ public class Manager implements Serializable {
     }
 
     public ApplicationUser getApplicationUser() {
-        return this.applicationUser != null ? new ApplicationUser(this.applicationUser) : null;
+        return this.applicationUser;
     }
 
     public void updateApplicationUser(ApplicationUser applicationUser) {

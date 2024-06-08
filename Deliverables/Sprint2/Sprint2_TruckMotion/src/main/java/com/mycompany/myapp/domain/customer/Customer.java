@@ -76,7 +76,7 @@ public class Customer implements Serializable {
     }
 
     public ApplicationUser getApplicationUser() {
-        return this.applicationUser != null ? new ApplicationUser(this.applicationUser) : null;
+        return this.applicationUser;
 
     }
 
