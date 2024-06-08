@@ -1,8 +1,6 @@
 package com.mycompany.myapp.domain.location.mapper;
 
-import com.mycompany.myapp.domain.customer.Company;
 import com.mycompany.myapp.domain.customer.Customer;
-import com.mycompany.myapp.domain.customer.CustomerId;
 import com.mycompany.myapp.domain.customer.mapper.CustomerMapper;
 import com.mycompany.myapp.domain.location.GeographicalCoordinates;
 import com.mycompany.myapp.domain.location.Location;
@@ -12,10 +10,6 @@ import com.mycompany.myapp.domain.location.dto.LocationDTO;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
-
-import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
-import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link Location} and its DTO {@link LocationDTO}.
@@ -63,7 +57,7 @@ public final class LocationMapper {
             entity.setCustomer(CustomerMapper.toEntity(dto.getCustomer()));
         }
         if(dto.getCoordX() != null && dto.getCoordY() != null && dto.getCoordZ() != null){
-            entity.setCoord(new GeographicalCoordinates(dto.getCoordX(),dto.getCoordY(),dto.getCoordZ()));
+            entity.updateCoord(new GeographicalCoordinates(dto.getCoordX(),dto.getCoordY(),dto.getCoordZ()));
         }
 
     }
