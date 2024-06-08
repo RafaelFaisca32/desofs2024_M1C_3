@@ -23,7 +23,7 @@ export const getEntities = createAsyncThunk('location/fetch_entity_list', async 
   return axios.get<ILocation[]>(requestUrl);
 });
 
-export const getEntitiesByUserLoggedIn = createAsyncThunk('serviceRequest/fetch_entity_list', async ({ sort }: IQueryParams) => {
+export const getEntitiesByUserLoggedIn = createAsyncThunk('location/fetch_entity_list', async ({ sort }: IQueryParams) => {
   const requestUrl = `${apiUrl}/getByUserLoggedIn?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
   return axios.get<Location[]>(requestUrl);
 });
