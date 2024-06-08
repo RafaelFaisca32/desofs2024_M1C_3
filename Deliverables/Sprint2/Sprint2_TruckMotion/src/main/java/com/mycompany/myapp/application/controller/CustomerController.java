@@ -94,38 +94,6 @@ public class CustomerController {
     }
 
     /**
-     * {@code PATCH  /customers/:id} : Partial updates given fields of an existing customer, field will ignore if it is null
-     *
-     * @param id the id of the customerDTO to save.
-     * @param customerDTO the customerDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated customerDTO,
-     * or with status {@code 400 (Bad Request)} if the customerDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the customerDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the customerDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<CustomerDTO> partialUpdateCustomer(
-        @PathVariable(value = "id", required = false) final UUID id,
-        @RequestBody CustomerDTO customerDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update Customer partially : {}, {}", id, customerDTO);
-        if (customerDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, customerDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        Optional<CustomerDTO> result = customerService.partialUpdate(customerDTO);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, customerDTO.getId().toString())
-        );
-    }
-
-    /**
      * {@code GET  /customers} : get all the customers.
      *
      * @param filter the filter of the request.

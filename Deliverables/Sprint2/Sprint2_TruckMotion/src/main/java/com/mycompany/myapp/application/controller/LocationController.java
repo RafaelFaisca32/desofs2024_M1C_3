@@ -90,38 +90,6 @@ public class LocationController {
     }
 
     /**
-     * {@code PATCH  /locations/:id} : Partial updates given fields of an existing location, field will ignore if it is null
-     *
-     * @param id the id of the locationDTO to save.
-     * @param locationDTO the locationDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated locationDTO,
-     * or with status {@code 400 (Bad Request)} if the locationDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the locationDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the locationDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<LocationDTO> partialUpdateLocation(
-        @PathVariable(value = "id", required = false) final UUID id,
-        @RequestBody LocationDTO locationDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update Location partially : {}, {}", id, locationDTO);
-        if (locationDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, locationDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        Optional<LocationDTO> result = locationService.partialUpdate(locationDTO);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, locationDTO.getId().toString())
-        );
-    }
-
-    /**
      * {@code GET  /locations} : get all the locations.
      *
      * @param filter the filter of the request.

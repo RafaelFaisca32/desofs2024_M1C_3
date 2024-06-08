@@ -88,37 +88,6 @@ public class ManagerController {
     }
 
     /**
-     * {@code PATCH  /managers/:id} : Partial updates given fields of an existing manager, field will ignore if it is null
-     *
-     * @param id the id of the managerDTO to save.
-     * @param managerDTO the managerDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated managerDTO,
-     * or with status {@code 400 (Bad Request)} if the managerDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the managerDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the managerDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<ManagerDTO> partialUpdateManager(
-        @PathVariable(value = "id", required = false) final UUID id,
-        @RequestBody ManagerDTO managerDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update Manager partially : {}, {}", id, managerDTO);
-        if (managerDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, managerDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-        Optional<ManagerDTO> result = managerService.partialUpdate(managerDTO);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, managerDTO.getId().toString())
-        );
-    }
-
-    /**
      * {@code GET  /managers} : get all the managers.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of managers in body.
