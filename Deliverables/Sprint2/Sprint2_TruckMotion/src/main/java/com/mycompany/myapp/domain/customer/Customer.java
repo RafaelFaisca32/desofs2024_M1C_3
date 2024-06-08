@@ -58,7 +58,7 @@ public class Customer implements Serializable {
         this.company = customer.getCompany();
         this.applicationUser = customer.getApplicationUser();
         this.locations = new HashSet<>(customer.getLocations());
-        this.serviceRequests = new HashSet<>(customer.getServiceRequest());
+        this.serviceRequests = new HashSet<>(customer.getServiceRequests());
 
     }
 
@@ -115,7 +115,7 @@ public class Customer implements Serializable {
         }
     }
 
-    public Set<ServiceRequest> getServiceRequest() {
+    public Set<ServiceRequest> getServiceRequests() {
         return this.serviceRequests != null ? new HashSet<>(this.serviceRequests) : null;
     }
 

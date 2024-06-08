@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * A Driver.
@@ -60,7 +59,7 @@ public class Driver implements Serializable {
         this.id = driver.getId();
         this.truck = driver.getTruck();
         this.applicationUser = driver.getApplicationUser();
-        this.transports = new HashSet<>(driver.getTransport());
+        this.transports = new HashSet<>(driver.getTransports());
     }
 
 
@@ -81,7 +80,7 @@ public class Driver implements Serializable {
         this.applicationUser = applicationUser != null ? new ApplicationUser(applicationUser) : null;
     }
 
-    public Set<Transport> getTransport() {
+    public Set<Transport> getTransports() {
         return this.transports != null ? new HashSet<>(this.transports) : null;
     }
 
