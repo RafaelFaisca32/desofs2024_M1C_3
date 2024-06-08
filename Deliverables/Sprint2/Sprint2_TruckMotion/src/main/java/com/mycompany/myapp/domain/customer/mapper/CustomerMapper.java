@@ -65,7 +65,7 @@ public final class CustomerMapper {
             entity.updateCompany(new Company(dto.getCompany()));
         }
         if(dto.getApplicationUser() != null){
-            entity.setApplicationUser(ApplicationUserMapper.toEntity(dto.getApplicationUser()));
+            entity.updateApplicationUser(ApplicationUserMapper.toEntity(dto.getApplicationUser()));
         }
     }
 }

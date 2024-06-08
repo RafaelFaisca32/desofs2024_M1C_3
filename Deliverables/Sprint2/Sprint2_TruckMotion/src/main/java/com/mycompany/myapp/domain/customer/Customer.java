@@ -61,77 +61,63 @@ public class Customer implements Serializable {
         return this.company != null ? new Company(this.company.value()) : null;
     }
 
-    public Customer updateCompanyWithReturn(Company company) {
-        this.updateCompany(new Company(company.value()));
-        return this;
-    }
 
     public void updateCompany(Company company) {
-        this.company = new Company(company.value());
+        this.company = company != null ? new Company(company.value()) : null;
     }
 
     public ApplicationUser getApplicationUser() {
-        //return this.applicationUser.mirror();
-        return null;
+        return this.applicationUser != null ? new ApplicationUser(this.applicationUser) : null;
+
     }
 
-    public void setApplicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser;
+    public void updateApplicationUser(ApplicationUser applicationUser) {
+        this.applicationUser = applicationUser != null ? new ApplicationUser(applicationUser) : null;
     }
 
-    public Customer applicationUser(ApplicationUser applicationUser) {
-        this.setApplicationUser(applicationUser);
-        return this;
-    }
 
     public Set<Location> getLocations() {
-        return this.locations;
+        return this.locations != null ? new HashSet<>(this.locations) : new HashSet<>();
     }
 
-    public void setLocations(Set<Location> locations) {
+    public void updateLocations(Set<Location> locations) {
+        if(locations != null) {
+            locations.forEach(i -> i.setCustomer(this));
+        }
+
         if (this.locations != null) {
             this.locations.forEach(i -> i.setCustomer(null));
         }
-        if (locations != null) {
-            locations.forEach(i -> i.setCustomer(this));
+        this.locations = locations != null ? new HashSet<>(locations) : new HashSet<>();
+    }
+
+    public void addLocation(Location location) {
+        if(location != null) {
+            location.setCustomer(this);
+            Location newLocation = new Location(location);
+            this.locations.add(newLocation);
         }
-        this.locations = locations;
     }
 
-    public Customer locations(Set<Location> locations) {
-        this.setLocations(locations);
-        return this;
-    }
-
-    public Customer addLocation(Location location) {
-        this.locations.add(location);
-        location.setCustomer(this);
-        return this;
-    }
-
-    public Customer removeLocation(Location location) {
-        this.locations.remove(location);
-        location.setCustomer(null);
-        return this;
+    public void removeLocation(Location location) {
+        if(location != null) {
+            location.setCustomer(null);
+            this.locations.remove(location);
+        }
     }
 
     public ServiceRequest getServiceRequest() {
-        return this.serviceRequest;
+        return this.serviceRequest != null ? new ServiceRequest(this.serviceRequest) : null;
     }
 
-    public void setServiceRequest(ServiceRequest serviceRequest) {
+    public void updateServiceRequest(ServiceRequest serviceRequest) {
         if (this.serviceRequest != null) {
             this.serviceRequest.setCustomer(null);
         }
         if (serviceRequest != null) {
             serviceRequest.setCustomer(this);
         }
-        this.serviceRequest = serviceRequest;
-    }
-
-    public Customer serviceRequest(ServiceRequest serviceRequest) {
-        this.setServiceRequest(serviceRequest);
-        return this;
+        this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -35,10 +35,10 @@ class CustomerTest {
         Customer customer = getCustomerRandomSampleGenerator();
         ApplicationUser applicationUserBack = getApplicationUserRandomSampleGenerator();
 
-        customer.setApplicationUser(applicationUserBack);
+        customer.updateApplicationUser(applicationUserBack);
         assertThat(customer.getApplicationUser()).isEqualTo(applicationUserBack);
 
-        customer.applicationUser(null);
+        customer.updateApplicationUser(null);
         assertThat(customer.getApplicationUser()).isNull();
     }
 
@@ -55,11 +55,11 @@ class CustomerTest {
         assertThat(customer.getLocations()).doesNotContain(locationBack);
         assertThat(locationBack.getCustomer()).isNull();
 
-        customer.locations(new HashSet<>(Set.of(locationBack)));
+        customer.updateLocations(new HashSet<>(Set.of(locationBack)));
         assertThat(customer.getLocations()).containsOnly(locationBack);
         assertThat(locationBack.getCustomer()).isEqualTo(customer);
 
-        customer.setLocations(new HashSet<>());
+        customer.updateLocations(new HashSet<>());
         assertThat(customer.getLocations()).doesNotContain(locationBack);
         assertThat(locationBack.getCustomer()).isNull();
     }
@@ -69,11 +69,11 @@ class CustomerTest {
         Customer customer = getCustomerRandomSampleGenerator();
         ServiceRequest serviceRequestBack = getServiceRequestRandomSampleGenerator();
 
-        customer.setServiceRequest(serviceRequestBack);
+        customer.updateServiceRequest(serviceRequestBack);
         assertThat(customer.getServiceRequest()).isEqualTo(serviceRequestBack);
         assertThat(serviceRequestBack.getCustomer()).isEqualTo(customer);
 
-        customer.serviceRequest(null);
+        customer.updateServiceRequest(null);
         assertThat(customer.getServiceRequest()).isNull();
         assertThat(serviceRequestBack.getCustomer()).isNull();
     }
