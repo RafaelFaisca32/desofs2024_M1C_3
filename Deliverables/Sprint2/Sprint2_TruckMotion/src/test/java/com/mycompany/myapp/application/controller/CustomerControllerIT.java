@@ -194,7 +194,7 @@ class CustomerControllerIT {
     void putNonExistingCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         //customer.updateId(new CustomerId() );
-
+        customer = new Customer(new CustomerId(),customer.getCompany(),customer.getApplicationUser());
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
@@ -216,7 +216,7 @@ class CustomerControllerIT {
     void putWithIdMismatchCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         //customer.updateId(new CustomerId());
-
+        customer = new Customer(new CustomerId(),customer.getCompany(),customer.getApplicationUser());
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
@@ -236,7 +236,7 @@ class CustomerControllerIT {
     void putWithMissingIdPathParamCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         //customer.updateId(new CustomerId());
-
+        customer = new Customer(new CustomerId(),customer.getCompany(),customer.getApplicationUser());
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
@@ -258,7 +258,7 @@ class CustomerControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the customer using partial update
-        Customer partialUpdatedCustomer = new Customer();
+        Customer partialUpdatedCustomer = new Customer(customer.getId(),customer.getCompany(),customer.getApplicationUser());
         //partialUpdatedCustomer.updateId(customer.getId());
 
         restCustomerMockMvc
@@ -284,7 +284,7 @@ class CustomerControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the customer using partial update
-        Customer partialUpdatedCustomer = new Customer();
+        Customer partialUpdatedCustomer = new Customer(customer.getId(),customer.getCompany(),customer.getApplicationUser());
         //partialUpdatedCustomer.updateId(customer.getId());
 
         partialUpdatedCustomer.updateCompany(UPDATED_COMPANY);
@@ -308,7 +308,7 @@ class CustomerControllerIT {
     void patchNonExistingCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         //customer.updateId(new CustomerId());
-
+        customer = new Customer(new CustomerId(),customer.getCompany(),customer.getApplicationUser());
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
@@ -330,7 +330,7 @@ class CustomerControllerIT {
     void patchWithIdMismatchCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         //customer.updateId(new CustomerId());
-
+        customer = new Customer(new CustomerId(),customer.getCompany(),customer.getApplicationUser());
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
@@ -352,7 +352,7 @@ class CustomerControllerIT {
     void patchWithMissingIdPathParamCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         //customer.updateId(new CustomerId());
-
+        customer = new Customer(new CustomerId(),customer.getCompany(),customer.getApplicationUser());
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
 
