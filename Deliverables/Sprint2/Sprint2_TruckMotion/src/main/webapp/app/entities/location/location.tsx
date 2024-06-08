@@ -8,8 +8,8 @@ import { ASC, DESC, SORT } from 'app/shared/util/pagination.constants';
 import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntities } from './location.reducer';
 import { AUTHORITIES } from '../../config/constants';
+import { getEntitiesByUserLoggedIn } from './location.reducer';
 
 export const Location = () => {
   const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ export const Location = () => {
 
   const getAllEntities = () => {
     dispatch(
-      getEntities({
+      getEntitiesByUserLoggedIn({
         sort: `${sortState.sort},${sortState.order}`,
       }),
     );

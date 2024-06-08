@@ -147,4 +147,13 @@ public class LocationService {
         LocationId lId = new LocationId(id);
         locationRepository.deleteById(lId);
     }
+
+
+    @Transactional(readOnly = true)
+    public List<LocationDTO> getByUserId(Long userId) {
+        log.debug("Request to get Location by UserId : {}", userId);
+        return StreamSupport.stream(locationRepository.getByUserId(userId).spliterator(), false)
+            .map(LocationMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 }
