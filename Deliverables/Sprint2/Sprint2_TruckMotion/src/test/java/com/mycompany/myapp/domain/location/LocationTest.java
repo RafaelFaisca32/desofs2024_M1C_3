@@ -12,6 +12,9 @@ import com.mycompany.myapp.domain.transport.Transport;
 import com.mycompany.myapp.application.controller.TestUtil;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 class LocationTest {
 
     @Test
@@ -21,7 +24,7 @@ class LocationTest {
         Location location2 = new Location();
         assertThat(location1).isNotEqualTo(location2);
 
-        location2 = new Location(location1.getId(),location1.getCoord(),location1.getCustomer());
+        location2 = new Location(location1);
         assertThat(location1).isEqualTo(location2);
 
         location2 = getLocationSample2();
@@ -33,10 +36,38 @@ class LocationTest {
         Location location = getLocationRandomSampleGenerator();
         Customer customerBack = getCustomerRandomSampleGenerator();
 
-        location.setCustomer(customerBack);
+        location.updateCustomer(customerBack);
         assertThat(location.getCustomer()).isEqualTo(customerBack);
 
-        location.customer(null);
+        location.updateCustomer(null);
         assertThat(location.getCustomer()).isNull();
+    }
+
+    @Test
+    void serviceRequestTest() throws Exception {
+        Location location = getLocationRandomSampleGenerator();
+        ServiceRequest serviceRequestBack = getServiceRequestRandomSampleGenerator();
+
+        location.updateServiceRequest(new HashSet<>(Set.of(serviceRequestBack)));
+        assertThat(location.getServiceRequests()).isEqualTo(serviceRequestBack);
+        assertThat(serviceRequestBack.getLocation()).isEqualTo(location);
+
+        location.updateServiceRequest(null);
+        assertThat(location.getServiceRequests()).isNull();
+        assertThat(serviceRequestBack.getLocation()).isNull();
+    }
+
+    @Test
+    void transportTest() throws Exception {
+        Location location = getLocationRandomSampleGenerator();
+        Transport transportBack = getTransportRandomSampleGenerator();
+
+        location.updateTransport(new HashSet<>(Set.of(transportBack)));
+        assertThat(location.getTransports()).isEqualTo(transportBack);
+        assertThat(transportBack.getLocation()).isEqualTo(location);
+
+        location.updateTransport(null);
+        assertThat(location.getTransports()).isNull();
+        assertThat(transportBack.getLocation()).isNull();
     }
 }

@@ -53,7 +53,7 @@ class AuthorityControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Authority createEntity(EntityManager em) {
-        Authority authority = new Authority().name(UUID.randomUUID().toString());
+        Authority authority = new Authority(UUID.randomUUID().toString());
         return authority;
     }
 
@@ -64,7 +64,7 @@ class AuthorityControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Authority createUpdatedEntity(EntityManager em) {
-        Authority authority = new Authority().name(UUID.randomUUID().toString());
+        Authority authority = new Authority(UUID.randomUUID().toString());
         return authority;
     }
 
@@ -114,7 +114,7 @@ class AuthorityControllerIT {
     @Transactional
     void getAllAuthorities() throws Exception {
         // Initialize the database
-        authority.setName(UUID.randomUUID().toString());
+        authority.updateName(UUID.randomUUID().toString());
         authorityRepository.saveAndFlush(authority);
 
         // Get all the authorityList
@@ -129,7 +129,7 @@ class AuthorityControllerIT {
     @Transactional
     void getAuthority() throws Exception {
         // Initialize the database
-        authority.setName(UUID.randomUUID().toString());
+        authority.updateName(UUID.randomUUID().toString());
         authorityRepository.saveAndFlush(authority);
 
         // Get the authority
@@ -151,7 +151,7 @@ class AuthorityControllerIT {
     @Transactional
     void deleteAuthority() throws Exception {
         // Initialize the database
-        authority.setName(UUID.randomUUID().toString());
+        authority.updateName(UUID.randomUUID().toString());
         authorityRepository.saveAndFlush(authority);
 
         long databaseSizeBeforeDelete = getRepositoryCount();

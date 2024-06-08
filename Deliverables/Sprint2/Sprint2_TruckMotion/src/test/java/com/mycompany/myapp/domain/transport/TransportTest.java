@@ -21,7 +21,7 @@ class TransportTest {
         Transport transport2 = new Transport();
         assertThat(transport1).isNotEqualTo(transport2);
 
-        transport2.setId(transport1.getId());
+        transport2 = new Transport(transport1);
         assertThat(transport1).isEqualTo(transport2);
 
         transport2 = getTransportSample2();
@@ -33,10 +33,10 @@ class TransportTest {
         Transport transport = getTransportRandomSampleGenerator();
         Location locationBack = getLocationRandomSampleGenerator();
 
-        transport.setLocation(locationBack);
+        transport.updateLocation(locationBack);
         assertThat(transport.getLocation()).isEqualTo(locationBack);
 
-        transport.location(null);
+        transport.updateLocation(null);
         assertThat(transport.getLocation()).isNull();
     }
 
@@ -45,10 +45,10 @@ class TransportTest {
         Transport transport = getTransportRandomSampleGenerator();
         Driver driverBack = getDriverRandomSampleGenerator();
 
-        transport.setDriver(driverBack);
+        transport.updateDriver(driverBack);
         assertThat(transport.getDriver()).isEqualTo(driverBack);
 
-        transport.driver(null);
+        transport.updateDriver(null);
         assertThat(transport.getDriver()).isNull();
     }
 
@@ -57,10 +57,10 @@ class TransportTest {
         Transport transport = getTransportRandomSampleGenerator();
         ServiceRequest serviceRequestBack = getServiceRequestRandomSampleGenerator();
 
-        transport.setServiceRequest(serviceRequestBack);
+        transport.updateServiceRequest(serviceRequestBack);
         assertThat(transport.getServiceRequest()).isEqualTo(serviceRequestBack);
 
-        transport.serviceRequest(null);
+        transport.updateServiceRequest(null);
         assertThat(transport.getServiceRequest()).isNull();
     }
 }

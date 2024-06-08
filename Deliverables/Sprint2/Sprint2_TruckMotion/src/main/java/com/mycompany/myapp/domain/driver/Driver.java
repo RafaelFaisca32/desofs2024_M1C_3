@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * A Driver.
@@ -56,31 +55,46 @@ public class Driver implements Serializable {
         this.applicationUser = applicationUser;
     }
 
+    public Driver(Driver driver){
+        this.id = driver.getId();
+        this.truck = driver.getTruck();
+        this.applicationUser = driver.getApplicationUser();
+        this.transports = new HashSet<>(driver.getTransports());
+    }
+
 
     public Truck getTruck() {
         return this.truck != null ? new Truck(this.truck) : null;
     }
 
     public void updateTruck(Truck truck) {
-        this.truck = truck != null ? new Truck(this.truck) : null;
+        this.truck = truck != null ? new Truck(truck) : null;
     }
 
 
     public ApplicationUser getApplicationUser() {
-        return this.applicationUser != null ? new ApplicationUser(this.applicationUser) : null;
+        return this.applicationUser;
     }
 
     public void updateApplicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser != null ? new ApplicationUser(this.applicationUser) : null;
+        this.applicationUser = applicationUser != null ? new ApplicationUser(applicationUser) : null;
     }
 
     public Set<Transport> getTransports() {
-        return this.transports;
+        return this.transports != null ? new HashSet<>(this.transports) : null;
     }
 
     public void updateTransports(Set<Transport> transports) {
-        this.transports = transports;
+        if(transports != null) {
+            transports.forEach(i -> i.updateDriver(this));
+        }
+
+        if (this.transports != null) {
+            this.transports.forEach(i -> i.updateDriver(null));
+        }
+        this.transports = transports != null ? new HashSet<>(transports) : null;
     }
+
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

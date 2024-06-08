@@ -2,11 +2,9 @@ package com.mycompany.myapp.domain.truck;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.driver.Driver;
-import com.mycompany.myapp.domain.transport.TransportId;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * A Truck.
@@ -59,58 +57,34 @@ public class Truck implements Serializable {
         return this.id != null ? new TruckId(this.id.value()) : null;
     }
 
-    public Truck id(TruckId id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(TruckId id) {
-        this.id = id;
-    }
-
     public Make getMake() {
         return this.make != null ? new Make(this.make.value()) : null;
     }
 
-    public Truck make(Make make) {
-        this.setMake(make);
-        return this;
-    }
-
-    public void setMake(Make make) {
-        this.make = make;
+    public void updateMake(Make make) {
+        this.make = make != null ? new Make(this.make.value()) : null;
     }
 
     public Model getModel() {
         return this.model != null ? new Model(this.model.value()) : null;
     }
 
-    public Truck model(Model model) {
-        this.setModel(model);
-        return this;
-    }
-
-    public void setModel(Model model) {
-        this.model = model;
+    public void updateModel(Model model) {
+        this.model = model != null ? new Model(this.model.value()) : null;
     }
 
     public Driver getDriver() {
         return this.driver;
     }
 
-    public void setDriver(Driver driver) {
+    public void updateDriver(Driver driver) {
         if (this.driver != null) {
             this.driver.updateTruck(null);
         }
         if (driver != null) {
             driver.updateTruck(this);
         }
-        this.driver = driver;
-    }
-
-    public Truck driver(Driver driver) {
-        this.setDriver(driver);
-        return this;
+        this.driver = driver != null ? new Driver(driver) : null;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

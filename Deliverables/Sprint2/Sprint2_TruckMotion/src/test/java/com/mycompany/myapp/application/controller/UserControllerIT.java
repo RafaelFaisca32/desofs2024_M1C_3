@@ -7,9 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
-import com.mycompany.myapp.application.controller.UserController;
 import com.mycompany.myapp.domain.user.Authority;
 import com.mycompany.myapp.domain.user.User;
+import com.mycompany.myapp.domain.user.UserId;
 import com.mycompany.myapp.infrastructure.repository.jpa.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
@@ -41,6 +41,7 @@ class UserControllerIT {
     private static final String UPDATED_LOGIN = "jhipster";
 
     private static final Long DEFAULT_ID = 1L;
+    private static final UUID DEFAULT_UUID = UUID.fromString("dc39723a-35e2-4f14-b682-933995d5c4bf");
 
     private static final String DEFAULT_PASSWORD = "passjohndoe";
     private static final String UPDATED_PASSWORD = "passjhipster";
@@ -94,14 +95,14 @@ class UserControllerIT {
      */
     public static User createEntity(EntityManager em) {
         User user = new User();
-        user.setLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
-        user.setEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
-        user.setFirstName(DEFAULT_FIRSTNAME);
-        user.setLastName(DEFAULT_LASTNAME);
-        user.setImageUrl(DEFAULT_IMAGEURL);
-        user.setLangKey(DEFAULT_LANGKEY);
+        user.updateLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.activate();
+        user.updateEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
+        user.updateFirstName(DEFAULT_FIRSTNAME);
+        user.updateLastName(DEFAULT_LASTNAME);
+        user.updateImageUrl(DEFAULT_IMAGEURL);
+        user.updateLangKey(DEFAULT_LANGKEY);
         return user;
     }
 
@@ -111,8 +112,8 @@ class UserControllerIT {
     public static User initTestUser(UserRepository userRepository, EntityManager em) {
         userRepository.deleteAll();
         User user = createEntity(em);
-        user.setLogin(DEFAULT_LOGIN);
-        user.setEmail(DEFAULT_EMAIL);
+        user.updateLogin(DEFAULT_LOGIN);
+        user.updateEmail(DEFAULT_EMAIL);
         return user;
     }
 
@@ -369,14 +370,14 @@ class UserControllerIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
-        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
-        anotherUser.setFirstName("java");
-        anotherUser.setLastName("hipster");
-        anotherUser.setImageUrl("");
-        anotherUser.setLangKey("en");
+        anotherUser.updateLogin("jhipster");
+        anotherUser.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        anotherUser.activate();
+        anotherUser.updateEmail("jhipster@localhost");
+        anotherUser.updateFirstName("java");
+        anotherUser.updateLastName("hipster");
+        anotherUser.updateImageUrl("");
+        anotherUser.updateLangKey("en");
         userRepository.saveAndFlush(anotherUser);
 
         // Update the user
@@ -409,14 +410,14 @@ class UserControllerIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
-        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
-        anotherUser.setFirstName("java");
-        anotherUser.setLastName("hipster");
-        anotherUser.setImageUrl("");
-        anotherUser.setLangKey("en");
+        anotherUser.updateLogin("jhipster");
+        anotherUser.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        anotherUser.activate();
+        anotherUser.updateEmail("jhipster@localhost");
+        anotherUser.updateFirstName("java");
+        anotherUser.updateLastName("hipster");
+        anotherUser.updateImageUrl("");
+        anotherUser.updateLangKey("en");
         userRepository.saveAndFlush(anotherUser);
 
         // Update the user
@@ -463,14 +464,12 @@ class UserControllerIT {
     @Test
     void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(User.class);
-        User user1 = new User();
-        user1.setId(DEFAULT_ID);
-        User user2 = new User();
-        user2.setId(user1.getId());
+        User user1 = new User(DEFAULT_ID,new UserId(DEFAULT_UUID));
+        User user2 = new User(user1);
         assertThat(user1).isEqualTo(user2);
-        user2.setId(2L);
+        user2 = new User(2L,new UserId() );
         assertThat(user1).isNotEqualTo(user2);
-        user1.setId(null);
+        user1 = new User(null, null);
         assertThat(user1).isNotEqualTo(user2);
     }
 
@@ -507,16 +506,17 @@ class UserControllerIT {
 
     @Test
     void testUserToUserDTO() {
-        user.setId(DEFAULT_ID);
-        user.setCreatedBy(DEFAULT_LOGIN);
-        user.setCreatedDate(Instant.now());
-        user.setLastModifiedBy(DEFAULT_LOGIN);
-        user.setLastModifiedDate(Instant.now());
+
+        user = new User(DEFAULT_ID,new UserId(DEFAULT_UUID));
+        user.updateCreatedBy(DEFAULT_LOGIN);
+        user.updateCreatedDate(Instant.now());
+        user.updateLastModifiedBy(DEFAULT_LOGIN);
+        user.updateLastModifiedDate(Instant.now());
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
-        authority.setName(AuthoritiesConstants.DRIVER);
+        authority.updateName(AuthoritiesConstants.DRIVER);
         authorities.add(authority);
-        user.setAuthorities(authorities);
+        user.updateAuthorities(authorities);
 
         AdminUserDTO userDTO = userMapper.userToAdminUserDTO(user);
 

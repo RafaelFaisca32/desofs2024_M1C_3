@@ -5,10 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.mycompany.myapp.domain.user.User;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import com.mycompany.myapp.domain.user.dto.UserDTO;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +19,7 @@ class UserMapperTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final Long DEFAULT_ID = 1L;
+    private static final UUID DEFAULT_UUID = UUID.fromString("dc39723a-35e2-4f14-b682-933995d5c4bf");
 
     private UserMapper userMapper;
     private User user;
@@ -30,14 +29,14 @@ class UserMapperTest {
     public void init() {
         userMapper = new UserMapper();
         user = new User();
-        user.setLogin(DEFAULT_LOGIN);
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
-        user.setEmail("johndoe@localhost");
-        user.setFirstName("john");
-        user.setLastName("doe");
-        user.setImageUrl("image_url");
-        user.setLangKey("en");
+        user.updateLogin(DEFAULT_LOGIN);
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.activate();
+        user.updateEmail("johndoe@localhost");
+        user.updateFirstName("john");
+        user.updateLastName("doe");
+        user.updateImageUrl("image_url");
+        user.updateLangKey("en");
 
         userDto = new AdminUserDTO(user);
     }
@@ -127,7 +126,7 @@ class UserMapperTest {
 
     @Test
     void testUserFromId() {
-        assertThat(userMapper.userFromId(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);
-        assertThat(userMapper.userFromId(null)).isNull();
+        assertThat(userMapper.userFromId(DEFAULT_ID, DEFAULT_UUID ).getId()).isEqualTo(DEFAULT_ID);
+        assertThat(userMapper.userFromId(null, null)).isNull();
     }
 }

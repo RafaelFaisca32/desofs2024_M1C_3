@@ -86,125 +86,81 @@ public class ApplicationUser implements Serializable {
         this.internalUser = internalUser;
     }
 
+    public ApplicationUser(long id, ApplicationUserId applicationUserId) {
+        this.id = id;
+        this.uuidId = applicationUserId;
+    }
+
     public Long getId() {
         return this.id;
     }
+
     public ApplicationUserId getUuidId() {
-        if(this.uuidId == null) return null;
-
-        return new ApplicationUserId(this.uuidId.value());
+        return this.uuidId != null  ? new ApplicationUserId(this.uuidId.value()) : null;
     }
-    public ApplicationUser id(Long id) {
-        this.setId(id);
-        return this;
-    }
-    public ApplicationUser uuidid(ApplicationUserId uuidId) {
-        this.setUuidId(uuidId);
-        return this;
-    }
-
-    public void setUuidId(ApplicationUserId uuidId) {
-        this.uuidId = uuidId;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public ApplicationUserBirthDate getBirthDate() {
         return new ApplicationUserBirthDate(this.birthDate.value());
     }
 
-    public ApplicationUser birthDate(ApplicationUserBirthDate birthDate) {
-        this.setBirthDate(birthDate);
-        return this;
-    }
-
-    public void setBirthDate(ApplicationUserBirthDate birthDate) {
-        this.birthDate = birthDate;
+    public void updateBirthDate(ApplicationUserBirthDate birthDate) {
+        this.birthDate = birthDate != null ? new ApplicationUserBirthDate(birthDate.value()) : null;
     }
 
     public Gender getGender() {
         return this.gender;
     }
 
-    public ApplicationUser gender(Gender gender) {
-        this.setGender(gender);
-        return this;
-    }
-
-    public void setGender(Gender gender) {
+    public void updateGender(Gender gender) {
         this.gender = gender;
     }
 
     public User getInternalUser() {
-        return this.internalUser;
+        return this.internalUser != null ? new User(this.internalUser) : null;
     }
 
-    public void setInternalUser(User user) {
-        this.internalUser = user;
-    }
-
-    public ApplicationUser internalUser(User user) {
-        this.setInternalUser(user);
-        return this;
+    public void updateInternalUser(User user) {
+        this.internalUser = user != null ? new User(user) : null;
     }
 
     public Driver getDriver() {
-        return this.driver;
+        return this.driver != null ? new Driver(this.driver) : null;
     }
 
-    public void setDriver(Driver driver) {
+    public void updateDriver(Driver driver) {
         if (this.driver != null) {
             this.driver.updateApplicationUser(null);
         }
         if (driver != null) {
             driver.updateApplicationUser(this);
         }
-        this.driver = driver;
-    }
-
-    public ApplicationUser driver(Driver driver) {
-        this.setDriver(driver);
-        return this;
+        this.driver = driver != null ? new Driver(driver) : null;
     }
 
     public Manager getManager() {
-        return this.manager;
+        return this.manager != null ? new Manager(this.manager) : null;
     }
 
-    public void setManager(Manager manager) {
+    public void updateManager(Manager manager) {
         if (this.manager != null) {
-            this.manager.setApplicationUser(null);
+            this.manager.updateApplicationUser(null);
         }
         if (manager != null) {
-            manager.setApplicationUser(this);
+            manager.updateApplicationUser(this);
         }
-        this.manager = manager;
+        this.manager = manager != null ? new Manager(manager) : null;
     }
-
-    public ApplicationUser manager(Manager manager) {
-        this.setManager(manager);
-        return this;
-    }
-
     public Customer getCustomer() {
-        return this.customer;
+        return this.customer != null ? new Customer(this.customer) : null;
     }
 
-    public void setCustomer(Customer customer) {
+    public void updateCustomer(Customer customer) {
         if (this.customer != null) {
             this.customer.updateApplicationUser(null);
         }
         if (customer != null) {
             customer.updateApplicationUser(this);
         }
-        this.customer = customer;
-    }
-
-    public ApplicationUser customer(Customer customer) {
-        this.setCustomer(customer);
-        return this;
+        this.customer = customer != null ? new Customer(customer) : null;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

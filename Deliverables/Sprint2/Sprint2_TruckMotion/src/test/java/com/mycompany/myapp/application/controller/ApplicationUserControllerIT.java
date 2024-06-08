@@ -34,6 +34,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.shaded.org.checkerframework.checker.units.qual.A;
 
 /**
  * Integration tests for the {@link ApplicationUserController} REST controller.
@@ -84,14 +85,14 @@ class ApplicationUserControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static ApplicationUser createEntity(EntityManager em) {
-        ApplicationUser applicationUser = new ApplicationUser()
-            .birthDate(DEFAULT_BIRTH_DATE)
-            .gender(DEFAULT_GENDER);
+        ApplicationUser applicationUser = new ApplicationUser();
+        applicationUser.updateBirthDate(DEFAULT_BIRTH_DATE);
+        applicationUser.updateGender(DEFAULT_GENDER);
         // Add required entity
         User user = UserControllerIT.createEntity(em);
         em.persist(user);
         em.flush();
-        applicationUser.setInternalUser(user);
+        applicationUser.updateInternalUser(user);
         return applicationUser;
     }
 
@@ -102,14 +103,14 @@ class ApplicationUserControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static ApplicationUser createUpdatedEntity(EntityManager em) {
-        ApplicationUser applicationUser = new ApplicationUser()
-            .birthDate(UPDATED_BIRTH_DATE)
-            .gender(UPDATED_GENDER);
+        ApplicationUser applicationUser = new ApplicationUser();
+        applicationUser.updateBirthDate(UPDATED_BIRTH_DATE);
+        applicationUser.updateGender(UPDATED_GENDER);
         // Add required entity
         User user = UserControllerIT.createEntity(em);
         em.persist(user);
         em.flush();
-        applicationUser.setInternalUser(user);
+        applicationUser.updateInternalUser(user);
         return applicationUser;
     }
 
@@ -146,7 +147,8 @@ class ApplicationUserControllerIT {
     @Transactional
     void createApplicationUserWithExistingId() throws Exception {
         // Create the ApplicationUser with an existing ID
-        applicationUser.setId(1L);
+        applicationUser = new ApplicationUser(1L,new ApplicationUserId(),applicationUser.getBirthDate(),applicationUser.getGender(),applicationUser.getInternalUser());
+
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
@@ -178,7 +180,7 @@ class ApplicationUserControllerIT {
         em.detach(updatedApplicationUser);
 
         // Update the User with new association value
-        updatedApplicationUser.setInternalUser(user);
+        updatedApplicationUser.updateInternalUser(user);
         ApplicationUserDTO updatedApplicationUserDTO = ApplicationUserMapper.toDto(updatedApplicationUser);
         assertThat(updatedApplicationUserDTO).isNotNull();
 
@@ -269,7 +271,8 @@ class ApplicationUserControllerIT {
         ApplicationUser updatedApplicationUser = applicationUserRepository.findById(applicationUser.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedApplicationUser are not directly saved in db
         em.detach(updatedApplicationUser);
-        updatedApplicationUser.birthDate(UPDATED_BIRTH_DATE).gender(UPDATED_GENDER);
+        updatedApplicationUser.updateBirthDate(UPDATED_BIRTH_DATE);
+        updatedApplicationUser.updateGender(UPDATED_GENDER);
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(updatedApplicationUser);
 
         restApplicationUserMockMvc
@@ -289,7 +292,8 @@ class ApplicationUserControllerIT {
     @Transactional
     void putNonExistingApplicationUser() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        applicationUser.setId(longCount.incrementAndGet());
+        applicationUser = new ApplicationUser(longCount.incrementAndGet(),new ApplicationUserId(),applicationUser.getBirthDate(),applicationUser.getGender(),applicationUser.getInternalUser());
+
 
         // Create the ApplicationUser
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
@@ -311,7 +315,7 @@ class ApplicationUserControllerIT {
     @Transactional
     void putWithIdMismatchApplicationUser() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        applicationUser.setId(longCount.incrementAndGet());
+        applicationUser = new ApplicationUser(longCount.incrementAndGet(),new ApplicationUserId(),applicationUser.getBirthDate(),applicationUser.getGender(),applicationUser.getInternalUser());
 
         // Create the ApplicationUser
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
@@ -333,7 +337,7 @@ class ApplicationUserControllerIT {
     @Transactional
     void putWithMissingIdPathParamApplicationUser() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        applicationUser.setId(longCount.incrementAndGet());
+        applicationUser = new ApplicationUser(longCount.incrementAndGet(),new ApplicationUserId(),applicationUser.getBirthDate(),applicationUser.getGender(),applicationUser.getInternalUser());
 
         // Create the ApplicationUser
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
@@ -356,10 +360,10 @@ class ApplicationUserControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the applicationUser using partial update
-        ApplicationUser partialUpdatedApplicationUser = new ApplicationUser();
-        partialUpdatedApplicationUser.setId(applicationUser.getId());
+        ApplicationUser partialUpdatedApplicationUser = new ApplicationUser(applicationUser);
 
-        partialUpdatedApplicationUser.birthDate(UPDATED_BIRTH_DATE).gender(UPDATED_GENDER);
+        partialUpdatedApplicationUser.updateBirthDate(UPDATED_BIRTH_DATE);
+        partialUpdatedApplicationUser.updateGender(UPDATED_GENDER);
 
         restApplicationUserMockMvc
             .perform(
@@ -387,10 +391,10 @@ class ApplicationUserControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the applicationUser using partial update
-        ApplicationUser partialUpdatedApplicationUser = new ApplicationUser();
-        partialUpdatedApplicationUser.setId(applicationUser.getId());
+        ApplicationUser partialUpdatedApplicationUser = new ApplicationUser(applicationUser);
 
-        partialUpdatedApplicationUser.birthDate(UPDATED_BIRTH_DATE).gender(UPDATED_GENDER);
+        partialUpdatedApplicationUser.updateBirthDate(UPDATED_BIRTH_DATE);
+        partialUpdatedApplicationUser.updateGender(UPDATED_GENDER);
 
         restApplicationUserMockMvc
             .perform(
@@ -413,7 +417,7 @@ class ApplicationUserControllerIT {
     @Transactional
     void patchNonExistingApplicationUser() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        applicationUser.setId(longCount.incrementAndGet());
+        applicationUser = new ApplicationUser(longCount.incrementAndGet(),new ApplicationUserId(),applicationUser.getBirthDate(),applicationUser.getGender(),applicationUser.getInternalUser());
 
         // Create the ApplicationUser
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
@@ -435,7 +439,7 @@ class ApplicationUserControllerIT {
     @Transactional
     void patchWithIdMismatchApplicationUser() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        applicationUser.setId(longCount.incrementAndGet());
+        applicationUser = new ApplicationUser(longCount.incrementAndGet(),new ApplicationUserId(),applicationUser.getBirthDate(),applicationUser.getGender(),applicationUser.getInternalUser());
 
         // Create the ApplicationUser
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);
@@ -457,7 +461,7 @@ class ApplicationUserControllerIT {
     @Transactional
     void patchWithMissingIdPathParamApplicationUser() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        applicationUser.setId(longCount.incrementAndGet());
+        applicationUser = new ApplicationUser(longCount.incrementAndGet(),new ApplicationUserId(),applicationUser.getBirthDate(),applicationUser.getGender(),applicationUser.getInternalUser());
 
         // Create the ApplicationUser
         ApplicationUserDTO applicationUserDTO = ApplicationUserMapper.toDto(applicationUser);

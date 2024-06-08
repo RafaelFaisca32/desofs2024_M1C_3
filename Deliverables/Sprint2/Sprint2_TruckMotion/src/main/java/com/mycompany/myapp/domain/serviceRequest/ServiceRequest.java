@@ -8,10 +8,8 @@ import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceStatusMapper;
 import com.mycompany.myapp.domain.transport.Transport;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * A ServiceRequest.
@@ -110,39 +108,20 @@ public class ServiceRequest implements Serializable {
         return this.id != null ? new ServiceRequestId(id.value()) : null;
     }
 
-    public ServiceRequest id(ServiceRequestId id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(ServiceRequestId id) {
-        this.id = id;
-    }
-
     public ServiceRequestItems getItems() {
         return this.items != null ? new ServiceRequestItems(this.items.value()) : null;
     }
 
-    public ServiceRequest items(ServiceRequestItems items) {
-        this.setItems(items);
-        return this;
-    }
-
-    public void setItems(ServiceRequestItems items) {
-        this.items = items;
+    public void updateItems(ServiceRequestItems items) {
+        this.items = items != null ? new ServiceRequestItems(items.value()) : null;
     }
 
     public ServiceRequestName getServiceName() {
         return this.serviceName != null ? new ServiceRequestName(this.serviceName.value()) : null;
     }
 
-    public ServiceRequest serviceName(ServiceRequestName serviceName) {
-        this.setServiceName(serviceName);
-        return this;
-    }
-
-    public void setServiceName(ServiceRequestName serviceName) {
-        this.serviceName = serviceName;
+    public void updateServiceName(ServiceRequestName serviceName) {
+        this.serviceName = serviceName != null ? new ServiceRequestName(serviceName.value()) : null;
     }
 
     public ServiceRequestTotalWeightOfItems getTotalWeightOfItems() {
@@ -150,118 +129,89 @@ public class ServiceRequest implements Serializable {
             new ServiceRequestTotalWeightOfItems(totalWeightOfItems.value()) : null;
     }
 
-    public ServiceRequest totalWeightOfItems(ServiceRequestTotalWeightOfItems totalWeightOfItems) {
-        this.setTotalWeightOfItems(totalWeightOfItems);
-        return this;
-    }
-
-    public void setTotalWeightOfItems(ServiceRequestTotalWeightOfItems totalWeightOfItems) {
-        this.totalWeightOfItems = totalWeightOfItems;
+    public void updateTotalWeightOfItems(ServiceRequestTotalWeightOfItems totalWeightOfItems) {
+        this.totalWeightOfItems = totalWeightOfItems != null ? new ServiceRequestTotalWeightOfItems(totalWeightOfItems.value()) : null;
     }
 
     public ServiceRequestPrice getPrice() {
         return this.price != null ? new ServiceRequestPrice(price.value()) : null;
     }
 
-    public ServiceRequest price(ServiceRequestPrice price) {
-        this.setPrice(price);
-        return this;
-    }
-
-    public void setPrice(ServiceRequestPrice price) {
-        this.price = price;
+    public void updatePrice(ServiceRequestPrice price) {
+        this.price = price != null ? new ServiceRequestPrice(price.value()) : null;
     }
 
     public ServiceRequestDate getDate() {
         return this.date != null ? new ServiceRequestDate(date.value()) : null;
     }
 
-    public ServiceRequest date(ServiceRequestDate date) {
-        this.setDate(date);
-        return this;
-    }
-
-    public void setDate(ServiceRequestDate date) {
-        this.date = date;
+    public void updateDate(ServiceRequestDate date) {
+        this.date = date != null ? new ServiceRequestDate(date.value()) : null;
     }
 
     public Location getLocation() {
-        return this.location;
+        return this.location != null ? new Location(this.location) : null;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public ServiceRequest location(Location location) {
-        this.setLocation(location);
-        return this;
+    public void updateLocation(Location location) {
+        this.location = location != null ? new Location(location) : null;
     }
 
     public Customer getCustomer() {
-        return this.customer;
+        return this.customer != null ? new Customer(this.customer) : null;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public ServiceRequest customer(Customer customer) {
-        this.setCustomer(customer);
-        return this;
+    public void updateCustomer(Customer customer) {
+        this.customer = customer != null ? new Customer(customer) : null;
     }
 
     public Set<ServiceStatus> getServiceStatuses() {
-        return this.serviceStatuses;
+        return this.serviceStatuses != null ? new HashSet<>(this.serviceStatuses) : null;
     }
 
-    public void setServiceStatuses(Set<ServiceStatus> serviceStatuses) {
+    public void updateServiceStatuses(Set<ServiceStatus> serviceStatuses) {
         if (this.serviceStatuses != null) {
-            this.serviceStatuses.forEach(i -> i.setServiceRequest(null));
+            this.serviceStatuses.forEach(i -> i.updateServiceRequest(null));
         }
         if (serviceStatuses != null) {
-            serviceStatuses.forEach(i -> i.setServiceRequest(this));
+            serviceStatuses.forEach(i -> i.updateServiceRequest(this));
         }
-        this.serviceStatuses = serviceStatuses;
+        this.serviceStatuses = serviceStatuses != null ? new HashSet<>(serviceStatuses) : null;
     }
 
-    public ServiceRequest serviceStatuses(Set<ServiceStatus> serviceStatuses) {
-        this.setServiceStatuses(serviceStatuses);
-        return this;
+    public void addServiceStatus(ServiceStatus serviceStatus) {
+        if(serviceStatus != null){
+            serviceStatus.updateServiceRequest(this);
+            ServiceStatus newServiceStatus = new ServiceStatus(serviceStatus);
+            this.serviceStatuses.add(newServiceStatus);
+        }
+
+
     }
 
-    public ServiceRequest addServiceStatus(ServiceStatus serviceStatus) {
-        this.serviceStatuses.add(serviceStatus);
-        serviceStatus.setServiceRequest(this);
-        return this;
-    }
-
-    public ServiceRequest removeServiceStatus(ServiceStatus serviceStatus) {
-        this.serviceStatuses.remove(serviceStatus);
-        serviceStatus.setServiceRequest(null);
-        return this;
+    public void removeServiceStatus(ServiceStatus serviceStatus) {
+        if(serviceStatus != null) {
+            this.serviceStatuses.remove(serviceStatus);
+            serviceStatus.updateServiceRequest(null);
+        }
     }
 
     public Transport getTransport() {
-        return this.transport;
+        return this.transport != null ? new Transport(this.transport) : null;
     }
 
-    public void setTransport(Transport transport) {
+    public void updateTransport(Transport transport) {
         if (this.transport != null) {
-            this.transport.setServiceRequest(null);
+            this.transport.updateServiceRequest(null);
         }
         if (transport != null) {
-            transport.setServiceRequest(this);
+            transport.updateServiceRequest(this);
         }
-        this.transport = transport;
+        this.transport = transport != null ? new Transport(transport) : null;
     }
 
     public void updateRequestStatus(ServiceStatusDTO statusDTO){
         this.serviceStatuses.add(ServiceStatusMapper.toEntity(statusDTO));
-    }
-    public ServiceRequest transport(Transport transport) {
-        this.setTransport(transport);
-        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -53,6 +53,15 @@ public class Customer implements Serializable {
         this.applicationUser = applicationUser;
     }
 
+    public Customer(Customer customer){
+        this.id = customer.getId();
+        this.company = customer.getCompany();
+        this.applicationUser = customer.getApplicationUser();
+        this.locations = new HashSet<>(customer.getLocations());
+        this.serviceRequests = new HashSet<>(customer.getServiceRequests());
+
+    }
+
     public CustomerId getId() {
         return this.id != null ? new CustomerId(this.id.value()) : null;
     }
@@ -67,7 +76,7 @@ public class Customer implements Serializable {
     }
 
     public ApplicationUser getApplicationUser() {
-        return this.applicationUser != null ? new ApplicationUser(this.applicationUser) : null;
+        return this.applicationUser;
 
     }
 
@@ -82,18 +91,18 @@ public class Customer implements Serializable {
 
     public void updateLocations(Set<Location> locations) {
         if(locations != null) {
-            locations.forEach(i -> i.setCustomer(this));
+            locations.forEach(i -> i.updateCustomer(this));
         }
 
         if (this.locations != null) {
-            this.locations.forEach(i -> i.setCustomer(null));
+            this.locations.forEach(i -> i.updateCustomer(null));
         }
-        this.locations = locations != null ? new HashSet<>(locations) : new HashSet<>();
+        this.locations = locations != null ? new HashSet<>(locations) : null;
     }
 
     public void addLocation(Location location) {
         if(location != null) {
-            location.setCustomer(this);
+            location.updateCustomer(this);
             Location newLocation = new Location(location);
             this.locations.add(newLocation);
         }
@@ -101,17 +110,26 @@ public class Customer implements Serializable {
 
     public void removeLocation(Location location) {
         if(location != null) {
-            location.setCustomer(null);
+            location.updateCustomer(null);
             this.locations.remove(location);
         }
     }
 
     public Set<ServiceRequest> getServiceRequests() {
-        return this.serviceRequests;
+        return this.serviceRequests != null ? new HashSet<>(this.serviceRequests) : null;
     }
 
-    public void updateServiceRequests(Set<ServiceRequest> serviceRequests) {
-        this.serviceRequests = serviceRequests;
+    public void updateServiceRequest(Set<ServiceRequest> serviceRequests) {
+
+        if(serviceRequests != null) {
+            serviceRequests.forEach(i -> i.updateCustomer(this));
+        }
+
+        if (this.serviceRequests != null) {
+            this.serviceRequests.forEach(i -> i.updateCustomer(null));
+        }
+
+        this.serviceRequests = serviceRequests != null ? new HashSet<>(serviceRequests) : null;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

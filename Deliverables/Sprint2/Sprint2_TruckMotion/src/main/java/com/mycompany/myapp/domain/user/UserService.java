@@ -8,7 +8,6 @@ import com.mycompany.myapp.domain.driver.DriverService;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.manager.ManagerService;
 import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
-import com.mycompany.myapp.domain.truck.Truck;
 import com.mycompany.myapp.domain.truck.TruckService;
 import com.mycompany.myapp.domain.truck.dto.TruckDTO;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
@@ -28,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -95,8 +93,8 @@ public class UserService {
             .findOneByActivationKey(key)
             .map(user -> {
                 // activate given user for the registration key.
-                user.setActivated(true);
-                user.setActivationKey(null);
+                user.activate();
+                user.updateActivationKey(null);
                 this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
                 return user;
@@ -110,9 +108,9 @@ public class UserService {
             .filter(user -> user.getResetDate().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
             .map(user -> {
                 passwordChecker(newPassword);
-                user.setPassword(passwordEncoder.encode(newPassword));
-                user.setResetKey(null);
-                user.setResetDate(null);
+                user.updatePassword(passwordEncoder.encode(newPassword));
+                user.updateResetKey(null);
+                user.updateResetDate(null);
                 this.clearUserCaches(user);
                 return user;
             });
@@ -123,8 +121,8 @@ public class UserService {
             .findOneByEmailIgnoreCase(mail)
             .filter(User::isActivated)
             .map(user -> {
-                user.setResetKey(RandomUtil.generateResetKey());
-                user.setResetDate(Instant.now());
+                user.updateResetKey(RandomUtil.generateResetKey());
+                user.updateResetDate(Instant.now());
                 this.clearUserCaches(user);
                 return user;
             });
@@ -150,24 +148,24 @@ public class UserService {
         User newUser = new User();
         passwordChecker(password);
         String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
+        newUser.updateLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
-        newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
+        newUser.updatePassword(encryptedPassword);
+        newUser.updateFirstName(userDTO.getFirstName());
+        newUser.updateLastName(userDTO.getLastName());
         if (userDTO.getEmail() != null) {
-            newUser.setEmail(userDTO.getEmail().toLowerCase());
+            newUser.updateEmail(userDTO.getEmail().toLowerCase());
         }
-        newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
+        newUser.updateImageUrl(userDTO.getImageUrl());
+        newUser.updateLangKey(userDTO.getLangKey());
         // new user is not active
-        newUser.setActivated(false);
+        newUser.deactivate();
         // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        newUser.updateActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
         //TODO: Pass through parameter what type of User we are registering
         authorityRepository.findById(AuthoritiesConstants.DRIVER).ifPresent(authorities::add);
-        newUser.setAuthorities(authorities);
+        newUser.updateAuthorities(authorities);
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
@@ -283,15 +281,19 @@ public class UserService {
             .map(Optional::get)
             .map(user -> {
                 this.clearUserCaches(user);
-                user.setLogin(userDTO.getLogin().toLowerCase());
-                user.setFirstName(userDTO.getFirstName());
-                user.setLastName(userDTO.getLastName());
+                user.updateLogin(userDTO.getLogin().toLowerCase());
+                user.updateFirstName(userDTO.getFirstName());
+                user.updateLastName(userDTO.getLastName());
                 if (userDTO.getEmail() != null) {
-                    user.setEmail(userDTO.getEmail().toLowerCase());
+                    user.updateEmail(userDTO.getEmail().toLowerCase());
                 }
-                user.setImageUrl(userDTO.getImageUrl());
-                user.setActivated(userDTO.isActivated());
-                user.setLangKey(userDTO.getLangKey());
+                user.updateImageUrl(userDTO.getImageUrl());
+                if(userDTO.isActivated()){
+                    user.activate();
+                } else {
+                    user.deactivate();
+                }
+                user.updateLangKey(userDTO.getLangKey());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO
@@ -332,13 +334,13 @@ public class UserService {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
+                user.updateFirstName(firstName);
+                user.updateLastName(lastName);
                 if (email != null) {
-                    user.setEmail(email.toLowerCase());
+                    user.updateEmail(email.toLowerCase());
                 }
-                user.setLangKey(langKey);
-                user.setImageUrl(imageUrl);
+                user.updateLangKey(langKey);
+                user.updateImageUrl(imageUrl);
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
@@ -356,7 +358,7 @@ public class UserService {
                 }
                 passwordChecker(newPassword);
                 String encryptedPassword = passwordEncoder.encode(newPassword);
-                user.setPassword(encryptedPassword);
+                user.updatePassword(encryptedPassword);
                 this.clearUserCaches(user);
                 log.debug("Changed password for User: {}", user);
             });

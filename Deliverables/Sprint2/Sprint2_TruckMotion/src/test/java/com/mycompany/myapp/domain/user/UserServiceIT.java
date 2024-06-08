@@ -56,14 +56,14 @@ class UserServiceIT {
     @BeforeEach
     public void init() {
         user = new User();
-        user.setLogin(DEFAULT_LOGIN);
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
-        user.setEmail(DEFAULT_EMAIL);
-        user.setFirstName(DEFAULT_FIRSTNAME);
-        user.setLastName(DEFAULT_LASTNAME);
-        user.setImageUrl(DEFAULT_IMAGEURL);
-        user.setLangKey(DEFAULT_LANGKEY);
+        user.updateLogin(DEFAULT_LOGIN);
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.activate();
+        user.updateEmail(DEFAULT_EMAIL);
+        user.updateFirstName(DEFAULT_FIRSTNAME);
+        user.updateLastName(DEFAULT_LASTNAME);
+        user.updateImageUrl(DEFAULT_IMAGEURL);
+        user.updateLangKey(DEFAULT_LANGKEY);
 
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(LocalDateTime.now()));
         auditingHandler.setDateTimeProvider(dateTimeProvider);
@@ -86,7 +86,7 @@ class UserServiceIT {
     @Test
     @Transactional
     void assertThatOnlyActivatedUserCanRequestPasswordReset() {
-        user.setActivated(false);
+        user.deactivate();
         userRepository.saveAndFlush(user);
 
         Optional<User> maybeUser = userService.requestPasswordReset(user.getLogin());
@@ -99,9 +99,9 @@ class UserServiceIT {
     void assertThatResetKeyMustNotBeOlderThan24Hours() {
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
-        user.setActivated(true);
-        user.setResetDate(daysAgo);
-        user.setResetKey(resetKey);
+        user.activate();
+        user.updateResetDate(daysAgo);
+        user.updateResetKey(resetKey);
         userRepository.saveAndFlush(user);
 
         Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
@@ -113,9 +113,9 @@ class UserServiceIT {
     @Transactional
     void assertThatResetKeyMustBeValid() {
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
-        user.setActivated(true);
-        user.setResetDate(daysAgo);
-        user.setResetKey("1234");
+        user.activate();
+        user.updateResetDate(daysAgo);
+        user.updateResetKey("1234");
         userRepository.saveAndFlush(user);
 
         Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
@@ -129,9 +129,9 @@ class UserServiceIT {
         String oldPassword = user.getPassword();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
-        user.setActivated(true);
-        user.setResetDate(daysAgo);
-        user.setResetKey(resetKey);
+        user.activate();
+        user.updateResetDate(daysAgo);
+        user.updateResetKey(resetKey);
         userRepository.saveAndFlush(user);
 
         Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
@@ -148,10 +148,10 @@ class UserServiceIT {
     void assertThatNotActivatedUsersWithNotNullActivationKeyCreatedBefore3DaysAreDeleted() {
         Instant now = Instant.now();
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
-        user.setActivated(false);
-        user.setActivationKey(RandomStringUtils.random(20));
+        user.deactivate();
+        user.updateActivationKey(RandomStringUtils.random(20));
         User dbUser = userRepository.saveAndFlush(user);
-        dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
+        dbUser.updateCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.saveAndFlush(user);
         Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
         List<User> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo);
@@ -166,9 +166,9 @@ class UserServiceIT {
     void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
         Instant now = Instant.now();
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
-        user.setActivated(false);
+        user.deactivate();
         User dbUser = userRepository.saveAndFlush(user);
-        dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
+        dbUser.updateCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.saveAndFlush(user);
         Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
         List<User> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo);

@@ -21,7 +21,7 @@ class DriverTest {
         Driver driver2 = new Driver();
         assertThat(driver1).isNotEqualTo(driver2);
 
-        driver2 = new Driver(driver1.getId(),driver1.getTruck(),driver1.getApplicationUser());
+        driver2 = new Driver(driver1);
         assertThat(driver1).isEqualTo(driver2);
 
         driver2 = getDriverSample2();

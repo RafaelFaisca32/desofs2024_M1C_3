@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * A Location.
@@ -73,39 +72,43 @@ public class Location implements Serializable {
             new GeographicalCoordinates(this.coord.xValue(),this.coord.yValue(),this.coord.zValue()) : null;
     }
 
-    public Location coord(GeographicalCoordinates coord){
-        this.updateCoord(coord);
-        return this;
-    }
-
     public Customer getCustomer() {
-        return this.customer;
+        return this.customer != null ? new Customer(this.customer) : null;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Location customer(Customer customer) {
-        this.setCustomer(customer);
-        return this;
+    public void updateCustomer(Customer customer) {
+        this.customer = customer != null ? new Customer(customer): null;
     }
 
     public Set<ServiceRequest> getServiceRequests() {
-        return this.serviceRequests;
+        return this.serviceRequests != null ? new HashSet<>(this.serviceRequests) : null;
     }
 
-    public void setServiceRequests(Set<ServiceRequest> serviceRequests) {
-        this.serviceRequests = serviceRequests;
-    }
+    public void updateServiceRequest(Set<ServiceRequest> serviceRequests) {
+        if(serviceRequests != null) {
+            serviceRequests.forEach(i -> i.updateLocation(this));
+        }
+
+        if (this.serviceRequests != null) {
+            this.serviceRequests.forEach(i -> i.updateLocation(null));
+        }
+        this.serviceRequests = serviceRequests != null ? new HashSet<>(serviceRequests) : null; }
 
     public Set<Transport> getTransports() {
-        return this.transports;
+        return this.transports != null ? new HashSet<>(this.transports) : null;
     }
 
-    public void setTransports(Set<Transport> transport) {
-        this.transports = transports;
+    public void updateTransport(Set<Transport> transports) {
+        if(transports != null) {
+            transports.forEach(i -> i.updateLocation(this));
+        }
+
+        if (this.transports != null) {
+            this.transports.forEach(i -> i.updateLocation(null));
+        }
+        this.transports = transports != null ? new HashSet<>(transports) : null;
     }
+
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

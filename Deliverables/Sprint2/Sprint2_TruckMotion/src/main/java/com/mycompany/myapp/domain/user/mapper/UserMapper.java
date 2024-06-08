@@ -2,8 +2,11 @@ package com.mycompany.myapp.domain.user.mapper;
 
 import com.mycompany.myapp.domain.user.Authority;
 import com.mycompany.myapp.domain.user.User;
+import com.mycompany.myapp.domain.user.UserId;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import com.mycompany.myapp.domain.user.dto.UserDTO;
+
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.mapstruct.BeanMapping;
@@ -32,7 +35,7 @@ public class UserMapper {
 
     public UserDTO adminUserDTOToUserDTO(AdminUserDTO adminUserDTO) {
         if(adminUserDTO == null) return null;
-        return new UserDTO(adminUserDTO.getId(),adminUserDTO.getLogin());
+        return new UserDTO(adminUserDTO.getId(),adminUserDTO.getLogin(), adminUserDTO.getUuidId());
     }
 
     public List<AdminUserDTO> usersToAdminUserDTOs(List<User> users) {
@@ -52,18 +55,18 @@ public class UserMapper {
 
     public User userDTOToUser(AdminUserDTO userDTO) {
         if (userDTO == null) return null;
-
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setLogin(userDTO.getLogin());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setImageUrl(userDTO.getImageUrl());
-        user.setActivated(userDTO.isActivated());
-        user.setLangKey(userDTO.getLangKey());
         Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
-        user.setAuthorities(authorities);
+
+        User user = new User(userDTO.getId(),
+            userDTO.getLogin(),
+            new UserId(userDTO.getUuidId()),
+            userDTO.getFirstName(),
+            userDTO.getLastName(),
+            userDTO.getEmail(),
+            userDTO.getImageUrl(),
+            userDTO.isActivated(),
+            userDTO.getLangKey(),
+            authorities);
         return user;
 
     }
@@ -76,7 +79,7 @@ public class UserMapper {
                 .stream()
                 .map(string -> {
                     Authority auth = new Authority();
-                    auth.setName(string);
+                    auth.updateName(string);
                     return auth;
                 })
                 .collect(Collectors.toSet());
@@ -85,17 +88,15 @@ public class UserMapper {
         return authorities;
     }
 
-    public User userFromId(Long id) {
+    public User userFromId(Long id, UUID uuid) {
         if (id == null) return null;
-        User user = new User();
-        user.setId(id);
+        User user = new User(id, new UserId(uuid));
         return user;
     }
 
     public User userFromDTO(UserDTO dto){
         if(dto == null) return null;
-        User user = new User();
-        user.setId(dto.getId());
+        User user = new User(dto.getId(), new UserId(dto.getUuid()));
         return user;
     }
 

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.user.ApplicationUser;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * A Manager.
@@ -30,6 +29,10 @@ public class Manager implements Serializable {
     public Manager(){
         this.id = new ManagerId();
     }
+    public Manager(Manager manager){
+        this.id = new ManagerId();
+        this.applicationUser = manager.getApplicationUser();
+    }
     public Manager(ManagerId id, ApplicationUser applicationUser) {
         this.id = id;
         this.applicationUser = applicationUser;
@@ -39,28 +42,13 @@ public class Manager implements Serializable {
         return this.id != null ? new ManagerId(this.id.value()) : null;
     }
 
-    public Manager id(ManagerId id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(ManagerId id) {
-        this.id = id;
-    }
-
     public ApplicationUser getApplicationUser() {
         return this.applicationUser;
     }
 
-    public void setApplicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser;
+    public void updateApplicationUser(ApplicationUser applicationUser) {
+        this.applicationUser = applicationUser != null ? new ApplicationUser(applicationUser) : null;
     }
-
-    public Manager applicationUser(ApplicationUser applicationUser) {
-        this.setApplicationUser(applicationUser);
-        return this;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override

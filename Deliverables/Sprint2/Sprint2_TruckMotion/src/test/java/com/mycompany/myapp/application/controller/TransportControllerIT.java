@@ -66,7 +66,9 @@ class TransportControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Transport createEntity(EntityManager em) {
-        Transport transport = new Transport().startTime(new TransportStartTime(DEFAULT_START_TIME)).endTime(new TransportEndTime(DEFAULT_END_TIME));
+        Transport transport = new Transport();
+        transport.updateStartTime(new TransportStartTime(DEFAULT_START_TIME));
+        transport.updateEndTime(new TransportEndTime(DEFAULT_END_TIME));
         return transport;
     }
 
@@ -77,7 +79,9 @@ class TransportControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Transport createUpdatedEntity(EntityManager em) {
-        Transport transport = new Transport().startTime(new TransportStartTime(UPDATED_START_TIME)).endTime(new TransportEndTime(UPDATED_END_TIME));
+        Transport transport = new Transport();
+        transport.updateStartTime(new TransportStartTime(UPDATED_START_TIME));
+        transport.updateEndTime(new TransportEndTime(UPDATED_END_TIME));
         return transport;
     }
 
@@ -177,7 +181,8 @@ class TransportControllerIT {
         Transport updatedTransport = transportRepository.findById(new TransportId(transport.getId().value())).orElseThrow();
         // Disconnect from session so that the updates on updatedTransport are not directly saved in db
         em.detach(updatedTransport);
-        updatedTransport.startTime(new TransportStartTime(UPDATED_START_TIME)).endTime(new TransportEndTime(UPDATED_END_TIME));
+        updatedTransport.updateStartTime(new TransportStartTime(UPDATED_START_TIME));
+        updatedTransport.updateEndTime(new TransportEndTime(UPDATED_END_TIME));
         TransportDTO transportDTO = TransportMapper.toDto(updatedTransport);
 
         restTransportMockMvc
@@ -197,7 +202,13 @@ class TransportControllerIT {
     @Transactional
     void putNonExistingTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(new TransportId());
+        transport = new Transport( new TransportId(),
+            transport.getStartTime(),
+            transport.getEndTime(),
+            transport.getLocation(),
+            transport.getDriver(),
+            transport.getServiceRequest()
+        );
 
         // Create the Transport
         TransportDTO transportDTO = TransportMapper.toDto(transport);
@@ -219,7 +230,13 @@ class TransportControllerIT {
     @Transactional
     void putWithIdMismatchTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(new TransportId());
+        transport = new Transport( new TransportId(),
+            transport.getStartTime(),
+            transport.getEndTime(),
+            transport.getLocation(),
+            transport.getDriver(),
+            transport.getServiceRequest()
+        );
 
         // Create the Transport
         TransportDTO transportDTO = TransportMapper.toDto(transport);
@@ -241,7 +258,13 @@ class TransportControllerIT {
     @Transactional
     void putWithMissingIdPathParamTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(new TransportId());
+        transport = new Transport( new TransportId(),
+            transport.getStartTime(),
+            transport.getEndTime(),
+            transport.getLocation(),
+            transport.getDriver(),
+            transport.getServiceRequest()
+        );
 
         // Create the Transport
         TransportDTO transportDTO = TransportMapper.toDto(transport);
@@ -264,10 +287,9 @@ class TransportControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the transport using partial update
-        Transport partialUpdatedTransport = new Transport();
-        partialUpdatedTransport.setId(transport.getId());
+        Transport partialUpdatedTransport = new Transport(transport);
 
-        partialUpdatedTransport.startTime(new TransportStartTime(UPDATED_START_TIME));
+        partialUpdatedTransport.updateStartTime(new TransportStartTime(UPDATED_START_TIME));
 
         restTransportMockMvc
             .perform(
@@ -295,10 +317,10 @@ class TransportControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the transport using partial update
-        Transport partialUpdatedTransport = new Transport();
-        partialUpdatedTransport.setId(transport.getId());
+        Transport partialUpdatedTransport = new Transport(transport);
 
-        partialUpdatedTransport.startTime(new TransportStartTime(UPDATED_START_TIME)).endTime(new TransportEndTime(UPDATED_END_TIME));
+        partialUpdatedTransport.updateStartTime(new TransportStartTime(UPDATED_START_TIME));
+        partialUpdatedTransport.updateEndTime(new TransportEndTime(UPDATED_END_TIME));
 
         restTransportMockMvc
             .perform(
@@ -318,7 +340,13 @@ class TransportControllerIT {
     @Transactional
     void patchNonExistingTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(new TransportId());
+        transport = new Transport( new TransportId(),
+            transport.getStartTime(),
+            transport.getEndTime(),
+            transport.getLocation(),
+            transport.getDriver(),
+            transport.getServiceRequest()
+        );
 
         // Create the Transport
         TransportDTO transportDTO = TransportMapper.toDto(transport);
@@ -340,7 +368,13 @@ class TransportControllerIT {
     @Transactional
     void patchWithIdMismatchTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(new TransportId());
+        transport = new Transport( new TransportId(),
+            transport.getStartTime(),
+            transport.getEndTime(),
+            transport.getLocation(),
+            transport.getDriver(),
+            transport.getServiceRequest()
+        );
 
         // Create the Transport
         TransportDTO transportDTO = TransportMapper.toDto(transport);
@@ -362,7 +396,13 @@ class TransportControllerIT {
     @Transactional
     void patchWithMissingIdPathParamTransport() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        transport.setId(new TransportId());
+        transport = new Transport( new TransportId(),
+            transport.getStartTime(),
+            transport.getEndTime(),
+            transport.getLocation(),
+            transport.getDriver(),
+            transport.getServiceRequest()
+        );
 
         // Create the Transport
         TransportDTO transportDTO = TransportMapper.toDto(transport);

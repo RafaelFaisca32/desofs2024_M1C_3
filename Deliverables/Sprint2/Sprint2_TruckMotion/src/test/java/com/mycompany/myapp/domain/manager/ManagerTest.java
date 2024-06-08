@@ -17,7 +17,7 @@ class ManagerTest {
         Manager manager2 = new Manager();
         assertThat(manager1).isNotEqualTo(manager2);
 
-        manager2.setId(manager1.getId());
+        manager2 = new Manager(manager1.getId(),manager1.getApplicationUser());
         assertThat(manager1).isEqualTo(manager2);
 
         manager2 = getManagerSample2();
@@ -29,10 +29,10 @@ class ManagerTest {
         Manager manager = getManagerRandomSampleGenerator();
         ApplicationUser applicationUserBack = getApplicationUserRandomSampleGenerator();
 
-        manager.setApplicationUser(applicationUserBack);
+        manager.updateApplicationUser(applicationUserBack);
         assertThat(manager.getApplicationUser()).isEqualTo(applicationUserBack);
 
-        manager.applicationUser(null);
+        manager.updateApplicationUser(null);
         assertThat(manager.getApplicationUser()).isNull();
     }
 }
