@@ -53,6 +53,15 @@ public class Customer implements Serializable {
         this.applicationUser = applicationUser;
     }
 
+    public Customer(Customer customer){
+        this.id = customer.getId();
+        this.company = customer.getCompany();
+        this.applicationUser = customer.getApplicationUser();
+        this.locations = new HashSet<>(customer.getLocations());
+        this.serviceRequest = customer.getServiceRequest();
+
+    }
+
     public CustomerId getId() {
         return this.id != null ? new CustomerId(this.id.value()) : null;
     }
@@ -82,18 +91,18 @@ public class Customer implements Serializable {
 
     public void updateLocations(Set<Location> locations) {
         if(locations != null) {
-            locations.forEach(i -> i.setCustomer(this));
+            locations.forEach(i -> i.updateCustomer(this));
         }
 
         if (this.locations != null) {
-            this.locations.forEach(i -> i.setCustomer(null));
+            this.locations.forEach(i -> i.updateCustomer(null));
         }
         this.locations = locations != null ? new HashSet<>(locations) : new HashSet<>();
     }
 
     public void addLocation(Location location) {
         if(location != null) {
-            location.setCustomer(this);
+            location.updateCustomer(this);
             Location newLocation = new Location(location);
             this.locations.add(newLocation);
         }
@@ -101,7 +110,7 @@ public class Customer implements Serializable {
 
     public void removeLocation(Location location) {
         if(location != null) {
-            location.setCustomer(null);
+            location.updateCustomer(null);
             this.locations.remove(location);
         }
     }

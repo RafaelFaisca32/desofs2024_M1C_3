@@ -33,10 +33,10 @@ class LocationTest {
         Location location = getLocationRandomSampleGenerator();
         Customer customerBack = getCustomerRandomSampleGenerator();
 
-        location.setCustomer(customerBack);
+        location.updateCustomer(customerBack);
         assertThat(location.getCustomer()).isEqualTo(customerBack);
 
-        location.customer(null);
+        location.updateCustomer(null);
         assertThat(location.getCustomer()).isNull();
     }
 
@@ -45,11 +45,11 @@ class LocationTest {
         Location location = getLocationRandomSampleGenerator();
         ServiceRequest serviceRequestBack = getServiceRequestRandomSampleGenerator();
 
-        location.setServiceRequest(serviceRequestBack);
+        location.updateServiceRequest(serviceRequestBack);
         assertThat(location.getServiceRequest()).isEqualTo(serviceRequestBack);
         assertThat(serviceRequestBack.getLocation()).isEqualTo(location);
 
-        location.serviceRequest(null);
+        location.updateServiceRequest(null);
         assertThat(location.getServiceRequest()).isNull();
         assertThat(serviceRequestBack.getLocation()).isNull();
     }
@@ -59,11 +59,11 @@ class LocationTest {
         Location location = getLocationRandomSampleGenerator();
         Transport transportBack = getTransportRandomSampleGenerator();
 
-        location.setTransport(transportBack);
+        location.updateTransport(transportBack);
         assertThat(location.getTransport()).isEqualTo(transportBack);
         assertThat(transportBack.getLocation()).isEqualTo(location);
 
-        location.transport(null);
+        location.updateTransport(null);
         assertThat(location.getTransport()).isNull();
         assertThat(transportBack.getLocation()).isNull();
     }

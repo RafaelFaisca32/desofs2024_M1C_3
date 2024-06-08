@@ -54,7 +54,7 @@ public final class LocationMapper {
     public static void partialUpdate(Location entity, LocationDTO dto) {
         if(entity == null || dto == null) return;
         if(dto.getCustomer() != null){
-            entity.setCustomer(CustomerMapper.toEntity(dto.getCustomer()));
+            entity.updateCustomer(CustomerMapper.toEntity(dto.getCustomer()));
         }
         if(dto.getCoordX() != null && dto.getCoordY() != null && dto.getCoordZ() != null){
             entity.updateCoord(new GeographicalCoordinates(dto.getCoordX(),dto.getCoordY(),dto.getCoordZ()));

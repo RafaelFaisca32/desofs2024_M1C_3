@@ -70,61 +70,42 @@ public class Location implements Serializable {
             new GeographicalCoordinates(this.coord.xValue(),this.coord.yValue(),this.coord.zValue()) : null;
     }
 
-    public Location coord(GeographicalCoordinates coord){
-        this.updateCoord(coord);
-        return this;
-    }
-
     public Customer getCustomer() {
-        return this.customer;
+        return this.customer != null ? new Customer(this.customer) : null;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Location customer(Customer customer) {
-        this.setCustomer(customer);
-        return this;
+    public void updateCustomer(Customer customer) {
+        this.customer = customer != null ? new Customer(customer): null;
     }
 
     public ServiceRequest getServiceRequest() {
-        return this.serviceRequest;
+        return this.serviceRequest != null ? new ServiceRequest(this.serviceRequest) : null;
     }
 
-    public void setServiceRequest(ServiceRequest serviceRequest) {
+    public void updateServiceRequest(ServiceRequest serviceRequest) {
         if (this.serviceRequest != null) {
             this.serviceRequest.setLocation(null);
         }
         if (serviceRequest != null) {
             serviceRequest.setLocation(this);
         }
-        this.serviceRequest = serviceRequest;
-    }
-
-    public Location serviceRequest(ServiceRequest serviceRequest) {
-        this.setServiceRequest(serviceRequest);
-        return this;
+        this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
     }
 
     public Transport getTransport() {
-        return this.transport;
+        return this.transport != null ? new Transport(this.transport) : null;
     }
 
-    public void setTransport(Transport transport) {
+    public void updateTransport(Transport transport) {
         if (this.transport != null) {
             this.transport.setLocation(null);
         }
         if (transport != null) {
             transport.setLocation(this);
         }
-        this.transport = transport;
+        this.transport = transport != null ? new Transport(transport) : null;
     }
 
-    public Location transport(Transport transport) {
-        this.setTransport(transport);
-        return this;
-    }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
