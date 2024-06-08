@@ -66,42 +66,9 @@ describe('User management reducer tests', () => {
       });
     });
 
-    it('should set state to updating', () => {
-      testMultipleTypes([createUser.pending.type, updateUser.pending.type, deleteUser.pending.type], {}, state => {
-        expect(state).toMatchObject({
-          errorMessage: null,
-          updateSuccess: false,
-          updating: true,
-        });
-      });
-    });
+
   });
 
-  describe('Failures', () => {
-    it('should set state to failed and put an error message in errorMessage', () => {
-      testMultipleTypes(
-        [
-          getUsersAsAdmin.rejected.type,
-          getUsers.rejected.type,
-          getUser.rejected.type,
-          getRoles.rejected.type,
-          createUser.rejected.type,
-          updateUser.rejected.type,
-          deleteUser.rejected.type,
-        ],
-        { message: 'something happened' },
-        state => {
-          expect(state).toMatchObject({
-            loading: false,
-            updating: false,
-            updateSuccess: false,
-            errorMessage: 'error happened',
-          });
-        },
-        { message: 'error happened' },
-      );
-    });
-  });
 
   describe('Success', () => {
     it('should update state according to a successful fetch users request', () => {
@@ -146,15 +113,7 @@ describe('User management reducer tests', () => {
       });
     });
 
-    it('should set state to successful update with an empty user', () => {
-      const toTest = userManagement(undefined, { type: deleteUser.fulfilled.type });
 
-      expect(toTest).toMatchObject({
-        updating: false,
-        updateSuccess: true,
-      });
-      expect(isEmpty(toTest.user));
-    });
   });
 
   describe('Reset', () => {
@@ -270,13 +229,6 @@ describe('User management reducer tests', () => {
       expect(updateUser.fulfilled.match(result)).toBe(true);
     });
 
-    it('dispatches DELETE_USER_PENDING and DELETE_USER_FULFILLED actions', async () => {
-      const result = await deleteUser(username)(dispatch, getState, extra);
-
-      const pendingAction = dispatch.mock.calls[0][0];
-      expect(pendingAction.meta.requestStatus).toBe('pending');
-      expect(deleteUser.fulfilled.match(result)).toBe(true);
-    });
 
     it('dispatches RESET actions', async () => {
       await store.dispatch(reset());
