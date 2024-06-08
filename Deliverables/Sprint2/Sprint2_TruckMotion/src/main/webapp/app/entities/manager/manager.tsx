@@ -83,7 +83,7 @@ export const Manager = () => {
             <thead>
               <tr>
                 <th >
-                  Manager Number 
+                  Manager Number
                 </th>
                 <th>
                   Application User <FontAwesomeIcon icon="sort" />
@@ -101,7 +101,7 @@ export const Manager = () => {
                   </td>
                   <td>
                     {manager.applicationUser ? (
-                      <Link to={`/application-user/${manager.applicationUser.id}`}>{manager.applicationUser.name}</Link>
+                      <Link to={`/admin/user-management/${manager.applicationUser.internalUser.login}`}>{manager.applicationUser.internalUser.login}</Link>
                     ) : (
                       ''
                     )}

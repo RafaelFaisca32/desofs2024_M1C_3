@@ -83,7 +83,7 @@ export const Customer = () => {
             <thead>
               <tr>
                 <th >
-                  Customer Number  
+                  Customer Number
                 </th>
                 <th className="hand" onClick={sort('company')}>
                   Company <FontAwesomeIcon icon={getSortIconByFieldName('company')} />
@@ -105,7 +105,7 @@ export const Customer = () => {
                   <td>{customer.company}</td>
                   <td>
                     {customer.applicationUser ? (
-                      <Link to={`/application-user/${customer.applicationUser.id}`}>{customer.applicationUser.name}</Link>
+                      <Link to={`/admin/user-management/${customer.applicationUser.internalUser.login}`}>{customer.applicationUser.internalUser.login}</Link>
                     ) : (
                       ''
                     )}

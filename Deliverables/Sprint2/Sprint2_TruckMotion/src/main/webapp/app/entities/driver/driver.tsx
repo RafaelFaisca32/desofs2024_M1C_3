@@ -105,7 +105,7 @@ export const Driver = () => {
                   <td>{driver.truck ? <Link to={`/truck/${driver.truck.id}`}>{driver.truck.make +" "+ driver.truck.model}</Link> : ''}</td>
                   <td>
                     {driver.applicationUser ? (
-                      <Link to={`/application-user/${driver.applicationUser.id}`}>{driver.applicationUser.name}</Link>
+                      <Link to={`/admin/user-management/${driver.applicationUser.internalUser.login}`}>{driver.applicationUser.internalUser.login}</Link>
                     ) : (
                       ''
                     )}
