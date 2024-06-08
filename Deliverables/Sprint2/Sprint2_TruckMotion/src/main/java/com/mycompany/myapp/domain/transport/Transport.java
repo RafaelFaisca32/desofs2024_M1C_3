@@ -31,13 +31,13 @@ public class Transport implements Serializable {
     private TransportEndTime endTime;
 
     @JsonIgnoreProperties(value = { "customer", "serviceRequest", "transport" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(unique = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "location_id")
     private Location location;
 
     @JsonIgnoreProperties(value = { "truck", "applicationUser", "transport" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(unique = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "driver_id")
     private Driver driver;
 
     @JsonIgnoreProperties(value = { "location", "customer", "serviceStatuses", "transport" }, allowSetters = true)

@@ -8,13 +8,18 @@ import { ASC, DESC, SORT } from 'app/shared/util/pagination.constants';
 import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntities } from './location.reducer';
+import { AUTHORITIES } from '../../config/constants';
+import { getEntitiesByUserLoggedIn } from './location.reducer';
 
 export const Location = () => {
   const dispatch = useAppDispatch();
 
   const pageLocation = useLocation();
   const navigate = useNavigate();
+
+  const account = useAppSelector(state => state.authentication.account);
+  const customerRole = [AUTHORITIES.CUSTOMER];
+  const authorities = account.authorities as string[]
 
   const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(pageLocation, 'id'), pageLocation.search));
 
@@ -23,7 +28,7 @@ export const Location = () => {
 
   const getAllEntities = () => {
     dispatch(
-      getEntities({
+      getEntitiesByUserLoggedIn({
         sort: `${sortState.sort},${sortState.order}`,
       }),
     );
@@ -71,10 +76,15 @@ export const Location = () => {
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> Refresh list
           </Button>
-          <Link to="/location/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+          {
+            customerRole.some(value => authorities.includes(value)) ? 
+            <Link to="/location/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
             &nbsp; Create a new Location
           </Link>
+            :null
+          }
+
         </div>
       </h2>
       <div className="table-responsive">
@@ -117,17 +127,22 @@ export const Location = () => {
                       <Button tag={Link} to={`/location/${location.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                       </Button>
-                      <Button tag={Link} to={`/location/${location.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                      </Button>
-                      <Button
-                        onClick={() => (window.location.href = `/location/${location.id}/delete`)}
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                      </Button>
+
+                        {
+                      customerRole.some(value => authorities.includes(value)) ? 
+                      <><Button tag={Link} to={`/location/${location.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
+                            <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                          </Button><Button
+                            onClick={() => (window.location.href = `/location/${location.id}/delete`)}
+                            color="danger"
+                            size="sm"
+                            data-cy="entityDeleteButton"
+                          >
+                              <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                            </Button></>
+                          : null
+                        }
+
                     </div>
                   </td>
                 </tr>

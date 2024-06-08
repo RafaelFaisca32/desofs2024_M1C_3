@@ -18,4 +18,6 @@ public interface ILocationRepository {
     long count();
 
     boolean existsById(LocationId id);
+
+    List<Location> getByUserId(Long userId);
 }

@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { ICustomer } from 'app/shared/model/customer.model';
 import { getEntities as getCustomers } from 'app/entities/customer/customer.reducer';
 import { ILocation } from 'app/shared/model/location.model';
+import { getEntityByLoggedInUser as getEntityByLoggedInUser } from 'app/entities/customer/customer.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './location.reducer';
 
 export const LocationUpdate = () => {
@@ -21,7 +22,7 @@ export const LocationUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-  const customers = useAppSelector(state => state.customer.entities);
+  const customer = useAppSelector(state => state.customer.entity);
   const locationEntity = useAppSelector(state => state.location.entity);
   const loading = useAppSelector(state => state.location.loading);
   const updating = useAppSelector(state => state.location.updating);
@@ -38,7 +39,7 @@ export const LocationUpdate = () => {
       dispatch(getEntity(id));
     }
 
-    dispatch(getCustomers({}));
+    dispatch(getEntityByLoggedInUser());
   }, []);
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export const LocationUpdate = () => {
     const entity = {
       ...locationEntity,
       ...values,
-      customer: customers.find(it => it.id.toString() === values.customer?.toString()),
+      customer: customer,
     };
 
     if (isNew) {
@@ -76,9 +77,9 @@ export const LocationUpdate = () => {
     isNew
       ? {}
       : {
-          ...locationEntity,
-          customer: locationEntity?.customer?.id,
-        };
+        ...locationEntity,
+        customer: locationEntity?.customer?.id,
+      };
 
   return (
     <div>
@@ -98,15 +99,10 @@ export const LocationUpdate = () => {
               <ValidatedField label="Coord X" id="location-coordX" name="coordX" data-cy="coordX" type="text" />
               <ValidatedField label="Coord Y" id="location-coordY" name="coordY" data-cy="coordY" type="text" />
               <ValidatedField label="Coord Z" id="location-coordZ" name="coordZ" data-cy="coordZ" type="text" />
-              <ValidatedField id="location-customer" name="customer" data-cy="customer" label="Customer" type="select">
-                <option value="" key="0" />
-                {customers
-                  ? customers.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.company}
-                      </option>
-                    ))
-                  : null}
+              <ValidatedField id="location-customer" name="customer" data-cy="customer" label="Customer" type="select" hidden={true}>
+                <option value={customer.id} key={customer.id}>
+                  {customer.company}
+                </option>
               </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/location" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />

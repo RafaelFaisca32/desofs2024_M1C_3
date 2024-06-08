@@ -11,11 +11,8 @@ import ManagerDeleteDialog from './manager-delete-dialog';
 const ManagerRoutes = () => (
   <ErrorBoundaryRoutes>
     <Route index element={<Manager />} />
-    <Route path="new" element={<ManagerUpdate />} />
     <Route path=":id">
       <Route index element={<ManagerDetail />} />
-      <Route path="edit" element={<ManagerUpdate />} />
-      <Route path="delete" element={<ManagerDeleteDialog />} />
     </Route>
   </ErrorBoundaryRoutes>
 );

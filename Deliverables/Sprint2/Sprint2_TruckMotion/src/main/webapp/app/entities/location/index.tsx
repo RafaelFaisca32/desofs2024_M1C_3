@@ -7,15 +7,23 @@ import Location from './location';
 import LocationDetail from './location-detail';
 import LocationUpdate from './location-update';
 import LocationDeleteDialog from './location-delete-dialog';
+import PrivateRoute from '../../shared/auth/private-route';
+import { AUTHORITIES } from '../../config/constants';
 
 const LocationRoutes = () => (
   <ErrorBoundaryRoutes>
     <Route index element={<Location />} />
-    <Route path="new" element={<LocationUpdate />} />
+    <Route path="new" element={
+          <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.CUSTOMER]}>
+        <LocationUpdate /> </PrivateRoute>} />
     <Route path=":id">
       <Route index element={<LocationDetail />} />
-      <Route path="edit" element={<LocationUpdate />} />
-      <Route path="delete" element={<LocationDeleteDialog />} />
+      <Route path="edit" element={
+          <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.CUSTOMER]}>
+        <LocationUpdate /> </PrivateRoute>} />
+        <Route path="delete" element={
+          <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.CUSTOMER]}>
+        <LocationDeleteDialog /> </PrivateRoute>} />
     </Route>
   </ErrorBoundaryRoutes>
 );

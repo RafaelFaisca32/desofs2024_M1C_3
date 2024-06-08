@@ -1,16 +1,16 @@
 package com.mycompany.myapp.application.controller;
 
 import com.mycompany.myapp.domain.location.Location;
+import com.mycompany.myapp.domain.user.UserService;
+import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import com.mycompany.myapp.infrastructure.repository.jpa.LocationRepository;
 import com.mycompany.myapp.domain.location.LocationService;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,9 +34,11 @@ public class LocationController {
     private String applicationName;
 
     private final LocationService locationService;
+    private final UserService userService;
 
-    public LocationController(LocationService locationService) {
+    public LocationController(LocationService locationService, UserService userService) {
         this.locationService = locationService;
+        this.userService = userService;
     }
 
     /**
@@ -88,38 +90,6 @@ public class LocationController {
     }
 
     /**
-     * {@code PATCH  /locations/:id} : Partial updates given fields of an existing location, field will ignore if it is null
-     *
-     * @param id the id of the locationDTO to save.
-     * @param locationDTO the locationDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated locationDTO,
-     * or with status {@code 400 (Bad Request)} if the locationDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the locationDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the locationDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<LocationDTO> partialUpdateLocation(
-        @PathVariable(value = "id", required = false) final UUID id,
-        @RequestBody LocationDTO locationDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update Location partially : {}, {}", id, locationDTO);
-        if (locationDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, locationDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        Optional<LocationDTO> result = locationService.partialUpdate(locationDTO);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, locationDTO.getId().toString())
-        );
-    }
-
-    /**
      * {@code GET  /locations} : get all the locations.
      *
      * @param filter the filter of the request.
@@ -166,5 +136,25 @@ public class LocationController {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+
+    @GetMapping("/getByUserLoggedIn")
+    public List<LocationDTO> getAllLocationsByLoggedInUser(@RequestParam(name = "filter", required = false) String filter) {
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+        log.debug("REST request to get all ServiceRequests By LoggedIn User");
+
+        List<LocationDTO> listRet = new ArrayList<>();
+
+        if (adminUserDTO != null) {
+            if (adminUserDTO.getAuthorities().contains("ROLE_MANAGER") || adminUserDTO.getAuthorities().contains("ROLE_ADMIN"))
+                listRet = locationService.findAll();
+            else if (adminUserDTO.getAuthorities().contains("ROLE_CUSTOMER"))
+                listRet = locationService.getByUserId(adminUserDTO.getId());
+        }
+
+        return listRet;
     }
 }

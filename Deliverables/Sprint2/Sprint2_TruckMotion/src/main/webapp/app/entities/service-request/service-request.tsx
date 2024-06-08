@@ -11,9 +11,13 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { updateEntityStatus } from './service-request.reducer';
 
 import { getEntitiesByUserLoggedIn } from './service-request.reducer';
-import { useDispatch } from 'react-redux';
+import { AUTHORITIES } from '../../config/constants';
 
 export const ServiceRequest = () => {
+  const account = useAppSelector(state => state.authentication.account);
+  const managerRole = [AUTHORITIES.MANAGER];
+  const customerRole = [AUTHORITIES.CUSTOMER];
+  const authorities = account.authorities as string[]
   const dispatch = useAppDispatch();
 
   const pageLocation = useLocation();
@@ -80,10 +84,13 @@ export const ServiceRequest = () => {
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> Refresh list
           </Button>
+          {customerRole.some(value => authorities.includes(value)) ?
           <Link to="/service-request/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
             &nbsp; Create a new Service Request
           </Link>
+      : null}
+
         </div>
       </h2>
       <div className="table-responsive">
@@ -157,7 +164,7 @@ export const ServiceRequest = () => {
                   </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      {serviceRequest.status ?  serviceRequest.status.status == 'PENDING' ? <><Button tag={Link} to={`/service-request/${serviceRequest.id}/statusUpdate`} color="success" size="sm" data-cy="entityDetailsButton">
+                      {serviceRequest.status && managerRole.some(value => authorities.includes(value))  ?  serviceRequest.status.status == 'PENDING' ? <><Button tag={Link} to={`/service-request/${serviceRequest.id}/statusUpdate`} color="success" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="plus" /> <span className="d-none d-md-inline">Approve</span>
                       </Button><Button onClick={() =>  updateStatus(serviceRequest.id, false, '', '', '')} color="danger" size="sm" data-cy="entityDetailsButton">
                           <FontAwesomeIcon icon="ban" /> <span className="d-none d-md-inline">Reject</span>
@@ -166,6 +173,7 @@ export const ServiceRequest = () => {
                       <Button tag={Link} to={`/service-request/${serviceRequest.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                       </Button>
+                      {customerRole.some(value => authorities.includes(value)) ?
                       <Button
                         tag={Link}
                         to={`/service-request/${serviceRequest.id}/edit`}
@@ -175,6 +183,8 @@ export const ServiceRequest = () => {
                       >
                         <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
                       </Button>
+                      : null}
+
                     </div>
                   </td>
                 </tr>

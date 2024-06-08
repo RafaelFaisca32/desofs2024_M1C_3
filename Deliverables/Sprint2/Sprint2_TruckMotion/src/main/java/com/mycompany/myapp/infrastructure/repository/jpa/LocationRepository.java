@@ -2,10 +2,11 @@ package com.mycompany.myapp.infrastructure.repository.jpa;
 
 import com.mycompany.myapp.domain.location.ILocationRepository;
 import com.mycompany.myapp.domain.location.Location;
-import java.util.UUID;
+import java.util.List;
 
 import com.mycompany.myapp.domain.location.LocationId;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,4 +14,11 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface LocationRepository extends JpaRepository<Location, LocationId>, ILocationRepository {}
+public interface LocationRepository extends JpaRepository<Location, LocationId>, ILocationRepository {
+
+    @Query("SELECT c FROM Location c " +
+        "JOIN c.customer au " +
+        "JOIN au.applicationUser u " +
+        "WHERE u.id = :userId" )
+    List<Location> getByUserId(@Param("userId") Long userId);
+}

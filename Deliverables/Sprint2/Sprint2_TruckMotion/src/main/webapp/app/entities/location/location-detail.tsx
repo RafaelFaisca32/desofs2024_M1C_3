@@ -7,9 +7,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './location.reducer';
+import { AUTHORITIES } from '../../config/constants';
 
 export const LocationDetail = () => {
   const dispatch = useAppDispatch();
+
+  const account = useAppSelector(state => state.authentication.account);
+  const customerRole = [AUTHORITIES.CUSTOMER];
+  const authorities = account.authorities as string[]
 
   const { id } = useParams<'id'>();
 
@@ -42,9 +47,13 @@ export const LocationDetail = () => {
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/location/${locationEntity.id}/edit`} replace color="primary">
-          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-        </Button>
+        {
+            customerRole.some(value => authorities.includes(value)) ? 
+            <Button tag={Link} to={`/location/${locationEntity.id}/edit`} replace color="primary">
+            <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+          </Button>
+            :null
+          }
       </Col>
     </Row>
   );

@@ -62,35 +62,6 @@ public class ServiceRequestController {
             .body(serviceRequestDTO);
     }
 
-    /**
-     * {@code PUT  /service-requests/:id} : Updates an existing serviceRequest.
-     *
-     * @param id the id of the serviceRequestDTO to save.
-     * @param serviceRequestDTO the serviceRequestDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated serviceRequestDTO,
-     * or with status {@code 400 (Bad Request)} if the serviceRequestDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the serviceRequestDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<ServiceRequestDTO> updateServiceRequest(
-        @PathVariable(value = "id", required = false) final UUID id,
-        @RequestBody ServiceRequestDTO serviceRequestDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to update ServiceRequest : {}, {}", id, serviceRequestDTO);
-        if (serviceRequestDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, serviceRequestDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        serviceRequestDTO = serviceRequestService.update(serviceRequestDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, serviceRequestDTO.getId().toString()))
-            .body(serviceRequestDTO);
-    }
-
     @PutMapping({"/{id}/{isApproved}", "/{id}/{isApproved}/{driverId}/{startDate}/{endDate}"})
     public ResponseEntity<ServiceRequestDTO> updateServiceRequestStatus(
         @PathVariable(value = "id", required = true) final UUID id,
@@ -140,22 +111,6 @@ public class ServiceRequestController {
     }
 
     /**
-     * {@code GET  /service-requests} : get all the serviceRequests.
-     *
-     * @param filter the filter of the request.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of serviceRequests in body.
-     */
-    @GetMapping("")
-    public List<ServiceRequestDTO> getAllServiceRequests(@RequestParam(name = "filter", required = false) String filter) {
-        if ("transport-is-null".equals(filter)) {
-            log.debug("REST request to get all ServiceRequests where transport is null");
-            return serviceRequestService.findAllWhereTransportIsNull();
-        }
-        log.debug("REST request to get all ServiceRequests");
-        return serviceRequestService.findAll();
-    }
-
-    /**
      * {@code GET  /service-requests/:id} : get the "id" serviceRequest.
      *
      * @param id the id of the serviceRequestDTO to retrieve.
@@ -166,21 +121,6 @@ public class ServiceRequestController {
         log.debug("REST request to get ServiceRequest : {}", id);
         Optional<ServiceRequestDTO> serviceRequestDTO = serviceRequestService.findOne(id);
         return ResponseUtil.wrapOrNotFound(serviceRequestDTO);
-    }
-
-    /**
-     * {@code DELETE  /service-requests/:id} : delete the "id" serviceRequest.
-     *
-     * @param id the id of the serviceRequestDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteServiceRequest(@PathVariable("id") UUID id) {
-        log.debug("REST request to delete ServiceRequest : {}", id);
-        serviceRequestService.delete(id);
-        return ResponseEntity.noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
-            .build();
     }
 
     @GetMapping("/getByUserLoggedIn")

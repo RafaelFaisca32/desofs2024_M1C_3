@@ -6,6 +6,9 @@ import com.mycompany.myapp.domain.truck.Truck;
 import com.mycompany.myapp.domain.user.ApplicationUser;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * A Driver.
@@ -33,8 +36,8 @@ public class Driver implements Serializable {
     private ApplicationUser applicationUser;
 
     @JsonIgnoreProperties(value = { "location", "driver", "serviceRequest" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "driver")
-    private Transport transport;
+    @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY)
+    private Set<Transport> transports = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -57,7 +60,7 @@ public class Driver implements Serializable {
         this.id = driver.getId();
         this.truck = driver.getTruck();
         this.applicationUser = driver.getApplicationUser();
-        this.transport = driver.getTransport();
+        this.transports = new HashSet<>(driver.getTransport());
     }
 
 
@@ -78,20 +81,19 @@ public class Driver implements Serializable {
         this.applicationUser = applicationUser != null ? new ApplicationUser(applicationUser) : null;
     }
 
-    public Transport getTransport() {
-        return this.transport != null ? new Transport(this.transport) : null;
+    public Set<Transport> getTransport() {
+        return this.transports != null ? new HashSet<>(this.transports) : null;
     }
 
-    public void updateTransport(Transport transport) {
-
-
-        if (this.transport != null) {
-            this.transport.updateDriver(null);
+    public void updateTransports(Set<Transport> transports) {
+        if(transports != null) {
+            transports.forEach(i -> i.updateDriver(this));
         }
-        if (transport != null) {
-            transport.updateDriver(this);
+
+        if (this.transports != null) {
+            this.transports.forEach(i -> i.updateDriver(null));
         }
-        this.transport = transport != null ? new Transport(transport) : null;
+        this.transports = transports != null ? new HashSet<>(transports) : null;
     }
 
 

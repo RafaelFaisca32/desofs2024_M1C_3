@@ -6,6 +6,9 @@ import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
 import com.mycompany.myapp.domain.transport.Transport;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * A Location.
@@ -30,12 +33,12 @@ public class Location implements Serializable {
     private Customer customer;
 
     @JsonIgnoreProperties(value = { "location", "customer", "serviceStatuses", "transport" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "location")
-    private ServiceRequest serviceRequest;
+    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
+    private Set<ServiceRequest> serviceRequests = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "location", "driver", "serviceRequest" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "location")
-    private Transport transport;
+    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
+    private Set<Transport> transports = new HashSet<>();
 
     public Location(LocationId id, GeographicalCoordinates coord, Customer customer) {
         this.id = id;
@@ -50,8 +53,8 @@ public class Location implements Serializable {
         this.id = location.getId();
         this.coord = location.getCoord();
         this.customer = location.getCustomer();
-        this.serviceRequest = location.getServiceRequest();
-        this.transport = location.getTransport();
+        this.serviceRequests = location.getServiceRequests();
+        this.transports = location.getTransports();
 
     }
 
@@ -78,32 +81,33 @@ public class Location implements Serializable {
         this.customer = customer != null ? new Customer(customer): null;
     }
 
-    public ServiceRequest getServiceRequest() {
-        return this.serviceRequest != null ? new ServiceRequest(this.serviceRequest) : null;
+    public Set<ServiceRequest> getServiceRequests() {
+        return this.serviceRequests != null ? new HashSet<>(this.serviceRequests) : null;
     }
 
-    public void updateServiceRequest(ServiceRequest serviceRequest) {
-        if (this.serviceRequest != null) {
-            this.serviceRequest.updateLocation(null);
+    public void updateServiceRequest(Set<ServiceRequest> serviceRequests) {
+        if(serviceRequests != null) {
+            serviceRequests.forEach(i -> i.updateLocation(this));
         }
-        if (serviceRequest != null) {
-            serviceRequest.updateLocation(this);
+
+        if (this.serviceRequests != null) {
+            this.serviceRequests.forEach(i -> i.updateLocation(null));
         }
-        this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
+        this.serviceRequests = serviceRequests != null ? new HashSet<>(serviceRequests) : null; }
+
+    public Set<Transport> getTransport() {
+        return this.transports != null ? new HashSet<>(this.transports) : null;
     }
 
-    public Transport getTransport() {
-        return this.transport != null ? new Transport(this.transport) : null;
-    }
+    public void updateTransport(Set<Transport> transports) {
+        if(transports != null) {
+            transports.forEach(i -> i.updateLocation(this));
+        }
 
-    public void updateTransport(Transport transport) {
-        if (this.transport != null) {
-            this.transport.updateLocation(null);
+        if (this.transports != null) {
+            this.transports.forEach(i -> i.updateLocation(null));
         }
-        if (transport != null) {
-            transport.updateLocation(this);
-        }
-        this.transport = transport != null ? new Transport(transport) : null;
+        this.transports = transports != null ? new HashSet<>(transports) : null;
     }
 
 

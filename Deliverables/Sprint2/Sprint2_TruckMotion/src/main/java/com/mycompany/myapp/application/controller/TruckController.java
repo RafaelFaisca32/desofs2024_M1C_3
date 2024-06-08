@@ -87,38 +87,6 @@ public class TruckController {
     }
 
     /**
-     * {@code PATCH  /trucks/:id} : Partial updates given fields of an existing truck, field will ignore if it is null
-     *
-     * @param id the id of the truckDTO to save.
-     * @param truckDTO the truckDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated truckDTO,
-     * or with status {@code 400 (Bad Request)} if the truckDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the truckDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the truckDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<TruckDTO> partialUpdateTruck(
-        @PathVariable(value = "id", required = false) final UUID id,
-        @RequestBody TruckDTO truckDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update Truck partially : {}, {}", id, truckDTO);
-        if (truckDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, truckDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        Optional<TruckDTO> result = truckService.partialUpdate(truckDTO);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, truckDTO.getId().toString())
-        );
-    }
-
-    /**
      * {@code GET  /trucks} : get all the trucks.
      *
      * @param filter the filter of the request.

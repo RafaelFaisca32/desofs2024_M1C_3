@@ -12,6 +12,9 @@ import com.mycompany.myapp.domain.transport.Transport;
 import com.mycompany.myapp.application.controller.TestUtil;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 class LocationTest {
 
     @Test
@@ -45,12 +48,12 @@ class LocationTest {
         Location location = getLocationRandomSampleGenerator();
         ServiceRequest serviceRequestBack = getServiceRequestRandomSampleGenerator();
 
-        location.updateServiceRequest(serviceRequestBack);
-        assertThat(location.getServiceRequest()).isEqualTo(serviceRequestBack);
+        location.updateServiceRequest(new HashSet<>(Set.of(serviceRequestBack)));
+        assertThat(location.getServiceRequests()).isEqualTo(serviceRequestBack);
         assertThat(serviceRequestBack.getLocation()).isEqualTo(location);
 
         location.updateServiceRequest(null);
-        assertThat(location.getServiceRequest()).isNull();
+        assertThat(location.getServiceRequests()).isNull();
         assertThat(serviceRequestBack.getLocation()).isNull();
     }
 
@@ -59,7 +62,7 @@ class LocationTest {
         Location location = getLocationRandomSampleGenerator();
         Transport transportBack = getTransportRandomSampleGenerator();
 
-        location.updateTransport(transportBack);
+        location.updateTransport(new HashSet<>(Set.of(transportBack)));
         assertThat(location.getTransport()).isEqualTo(transportBack);
         assertThat(transportBack.getLocation()).isEqualTo(location);
 

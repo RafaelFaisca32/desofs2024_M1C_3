@@ -43,13 +43,13 @@ public class ServiceRequest implements Serializable {
     private ServiceRequestDate date;
 
     @JsonIgnoreProperties(value = { "customer", "serviceRequest", "transport" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(unique = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "location_id")
     private Location location;
 
     @JsonIgnoreProperties(value = { "applicationUser", "locations", "serviceRequest" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(unique = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "serviceRequest", cascade = CascadeType.ALL)

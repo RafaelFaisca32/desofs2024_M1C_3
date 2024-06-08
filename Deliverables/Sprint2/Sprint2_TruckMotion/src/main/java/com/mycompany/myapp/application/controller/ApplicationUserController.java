@@ -96,42 +96,6 @@ public class ApplicationUserController {
     }
 
     /**
-     * {@code PATCH  /application-users/:id} : Partial updates given fields of an existing applicationUser, field will ignore if it is null
-     *
-     * @param id the id of the applicationUserDTO to save.
-     * @param applicationUserDTO the applicationUserDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated applicationUserDTO,
-     * or with status {@code 400 (Bad Request)} if the applicationUserDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the applicationUserDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the applicationUserDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<ApplicationUserDTO> partialUpdateApplicationUser(
-        @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody ApplicationUserDTO applicationUserDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update ApplicationUser partially : {}, {}", id, applicationUserDTO);
-        if (applicationUserDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, applicationUserDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!applicationUserService.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Optional<ApplicationUserDTO> result = applicationUserService.partialUpdate(applicationUserDTO);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, applicationUserDTO.getId().toString())
-        );
-    }
-
-    /**
      * {@code GET  /application-users} : get all the applicationUsers.
      *
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).

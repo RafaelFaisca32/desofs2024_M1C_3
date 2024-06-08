@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { ITruck } from 'app/shared/model/truck.model';
 import { getEntity, updateEntity, createEntity, reset } from './truck.reducer';
+import { AUTHORITIES } from '../../config/constants';
 
 export const TruckUpdate = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +19,6 @@ export const TruckUpdate = () => {
 
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
-
   const truckEntity = useAppSelector(state => state.truck.entity);
   const loading = useAppSelector(state => state.truck.loading);
   const updating = useAppSelector(state => state.truck.updating);

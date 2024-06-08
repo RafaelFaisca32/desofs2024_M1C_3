@@ -38,8 +38,8 @@ public class Customer implements Serializable {
     private Set<Location> locations = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "location", "customer", "serviceStatuses", "transport" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "customer")
-    private ServiceRequest serviceRequest;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private Set<ServiceRequest> serviceRequests = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -58,7 +58,7 @@ public class Customer implements Serializable {
         this.company = customer.getCompany();
         this.applicationUser = customer.getApplicationUser();
         this.locations = new HashSet<>(customer.getLocations());
-        this.serviceRequest = customer.getServiceRequest();
+        this.serviceRequests = new HashSet<>(customer.getServiceRequest());
 
     }
 
@@ -97,7 +97,7 @@ public class Customer implements Serializable {
         if (this.locations != null) {
             this.locations.forEach(i -> i.updateCustomer(null));
         }
-        this.locations = locations != null ? new HashSet<>(locations) : new HashSet<>();
+        this.locations = locations != null ? new HashSet<>(locations) : null;
     }
 
     public void addLocation(Location location) {
@@ -115,18 +115,21 @@ public class Customer implements Serializable {
         }
     }
 
-    public ServiceRequest getServiceRequest() {
-        return this.serviceRequest != null ? new ServiceRequest(this.serviceRequest) : null;
+    public Set<ServiceRequest> getServiceRequest() {
+        return this.serviceRequests != null ? new HashSet<>(this.serviceRequests) : null;
     }
 
-    public void updateServiceRequest(ServiceRequest serviceRequest) {
-        if (this.serviceRequest != null) {
-            this.serviceRequest.updateCustomer(null);
+    public void updateServiceRequest(Set<ServiceRequest> serviceRequests) {
+
+        if(serviceRequests != null) {
+            serviceRequests.forEach(i -> i.updateCustomer(this));
         }
-        if (serviceRequest != null) {
-            serviceRequest.updateCustomer(this);
+
+        if (this.serviceRequests != null) {
+            this.serviceRequests.forEach(i -> i.updateCustomer(null));
         }
-        this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
+
+        this.serviceRequests = serviceRequests != null ? new HashSet<>(serviceRequests) : null;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
