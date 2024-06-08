@@ -1,14 +1,9 @@
 package com.mycompany.myapp.domain.user.mapper;
 
-import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
 import com.mycompany.myapp.domain.user.ApplicationUser;
 import com.mycompany.myapp.domain.user.ApplicationUserBirthDate;
 import com.mycompany.myapp.domain.user.ApplicationUserId;
-import com.mycompany.myapp.domain.user.User;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
-import com.mycompany.myapp.domain.user.dto.UserDTO;
-import org.mapstruct.*;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
@@ -68,14 +63,14 @@ public final class ApplicationUserMapper{
     public static void partialUpdate(ApplicationUser entity, ApplicationUserDTO dto) {
         if(entity == null || dto == null) return;
         if(dto.getBirthDate() != null){
-            entity.setBirthDate(new ApplicationUserBirthDate(dto.getBirthDate()));
+            entity.updateBirthDate(new ApplicationUserBirthDate(dto.getBirthDate()));
         }
         if(dto.getGender() != null){
-            entity.setGender(dto.getGender());
+            entity.updateGender(dto.getGender());
         }
         UserMapper userMapper = new UserMapper();
         if(dto.getInternalUser()!= null){
-            entity.setInternalUser(userMapper.userFromId(dto.getInternalUser().getId()));
+            entity.updateInternalUser(userMapper.userFromId(dto.getInternalUser().getId(), dto.getUuidId()));
         }
     }
 }

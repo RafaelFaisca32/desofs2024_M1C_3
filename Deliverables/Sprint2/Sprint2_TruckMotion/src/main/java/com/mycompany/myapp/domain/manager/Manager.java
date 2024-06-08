@@ -29,6 +29,10 @@ public class Manager implements Serializable {
     public Manager(){
         this.id = new ManagerId();
     }
+    public Manager(Manager manager){
+        this.id = new ManagerId();
+        this.applicationUser = manager.getApplicationUser();
+    }
     public Manager(ManagerId id, ApplicationUser applicationUser) {
         this.id = id;
         this.applicationUser = applicationUser;

@@ -94,7 +94,65 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
-    public User(){}
+    public User(){ this.uuidId = new UserId(); }
+
+    public User(Long id, UserId uuidId){ this.id = id; this.uuidId = uuidId; }
+
+    public User(User user){
+        this.uuidId = new UserId();
+        this.login = user.getLogin();
+        this.password = user.getPassword();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.activated = user.isActivated();
+        this.langKey = user.getLangKey();
+        this.imageUrl = user.getImageUrl();
+        this.activationKey = user.getActivationKey();
+        this.resetKey = user.getResetKey();
+        this.resetDate = user.getResetDate();
+        this.uuidId = user.getUuidId();
+        this.authorities = user.getAuthorities();
+
+    }
+
+    /*
+    User user = new User();
+        user.setId(userDTO.getId());
+        user.setLogin(userDTO.getLogin());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setImageUrl(userDTO.getImageUrl());
+        user.setActivated(userDTO.isActivated());
+        user.setLangKey(userDTO.getLangKey());
+
+     */
+    public User(Long id,
+                String login,
+                UserId userId,
+                String firstName,
+                String lastName,
+                String email,
+                String imageUrl,
+                boolean activated,
+                String langKey,
+                Set<Authority> authorities
+    )
+    {
+        this.id = id;
+        this.login = login;
+        this.uuidId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.activated = activated;
+        this.langKey = langKey;
+        if(authorities != null){
+            this.authorities.addAll(authorities);
+        }
+    }
 
     public User(String login,
                 UserId userId,
@@ -127,26 +185,10 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     }
 
     public UserId getUuidId() {
-        if(this.uuidId == null) return null;
-
-        return new UserId(this.uuidId.value());
+        return this.uuidId != null ? new UserId(this.uuidId.value()) : null;
     }
-
-    public User uuidid(UserId uuidId) {
-        this.setUuidId(uuidId);
-        return this;
-    }
-
-    public void setUuidId(UserId uuidId) {
-        this.uuidId = uuidId;
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getLogin() {
@@ -154,7 +196,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     }
 
     // Lowercase the login before saving it in database
-    public void setLogin(String login) {
+    public void updateLogin(String login) {
         this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
     }
 
@@ -162,7 +204,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void updatePassword(String password) {
         this.password = password;
     }
 
@@ -170,7 +212,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void updateFirstName(String firstName) {
         this.firstName = firstName;
     }
 
@@ -178,7 +220,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void updateLastName(String lastName) {
         this.lastName = lastName;
     }
 
@@ -186,7 +228,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void updateEmail(String email) {
         this.email = email;
     }
 
@@ -194,7 +236,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void updateImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
@@ -202,15 +244,11 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return activated;
     }
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
     public String getActivationKey() {
         return activationKey;
     }
 
-    public void setActivationKey(String activationKey) {
+    public void updateActivationKey(String activationKey) {
         this.activationKey = activationKey;
     }
 
@@ -218,7 +256,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return resetKey;
     }
 
-    public void setResetKey(String resetKey) {
+    public void updateResetKey(String resetKey) {
         this.resetKey = resetKey;
     }
 
@@ -226,7 +264,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return resetDate;
     }
 
-    public void setResetDate(Instant resetDate) {
+    public void updateResetDate(Instant resetDate) {
         this.resetDate = resetDate;
     }
 
@@ -234,16 +272,16 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return langKey;
     }
 
-    public void setLangKey(String langKey) {
+    public void updateLangKey(String langKey) {
         this.langKey = langKey;
     }
 
     public Set<Authority> getAuthorities() {
-        return authorities;
+        return authorities != null ? new HashSet<>(this.authorities) : null;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
+    public void updateAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities != null ? new HashSet<>(this.authorities) : null;
     }
 
     @Override

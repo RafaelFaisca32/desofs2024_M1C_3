@@ -11,14 +11,14 @@ public class ApplicationUserTestSamples {
 
     public static ApplicationUser getApplicationUserSample1() {
 
-        return new ApplicationUser().id(1L).uuidid(new ApplicationUserId(UUID.fromString("6d232e43-bf74-4885-98e7-572cb76243df")));
+        return new ApplicationUser(1L,new ApplicationUserId(UUID.fromString("6d232e43-bf74-4885-98e7-572cb76243df")));
     }
 
     public static ApplicationUser getApplicationUserSample2() {
-        return new ApplicationUser().id(2L).uuidid(new ApplicationUserId(UUID.fromString("727e0286-8bbe-45e5-9402-f8e8ece80435")));
+        return new ApplicationUser(2L,new ApplicationUserId(UUID.fromString("727e0286-8bbe-45e5-9402-f8e8ece80435")));
     }
 
     public static ApplicationUser getApplicationUserRandomSampleGenerator() {
-        return new ApplicationUser().id(longCount.incrementAndGet()).uuidid(new ApplicationUserId(UUID.randomUUID()));
+        return new ApplicationUser(longCount.incrementAndGet(),new ApplicationUserId(UUID.randomUUID()));
     }
 }

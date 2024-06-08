@@ -27,25 +27,23 @@ public class Authority implements Serializable, Persistable<String> {
     @Transient
     private boolean isPersisted;
 
+    public Authority() {}
+    public Authority(String name) { this.name = name; }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public String getName() {
         return this.name;
     }
 
-    public Authority name(String name) {
-        this.setName(name);
-        return this;
-    }
-
-    public void setName(String name) {
+    public void updateName(String name) {
         this.name = name;
     }
 
     @PostLoad
     @PostPersist
     public void updateEntityState() {
-        this.setIsPersisted();
+        this.updateIsPersisted();
     }
 
     @Override
@@ -59,7 +57,7 @@ public class Authority implements Serializable, Persistable<String> {
         return !this.isPersisted;
     }
 
-    public Authority setIsPersisted() {
+    public Authority updateIsPersisted() {
         this.isPersisted = true;
         return this;
     }

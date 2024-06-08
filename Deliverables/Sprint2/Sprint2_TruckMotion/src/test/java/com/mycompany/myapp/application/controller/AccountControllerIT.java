@@ -235,7 +235,7 @@ class AccountControllerIT {
 
         Optional<User> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com");
         assertThat(testUser).isPresent();
-        testUser.orElseThrow().setActivated(true);
+        testUser.orElseThrow().activate();
         userRepository.save(testUser.orElseThrow());
 
         // Second (already activated) user
@@ -309,7 +309,7 @@ class AccountControllerIT {
         assertThat(testUser4).isPresent();
         assertThat(testUser4.orElseThrow().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
-        testUser4.orElseThrow().setActivated(true);
+        testUser4.orElseThrow().activate();
         userService.updateUser((new AdminUserDTO(testUser4.orElseThrow())));
 
         // Register 4th (already activated) user
@@ -348,11 +348,11 @@ class AccountControllerIT {
     void testActivateAccount() throws Exception {
         final String activationKey = "some activation key";
         User user = new User();
-        user.setLogin("activate-account");
-        user.setEmail("activate-account@example.com");
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(false);
-        user.setActivationKey(activationKey);
+        user.updateLogin("activate-account");
+        user.updateEmail("activate-account@example.com");
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.deactivate();
+        user.updateActivationKey(activationKey);
 
         userRepository.saveAndFlush(user);
 
@@ -373,10 +373,10 @@ class AccountControllerIT {
     @WithMockUser("save-account")
     void testSaveAccount() throws Exception {
         User user = new User();
-        user.setLogin("save-account");
-        user.setEmail("save-account@example.com");
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
+        user.updateLogin("save-account");
+        user.updateEmail("save-account@example.com");
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.activate();
         userRepository.saveAndFlush(user);
 
         AdminUserDTO userDTO = new AdminUserDTO();
@@ -409,10 +409,10 @@ class AccountControllerIT {
     @WithMockUser("save-invalid-email")
     void testSaveInvalidEmail() throws Exception {
         User user = new User();
-        user.setLogin("save-invalid-email");
-        user.setEmail("save-invalid-email@example.com");
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
+        user.updateLogin("save-invalid-email");
+        user.updateEmail("save-invalid-email@example.com");
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.activate();
 
         userRepository.saveAndFlush(user);
 
@@ -438,17 +438,17 @@ class AccountControllerIT {
     @WithMockUser("save-existing-email")
     void testSaveExistingEmail() throws Exception {
         User user = new User();
-        user.setLogin("save-existing-email");
-        user.setEmail("save-existing-email@example.com");
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
+        user.updateLogin("save-existing-email");
+        user.updateEmail("save-existing-email@example.com");
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.activate();
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("save-existing-email2");
-        anotherUser.setEmail("save-existing-email2@example.com");
-        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        anotherUser.setActivated(true);
+        anotherUser.updateLogin("save-existing-email2");
+        anotherUser.updateEmail("save-existing-email2@example.com");
+        anotherUser.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        anotherUser.activate();
 
         userRepository.saveAndFlush(anotherUser);
 
@@ -475,10 +475,10 @@ class AccountControllerIT {
     @WithMockUser("save-existing-email-and-login")
     void testSaveExistingEmailAndLogin() throws Exception {
         User user = new User();
-        user.setLogin("save-existing-email-and-login");
-        user.setEmail("save-existing-email-and-login@example.com");
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
+        user.updateLogin("save-existing-email-and-login");
+        user.updateEmail("save-existing-email-and-login@example.com");
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.activate();
         userRepository.saveAndFlush(user);
 
         AdminUserDTO userDTO = new AdminUserDTO();
@@ -505,9 +505,9 @@ class AccountControllerIT {
     void testChangePasswordWrongExistingPassword() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
-        user.setPassword(passwordEncoder.encode(currentPassword));
-        user.setLogin("change-password-wrong-existing-password");
-        user.setEmail("change-password-wrong-existing-password@example.com");
+        user.updatePassword(passwordEncoder.encode(currentPassword));
+        user.updateLogin("change-password-wrong-existing-password");
+        user.updateEmail("change-password-wrong-existing-password@example.com");
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc
@@ -529,9 +529,9 @@ class AccountControllerIT {
     void testChangePassword() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
-        user.setPassword(passwordEncoder.encode(currentPassword));
-        user.setLogin("change-password");
-        user.setEmail("change-password@example.com");
+        user.updatePassword(passwordEncoder.encode(currentPassword));
+        user.updateLogin("change-password");
+        user.updateEmail("change-password@example.com");
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc
@@ -552,9 +552,9 @@ class AccountControllerIT {
     void testChangePasswordTooSmall() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
-        user.setPassword(passwordEncoder.encode(currentPassword));
-        user.setLogin("change-password-too-small");
-        user.setEmail("change-password-too-small@example.com");
+        user.updatePassword(passwordEncoder.encode(currentPassword));
+        user.updateLogin("change-password-too-small");
+        user.updateEmail("change-password-too-small@example.com");
         userRepository.saveAndFlush(user);
 
         String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
@@ -577,9 +577,9 @@ class AccountControllerIT {
     void testChangePasswordTooLong() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
-        user.setPassword(passwordEncoder.encode(currentPassword));
-        user.setLogin("change-password-too-long");
-        user.setEmail("change-password-too-long@example.com");
+        user.updatePassword(passwordEncoder.encode(currentPassword));
+        user.updateLogin("change-password-too-long");
+        user.updateEmail("change-password-too-long@example.com");
         userRepository.saveAndFlush(user);
 
         String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
@@ -602,9 +602,9 @@ class AccountControllerIT {
     void testChangePasswordEmpty() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
-        user.setPassword(passwordEncoder.encode(currentPassword));
-        user.setLogin("change-password-empty");
-        user.setEmail("change-password-empty@example.com");
+        user.updatePassword(passwordEncoder.encode(currentPassword));
+        user.updateLogin("change-password-empty");
+        user.updateEmail("change-password-empty@example.com");
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc
@@ -623,11 +623,11 @@ class AccountControllerIT {
     @Transactional
     void testRequestPasswordReset() throws Exception {
         User user = new User();
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
-        user.setLogin("password-reset");
-        user.setEmail("password-reset@example.com");
-        user.setLangKey("en");
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.activate();
+        user.updateLogin("password-reset");
+        user.updateEmail("password-reset@example.com");
+        user.updateLangKey("en");
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc
@@ -639,11 +639,11 @@ class AccountControllerIT {
     @Transactional
     void testRequestPasswordResetUpperCaseEmail() throws Exception {
         User user = new User();
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setActivated(true);
-        user.setLogin("password-reset-upper-case");
-        user.setEmail("password-reset-upper-case@example.com");
-        user.setLangKey("en");
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.activate();
+        user.updateLogin("password-reset-upper-case");
+        user.updateEmail("password-reset-upper-case@example.com");
+        user.updateLangKey("en");
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc
@@ -662,11 +662,11 @@ class AccountControllerIT {
     @Transactional
     void testFinishPasswordReset() throws Exception {
         User user = new User();
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setLogin("finish-password-reset");
-        user.setEmail("finish-password-reset@example.com");
-        user.setResetDate(Instant.now().plusSeconds(60));
-        user.setResetKey("reset key");
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.updateLogin("finish-password-reset");
+        user.updateEmail("finish-password-reset@example.com");
+        user.updateResetDate(Instant.now().plusSeconds(60));
+        user.updateResetKey("reset key");
         userRepository.saveAndFlush(user);
 
         KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
@@ -689,11 +689,11 @@ class AccountControllerIT {
     @Transactional
     void testFinishPasswordResetTooSmall() throws Exception {
         User user = new User();
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setLogin("finish-password-reset-too-small");
-        user.setEmail("finish-password-reset-too-small@example.com");
-        user.setResetDate(Instant.now().plusSeconds(60));
-        user.setResetKey("reset key too small");
+        user.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        user.updateLogin("finish-password-reset-too-small");
+        user.updateEmail("finish-password-reset-too-small@example.com");
+        user.updateResetDate(Instant.now().plusSeconds(60));
+        user.updateResetKey("reset key too small");
         userRepository.saveAndFlush(user);
 
         KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();

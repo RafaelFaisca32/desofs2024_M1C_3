@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
-import com.mycompany.myapp.application.controller.AuthenticateController;
 import com.mycompany.myapp.domain.user.User;
 import com.mycompany.myapp.infrastructure.repository.jpa.UserRepository;
 import com.mycompany.myapp.application.controller.vm.LoginVM;
@@ -46,10 +45,10 @@ class AuthenticateControllerIT {
     @Transactional
     void testAuthorize() throws Exception {
         User user = new User();
-        user.setLogin("user-jwt-controller");
-        user.setEmail("user-jwt-controller@example.com");
-        user.setActivated(true);
-        user.setPassword(passwordEncoder.encode("test"));
+        user.updateLogin("user-jwt-controller");
+        user.updateEmail("user-jwt-controller@example.com");
+        user.activate();
+        user.updatePassword(passwordEncoder.encode("test"));
 
         userRepository.saveAndFlush(user);
 
@@ -69,10 +68,10 @@ class AuthenticateControllerIT {
     @Transactional
     void testAuthorizeWithRememberMe() throws Exception {
         User user = new User();
-        user.setLogin("user-jwt-controller-remember-me");
-        user.setEmail("user-jwt-controller-remember-me@example.com");
-        user.setActivated(true);
-        user.setPassword(passwordEncoder.encode("test"));
+        user.updateLogin("user-jwt-controller-remember-me");
+        user.updateEmail("user-jwt-controller-remember-me@example.com");
+        user.activate();
+        user.updatePassword(passwordEncoder.encode("test"));
 
         userRepository.saveAndFlush(user);
 

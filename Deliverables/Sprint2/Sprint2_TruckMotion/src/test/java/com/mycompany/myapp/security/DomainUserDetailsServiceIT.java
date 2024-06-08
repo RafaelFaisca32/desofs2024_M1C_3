@@ -40,33 +40,33 @@ class DomainUserDetailsServiceIT {
     @BeforeEach
     public void init() {
         User userOne = new User();
-        userOne.setLogin(USER_ONE_LOGIN);
-        userOne.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        userOne.setActivated(true);
-        userOne.setEmail(USER_ONE_EMAIL);
-        userOne.setFirstName("userOne");
-        userOne.setLastName("doe");
-        userOne.setLangKey("en");
+        userOne.updateLogin(USER_ONE_LOGIN);
+        userOne.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        userOne.activate();
+        userOne.updateEmail(USER_ONE_EMAIL);
+        userOne.updateFirstName("userOne");
+        userOne.updateLastName("doe");
+        userOne.updateLangKey("en");
         userRepository.save(userOne);
 
         User userTwo = new User();
-        userTwo.setLogin(USER_TWO_LOGIN);
-        userTwo.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        userTwo.setActivated(true);
-        userTwo.setEmail(USER_TWO_EMAIL);
-        userTwo.setFirstName("userTwo");
-        userTwo.setLastName("doe");
-        userTwo.setLangKey("en");
+        userTwo.updateLogin(USER_TWO_LOGIN);
+        userTwo.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        userTwo.activate();
+        userTwo.updateEmail(USER_TWO_EMAIL);
+        userTwo.updateFirstName("userTwo");
+        userTwo.updateLastName("doe");
+        userTwo.updateLangKey("en");
         userRepository.save(userTwo);
 
         User userThree = new User();
-        userThree.setLogin(USER_THREE_LOGIN);
-        userThree.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        userThree.setActivated(false);
-        userThree.setEmail(USER_THREE_EMAIL);
-        userThree.setFirstName("userThree");
-        userThree.setLastName("doe");
-        userThree.setLangKey("en");
+        userThree.updateLogin(USER_THREE_LOGIN);
+        userThree.updatePassword(RandomStringUtils.randomAlphanumeric(60));
+        userThree.deactivate();
+        userThree.updateEmail(USER_THREE_EMAIL);
+        userThree.updateFirstName("userThree");
+        userThree.updateLastName("doe");
+        userThree.updateLangKey("en");
         userRepository.save(userThree);
     }
 
