@@ -3,6 +3,7 @@ package com.mycompany.myapp.application.controller;
 import com.mycompany.myapp.domain.user.Authority;
 import com.mycompany.myapp.infrastructure.repository.jpa.AuthorityRepository;
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -65,7 +66,7 @@ public class AuthorityController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of authorities in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public List<Authority> getAllAuthorities() {
         log.debug("REST request to get all Authorities");
         return authorityRepository.findAll();
@@ -78,7 +79,7 @@ public class AuthorityController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the authority, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<Authority> getAuthority(@PathVariable("id") String id) {
         log.debug("REST request to get Authority : {}", id);
         Optional<Authority> authority = authorityRepository.findById(id);

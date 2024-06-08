@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * A Customer.
@@ -58,30 +57,22 @@ public class Customer implements Serializable {
         return this.id != null ? new CustomerId(this.id.value()) : null;
     }
 
-    public Customer id(CustomerId id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(CustomerId id) {
-        this.id = id;
-    }
-
     public Company getCompany() {
         return this.company != null ? new Company(this.company.value()) : null;
     }
 
-    public Customer company(Company company) {
-        this.setCompany(company);
+    public Customer updateCompanyWithReturn(Company company) {
+        this.updateCompany(new Company(company.value()));
         return this;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void updateCompany(Company company) {
+        this.company = new Company(company.value());
     }
 
     public ApplicationUser getApplicationUser() {
-        return this.applicationUser;
+        //return this.applicationUser.mirror();
+        return null;
     }
 
     public void setApplicationUser(ApplicationUser applicationUser) {

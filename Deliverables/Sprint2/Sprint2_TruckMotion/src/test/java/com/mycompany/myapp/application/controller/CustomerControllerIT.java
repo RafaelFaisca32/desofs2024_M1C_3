@@ -62,7 +62,7 @@ class CustomerControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Customer createEntity(EntityManager em) {
-        Customer customer = new Customer().company(DEFAULT_COMPANY);
+        Customer customer = new Customer().updateCompanyWithReturn(DEFAULT_COMPANY);
         return customer;
     }
 
@@ -73,7 +73,7 @@ class CustomerControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Customer createUpdatedEntity(EntityManager em) {
-        Customer customer = new Customer().company(UPDATED_COMPANY);
+        Customer customer = new Customer().updateCompanyWithReturn(UPDATED_COMPANY);
         return customer;
     }
 
@@ -171,7 +171,7 @@ class CustomerControllerIT {
         Customer updatedCustomer = customerRepository.findById(customer.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedCustomer are not directly saved in db
         em.detach(updatedCustomer);
-        updatedCustomer.company(UPDATED_COMPANY);
+        updatedCustomer.updateCompanyWithReturn(UPDATED_COMPANY);
         CustomerDTO customerDTO = CustomerMapper.toDto(updatedCustomer);
 
         restCustomerMockMvc
@@ -191,7 +191,7 @@ class CustomerControllerIT {
     @Transactional
     void putNonExistingCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(new CustomerId() );
+        //customer.updateId(new CustomerId() );
 
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
@@ -213,7 +213,7 @@ class CustomerControllerIT {
     @Transactional
     void putWithIdMismatchCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(new CustomerId());
+        //customer.updateId(new CustomerId());
 
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
@@ -233,7 +233,7 @@ class CustomerControllerIT {
     @Transactional
     void putWithMissingIdPathParamCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(new CustomerId());
+        //customer.updateId(new CustomerId());
 
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
@@ -257,7 +257,7 @@ class CustomerControllerIT {
 
         // Update the customer using partial update
         Customer partialUpdatedCustomer = new Customer();
-        partialUpdatedCustomer.setId(customer.getId());
+        //partialUpdatedCustomer.updateId(customer.getId());
 
         restCustomerMockMvc
             .perform(
@@ -283,9 +283,9 @@ class CustomerControllerIT {
 
         // Update the customer using partial update
         Customer partialUpdatedCustomer = new Customer();
-        partialUpdatedCustomer.setId(customer.getId());
+        //partialUpdatedCustomer.updateId(customer.getId());
 
-        partialUpdatedCustomer.company(UPDATED_COMPANY);
+        partialUpdatedCustomer.updateCompanyWithReturn(UPDATED_COMPANY);
 
         restCustomerMockMvc
             .perform(
@@ -305,7 +305,7 @@ class CustomerControllerIT {
     @Transactional
     void patchNonExistingCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(new CustomerId());
+        //customer.updateId(new CustomerId());
 
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
@@ -327,7 +327,7 @@ class CustomerControllerIT {
     @Transactional
     void patchWithIdMismatchCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(new CustomerId());
+        //customer.updateId(new CustomerId());
 
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);
@@ -349,7 +349,7 @@ class CustomerControllerIT {
     @Transactional
     void patchWithMissingIdPathParamCustomer() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        customer.setId(new CustomerId());
+        //customer.updateId(new CustomerId());
 
         // Create the Customer
         CustomerDTO customerDTO = CustomerMapper.toDto(customer);

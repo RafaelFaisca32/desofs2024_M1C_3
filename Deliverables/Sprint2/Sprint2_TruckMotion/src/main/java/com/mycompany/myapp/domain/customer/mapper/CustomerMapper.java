@@ -4,13 +4,11 @@ import com.mycompany.myapp.domain.customer.Company;
 import com.mycompany.myapp.domain.customer.CustomerId;
 import com.mycompany.myapp.domain.location.Location;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
-import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
 import com.mycompany.myapp.domain.user.ApplicationUser;
 import com.mycompany.myapp.domain.customer.Customer;
 import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.domain.user.mapper.ApplicationUserMapper;
-import org.mapstruct.*;
 
 import java.util.*;
 
@@ -64,7 +62,7 @@ public final class CustomerMapper {
         if(entity == null || dto == null) return;
 
         if(dto.getCompany() != null){
-            entity.setCompany(new Company(dto.getCompany()));
+            entity.updateCompany(new Company(dto.getCompany()));
         }
         if(dto.getApplicationUser() != null){
             entity.setApplicationUser(ApplicationUserMapper.toEntity(dto.getApplicationUser()));

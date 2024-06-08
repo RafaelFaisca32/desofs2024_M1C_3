@@ -62,7 +62,7 @@ const AppRoutes = () => {
           }
         />
         <Route
-          path="admin/user-management"
+          path="admin/user-management/*"
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.MANAGER, AUTHORITIES.ADMIN]}>
               <Manager />
