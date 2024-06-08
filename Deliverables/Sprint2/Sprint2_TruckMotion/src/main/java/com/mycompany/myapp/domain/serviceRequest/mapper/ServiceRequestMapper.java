@@ -14,12 +14,9 @@ import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceStatusDTO;
-import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
 import com.mycompany.myapp.domain.user.ApplicationUser;
-import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link ServiceRequest} and its DTO {@link ServiceRequestDTO}.
@@ -87,25 +84,25 @@ public final class ServiceRequestMapper {
     public static void partialUpdate(ServiceRequest entity, ServiceRequestDTO dto) {
         if(entity == null || dto == null ) return;
         if(dto.getCustomer() != null){
-            entity.setCustomer(new Customer(new CustomerId(dto.getCustomer().getId()),new Company(), new ApplicationUser()));
+            entity.updateCustomer(new Customer(new CustomerId(dto.getCustomer().getId()),new Company(), new ApplicationUser()));
         }
         if(dto.getLocation() != null){
-            entity.setLocation(new Location(new LocationId(dto.getLocation().getId()),new GeographicalCoordinates(),new Customer()));
+            entity.updateLocation(new Location(new LocationId(dto.getLocation().getId()),new GeographicalCoordinates(),new Customer()));
         }
         if(dto.getItems() != null){
-            entity.setItems(new ServiceRequestItems(dto.getItems()));
+            entity.updateItems(new ServiceRequestItems(dto.getItems()));
         }
         if(dto.getServiceName() != null){
-            entity.setServiceName(new ServiceRequestName(dto.getServiceName()));
+            entity.updateServiceName(new ServiceRequestName(dto.getServiceName()));
         }
         if(dto.getTotalWeightOfItems() != null){
-            entity.setTotalWeightOfItems(new ServiceRequestTotalWeightOfItems(dto.getTotalWeightOfItems()));
+            entity.updateTotalWeightOfItems(new ServiceRequestTotalWeightOfItems(dto.getTotalWeightOfItems()));
         }
         if(dto.getPrice() != null){
-            entity.setPrice(new ServiceRequestPrice(dto.getPrice()));
+            entity.updatePrice(new ServiceRequestPrice(dto.getPrice()));
         }
         if(dto.getDate() != null){
-            entity.setDate(new ServiceRequestDate(dto.getDate()));
+            entity.updateDate(new ServiceRequestDate(dto.getDate()));
         }
     }
 }

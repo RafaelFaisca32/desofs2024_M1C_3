@@ -1,18 +1,10 @@
 package com.mycompany.myapp.domain.serviceRequest.mapper;
 
-import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
-import com.mycompany.myapp.domain.customer.mapper.CustomerMapper;
-import com.mycompany.myapp.domain.location.dto.LocationDTO;
-import com.mycompany.myapp.domain.location.mapper.LocationMapper;
 import com.mycompany.myapp.domain.serviceRequest.*;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceStatusDTO;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
-import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link ServiceStatus} and its DTO {@link ServiceStatusDTO}.
@@ -57,16 +49,13 @@ public final class ServiceStatusMapper {
         if(entity == null || dto == null) return;
 
         if(dto.getServiceRequest() != null){
-            entity.setServiceRequest(ServiceRequestMapper.toEntity(dto.getServiceRequest()));
+            entity.updateServiceRequest(ServiceRequestMapper.toEntity(dto.getServiceRequest()));
         }
         if(dto.getDate() != null){
-            entity.setDate(new ServiceRequestDate(dto.getDate()));
+            entity.updateDate(new ServiceRequestDate(dto.getDate()));
         }
         if(dto.getObservations() != null){
-            entity.setObservations(new ServiceStatusObservations(dto.getObservations()));
-        }
-        if(dto.getStatus() != null) {
-            entity.setStatus(dto.getStatus());
+            entity.updateObservations(new ServiceStatusObservations(dto.getObservations()));
         }
     }
 }

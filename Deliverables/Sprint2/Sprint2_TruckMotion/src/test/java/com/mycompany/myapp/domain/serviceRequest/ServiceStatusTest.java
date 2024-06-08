@@ -16,7 +16,7 @@ class ServiceStatusTest {
         ServiceStatus serviceStatus2 = new ServiceStatus();
         assertThat(serviceStatus1).isNotEqualTo(serviceStatus2);
 
-        serviceStatus2.setId(serviceStatus1.getId());
+        serviceStatus2 = new ServiceStatus(serviceStatus1);
         assertThat(serviceStatus1).isEqualTo(serviceStatus2);
 
         serviceStatus2 = getServiceStatusSample2();
@@ -28,10 +28,10 @@ class ServiceStatusTest {
         ServiceStatus serviceStatus = getServiceStatusRandomSampleGenerator();
         ServiceRequest serviceRequestBack = getServiceRequestRandomSampleGenerator();
 
-        serviceStatus.setServiceRequest(serviceRequestBack);
+        serviceStatus.updateServiceRequest(serviceRequestBack);
         assertThat(serviceStatus.getServiceRequest()).isEqualTo(serviceRequestBack);
 
-        serviceStatus.serviceRequest(null);
+        serviceStatus.updateServiceRequest(null);
         assertThat(serviceStatus.getServiceRequest()).isNull();
     }
 }

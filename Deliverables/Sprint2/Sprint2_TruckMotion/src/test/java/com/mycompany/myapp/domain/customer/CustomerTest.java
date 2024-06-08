@@ -23,7 +23,7 @@ class CustomerTest {
         Customer customer2 = new Customer();
         assertThat(customer1).isNotEqualTo(customer2);
 
-        customer2 = new Customer(customer1.getId(),customer1.getCompany(),customer1.getApplicationUser());
+        customer2 = new Customer(customer1);
         assertThat(customer1).isEqualTo(customer2);
 
         customer2 = getCustomerSample2();

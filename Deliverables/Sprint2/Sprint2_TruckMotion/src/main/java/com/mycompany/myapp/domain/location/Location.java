@@ -84,10 +84,10 @@ public class Location implements Serializable {
 
     public void updateServiceRequest(ServiceRequest serviceRequest) {
         if (this.serviceRequest != null) {
-            this.serviceRequest.setLocation(null);
+            this.serviceRequest.updateLocation(null);
         }
         if (serviceRequest != null) {
-            serviceRequest.setLocation(this);
+            serviceRequest.updateLocation(this);
         }
         this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
     }

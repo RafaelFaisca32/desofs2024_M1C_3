@@ -24,7 +24,7 @@ class ServiceRequestTest {
         ServiceRequest serviceRequest2 = new ServiceRequest();
         assertThat(serviceRequest1).isNotEqualTo(serviceRequest2);
 
-        serviceRequest2.setId(serviceRequest1.getId());
+        serviceRequest2 = new ServiceRequest(serviceRequest1);
         assertThat(serviceRequest1).isEqualTo(serviceRequest2);
 
         serviceRequest2 = getServiceRequestSample2();
@@ -36,10 +36,10 @@ class ServiceRequestTest {
         ServiceRequest serviceRequest = getServiceRequestRandomSampleGenerator();
         Location locationBack = getLocationRandomSampleGenerator();
 
-        serviceRequest.setLocation(locationBack);
+        serviceRequest.updateLocation(locationBack);
         assertThat(serviceRequest.getLocation()).isEqualTo(locationBack);
 
-        serviceRequest.location(null);
+        serviceRequest.updateLocation(null);
         assertThat(serviceRequest.getLocation()).isNull();
     }
 
@@ -48,10 +48,10 @@ class ServiceRequestTest {
         ServiceRequest serviceRequest = getServiceRequestRandomSampleGenerator();
         Customer customerBack = getCustomerRandomSampleGenerator();
 
-        serviceRequest.setCustomer(customerBack);
+        serviceRequest.updateCustomer(customerBack);
         assertThat(serviceRequest.getCustomer()).isEqualTo(customerBack);
 
-        serviceRequest.customer(null);
+        serviceRequest.updateCustomer(null);
         assertThat(serviceRequest.getCustomer()).isNull();
     }
 
@@ -68,11 +68,11 @@ class ServiceRequestTest {
         assertThat(serviceRequest.getServiceStatuses()).doesNotContain(serviceStatusBack);
         assertThat(serviceStatusBack.getServiceRequest()).isNull();
 
-        serviceRequest.serviceStatuses(new HashSet<>(Set.of(serviceStatusBack)));
+        serviceRequest.updateServiceStatuses(new HashSet<>(Set.of(serviceStatusBack)));
         assertThat(serviceRequest.getServiceStatuses()).containsOnly(serviceStatusBack);
         assertThat(serviceStatusBack.getServiceRequest()).isEqualTo(serviceRequest);
 
-        serviceRequest.setServiceStatuses(new HashSet<>());
+        serviceRequest.updateServiceStatuses(new HashSet<>());
         assertThat(serviceRequest.getServiceStatuses()).doesNotContain(serviceStatusBack);
         assertThat(serviceStatusBack.getServiceRequest()).isNull();
     }
@@ -82,11 +82,11 @@ class ServiceRequestTest {
         ServiceRequest serviceRequest = getServiceRequestRandomSampleGenerator();
         Transport transportBack = getTransportRandomSampleGenerator();
 
-        serviceRequest.setTransport(transportBack);
+        serviceRequest.updateTransport(transportBack);
         assertThat(serviceRequest.getTransport()).isEqualTo(transportBack);
         assertThat(transportBack.getServiceRequest()).isEqualTo(serviceRequest);
 
-        serviceRequest.transport(null);
+        serviceRequest.updateTransport(null);
         assertThat(serviceRequest.getTransport()).isNull();
         assertThat(transportBack.getServiceRequest()).isNull();
     }

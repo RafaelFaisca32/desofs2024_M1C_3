@@ -6,13 +6,10 @@ import com.mycompany.myapp.domain.driver.DriverId;
 import com.mycompany.myapp.domain.driver.IDriverRepository;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.driver.mapper.DriverMapper;
-import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceStatusDTO;
 import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceStatusMapper;
 import com.mycompany.myapp.domain.transport.TransportService;
 import com.mycompany.myapp.domain.transport.dto.TransportDTO;
-import com.mycompany.myapp.infrastructure.repository.jpa.DriverRepository;
-import com.mycompany.myapp.infrastructure.repository.jpa.ServiceRequestRepository;
 import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
 import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceRequestMapper;
 
@@ -99,8 +96,8 @@ public class ServiceRequestService {
         }
 
         ServiceRequestMapper.partialUpdate(serviceRequest1, serviceRequestDTO);
-        serviceRequest1.setLocation(serviceRequest2.getLocation());
-        serviceRequest1.setCustomer(serviceRequest2.getCustomer());
+        serviceRequest1.updateLocation(serviceRequest2.getLocation());
+        serviceRequest1.updateCustomer(serviceRequest2.getCustomer());
         ServiceRequest serviceRequest = serviceRequestRepository.save(serviceRequest1);
         return ServiceRequestMapper.toDto(serviceRequest);
     }

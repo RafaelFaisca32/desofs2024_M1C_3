@@ -3,8 +3,6 @@ package com.mycompany.myapp.domain.serviceRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.UUID;
 
 /**
  * A ServiceStatus.
@@ -49,69 +47,44 @@ public class ServiceStatus implements Serializable {
         this.serviceRequest = serviceRequest;
     }
 
+    public ServiceStatus(ServiceStatus serviceStatus){
+        this.id = serviceStatus.getId();
+        this.date = serviceStatus.getDate();
+        this.observations = serviceStatus.getObservations();
+        this.status = serviceStatus.getStatus();
+        this.serviceRequest = serviceStatus.getServiceRequest();
+    }
+
     public ServiceStatusId getId() {
         return this.id != null ? new ServiceStatusId(this.id.value()) : null;
-    }
-
-    public ServiceStatus id(ServiceStatusId id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(ServiceStatusId id) {
-        this.id = id;
     }
 
     public ServiceRequestDate getDate() {
         return this.date != null ? new ServiceRequestDate(this.date.value()) : null;
     }
 
-    public ServiceStatus date(ServiceRequestDate date) {
-        this.setDate(date);
-        return this;
-    }
-
-    public void setDate(ServiceRequestDate date) {
-        this.date = date;
+    public void updateDate(ServiceRequestDate date) {
+        this.date = date != null ? new ServiceRequestDate(this.date.value()) : null;
     }
 
     public ServiceStatusObservations getObservations() {
         return this.observations != null ? new ServiceStatusObservations(this.observations.value()) : null;
     }
 
-    public ServiceStatus observations(ServiceStatusObservations observations) {
-        this.setObservations(observations);
-        return this;
-    }
-
-    public void setObservations(ServiceStatusObservations observations) {
-        this.observations = observations;
+    public void updateObservations(ServiceStatusObservations observations) {
+        this.observations = observations != null ? new ServiceStatusObservations(observations.value()) : null;
     }
 
     public Status getStatus() {
         return this.status;
     }
 
-    public ServiceStatus status(Status status) {
-        this.setStatus(status);
-        return this;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
     public ServiceRequest getServiceRequest() {
-        return this.serviceRequest;
+        return this.serviceRequest != null ? new ServiceRequest(this.serviceRequest) : null;
     }
 
-    public void setServiceRequest(ServiceRequest serviceRequest) {
-        this.serviceRequest = serviceRequest;
-    }
-
-    public ServiceStatus serviceRequest(ServiceRequest serviceRequest) {
-        this.setServiceRequest(serviceRequest);
-        return this;
+    public void updateServiceRequest(ServiceRequest serviceRequest) {
+        this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

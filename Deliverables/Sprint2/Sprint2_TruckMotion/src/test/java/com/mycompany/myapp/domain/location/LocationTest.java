@@ -21,7 +21,7 @@ class LocationTest {
         Location location2 = new Location();
         assertThat(location1).isNotEqualTo(location2);
 
-        location2 = new Location(location1.getId(),location1.getCoord(),location1.getCustomer());
+        location2 = new Location(location1);
         assertThat(location1).isEqualTo(location2);
 
         location2 = getLocationSample2();

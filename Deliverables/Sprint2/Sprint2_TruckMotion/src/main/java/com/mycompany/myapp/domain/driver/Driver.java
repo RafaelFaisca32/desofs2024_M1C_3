@@ -53,6 +53,13 @@ public class Driver implements Serializable {
         this.applicationUser = applicationUser;
     }
 
+    public Driver(Driver driver){
+        this.id = driver.getId();
+        this.truck = driver.getTruck();
+        this.applicationUser = driver.getApplicationUser();
+        this.transport = driver.getTransport();
+    }
+
 
     public Truck getTruck() {
         return this.truck != null ? new Truck(this.truck) : null;

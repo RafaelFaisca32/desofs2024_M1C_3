@@ -75,12 +75,13 @@ class ServiceRequestControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static ServiceRequest createEntity(EntityManager em) {
-        ServiceRequest serviceRequest = new ServiceRequest()
-            .items(new ServiceRequestItems(DEFAULT_ITEMS))
-            .serviceName(new ServiceRequestName(DEFAULT_SERVICE_NAME))
-            .totalWeightOfItems(new ServiceRequestTotalWeightOfItems(DEFAULT_TOTAL_WEIGHT_OF_ITEMS))
-            .price(new ServiceRequestPrice(DEFAULT_PRICE))
-            .date(new ServiceRequestDate(DEFAULT_DATE));
+        ServiceRequest serviceRequest = new ServiceRequest();
+
+        serviceRequest.updateItems(new ServiceRequestItems(DEFAULT_ITEMS));
+        serviceRequest.updateServiceName(new ServiceRequestName(DEFAULT_SERVICE_NAME));
+        serviceRequest.updateTotalWeightOfItems(new ServiceRequestTotalWeightOfItems(DEFAULT_TOTAL_WEIGHT_OF_ITEMS));
+        serviceRequest.updatePrice(new ServiceRequestPrice(DEFAULT_PRICE));
+        serviceRequest.updateDate(new ServiceRequestDate(DEFAULT_DATE));
         return serviceRequest;
     }
 
@@ -91,12 +92,12 @@ class ServiceRequestControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static ServiceRequest createUpdatedEntity(EntityManager em) {
-        ServiceRequest serviceRequest = new ServiceRequest()
-            .items(new ServiceRequestItems(UPDATED_ITEMS))
-            .serviceName(new ServiceRequestName(UPDATED_SERVICE_NAME))
-            .totalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS))
-            .price(new ServiceRequestPrice(UPDATED_PRICE))
-            .date(new ServiceRequestDate(UPDATED_DATE));
+        ServiceRequest serviceRequest = new ServiceRequest();
+        serviceRequest.updateItems(new ServiceRequestItems(UPDATED_ITEMS));
+        serviceRequest.updateServiceName(new ServiceRequestName(UPDATED_SERVICE_NAME));
+        serviceRequest.updateTotalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS));
+        serviceRequest.updatePrice(new ServiceRequestPrice(UPDATED_PRICE));
+        serviceRequest.updateDate(new ServiceRequestDate(UPDATED_DATE));
         return serviceRequest;
     }
 
@@ -202,12 +203,12 @@ class ServiceRequestControllerIT {
         ServiceRequest updatedServiceRequest = serviceRequestRepository.findById(serviceRequest.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedServiceRequest are not directly saved in db
         em.detach(updatedServiceRequest);
-        updatedServiceRequest
-            .items(new ServiceRequestItems(UPDATED_ITEMS))
-            .serviceName(new ServiceRequestName(UPDATED_SERVICE_NAME))
-            .totalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS))
-            .price(new ServiceRequestPrice(UPDATED_PRICE))
-            .date(new ServiceRequestDate(UPDATED_DATE));
+
+        updatedServiceRequest.updateItems(new ServiceRequestItems(UPDATED_ITEMS));
+        updatedServiceRequest.updateServiceName(new ServiceRequestName(UPDATED_SERVICE_NAME));
+        updatedServiceRequest.updateTotalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS));
+        updatedServiceRequest.updatePrice(new ServiceRequestPrice(UPDATED_PRICE));
+        updatedServiceRequest.updateDate(new ServiceRequestDate(UPDATED_DATE));
         ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(updatedServiceRequest);
 
         restServiceRequestMockMvc
@@ -227,8 +228,17 @@ class ServiceRequestControllerIT {
     @Transactional
     void putNonExistingServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
 
+        serviceRequest = new ServiceRequest(
+            new ServiceRequestId(),
+            serviceRequest.getItems(),
+            serviceRequest.getServiceName(),
+            serviceRequest.getTotalWeightOfItems(),
+            serviceRequest.getPrice(),
+            serviceRequest.getDate(),
+            serviceRequest.getLocation(),
+            serviceRequest.getCustomer()
+        );
         // Create the ServiceRequest
         ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
 
@@ -249,7 +259,16 @@ class ServiceRequestControllerIT {
     @Transactional
     void putWithIdMismatchServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
+        serviceRequest = new ServiceRequest(
+            new ServiceRequestId(),
+            serviceRequest.getItems(),
+            serviceRequest.getServiceName(),
+            serviceRequest.getTotalWeightOfItems(),
+            serviceRequest.getPrice(),
+            serviceRequest.getDate(),
+            serviceRequest.getLocation(),
+            serviceRequest.getCustomer()
+        );
 
         // Create the ServiceRequest
         ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
@@ -271,7 +290,16 @@ class ServiceRequestControllerIT {
     @Transactional
     void putWithMissingIdPathParamServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
+        serviceRequest = new ServiceRequest(
+            new ServiceRequestId(),
+            serviceRequest.getItems(),
+            serviceRequest.getServiceName(),
+            serviceRequest.getTotalWeightOfItems(),
+            serviceRequest.getPrice(),
+            serviceRequest.getDate(),
+            serviceRequest.getLocation(),
+            serviceRequest.getCustomer()
+        );
 
         // Create the ServiceRequest
         ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
@@ -294,10 +322,11 @@ class ServiceRequestControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the serviceRequest using partial update
-        ServiceRequest partialUpdatedServiceRequest = new ServiceRequest();
-        partialUpdatedServiceRequest.setId(serviceRequest.getId());
+        ServiceRequest partialUpdatedServiceRequest = new ServiceRequest(serviceRequest);
 
-        partialUpdatedServiceRequest.serviceName(new ServiceRequestName(UPDATED_SERVICE_NAME)).totalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS)).date(new ServiceRequestDate(UPDATED_DATE));
+        partialUpdatedServiceRequest.updateServiceName(new ServiceRequestName(UPDATED_SERVICE_NAME));
+        partialUpdatedServiceRequest.updateTotalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS));
+        partialUpdatedServiceRequest.updateDate(new ServiceRequestDate(UPDATED_DATE));
 
         restServiceRequestMockMvc
             .perform(
@@ -325,15 +354,14 @@ class ServiceRequestControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the serviceRequest using partial update
-        ServiceRequest partialUpdatedServiceRequest = new ServiceRequest();
-        partialUpdatedServiceRequest.setId(serviceRequest.getId());
+        ServiceRequest partialUpdatedServiceRequest = new ServiceRequest(serviceRequest);
 
-        partialUpdatedServiceRequest
-            .items(new ServiceRequestItems(UPDATED_ITEMS))
-            .serviceName(new ServiceRequestName(UPDATED_SERVICE_NAME))
-            .totalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS))
-            .price(new ServiceRequestPrice(UPDATED_PRICE))
-            .date(new ServiceRequestDate(UPDATED_DATE));
+
+         partialUpdatedServiceRequest.updateItems(new ServiceRequestItems(UPDATED_ITEMS));
+         partialUpdatedServiceRequest.updateServiceName(new ServiceRequestName(UPDATED_SERVICE_NAME));
+         partialUpdatedServiceRequest.updateTotalWeightOfItems(new ServiceRequestTotalWeightOfItems(UPDATED_TOTAL_WEIGHT_OF_ITEMS));
+         partialUpdatedServiceRequest.updatePrice(new ServiceRequestPrice(UPDATED_PRICE));
+         partialUpdatedServiceRequest.updateDate(new ServiceRequestDate(UPDATED_DATE));
 
         restServiceRequestMockMvc
             .perform(
@@ -353,7 +381,16 @@ class ServiceRequestControllerIT {
     @Transactional
     void patchNonExistingServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
+        serviceRequest = new ServiceRequest(
+            new ServiceRequestId(),
+            serviceRequest.getItems(),
+            serviceRequest.getServiceName(),
+            serviceRequest.getTotalWeightOfItems(),
+            serviceRequest.getPrice(),
+            serviceRequest.getDate(),
+            serviceRequest.getLocation(),
+            serviceRequest.getCustomer()
+        );
 
         // Create the ServiceRequest
         ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
@@ -375,7 +412,16 @@ class ServiceRequestControllerIT {
     @Transactional
     void patchWithIdMismatchServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
+        serviceRequest = new ServiceRequest(
+            new ServiceRequestId(),
+            serviceRequest.getItems(),
+            serviceRequest.getServiceName(),
+            serviceRequest.getTotalWeightOfItems(),
+            serviceRequest.getPrice(),
+            serviceRequest.getDate(),
+            serviceRequest.getLocation(),
+            serviceRequest.getCustomer()
+        );
 
         // Create the ServiceRequest
         ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);
@@ -397,7 +443,16 @@ class ServiceRequestControllerIT {
     @Transactional
     void patchWithMissingIdPathParamServiceRequest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        serviceRequest.setId(new ServiceRequestId(UUID.randomUUID()));
+        serviceRequest = new ServiceRequest(
+            new ServiceRequestId(),
+            serviceRequest.getItems(),
+            serviceRequest.getServiceName(),
+            serviceRequest.getTotalWeightOfItems(),
+            serviceRequest.getPrice(),
+            serviceRequest.getDate(),
+            serviceRequest.getLocation(),
+            serviceRequest.getCustomer()
+        );
 
         // Create the ServiceRequest
         ServiceRequestDTO serviceRequestDTO = ServiceRequestMapper.toDto(serviceRequest);

@@ -121,10 +121,10 @@ public class Customer implements Serializable {
 
     public void updateServiceRequest(ServiceRequest serviceRequest) {
         if (this.serviceRequest != null) {
-            this.serviceRequest.setCustomer(null);
+            this.serviceRequest.updateCustomer(null);
         }
         if (serviceRequest != null) {
-            serviceRequest.setCustomer(this);
+            serviceRequest.updateCustomer(this);
         }
         this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
     }
