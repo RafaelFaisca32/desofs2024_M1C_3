@@ -6,8 +6,6 @@ import com.mycompany.myapp.domain.location.Location;
 import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.UUID;
 
 /**
  * A Transport.
@@ -75,78 +73,44 @@ public class Transport implements Serializable {
         return this.id != null ? new TransportId(id.value()) : null;
     }
 
-    public Transport id(TransportId id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(TransportId id) {
-        this.id = id;
-    }
-
     public TransportStartTime getStartTime() {
         return this.startTime != null ? new TransportStartTime(this.startTime.value()) : null;
     }
 
-    public Transport startTime(TransportStartTime startTime) {
-        this.setStartTime(startTime);
-        return this;
-    }
-
-    public void setStartTime(TransportStartTime startTime) {
-        this.startTime = startTime;
+    public void updateStartTime(TransportStartTime startTime) {
+        this.startTime = startTime != null ? new TransportStartTime(this.startTime.value()) : null;
     }
 
     public TransportEndTime getEndTime() {
         return this.endTime != null ? new TransportEndTime(this.endTime.value()) : null;
     }
 
-    public Transport endTime(TransportEndTime endTime) {
-        this.setEndTime(endTime);
-        return this;
-    }
-
-    public void setEndTime(TransportEndTime endTime) {
-        this.endTime = endTime;
+    public void updateEndTime(TransportEndTime endTime) {
+        this.endTime = endTime != null ? new TransportEndTime(this.endTime.value()) : null;
     }
 
     public Location getLocation() {
-        return this.location;
+        return this.location != null ? new Location(this.location) : null;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public Transport location(Location location) {
-        this.setLocation(location);
-        return this;
+    public void updateLocation(Location location) {
+        this.location = location != null ? new Location(location) : null;
     }
 
     public Driver getDriver() {
-        return this.driver;
+        return this.driver != null ? new Driver(this.driver) : null;
     }
 
-    public void setDriver(Driver driver) {
-        this.driver = driver;
-    }
-
-    public Transport driver(Driver driver) {
-        this.setDriver(driver);
-        return this;
+    public void updateDriver(Driver driver) {
+        this.driver = driver != null ? new Driver(driver) : null;
     }
 
     public ServiceRequest getServiceRequest() {
-        return this.serviceRequest;
+        return this.serviceRequest != null ? new ServiceRequest(this.serviceRequest) : null;
     }
 
-    public void setServiceRequest(ServiceRequest serviceRequest) {
-        this.serviceRequest = serviceRequest;
-    }
-
-    public Transport serviceRequest(ServiceRequest serviceRequest) {
-        this.setServiceRequest(serviceRequest);
-        return this;
+    public void updateServiceRequest(ServiceRequest serviceRequest) {
+        this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

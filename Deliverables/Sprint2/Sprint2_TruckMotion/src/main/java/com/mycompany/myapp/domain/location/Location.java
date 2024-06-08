@@ -98,10 +98,10 @@ public class Location implements Serializable {
 
     public void updateTransport(Transport transport) {
         if (this.transport != null) {
-            this.transport.setLocation(null);
+            this.transport.updateLocation(null);
         }
         if (transport != null) {
-            transport.setLocation(this);
+            transport.updateLocation(this);
         }
         this.transport = transport != null ? new Transport(transport) : null;
     }

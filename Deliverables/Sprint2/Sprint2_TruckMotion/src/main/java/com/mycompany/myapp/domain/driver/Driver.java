@@ -86,10 +86,10 @@ public class Driver implements Serializable {
 
 
         if (this.transport != null) {
-            this.transport.setDriver(null);
+            this.transport.updateDriver(null);
         }
         if (transport != null) {
-            transport.setDriver(this);
+            transport.updateDriver(this);
         }
         this.transport = transport != null ? new Transport(transport) : null;
     }

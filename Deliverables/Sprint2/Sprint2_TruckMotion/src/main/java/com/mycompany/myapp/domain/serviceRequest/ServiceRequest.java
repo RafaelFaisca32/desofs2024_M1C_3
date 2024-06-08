@@ -202,10 +202,10 @@ public class ServiceRequest implements Serializable {
 
     public void updateTransport(Transport transport) {
         if (this.transport != null) {
-            this.transport.setServiceRequest(null);
+            this.transport.updateServiceRequest(null);
         }
         if (transport != null) {
-            transport.setServiceRequest(this);
+            transport.updateServiceRequest(this);
         }
         this.transport = transport != null ? new Transport(transport) : null;
     }
