@@ -173,7 +173,7 @@ export const ServiceRequest = () => {
                       <Button tag={Link} to={`/service-request/${serviceRequest.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                       </Button>
-                      {customerRole.some(value => authorities.includes(value)) ?
+                      {customerRole.some(value => authorities.includes(value)) && serviceRequest.status?.status == 'PENDING' ?
                       <Button
                         tag={Link}
                         to={`/service-request/${serviceRequest.id}/edit`}

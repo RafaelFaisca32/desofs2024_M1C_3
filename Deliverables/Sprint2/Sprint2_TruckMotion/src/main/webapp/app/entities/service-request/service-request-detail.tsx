@@ -63,7 +63,7 @@ export const ServiceRequestDetail = () => {
         </Button>
         &nbsp;
 
-        {customerRole.some(value => authorities.includes(value))  ?
+        {customerRole.some(value => authorities.includes(value)) && serviceRequestEntity?.status == 'PENDING' ?
         <Button tag={Link} to={`/service-request/${serviceRequestEntity.id}/edit`} replace color="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
         </Button>

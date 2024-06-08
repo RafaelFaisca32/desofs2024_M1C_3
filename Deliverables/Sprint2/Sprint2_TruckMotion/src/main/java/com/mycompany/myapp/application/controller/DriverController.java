@@ -12,10 +12,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -106,6 +109,7 @@ public class DriverController {
 
 
     @GetMapping("/freeDrivers/{startDate}/{endDate}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public List<AvailableDriverDTO> getAllFreeDrivers( @PathVariable(value = "startDate", required = false) final String startDate,
                                                        @PathVariable(value = "endDate", required = false) final String endDate) {
 

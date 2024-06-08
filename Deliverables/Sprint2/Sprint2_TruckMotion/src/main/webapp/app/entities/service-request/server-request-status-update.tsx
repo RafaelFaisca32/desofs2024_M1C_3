@@ -144,9 +144,6 @@ export const ServiceRequestStatusUpdate = () => {
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/service-request/${serviceRequestEntity.id}/edit`} replace color="secundary">
-          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-        </Button>
         {selectedDriver && selectedStartDate && selectedEndDate ? <Button onClick={() =>  updateStatus(serviceRequestEntity.id, true, selectedDriver, selectedStartDate, selectedEndDate)} replace color="primary">
           <FontAwesomeIcon icon="plus" /> <span className="d-none d-md-inline">Approve</span>
         </Button>: null}

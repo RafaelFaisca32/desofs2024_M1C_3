@@ -11,10 +11,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -50,6 +52,7 @@ public class ServiceRequestController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.CUSTOMER + "')")
     public ResponseEntity<ServiceRequestDTO> createServiceRequest(@RequestBody ServiceRequestDTO serviceRequestDTO)
         throws URISyntaxException {
         log.debug("REST request to save ServiceRequest : {}", serviceRequestDTO);
@@ -63,6 +66,7 @@ public class ServiceRequestController {
     }
 
     @PutMapping({"/{id}/{isApproved}", "/{id}/{isApproved}/{driverId}/{startDate}/{endDate}"})
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<ServiceRequestDTO> updateServiceRequestStatus(
         @PathVariable(value = "id", required = true) final UUID id,
         @PathVariable(value = "isApproved", required = true) final boolean isApproved,
@@ -78,6 +82,53 @@ public class ServiceRequestController {
             .body(null);
     }
 
+    /**
+     * {@code PUT  /service-requests/:id} : Updates an existing serviceRequest.
+     *
+     * @param id the id of the serviceRequestDTO to save.
+     * @param serviceRequestDTO the serviceRequestDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated serviceRequestDTO,
+     * or with status {@code 400 (Bad Request)} if the serviceRequestDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the serviceRequestDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.CUSTOMER + "')")
+    public ResponseEntity<ServiceRequestDTO> updateServiceRequest(
+        @PathVariable(value = "id", required = false) final UUID id,
+        @RequestBody ServiceRequestDTO serviceRequestDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to update ServiceRequest : {}, {}", id, serviceRequestDTO);
+        if (serviceRequestDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, serviceRequestDTO.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        serviceRequestDTO = serviceRequestService.update(serviceRequestDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, serviceRequestDTO.getId().toString()))
+            .body(serviceRequestDTO);
+    }
+
+
+    /**
+     * {@code GET  /service-requests} : get all the serviceRequests.
+     *
+     * @param filter the filter of the request.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of serviceRequests in body.
+     */
+    @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.CUSTOMER + "')")
+    public List<ServiceRequestDTO> getAllServiceRequests(@RequestParam(name = "filter", required = false) String filter) {
+        if ("transport-is-null".equals(filter)) {
+            log.debug("REST request to get all ServiceRequests where transport is null");
+            return serviceRequestService.findAllWhereTransportIsNull();
+        }
+        log.debug("REST request to get all ServiceRequests");
+        return serviceRequestService.findAll();
+    }
     /**
      * {@code PATCH  /service-requests/:id} : Partial updates given fields of an existing serviceRequest, field will ignore if it is null
      *
@@ -117,6 +168,7 @@ public class ServiceRequestController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the serviceRequestDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.CUSTOMER + "')")
     public ResponseEntity<ServiceRequestDTO> getServiceRequest(@PathVariable("id") UUID id) {
         log.debug("REST request to get ServiceRequest : {}", id);
         Optional<ServiceRequestDTO> serviceRequestDTO = serviceRequestService.findOne(id);
@@ -124,6 +176,7 @@ public class ServiceRequestController {
     }
 
     @GetMapping("/getByUserLoggedIn")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.CUSTOMER + "')")
     public List<ServiceRequestDTO> getAllServiceRequestsByLoggedInUser(@RequestParam(name = "filter", required = false) String filter) {
         AdminUserDTO adminUserDTO = userService
             .getUserWithAuthorities()
