@@ -27,7 +27,7 @@ export const ServiceRequestUpdate = () => {
   const updateSuccess = useAppSelector(state => state.serviceRequest.updateSuccess);
 
   const handleClose = () => {
-    navigate('/service-request');
+    //navigate('/service-request');
   };
 
   useEffect(() => {
