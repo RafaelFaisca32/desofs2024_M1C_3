@@ -90,7 +90,7 @@ public class Transport implements Serializable {
     }
 
     public Location getLocation() {
-        return this.location != null ? new Location(this.location) : null;
+        return this.location ;
     }
 
     public void updateLocation(Location location) {
@@ -98,7 +98,7 @@ public class Transport implements Serializable {
     }
 
     public Driver getDriver() {
-        return this.driver != null ? new Driver(this.driver) : null;
+        return this.driver ;
     }
 
     public void updateDriver(Driver driver) {
@@ -106,7 +106,7 @@ public class Transport implements Serializable {
     }
 
     public ServiceRequest getServiceRequest() {
-        return this.serviceRequest != null ? new ServiceRequest(this.serviceRequest) : null;
+        return this.serviceRequest ;
     }
 
     public void updateServiceRequest(ServiceRequest serviceRequest) {
