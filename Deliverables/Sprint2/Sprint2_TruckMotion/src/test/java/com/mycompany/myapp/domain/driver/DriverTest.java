@@ -21,7 +21,7 @@ class DriverTest {
         Driver driver2 = new Driver();
         assertThat(driver1).isNotEqualTo(driver2);
 
-        driver2.setId(driver1.getId());
+        driver2 = new Driver(driver1.getId(),driver1.getTruck(),driver1.getApplicationUser());
         assertThat(driver1).isEqualTo(driver2);
 
         driver2 = getDriverSample2();
@@ -33,10 +33,10 @@ class DriverTest {
         Driver driver = getDriverRandomSampleGenerator();
         Truck truckBack = getTruckRandomSampleGenerator();
 
-        driver.setTruck(truckBack);
+        driver.updateTruck(truckBack);
         assertThat(driver.getTruck()).isEqualTo(truckBack);
 
-        driver.truck(null);
+        driver.updateTruck(null);
         assertThat(driver.getTruck()).isNull();
     }
 
@@ -45,10 +45,10 @@ class DriverTest {
         Driver driver = getDriverRandomSampleGenerator();
         ApplicationUser applicationUserBack = getApplicationUserRandomSampleGenerator();
 
-        driver.setApplicationUser(applicationUserBack);
+        driver.updateApplicationUser(applicationUserBack);
         assertThat(driver.getApplicationUser()).isEqualTo(applicationUserBack);
 
-        driver.applicationUser(null);
+        driver.updateApplicationUser(null);
         assertThat(driver.getApplicationUser()).isNull();
     }
 
@@ -57,11 +57,11 @@ class DriverTest {
         Driver driver = getDriverRandomSampleGenerator();
         Transport transportBack = getTransportRandomSampleGenerator();
 
-        driver.setTransport(transportBack);
+        driver.updateTransport(transportBack);
         assertThat(driver.getTransport()).isEqualTo(transportBack);
         assertThat(transportBack.getDriver()).isEqualTo(driver);
 
-        driver.transport(null);
+        driver.updateTransport(null);
         assertThat(driver.getTransport()).isNull();
         assertThat(transportBack.getDriver()).isNull();
     }

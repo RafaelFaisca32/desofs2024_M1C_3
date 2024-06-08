@@ -55,10 +55,10 @@ public final class DriverMapper {
     public static void partialUpdate(Driver entity, DriverDTO dto) {
         if(entity == null || dto == null) return;
         if(dto.getTruck() != null){
-            entity.setTruck(TruckMapper.toEntity(dto.getTruck()));
+            entity.updateTruck(TruckMapper.toEntity(dto.getTruck()));
         }
         if(dto.getApplicationUser() != null){
-            entity.setApplicationUser(entity.getApplicationUser());
+            entity.updateApplicationUser(entity.getApplicationUser());
         }
     }
 }

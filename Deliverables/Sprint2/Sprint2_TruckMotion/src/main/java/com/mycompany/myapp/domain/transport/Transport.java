@@ -53,6 +53,15 @@ public class Transport implements Serializable {
 
     }
 
+    public Transport(Transport transport){
+        this.id = transport.getId();
+        this.startTime = transport.getStartTime();
+        this.endTime = transport.getEndTime();
+        this.location = transport.getLocation();
+        this.driver = transport.getDriver();
+        this.serviceRequest = transport.getServiceRequest();
+    }
+
     public Transport(TransportId id, TransportStartTime startTime, TransportEndTime endTime, Location location, Driver driver, ServiceRequest serviceRequest) {
         this.id = id;
         this.startTime = startTime;

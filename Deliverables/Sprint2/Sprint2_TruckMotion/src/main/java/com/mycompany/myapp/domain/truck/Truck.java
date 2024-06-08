@@ -48,6 +48,13 @@ public class Truck implements Serializable {
 
     }
 
+    public Truck(Truck truck){
+        this.id = truck.getId();
+        this.make = truck.getMake();
+        this.model = truck.getModel();
+        this.driver = truck.getDriver();
+    }
+
     public TruckId getId() {
         return this.id != null ? new TruckId(this.id.value()) : null;
     }
@@ -93,10 +100,10 @@ public class Truck implements Serializable {
 
     public void setDriver(Driver driver) {
         if (this.driver != null) {
-            this.driver.setTruck(null);
+            this.driver.updateTruck(null);
         }
         if (driver != null) {
-            driver.setTruck(this);
+            driver.updateTruck(this);
         }
         this.driver = driver;
     }

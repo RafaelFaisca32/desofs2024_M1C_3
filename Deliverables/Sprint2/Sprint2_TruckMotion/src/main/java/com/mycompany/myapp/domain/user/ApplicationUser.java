@@ -156,10 +156,10 @@ public class ApplicationUser implements Serializable {
 
     public void setDriver(Driver driver) {
         if (this.driver != null) {
-            this.driver.setApplicationUser(null);
+            this.driver.updateApplicationUser(null);
         }
         if (driver != null) {
-            driver.setApplicationUser(this);
+            driver.updateApplicationUser(this);
         }
         this.driver = driver;
     }
