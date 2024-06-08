@@ -46,7 +46,7 @@ export const getEntity = createAsyncThunk(
     const requestUrl = `${apiUrl}/${id}`;
     return axios.get<IDriver>(requestUrl);
   },
-  { serializeError: serializeAxiosError },
+  { serializeError: serializeAxiosError }
 );
 
 export const createEntity = createAsyncThunk(

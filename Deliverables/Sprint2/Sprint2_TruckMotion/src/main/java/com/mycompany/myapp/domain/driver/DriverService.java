@@ -130,8 +130,6 @@ public class DriverService {
         TransportEndTime start = new TransportEndTime(ZonedDateTime.of(LocalDateTime.parse(startDate, formatter), zoneId));
         TransportStartTime end = new TransportStartTime(ZonedDateTime.of(LocalDateTime.parse(endDate, formatter), zoneId));
         List<Object[]> drivers = transportRepository.findFreeDrivers(start, end);
-        Object[] first = drivers.get(0);
-        String id = ((DriverId) first[0]).value().toString();
         return drivers.stream()
             .map(result ->  new AvailableDriverDTO(((DriverId) result[0]).value().toString(), (String) result[1]))
             .collect(Collectors.toList());

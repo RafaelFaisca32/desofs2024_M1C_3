@@ -8,11 +8,16 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './service-request.reducer';
+import { AUTHORITIES } from '../../config/constants';
 
 export const ServiceRequestDetail = () => {
   const dispatch = useAppDispatch();
 
   const { id } = useParams<'id'>();
+
+  const account = useAppSelector(state => state.authentication.account);
+  const customerRole = [AUTHORITIES.CUSTOMER];
+  const authorities = account.authorities as string[]
 
   useEffect(() => {
     dispatch(getEntity(id));
@@ -57,9 +62,12 @@ export const ServiceRequestDetail = () => {
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
         </Button>
         &nbsp;
+
+        {customerRole.some(value => authorities.includes(value))  ?
         <Button tag={Link} to={`/service-request/${serviceRequestEntity.id}/edit`} replace color="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
         </Button>
+        : null}
       </Col>
     </Row>
   );

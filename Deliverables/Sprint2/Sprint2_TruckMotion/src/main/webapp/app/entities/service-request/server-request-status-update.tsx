@@ -19,8 +19,6 @@ interface IAvailableDriverDTO {
 export const ServiceRequestStatusUpdate = () => {
   const dispatch = useAppDispatch();
 
-  const drivers = useAppSelector(state => state.driver.entities); 
-
   const { id } = useParams<'id'>();
 
   const navigate = useNavigate();
