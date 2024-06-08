@@ -181,7 +181,7 @@ class ManagerControllerIT {
     @Transactional
     void putNonExistingManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(new ManagerId());
+        manager = new Manager(new ManagerId(),manager.getApplicationUser());
 
         // Create the Manager
         ManagerDTO managerDTO = ManagerMapper.toDto(manager);
@@ -201,7 +201,7 @@ class ManagerControllerIT {
     @Transactional
     void putWithIdMismatchManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(new ManagerId());
+        manager = new Manager(new ManagerId(),manager.getApplicationUser());
 
         // Create the Manager
         ManagerDTO managerDTO = ManagerMapper.toDto(manager);
@@ -221,7 +221,7 @@ class ManagerControllerIT {
     @Transactional
     void putWithMissingIdPathParamManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(new ManagerId());
+        manager = new Manager(new ManagerId(),manager.getApplicationUser());
 
         // Create the Manager
         ManagerDTO managerDTO = ManagerMapper.toDto(manager);
@@ -244,8 +244,7 @@ class ManagerControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the manager using partial update
-        Manager partialUpdatedManager = new Manager();
-        partialUpdatedManager.setId(manager.getId());
+        Manager partialUpdatedManager = new Manager(manager.getId(),manager.getApplicationUser());
 
         restManagerMockMvc
             .perform(
@@ -270,8 +269,7 @@ class ManagerControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the manager using partial update
-        Manager partialUpdatedManager = new Manager();
-        partialUpdatedManager.setId(manager.getId());
+        Manager partialUpdatedManager = new Manager(manager.getId(),manager.getApplicationUser());
 
         restManagerMockMvc
             .perform(
@@ -291,7 +289,7 @@ class ManagerControllerIT {
     @Transactional
     void patchNonExistingManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(new ManagerId());
+        manager = new Manager(new ManagerId(),manager.getApplicationUser());
 
         // Create the Manager
         ManagerDTO managerDTO = ManagerMapper.toDto(manager);
@@ -313,7 +311,7 @@ class ManagerControllerIT {
     @Transactional
     void patchWithIdMismatchManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(new ManagerId());
+        manager = new Manager(new ManagerId(),manager.getApplicationUser());
 
         // Create the Manager
         ManagerDTO managerDTO = ManagerMapper.toDto(manager);
@@ -335,7 +333,7 @@ class ManagerControllerIT {
     @Transactional
     void patchWithMissingIdPathParamManager() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        manager.setId(new ManagerId());
+        manager = new Manager(new ManagerId(),manager.getApplicationUser());
 
         // Create the Manager
         ManagerDTO managerDTO = ManagerMapper.toDto(manager);

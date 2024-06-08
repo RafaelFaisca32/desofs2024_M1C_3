@@ -1,14 +1,10 @@
 package com.mycompany.myapp.domain.manager.mapper;
 
-import com.mycompany.myapp.domain.location.mapper.LocationMapper;
 import com.mycompany.myapp.domain.manager.ManagerId;
-import com.mycompany.myapp.domain.shared.mapper.EntityMapper;
 import com.mycompany.myapp.domain.user.ApplicationUser;
 import com.mycompany.myapp.domain.manager.Manager;
-import com.mycompany.myapp.domain.user.dto.ApplicationUserDTO;
 import com.mycompany.myapp.domain.manager.dto.ManagerDTO;
 import com.mycompany.myapp.domain.user.mapper.ApplicationUserMapper;
-import org.mapstruct.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +41,7 @@ public final class ManagerMapper{
     public static void partialUpdate(Manager entity, ManagerDTO dto) {
         if(entity == null || dto == null) return;
         if(dto.getApplicationUser() != null){
-            entity.setApplicationUser(ApplicationUserMapper.toEntity(dto.getApplicationUser()));
+            entity.updateApplicationUser(ApplicationUserMapper.toEntity(dto.getApplicationUser()));
         }
     }
 }

@@ -175,10 +175,10 @@ public class ApplicationUser implements Serializable {
 
     public void setManager(Manager manager) {
         if (this.manager != null) {
-            this.manager.setApplicationUser(null);
+            this.manager.updateApplicationUser(null);
         }
         if (manager != null) {
-            manager.setApplicationUser(this);
+            manager.updateApplicationUser(this);
         }
         this.manager = manager;
     }
