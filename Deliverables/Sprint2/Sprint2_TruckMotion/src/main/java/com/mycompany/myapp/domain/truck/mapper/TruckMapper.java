@@ -44,10 +44,10 @@ public final class TruckMapper {
     public static void partialUpdate(Truck entity, TruckDTO dto) {
         if(entity == null || dto == null) return;
         if(dto.getMake() != null){
-            entity.setMake(new Make(dto.getMake()));
+            entity.updateMake(new Make(dto.getMake()));
         }
         if(dto.getModel() != null){
-            entity.setModel(new Model(dto.getModel()));
+            entity.updateModel(new Model(dto.getModel()));
         }
     }
 }

@@ -17,7 +17,7 @@ class TruckTest {
         Truck truck2 = new Truck();
         assertThat(truck1).isNotEqualTo(truck2);
 
-        truck2.setId(truck1.getId());
+        truck2 = new Truck(truck1);
         assertThat(truck1).isEqualTo(truck2);
 
         truck2 = getTruckSample2();
@@ -29,11 +29,11 @@ class TruckTest {
         Truck truck = getTruckRandomSampleGenerator();
         Driver driverBack = getDriverRandomSampleGenerator();
 
-        truck.setDriver(driverBack);
+        truck.updateDriver(driverBack);
         assertThat(truck.getDriver()).isEqualTo(driverBack);
         assertThat(driverBack.getTruck()).isEqualTo(truck);
 
-        truck.driver(null);
+        truck.updateDriver(null);
         assertThat(truck.getDriver()).isNull();
         assertThat(driverBack.getTruck()).isNull();
     }
