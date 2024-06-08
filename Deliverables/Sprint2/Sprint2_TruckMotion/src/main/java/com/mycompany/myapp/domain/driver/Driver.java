@@ -6,7 +6,6 @@ import com.mycompany.myapp.domain.truck.Truck;
 import com.mycompany.myapp.domain.user.ApplicationUser;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * A Driver.
@@ -43,67 +42,51 @@ public class Driver implements Serializable {
         return this.id != null ? new DriverId(this.id.value()) : null;
     }
 
-    public Driver id(DriverId id) {
-        this.setId(id);
-        return this;
-    }
+
     public Driver(){
         this.id = new DriverId();
     }
+
     public Driver(DriverId id, Truck truck, ApplicationUser applicationUser) {
         this.id = id;
         this.truck = truck;
         this.applicationUser = applicationUser;
     }
 
-    public void setId(DriverId id) {
-        this.id = id;
-    }
 
     public Truck getTruck() {
-        return this.truck;
+        return this.truck != null ? new Truck(this.truck) : null;
     }
 
-    public void setTruck(Truck truck) {
-        this.truck = truck;
+    public void updateTruck(Truck truck) {
+        this.truck = truck != null ? new Truck(this.truck) : null;
     }
 
-    public Driver truck(Truck truck) {
-        this.setTruck(truck);
-        return this;
-    }
 
     public ApplicationUser getApplicationUser() {
-        return this.applicationUser;
+        return this.applicationUser != null ? new ApplicationUser(this.applicationUser) : null;
     }
 
-    public void setApplicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser;
-    }
-
-    public Driver applicationUser(ApplicationUser applicationUser) {
-        this.setApplicationUser(applicationUser);
-        return this;
+    public void updateApplicationUser(ApplicationUser applicationUser) {
+        this.applicationUser = applicationUser != null ? new ApplicationUser(this.applicationUser) : null;
     }
 
     public Transport getTransport() {
-        return this.transport;
+        return this.transport != null ? new Transport(this.transport) : null;
     }
 
-    public void setTransport(Transport transport) {
+    public void updateTransport(Transport transport) {
+
+
         if (this.transport != null) {
             this.transport.setDriver(null);
         }
         if (transport != null) {
             transport.setDriver(this);
         }
-        this.transport = transport;
+        this.transport = transport != null ? new Transport(this.transport) : null;
     }
 
-    public Driver transport(Transport transport) {
-        this.setTransport(transport);
-        return this;
-    }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

@@ -200,7 +200,6 @@ class LocationControllerIT {
     @Transactional
     void putNonExistingLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(new LocationId(UUID.randomUUID()));
 
         // Create the Location
         LocationDTO locationDTO = LocationMapper.toDto(location);
@@ -222,7 +221,6 @@ class LocationControllerIT {
     @Transactional
     void putWithIdMismatchLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(new LocationId(UUID.randomUUID()));
 
         // Create the Location
         LocationDTO locationDTO = LocationMapper.toDto(location);
@@ -242,7 +240,6 @@ class LocationControllerIT {
     @Transactional
     void putWithMissingIdPathParamLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(new LocationId( UUID.randomUUID()));
 
         // Create the Location
         LocationDTO locationDTO = LocationMapper.toDto(location);
@@ -266,7 +263,6 @@ class LocationControllerIT {
 
         // Update the location using partial update
         Location partialUpdatedLocation = new Location();
-        partialUpdatedLocation.setId(location.getId());
 
         restLocationMockMvc
             .perform(
@@ -291,8 +287,7 @@ class LocationControllerIT {
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the location using partial update
-        Location partialUpdatedLocation = new Location();
-        partialUpdatedLocation.setId(location.getId());
+        Location partialUpdatedLocation = location;
 
         partialUpdatedLocation.coord(new GeographicalCoordinates(UPDATED_COORD_X,UPDATED_COORD_Y,UPDATED_COORD_Z));
 
@@ -314,7 +309,6 @@ class LocationControllerIT {
     @Transactional
     void patchNonExistingLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(new LocationId(UUID.randomUUID()));
 
         // Create the Location
         LocationDTO locationDTO = LocationMapper.toDto(location);
@@ -336,7 +330,6 @@ class LocationControllerIT {
     @Transactional
     void patchWithIdMismatchLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(new LocationId(UUID.randomUUID()));
 
         // Create the Location
         LocationDTO locationDTO = LocationMapper.toDto(location);
@@ -358,7 +351,6 @@ class LocationControllerIT {
     @Transactional
     void patchWithMissingIdPathParamLocation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        location.setId(new LocationId(UUID.randomUUID()));
 
         // Create the Location
         LocationDTO locationDTO = LocationMapper.toDto(location);

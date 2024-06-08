@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 /**
  * A ApplicationUser.
@@ -59,6 +58,20 @@ public class ApplicationUser implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public ApplicationUser(){
+
+    }
+
+    public ApplicationUser(ApplicationUser applicationUser){
+
+            this.id = applicationUser.getId();
+            this.uuidId = applicationUser.getUuidId();
+            this.birthDate = applicationUser.getBirthDate();
+            this.gender = applicationUser.getGender();
+            this.internalUser = applicationUser.getInternalUser();
+            this.driver = applicationUser.getDriver();
+            this.manager = applicationUser.getManager();
+            this.customer = applicationUser.getCustomer();
+
 
     }
     public ApplicationUser(Long id,
@@ -143,10 +156,10 @@ public class ApplicationUser implements Serializable {
 
     public void setDriver(Driver driver) {
         if (this.driver != null) {
-            this.driver.setApplicationUser(null);
+            this.driver.updateApplicationUser(null);
         }
         if (driver != null) {
-            driver.setApplicationUser(this);
+            driver.updateApplicationUser(this);
         }
         this.driver = driver;
     }
@@ -181,10 +194,10 @@ public class ApplicationUser implements Serializable {
 
     public void setCustomer(Customer customer) {
         if (this.customer != null) {
-            this.customer.setApplicationUser(null);
+            this.customer.updateApplicationUser(null);
         }
         if (customer != null) {
-            customer.setApplicationUser(this);
+            customer.updateApplicationUser(this);
         }
         this.customer = customer;
     }

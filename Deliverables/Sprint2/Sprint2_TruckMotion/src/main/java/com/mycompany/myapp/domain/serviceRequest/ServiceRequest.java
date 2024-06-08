@@ -93,6 +93,19 @@ public class ServiceRequest implements Serializable {
         this.id = id;
     }
 
+    public ServiceRequest(ServiceRequest serviceRequest){
+        this.id = serviceRequest.getId();
+        this.items = serviceRequest.getItems();
+        this.serviceName = serviceRequest.getServiceName();
+        this.totalWeightOfItems = serviceRequest.getTotalWeightOfItems();
+        this.price = serviceRequest.getPrice();
+        this.date = serviceRequest.getDate();
+        this.location = serviceRequest.getLocation();
+        this.customer = serviceRequest.getCustomer();
+        this.serviceStatuses = serviceRequest.getServiceStatuses();
+        this.transport = serviceRequest.getTransport();
+    }
+
     public ServiceRequestId getId() {
         return this.id != null ? new ServiceRequestId(id.value()) : null;
     }

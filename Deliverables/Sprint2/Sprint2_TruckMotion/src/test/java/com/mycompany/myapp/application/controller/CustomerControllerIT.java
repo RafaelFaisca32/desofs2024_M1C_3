@@ -62,7 +62,8 @@ class CustomerControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Customer createEntity(EntityManager em) {
-        Customer customer = new Customer().updateCompanyWithReturn(DEFAULT_COMPANY);
+        Customer customer = new Customer();
+        customer.updateCompany(DEFAULT_COMPANY);
         return customer;
     }
 
@@ -73,7 +74,8 @@ class CustomerControllerIT {
      * if they test an entity which requires the current entity.
      */
     public static Customer createUpdatedEntity(EntityManager em) {
-        Customer customer = new Customer().updateCompanyWithReturn(UPDATED_COMPANY);
+        Customer customer = new Customer();
+        customer.updateCompany(UPDATED_COMPANY);
         return customer;
     }
 
@@ -171,7 +173,7 @@ class CustomerControllerIT {
         Customer updatedCustomer = customerRepository.findById(customer.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedCustomer are not directly saved in db
         em.detach(updatedCustomer);
-        updatedCustomer.updateCompanyWithReturn(UPDATED_COMPANY);
+        updatedCustomer.updateCompany(UPDATED_COMPANY);
         CustomerDTO customerDTO = CustomerMapper.toDto(updatedCustomer);
 
         restCustomerMockMvc
@@ -285,7 +287,7 @@ class CustomerControllerIT {
         Customer partialUpdatedCustomer = new Customer();
         //partialUpdatedCustomer.updateId(customer.getId());
 
-        partialUpdatedCustomer.updateCompanyWithReturn(UPDATED_COMPANY);
+        partialUpdatedCustomer.updateCompany(UPDATED_COMPANY);
 
         restCustomerMockMvc
             .perform(

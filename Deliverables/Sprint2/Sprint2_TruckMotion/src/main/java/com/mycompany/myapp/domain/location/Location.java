@@ -6,7 +6,6 @@ import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
 import com.mycompany.myapp.domain.transport.Transport;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * A Location.
@@ -47,6 +46,14 @@ public class Location implements Serializable {
     public Location() {
         this.id = new LocationId();
     }
+    public Location(Location location){
+        this.id = location.getId();
+        this.coord = location.getCoord();
+        this.customer = location.getCustomer();
+        this.serviceRequest = location.getServiceRequest();
+        this.transport = location.getTransport();
+
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -54,26 +61,17 @@ public class Location implements Serializable {
         return this.id != null ? new LocationId(this.id.value()) : null;
     }
 
-    public Location id(LocationId id) {
-        this.setId(id);
-        return this;
-    }
-
-
-    public void setId(LocationId id) {
-        this.id = id;
-    }
-
     public GeographicalCoordinates getCoord(){
         return this.coord != null ?
             new GeographicalCoordinates(this.coord.xValue(),this.coord.yValue(),this.coord.zValue()) : null;
     }
-    public void setCoord(GeographicalCoordinates coord){
-        this.coord = coord;
+    public void updateCoord(GeographicalCoordinates coord){
+        this.coord = coord != null ?
+            new GeographicalCoordinates(this.coord.xValue(),this.coord.yValue(),this.coord.zValue()) : null;
     }
 
     public Location coord(GeographicalCoordinates coord){
-        this.setCoord(coord);
+        this.updateCoord(coord);
         return this;
     }
 
