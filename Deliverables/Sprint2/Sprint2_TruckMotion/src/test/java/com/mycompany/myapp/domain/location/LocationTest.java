@@ -39,32 +39,4 @@ class LocationTest {
         location.customer(null);
         assertThat(location.getCustomer()).isNull();
     }
-
-    @Test
-    void serviceRequestTest() throws Exception {
-        Location location = getLocationRandomSampleGenerator();
-        ServiceRequest serviceRequestBack = getServiceRequestRandomSampleGenerator();
-
-        location.setServiceRequest(serviceRequestBack);
-        assertThat(location.getServiceRequest()).isEqualTo(serviceRequestBack);
-        assertThat(serviceRequestBack.getLocation()).isEqualTo(location);
-
-        location.serviceRequest(null);
-        assertThat(location.getServiceRequest()).isNull();
-        assertThat(serviceRequestBack.getLocation()).isNull();
-    }
-
-    @Test
-    void transportTest() throws Exception {
-        Location location = getLocationRandomSampleGenerator();
-        Transport transportBack = getTransportRandomSampleGenerator();
-
-        location.setTransport(transportBack);
-        assertThat(location.getTransport()).isEqualTo(transportBack);
-        assertThat(transportBack.getLocation()).isEqualTo(location);
-
-        location.transport(null);
-        assertThat(location.getTransport()).isNull();
-        assertThat(transportBack.getLocation()).isNull();
-    }
 }

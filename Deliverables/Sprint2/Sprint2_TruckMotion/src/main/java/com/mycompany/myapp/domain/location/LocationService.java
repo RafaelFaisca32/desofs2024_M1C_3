@@ -106,7 +106,7 @@ public class LocationService {
     public List<LocationDTO> findAllWhereServiceRequestIsNull() {
         log.debug("Request to get all locations where ServiceRequest is null");
         return StreamSupport.stream(locationRepository.findAll().spliterator(), false)
-            .filter(location -> location.getServiceRequest() == null)
+            .filter(location -> location.getServiceRequests() == null)
             .map(LocationMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
@@ -119,7 +119,7 @@ public class LocationService {
     public List<LocationDTO> findAllWhereTransportIsNull() {
         log.debug("Request to get all locations where Transport is null");
         return StreamSupport.stream(locationRepository.findAll().spliterator(), false)
-            .filter(location -> location.getTransport() == null)
+            .filter(location -> location.getTransports() == null)
             .map(LocationMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

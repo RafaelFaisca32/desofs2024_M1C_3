@@ -6,6 +6,9 @@ import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
 import com.mycompany.myapp.domain.transport.Transport;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * A Location.
@@ -30,12 +33,12 @@ public class Location implements Serializable {
     private Customer customer;
 
     @JsonIgnoreProperties(value = { "location", "customer", "serviceStatuses", "transport" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "location")
-    private ServiceRequest serviceRequest;
+    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
+    private Set<ServiceRequest> serviceRequests = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "location", "driver", "serviceRequest" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "location")
-    private Transport transport;
+    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
+    private Set<Transport> transports = new HashSet<>();
 
     public Location(LocationId id, GeographicalCoordinates coord, Customer customer) {
         this.id = id;
@@ -50,8 +53,8 @@ public class Location implements Serializable {
         this.id = location.getId();
         this.coord = location.getCoord();
         this.customer = location.getCustomer();
-        this.serviceRequest = location.getServiceRequest();
-        this.transport = location.getTransport();
+        this.serviceRequests = location.getServiceRequests();
+        this.transports = location.getTransports();
 
     }
 
@@ -88,42 +91,20 @@ public class Location implements Serializable {
         return this;
     }
 
-    public ServiceRequest getServiceRequest() {
-        return this.serviceRequest;
+    public Set<ServiceRequest> getServiceRequests() {
+        return this.serviceRequests;
     }
 
-    public void setServiceRequest(ServiceRequest serviceRequest) {
-        if (this.serviceRequest != null) {
-            this.serviceRequest.setLocation(null);
-        }
-        if (serviceRequest != null) {
-            serviceRequest.setLocation(this);
-        }
-        this.serviceRequest = serviceRequest;
+    public void setServiceRequests(Set<ServiceRequest> serviceRequests) {
+        this.serviceRequests = serviceRequests;
     }
 
-    public Location serviceRequest(ServiceRequest serviceRequest) {
-        this.setServiceRequest(serviceRequest);
-        return this;
+    public Set<Transport> getTransports() {
+        return this.transports;
     }
 
-    public Transport getTransport() {
-        return this.transport;
-    }
-
-    public void setTransport(Transport transport) {
-        if (this.transport != null) {
-            this.transport.setLocation(null);
-        }
-        if (transport != null) {
-            transport.setLocation(this);
-        }
-        this.transport = transport;
-    }
-
-    public Location transport(Transport transport) {
-        this.setTransport(transport);
-        return this;
+    public void setTransports(Set<Transport> transport) {
+        this.transports = transports;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

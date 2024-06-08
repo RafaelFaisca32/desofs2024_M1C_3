@@ -106,7 +106,7 @@ public class CustomerService {
     public List<CustomerDTO> findAllWhereServiceRequestIsNull() {
         log.debug("Request to get all customers where ServiceRequest is null");
         return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
-            .filter(customer -> customer.getServiceRequest() == null)
+            .filter(customer -> customer.getServiceRequests() == null)
             .map(CustomerMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

@@ -117,7 +117,7 @@ public class DriverService {
     public List<DriverDTO> findAllWhereTransportIsNull() {
         log.debug("Request to get all drivers where Transport is null");
         return StreamSupport.stream(driverRepository.findAll().spliterator(), false)
-            .filter(driver -> driver.getTransport() == null)
+            .filter(driver -> driver.getTransports() == null)
             .map(DriverMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

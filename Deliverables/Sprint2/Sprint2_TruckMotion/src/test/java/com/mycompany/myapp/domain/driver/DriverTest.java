@@ -51,18 +51,4 @@ class DriverTest {
         driver.updateApplicationUser(null);
         assertThat(driver.getApplicationUser()).isNull();
     }
-
-    @Test
-    void transportTest() throws Exception {
-        Driver driver = getDriverRandomSampleGenerator();
-        Transport transportBack = getTransportRandomSampleGenerator();
-
-        driver.updateTransport(transportBack);
-        assertThat(driver.getTransport()).isEqualTo(transportBack);
-        assertThat(transportBack.getDriver()).isEqualTo(driver);
-
-        driver.updateTransport(null);
-        assertThat(driver.getTransport()).isNull();
-        assertThat(transportBack.getDriver()).isNull();
-    }
 }

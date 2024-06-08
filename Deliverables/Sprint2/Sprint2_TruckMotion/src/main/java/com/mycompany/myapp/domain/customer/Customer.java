@@ -38,8 +38,8 @@ public class Customer implements Serializable {
     private Set<Location> locations = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "location", "customer", "serviceStatuses", "transport" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "customer")
-    private ServiceRequest serviceRequest;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private Set<ServiceRequest> serviceRequests = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -106,18 +106,12 @@ public class Customer implements Serializable {
         }
     }
 
-    public ServiceRequest getServiceRequest() {
-        return this.serviceRequest != null ? new ServiceRequest(this.serviceRequest) : null;
+    public Set<ServiceRequest> getServiceRequests() {
+        return this.serviceRequests;
     }
 
-    public void updateServiceRequest(ServiceRequest serviceRequest) {
-        if (this.serviceRequest != null) {
-            this.serviceRequest.setCustomer(null);
-        }
-        if (serviceRequest != null) {
-            serviceRequest.setCustomer(this);
-        }
-        this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
+    public void updateServiceRequests(Set<ServiceRequest> serviceRequests) {
+        this.serviceRequests = serviceRequests;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

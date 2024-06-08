@@ -6,6 +6,9 @@ import com.mycompany.myapp.domain.truck.Truck;
 import com.mycompany.myapp.domain.user.ApplicationUser;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * A Driver.
@@ -33,8 +36,8 @@ public class Driver implements Serializable {
     private ApplicationUser applicationUser;
 
     @JsonIgnoreProperties(value = { "location", "driver", "serviceRequest" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "driver")
-    private Transport transport;
+    @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY)
+    private Set<Transport> transports = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -71,22 +74,13 @@ public class Driver implements Serializable {
         this.applicationUser = applicationUser != null ? new ApplicationUser(this.applicationUser) : null;
     }
 
-    public Transport getTransport() {
-        return this.transport != null ? new Transport(this.transport) : null;
+    public Set<Transport> getTransports() {
+        return this.transports;
     }
 
-    public void updateTransport(Transport transport) {
-
-
-        if (this.transport != null) {
-            this.transport.setDriver(null);
-        }
-        if (transport != null) {
-            transport.setDriver(this);
-        }
-        this.transport = transport != null ? new Transport(this.transport) : null;
+    public void updateTransports(Set<Transport> transports) {
+        this.transports = transports;
     }
-
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

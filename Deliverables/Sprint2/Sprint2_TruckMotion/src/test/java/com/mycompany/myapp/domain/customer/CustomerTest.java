@@ -63,18 +63,4 @@ class CustomerTest {
         assertThat(customer.getLocations()).doesNotContain(locationBack);
         assertThat(locationBack.getCustomer()).isNull();
     }
-
-    @Test
-    void serviceRequestTest() throws Exception {
-        Customer customer = getCustomerRandomSampleGenerator();
-        ServiceRequest serviceRequestBack = getServiceRequestRandomSampleGenerator();
-
-        customer.updateServiceRequest(serviceRequestBack);
-        assertThat(customer.getServiceRequest()).isEqualTo(serviceRequestBack);
-        assertThat(serviceRequestBack.getCustomer()).isEqualTo(customer);
-
-        customer.updateServiceRequest(null);
-        assertThat(customer.getServiceRequest()).isNull();
-        assertThat(serviceRequestBack.getCustomer()).isNull();
-    }
 }
