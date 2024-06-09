@@ -109,9 +109,10 @@ public class ServiceRequestService {
         AdminUserDTO adminUserDTO = userService
             .getUserWithAuthorities()
             .map(AdminUserDTO::new).get();
+        ServiceRequestDTO serviceRequestDTO1 = ServiceRequestMapper.toDto(serviceRequest1);
 
         Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
-        if (customer.isPresent() && customer.get().getId().equals(serviceRequest1.getCustomer().getId().value())) {
+        if (customer.isPresent() && customer.get().getId().equals(serviceRequest1.getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING)) {
             if (serviceRequestDTO.getStatus() != null) {
                 serviceRequestDTO.setStatus(new ServiceStatusDTO("", serviceRequestDTO.getStatus().getStatus(), new ServiceRequestDTO(serviceRequestDTO.getId())));
                 serviceRequest1.getServiceStatuses().add(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
@@ -146,20 +147,23 @@ public class ServiceRequestService {
 
         Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
         Optional<ServiceRequest> serviceRequest = serviceRequestRepository.findById(new ServiceRequestId(serviceRequestDTO.getId()));
-        if (serviceRequest.isPresent() && customer.isPresent() && customer.get().getId().equals(serviceRequest.get().getCustomer().getId().value())) {
+        if (serviceRequest.isPresent()) {
+            ServiceRequestDTO serviceRequestDTO1 = ServiceRequestMapper.toDto(serviceRequest.get());
+            if (customer.isPresent() && customer.get().getId().equals(serviceRequest.get().getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING)) {
 
-            return serviceRequest
-                .map(existingServiceRequest -> {
-                    ServiceRequestMapper.partialUpdate(existingServiceRequest, serviceRequestDTO);
+                return serviceRequest
+                    .map(existingServiceRequest -> {
+                        ServiceRequestMapper.partialUpdate(existingServiceRequest, serviceRequestDTO);
 
-                    return existingServiceRequest;
-                })
-                .map(serviceRequestRepository::save)
-                .map(ServiceRequestMapper::toDto);
-        }
-        else
-        {
-            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+                        return existingServiceRequest;
+                    })
+                    .map(serviceRequestRepository::save)
+                    .map(ServiceRequestMapper::toDto);
+            } else {
+                throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+            }
+        } else {
+            throw new BadRequestAlertException("Unknown error", ENTITY_NAME, "unknownerror");
         }
     }
 
@@ -212,7 +216,8 @@ public class ServiceRequestService {
 
         Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
         if(service.isPresent()) {
-            if (customer.isPresent() && customer.get().getId().equals(service.get().getCustomer().getId().value())) {
+            ServiceRequestDTO serviceRequestDTO1 = ServiceRequestMapper.toDto(service.get());
+            if (customer.isPresent() && customer.get().getId().equals(service.get().getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING)) {
                 ServiceRequest req = service.get();
                 ServiceRequestDTO reqDTO = ServiceRequestMapper.toDto(req);
                 if (isApproved) {
