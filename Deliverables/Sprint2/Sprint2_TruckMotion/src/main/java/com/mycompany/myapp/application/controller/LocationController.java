@@ -1,5 +1,7 @@
 package com.mycompany.myapp.application.controller;
 
+import com.mycompany.myapp.domain.customer.CustomerService;
+import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.domain.location.Location;
 import com.mycompany.myapp.domain.user.UserService;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
@@ -36,9 +38,12 @@ public class LocationController {
     private final LocationService locationService;
     private final UserService userService;
 
-    public LocationController(LocationService locationService, UserService userService) {
+    private final CustomerService customerService;
+
+    public LocationController(LocationService locationService, UserService userService, CustomerService customerService) {
         this.locationService = locationService;
         this.userService = userService;
+        this.customerService = customerService;
     }
 
     /**
@@ -54,10 +59,20 @@ public class LocationController {
         if (locationDTO.getId() != null) {
             throw new BadRequestAlertException("A new location cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        locationDTO = locationService.save(locationDTO);
-        return ResponseEntity.created(new URI("/api/locations/" + locationDTO.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, locationDTO.getId().toString()))
-            .body(locationDTO);
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+        if (customer.isPresent()) {
+            locationDTO.setCustomer(customer.get());
+            locationDTO = locationService.save(locationDTO);
+            return ResponseEntity.created(new URI("/api/locations/" + locationDTO.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, locationDTO.getId().toString()))
+                .body(locationDTO);
+        } else {
+            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+        }
     }
 
     /**

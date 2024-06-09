@@ -1,6 +1,10 @@
 package com.mycompany.myapp.domain.location;
 
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
+import com.mycompany.myapp.domain.customer.CustomerService;
+import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
+import com.mycompany.myapp.domain.user.UserService;
+import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import com.mycompany.myapp.infrastructure.repository.jpa.LocationRepository;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.location.mapper.LocationMapper;
@@ -26,11 +30,16 @@ public class LocationService {
 
     private final ILocationRepository locationRepository;
 
+    private final UserService userService;
+
+    private final CustomerService customerService;
 
     private static final String ENTITY_NAME = "location";
 
-    public LocationService(ILocationRepository locationRepository) {
+    public LocationService(ILocationRepository locationRepository, UserService userService, CustomerService customerService) {
         this.locationRepository = locationRepository;
+        this.userService = userService;
+        this.customerService = customerService;
     }
 
     /**
@@ -58,9 +67,21 @@ public class LocationService {
         if (!locationRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-        Location location = LocationMapper.toEntity(locationDTO);
-        location = locationRepository.save(location);
-        return LocationMapper.toDto(location);
+
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+
+        Optional<Location> location1 = locationRepository.findById(new LocationId(locationDTO.getId()));
+
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+        if (customer.isPresent() && customer.get().getId().equals(location1.get().getCustomer().getId().value())) {
+            Location location = LocationMapper.toEntity(locationDTO);
+            location = locationRepository.save(location);
+            return LocationMapper.toDto(location);
+        } else {
+            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+        }
     }
 
     /**
@@ -76,15 +97,26 @@ public class LocationService {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        return locationRepository
-            .findById(id)
-            .map(existingLocation -> {
-                LocationMapper.partialUpdate(existingLocation, locationDTO);
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
 
-                return existingLocation;
-            })
-            .map(locationRepository::save)
-            .map(LocationMapper::toDto);
+        Optional<Location> location = locationRepository.findById(new LocationId(locationDTO.getId()));
+
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+        if (customer.isPresent() && customer.get().getId().equals(location.get().getCustomer().getId().value())) {
+
+            return location
+                .map(existingLocation -> {
+                    LocationMapper.partialUpdate(existingLocation, locationDTO);
+
+                    return existingLocation;
+                })
+                .map(locationRepository::save)
+                .map(LocationMapper::toDto);
+        } else {
+            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+        }
     }
 
     /**
@@ -145,9 +177,19 @@ public class LocationService {
     public void delete(UUID id) {
         log.debug("Request to delete Location : {}", id);
         LocationId lId = new LocationId(id);
-        locationRepository.deleteById(lId);
-    }
 
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+        Optional<Location> location = locationRepository.findById(lId);
+        if (customer.isPresent() && customer.get().getId().equals(location.get().getCustomer().getId().value())) {
+            locationRepository.deleteById(lId);
+        } else {
+            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+        }
+    }
 
     @Transactional(readOnly = true)
     public List<LocationDTO> getByUserId(Long userId) {

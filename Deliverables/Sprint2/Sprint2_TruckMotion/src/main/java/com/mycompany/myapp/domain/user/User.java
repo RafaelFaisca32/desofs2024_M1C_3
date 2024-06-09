@@ -115,19 +115,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         this.authorities = user.getAuthorities();
 
     }
-
-    /*
-    User user = new User();
-        user.setId(userDTO.getId());
-        user.setLogin(userDTO.getLogin());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setImageUrl(userDTO.getImageUrl());
-        user.setActivated(userDTO.isActivated());
-        user.setLangKey(userDTO.getLangKey());
-
-     */
     public User(Long id,
                 String login,
                 UserId userId,
@@ -277,11 +264,11 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     }
 
     public Set<Authority> getAuthorities() {
-        return authorities != null ? new HashSet<>(this.authorities) : null;
+        return authorities != null ? new HashSet<>(this.authorities) : new HashSet<>();
     }
 
     public void updateAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities != null ? new HashSet<>(this.authorities) : null;
+        this.authorities = authorities != null ? new HashSet<>(this.authorities) : new HashSet<>();
     }
 
     @Override

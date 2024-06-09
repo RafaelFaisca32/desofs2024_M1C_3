@@ -65,7 +65,6 @@ export const ServiceRequestUpdate = () => {
     };
 
     if (isNew) {
-      entity.status = {id:null, date:null, observations:null, status: "PENDING", serviceRequest:null}
       dispatch(createEntity(entity));
     } else {
       dispatch(updateEntity(entity));

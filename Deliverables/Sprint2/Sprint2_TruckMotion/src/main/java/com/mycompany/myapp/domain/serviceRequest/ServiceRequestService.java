@@ -1,6 +1,8 @@
 package com.mycompany.myapp.domain.serviceRequest;
 
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
+import com.mycompany.myapp.domain.customer.CustomerService;
+import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.domain.driver.Driver;
 import com.mycompany.myapp.domain.driver.DriverId;
 import com.mycompany.myapp.domain.driver.IDriverRepository;
@@ -23,6 +25,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import com.mycompany.myapp.domain.user.UserService;
+import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,14 +45,21 @@ public class ServiceRequestService {
     private final IServiceRequestRepository serviceRequestRepository;
 
     private final TransportService transportService;
+
+    private final UserService userService;
+
+    private final CustomerService customerService;
+
     private static final String ENTITY_NAME = "serviceRequest";
     private final IDriverRepository driverRepository;
 
     public ServiceRequestService(IServiceRequestRepository serviceRequestRepository, TransportService transportService,
-                                 IDriverRepository driverRepository) {
+                                 IDriverRepository driverRepository, UserService userService,CustomerService customerService) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.transportService = transportService;
         this.driverRepository = driverRepository;
+        this.userService = userService;
+        this.customerService = customerService;
     }
 
     /**
@@ -59,21 +71,25 @@ public class ServiceRequestService {
     public ServiceRequestDTO save(ServiceRequestDTO serviceRequestDTO) {
         log.debug("Request to save ServiceRequest : {}", serviceRequestDTO);
 
-        ServiceRequest serviceRequest1 = ServiceRequestMapper.toEntity(serviceRequestDTO);
-        serviceRequestDTO.setId(serviceRequest1.getId().value());
-        if (serviceRequestDTO.getStatus() == null){
-            serviceRequestDTO.setStatus(new ServiceStatusDTO("",Status.PENDING,serviceRequestDTO));
-            serviceRequest1.getServiceStatuses().add(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
-        } else {
-            if (serviceRequestDTO.getStatus().getId() == null){
-                serviceRequestDTO.setStatus(new ServiceStatusDTO("",serviceRequestDTO.getStatus().getStatus(), serviceRequestDTO));
-                serviceRequest1.addServiceStatuses(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
-            }
-        }
-        ServiceRequestMapper.partialUpdate(serviceRequest1, serviceRequestDTO);
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
 
-        ServiceRequest serviceRequest = serviceRequestRepository.save(serviceRequest1);
-        return ServiceRequestMapper.toDto(serviceRequest);
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+        if (customer.isPresent()) {
+            serviceRequestDTO.setCustomer(customer.get());
+
+            ServiceRequest serviceRequest1 = ServiceRequestMapper.toEntity(serviceRequestDTO);
+            serviceRequestDTO.setId(serviceRequest1.getId().value());
+            serviceRequestDTO.setStatus(new ServiceStatusDTO("", Status.PENDING, serviceRequestDTO));
+            serviceRequest1.addServiceStatuses(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
+            ServiceRequestMapper.partialUpdate(serviceRequest1, serviceRequestDTO);
+
+            ServiceRequest serviceRequest = serviceRequestRepository.save(serviceRequest1);
+            return ServiceRequestMapper.toDto(serviceRequest);
+        } else {
+            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+        }
     }
 
     /**
@@ -90,16 +106,26 @@ public class ServiceRequestService {
         }
         ServiceRequest serviceRequest2 = ServiceRequestMapper.toEntity(serviceRequestDTO);
         ServiceRequest serviceRequest1 = serviceRequestRepository.findById(new ServiceRequestId(serviceRequestDTO.getId())).get();
-        if (serviceRequestDTO.getStatus() != null) {
-            serviceRequestDTO.setStatus(new ServiceStatusDTO("", serviceRequestDTO.getStatus().getStatus(), new ServiceRequestDTO(serviceRequestDTO.getId())));
-            serviceRequest1.getServiceStatuses().add(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
-        }
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+        ServiceRequestDTO serviceRequestDTO1 = ServiceRequestMapper.toDto(serviceRequest1);
 
-        ServiceRequestMapper.partialUpdate(serviceRequest1, serviceRequestDTO);
-        serviceRequest1.updateLocation(serviceRequest2.getLocation());
-        serviceRequest1.updateCustomer(serviceRequest2.getCustomer());
-        ServiceRequest serviceRequest = serviceRequestRepository.save(serviceRequest1);
-        return ServiceRequestMapper.toDto(serviceRequest);
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+        if (customer.isPresent() && customer.get().getId().equals(serviceRequest1.getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING)) {
+            if (serviceRequestDTO.getStatus() != null) {
+                serviceRequestDTO.setStatus(new ServiceStatusDTO("", serviceRequestDTO.getStatus().getStatus(), new ServiceRequestDTO(serviceRequestDTO.getId())));
+                serviceRequest1.getServiceStatuses().add(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
+            }
+
+            ServiceRequestMapper.partialUpdate(serviceRequest1, serviceRequestDTO);
+            serviceRequest1.updateLocation(serviceRequest2.getLocation());
+            serviceRequest1.updateCustomer(serviceRequest2.getCustomer());
+            ServiceRequest serviceRequest = serviceRequestRepository.save(serviceRequest1);
+            return ServiceRequestMapper.toDto(serviceRequest);
+        } else {
+            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+        }
     }
 
     /**
@@ -115,16 +141,30 @@ public class ServiceRequestService {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
 
-        return serviceRequestRepository
-            .findById(new ServiceRequestId(serviceRequestDTO.getId()))
-            .map(existingServiceRequest -> {
-                ServiceRequestMapper.partialUpdate(existingServiceRequest, serviceRequestDTO);
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+        Optional<ServiceRequest> serviceRequest = serviceRequestRepository.findById(new ServiceRequestId(serviceRequestDTO.getId()));
+        if (serviceRequest.isPresent()) {
+            ServiceRequestDTO serviceRequestDTO1 = ServiceRequestMapper.toDto(serviceRequest.get());
+            if (customer.isPresent() && customer.get().getId().equals(serviceRequest.get().getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING)) {
 
-                return existingServiceRequest;
-            })
-            .map(serviceRequestRepository::save)
-            .map(ServiceRequestMapper::toDto);
+                return serviceRequest
+                    .map(existingServiceRequest -> {
+                        ServiceRequestMapper.partialUpdate(existingServiceRequest, serviceRequestDTO);
+
+                        return existingServiceRequest;
+                    })
+                    .map(serviceRequestRepository::save)
+                    .map(ServiceRequestMapper::toDto);
+            } else {
+                throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+            }
+        } else {
+            throw new BadRequestAlertException("Unknown error", ENTITY_NAME, "unknownerror");
+        }
     }
 
     /**
@@ -168,37 +208,38 @@ public class ServiceRequestService {
         return serviceRequestRepository.findById(new ServiceRequestId(id)).map(ServiceRequestMapper::toDto);
     }
 
-    /**
-     * Delete the serviceRequest by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(UUID id) {
-        log.debug("Request to delete ServiceRequest : {}", id);
-        serviceRequestRepository.deleteById(new ServiceRequestId(id));
-    }
     public void updateRequestServiceStatus(UUID id, boolean isApproved, UUID driverId, String startTime,String endTime) {
         Optional<ServiceRequest> service = serviceRequestRepository.findById(new ServiceRequestId(id));
-        if(service.isPresent()){
-            ServiceRequest req = service.get();
-            ServiceRequestDTO reqDTO = ServiceRequestMapper.toDto(req);
-            if(isApproved){
-                req.updateRequestStatus(new ServiceStatusDTO(null,Status.ACTIVE,reqDTO));
-                Optional<Driver> driver = driverRepository.findById(new DriverId(driverId));
-                if(driver.isPresent()) {
-                    DriverDTO driverDTO = DriverMapper.toDto(driver.get());
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
 
-                    ZoneId zoneId = ZoneId.systemDefault();
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+        if(service.isPresent()) {
+            ServiceRequestDTO serviceRequestDTO1 = ServiceRequestMapper.toDto(service.get());
+            if (customer.isPresent() && customer.get().getId().equals(service.get().getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING)) {
+                ServiceRequest req = service.get();
+                ServiceRequestDTO reqDTO = ServiceRequestMapper.toDto(req);
+                if (isApproved) {
+                    req.updateRequestStatus(new ServiceStatusDTO(null, Status.ACTIVE, reqDTO));
+                    Optional<Driver> driver = driverRepository.findById(new DriverId(driverId));
+                    if (driver.isPresent()) {
+                        DriverDTO driverDTO = DriverMapper.toDto(driver.get());
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
-                    ZonedDateTime zonedStartTime = ZonedDateTime.of(LocalDateTime.parse(startTime, formatter), zoneId);
-                    ZonedDateTime zonedEndTime = ZonedDateTime.of(LocalDateTime.parse(endTime, formatter), zoneId);
-                    transportService.save(new TransportDTO(null,zonedStartTime, zonedEndTime, reqDTO.getLocation(),driverDTO, reqDTO));
+                        ZoneId zoneId = ZoneId.systemDefault();
+
+                        ZonedDateTime zonedStartTime = ZonedDateTime.of(LocalDateTime.parse(startTime, formatter), zoneId);
+                        ZonedDateTime zonedEndTime = ZonedDateTime.of(LocalDateTime.parse(endTime, formatter), zoneId);
+                        transportService.save(new TransportDTO(null, zonedStartTime, zonedEndTime, reqDTO.getLocation(), driverDTO, reqDTO));
+                    }
+                } else {
+                    req.updateRequestStatus(new ServiceStatusDTO(null, Status.CANCELED, reqDTO));
                 }
-            }else{
-                req.updateRequestStatus(new ServiceStatusDTO(null,Status.CANCELED,reqDTO) );
+                serviceRequestRepository.save(req);
+            } else {
+                throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
             }
-            serviceRequestRepository.save(req);
         }
     }
 
@@ -206,7 +247,6 @@ public class ServiceRequestService {
     public List<ServiceRequestDTO> getByUserId(Long userId) {
         log.debug("Request to get Service Requests by UserId : {}", userId);
         return StreamSupport.stream(serviceRequestRepository.getByUserId(userId).spliterator(), false)
-            .filter(serviceRequest -> serviceRequest.getTransport() == null)
             .map(ServiceRequestMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

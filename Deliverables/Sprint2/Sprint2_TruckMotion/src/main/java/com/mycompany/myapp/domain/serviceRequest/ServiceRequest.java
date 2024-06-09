@@ -150,7 +150,7 @@ public class ServiceRequest implements Serializable {
     }
 
     public Location getLocation() {
-        return this.location != null ? new Location(this.location) : null;
+        return this.location;
     }
 
     public void updateLocation(Location location) {
@@ -158,7 +158,7 @@ public class ServiceRequest implements Serializable {
     }
 
     public Customer getCustomer() {
-        return this.customer != null ? new Customer(this.customer) : null;
+        return this.customer;
     }
 
     public void updateCustomer(Customer customer) {
@@ -166,11 +166,14 @@ public class ServiceRequest implements Serializable {
     }
 
     public Set<ServiceStatus> getServiceStatuses() {
-        return this.serviceStatuses != null ? new HashSet<>(this.serviceStatuses) : null;
+        return this.serviceStatuses != null ? new HashSet<>(this.serviceStatuses) : new HashSet<>();
     }
 
     public void addServiceStatuses(ServiceStatus status){
-        this.serviceStatuses.add(status);
+        if(this.serviceStatuses!= null && status != null){
+            this.serviceStatuses.add(status);
+        }
+
     }
 
     public void updateServiceStatuses(Set<ServiceStatus> serviceStatuses) {
@@ -180,11 +183,11 @@ public class ServiceRequest implements Serializable {
         if (serviceStatuses != null) {
             serviceStatuses.forEach(i -> i.updateServiceRequest(this));
         }
-        this.serviceStatuses = serviceStatuses != null ? new HashSet<>(serviceStatuses) : null;
+        this.serviceStatuses = serviceStatuses != null ? new HashSet<>(serviceStatuses) : new HashSet<>();
     }
 
     public void addServiceStatus(ServiceStatus serviceStatus) {
-        if(serviceStatus != null){
+        if(this.serviceStatuses!= null && serviceStatus != null){
             serviceStatus.updateServiceRequest(this);
             ServiceStatus newServiceStatus = new ServiceStatus(serviceStatus);
             this.serviceStatuses.add(newServiceStatus);
@@ -194,14 +197,14 @@ public class ServiceRequest implements Serializable {
     }
 
     public void removeServiceStatus(ServiceStatus serviceStatus) {
-        if(serviceStatus != null) {
+        if(this.serviceStatuses!= null && serviceStatus != null) {
             this.serviceStatuses.remove(serviceStatus);
             serviceStatus.updateServiceRequest(null);
         }
     }
 
     public Transport getTransport() {
-        return this.transport != null ? new Transport(this.transport) : null;
+        return this.transport;
     }
 
     public void updateTransport(Transport transport) {
@@ -215,7 +218,9 @@ public class ServiceRequest implements Serializable {
     }
 
     public void updateRequestStatus(ServiceStatusDTO statusDTO){
-        this.serviceStatuses.add(ServiceStatusMapper.toEntity(statusDTO));
+        if(this.serviceStatuses!= null && statusDTO != null){
+            this.serviceStatuses.add(ServiceStatusMapper.toEntity(statusDTO));
+        }
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

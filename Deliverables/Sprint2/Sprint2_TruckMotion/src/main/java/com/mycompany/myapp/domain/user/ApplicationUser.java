@@ -115,7 +115,7 @@ public class ApplicationUser implements Serializable {
     }
 
     public User getInternalUser() {
-        return this.internalUser != null ? new User(this.internalUser) : null;
+        return this.internalUser;
     }
 
     public void updateInternalUser(User user) {
@@ -123,7 +123,7 @@ public class ApplicationUser implements Serializable {
     }
 
     public Driver getDriver() {
-        return this.driver != null ? new Driver(this.driver) : null;
+        return this.driver;
     }
 
     public void updateDriver(Driver driver) {
@@ -137,7 +137,7 @@ public class ApplicationUser implements Serializable {
     }
 
     public Manager getManager() {
-        return this.manager != null ? new Manager(this.manager) : null;
+        return this.manager;
     }
 
     public void updateManager(Manager manager) {
@@ -150,7 +150,7 @@ public class ApplicationUser implements Serializable {
         this.manager = manager != null ? new Manager(manager) : null;
     }
     public Customer getCustomer() {
-        return this.customer != null ? new Customer(this.customer) : null;
+        return this.customer;
     }
 
     public void updateCustomer(Customer customer) {
