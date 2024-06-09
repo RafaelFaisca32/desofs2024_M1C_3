@@ -76,7 +76,7 @@ public class ServiceRequestService {
             .map(AdminUserDTO::new).get();
 
         Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
-        if (customer.isPresent()) {
+        if (customer.isPresent() && !customer.get().getLocations().stream().filter(loc -> loc.equals(serviceRequestDTO.getLocation())).toList().isEmpty()) {
             serviceRequestDTO.setCustomer(customer.get());
 
             ServiceRequest serviceRequest1 = ServiceRequestMapper.toEntity(serviceRequestDTO);
@@ -112,7 +112,7 @@ public class ServiceRequestService {
         ServiceRequestDTO serviceRequestDTO1 = ServiceRequestMapper.toDto(serviceRequest1);
 
         Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
-        if (customer.isPresent() && customer.get().getId().equals(serviceRequest1.getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING)) {
+        if (customer.isPresent() && customer.get().getId().equals(serviceRequest1.getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING) && !customer.get().getLocations().stream().filter(loc -> loc.equals(serviceRequestDTO.getLocation())).toList().isEmpty()) {
             if (serviceRequestDTO.getStatus() != null) {
                 serviceRequestDTO.setStatus(new ServiceStatusDTO("", serviceRequestDTO.getStatus().getStatus(), new ServiceRequestDTO(serviceRequestDTO.getId())));
                 serviceRequest1.getServiceStatuses().add(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
@@ -149,7 +149,7 @@ public class ServiceRequestService {
         Optional<ServiceRequest> serviceRequest = serviceRequestRepository.findById(new ServiceRequestId(serviceRequestDTO.getId()));
         if (serviceRequest.isPresent()) {
             ServiceRequestDTO serviceRequestDTO1 = ServiceRequestMapper.toDto(serviceRequest.get());
-            if (customer.isPresent() && customer.get().getId().equals(serviceRequest.get().getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING)) {
+            if (customer.isPresent() && customer.get().getId().equals(serviceRequest.get().getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING) && !customer.get().getLocations().stream().filter(loc -> loc.equals(serviceRequestDTO.getLocation())).toList().isEmpty()) {
 
                 return serviceRequest
                     .map(existingServiceRequest -> {
