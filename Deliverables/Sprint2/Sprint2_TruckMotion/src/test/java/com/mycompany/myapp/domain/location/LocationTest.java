@@ -53,7 +53,7 @@ class LocationTest {
         assertThat(serviceRequestBack.getLocation()).isEqualTo(location);
 
         location.updateServiceRequest(null);
-        assertThat(location.getServiceRequests()).isNull();
+        assertThat(location.getServiceRequests()).isEmpty();
         assertThat(serviceRequestBack.getLocation()).isNull();
     }
 
@@ -67,7 +67,7 @@ class LocationTest {
         assertThat(transportBack.getLocation()).isEqualTo(location);
 
         location.updateTransport(null);
-        assertThat(location.getTransports()).isNull();
+        assertThat(location.getTransports()).isEmpty();
         assertThat(transportBack.getLocation()).isNull();
     }
 }
