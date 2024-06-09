@@ -27,7 +27,7 @@ export const ServiceRequestUpdate = () => {
   const updateSuccess = useAppSelector(state => state.serviceRequest.updateSuccess);
 
   const handleClose = () => {
-    //navigate('/service-request');
+    navigate('/service-request');
   };
 
   useEffect(() => {
@@ -65,6 +65,7 @@ export const ServiceRequestUpdate = () => {
     };
 
     if (isNew) {
+      entity.status = {id:null, date:null, observations:null, status: "PENDING", serviceRequest:null}
       dispatch(createEntity(entity));
     } else {
       dispatch(updateEntity(entity));

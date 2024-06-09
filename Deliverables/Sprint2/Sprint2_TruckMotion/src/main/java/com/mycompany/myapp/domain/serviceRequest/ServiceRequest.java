@@ -169,6 +169,10 @@ public class ServiceRequest implements Serializable {
         return this.serviceStatuses != null ? new HashSet<>(this.serviceStatuses) : null;
     }
 
+    public void addServiceStatuses(ServiceStatus status){
+        this.serviceStatuses.add(status);
+    }
+
     public void updateServiceStatuses(Set<ServiceStatus> serviceStatuses) {
         if (this.serviceStatuses != null) {
             this.serviceStatuses.forEach(i -> i.updateServiceRequest(null));
