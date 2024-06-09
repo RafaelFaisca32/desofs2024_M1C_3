@@ -51,6 +51,7 @@ public class DriverController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<DriverDTO> createDriver(@RequestBody DriverDTO driverDTO) throws URISyntaxException {
         log.debug("REST request to save Driver : {}", driverDTO);
         if (driverDTO.getId() != null) {
@@ -73,6 +74,7 @@ public class DriverController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<DriverDTO> updateDriver(
         @PathVariable(value = "id", required = false) final UUID id,
         @RequestBody DriverDTO driverDTO
@@ -98,6 +100,7 @@ public class DriverController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of drivers in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public List<DriverDTO> getAllDrivers(@RequestParam(name = "filter", required = false) String filter) {
         if ("transport-is-null".equals(filter)) {
             log.debug("REST request to get all Drivers where transport is null");
@@ -123,6 +126,7 @@ public class DriverController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the driverDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<DriverDTO> getDriver(@PathVariable("id") UUID id) {
         log.debug("REST request to get Driver : {}", id);
         Optional<DriverDTO> driverDTO = driverService.findOne(id);
@@ -136,6 +140,7 @@ public class DriverController {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<Void> deleteDriver(@PathVariable("id") UUID id) {
         log.debug("REST request to delete Driver : {}", id);
         driverService.delete(id);

@@ -18,10 +18,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -58,6 +60,7 @@ public class TransportController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<TransportDTO> createTransport(@RequestBody TransportDTO transportDTO) throws URISyntaxException {
         log.debug("REST request to save Transport : {}", transportDTO);
         if (transportDTO.getId() != null) {
@@ -80,6 +83,7 @@ public class TransportController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.DRIVER + "')")
     public ResponseEntity<TransportDTO> updateTransport(
         @PathVariable(value = "id", required = false) final UUID id,
         @RequestBody TransportDTO transportDTO
@@ -119,6 +123,7 @@ public class TransportController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of transports in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public List<TransportDTO> getAllTransports() {
         log.debug("REST request to get all Transports");
         return transportService.findAll();
@@ -131,6 +136,7 @@ public class TransportController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the transportDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.DRIVER + "')")
     public ResponseEntity<TransportDTO> getTransport(@PathVariable("id") UUID id) {
         log.debug("REST request to get Transport : {}", id);
         Optional<TransportDTO> transportDTO = transportService.findOne(id);
@@ -144,6 +150,7 @@ public class TransportController {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<Void> deleteTransport(@PathVariable("id") UUID id) {
         log.debug("REST request to delete Transport : {}", id);
         transportService.delete(id);
@@ -153,6 +160,7 @@ public class TransportController {
     }
 
     @GetMapping("/getByUserLoggedIn")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.DRIVER + "')")
     public List<TransportDTO> getAllTransportsByLoggedInUser(@RequestParam(name = "filter", required = false) String filter) {
         AdminUserDTO adminUserDTO = userService
             .getUserWithAuthorities()

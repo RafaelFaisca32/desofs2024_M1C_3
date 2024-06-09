@@ -76,7 +76,8 @@ public class ServiceRequestService {
             .map(AdminUserDTO::new).get();
 
         Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
-        if (customer.isPresent() && !customer.get().getLocations().stream().filter(loc -> loc.equals(serviceRequestDTO.getLocation())).toList().isEmpty()) {
+        if (customer.isPresent() &&
+            !customer.get().getLocations().stream().filter(loc -> loc.equals(serviceRequestDTO.getLocation())).toList().isEmpty()) {
             serviceRequestDTO.setCustomer(customer.get());
 
             ServiceRequest serviceRequest1 = ServiceRequestMapper.toEntity(serviceRequestDTO);

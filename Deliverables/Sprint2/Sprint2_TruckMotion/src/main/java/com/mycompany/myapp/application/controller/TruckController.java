@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -46,6 +49,7 @@ public class TruckController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<TruckDTO> createTruck(@RequestBody TruckDTO truckDTO) throws URISyntaxException {
         log.debug("REST request to save Truck : {}", truckDTO);
         if (truckDTO.getId() != null) {
@@ -68,6 +72,7 @@ public class TruckController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<TruckDTO> updateTruck(
         @PathVariable(value = "id", required = false) final UUID id,
         @RequestBody TruckDTO truckDTO
@@ -93,6 +98,7 @@ public class TruckController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of trucks in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.DRIVER + "')")
     public List<TruckDTO> getAllTrucks(@RequestParam(name = "filter", required = false) String filter) {
         if ("driver-is-null".equals(filter)) {
             log.debug("REST request to get all Trucks where driver is null");
@@ -109,6 +115,7 @@ public class TruckController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the truckDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.DRIVER +"')")
     public ResponseEntity<TruckDTO> getTruck(@PathVariable("id") UUID id) {
         log.debug("REST request to get Truck : {}", id);
         Optional<TruckDTO> truckDTO = truckService.findOne(id);
@@ -122,6 +129,7 @@ public class TruckController {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<Void> deleteTruck(@PathVariable("id") UUID id) {
         log.debug("REST request to delete Truck : {}", id);
         truckService.delete(id);

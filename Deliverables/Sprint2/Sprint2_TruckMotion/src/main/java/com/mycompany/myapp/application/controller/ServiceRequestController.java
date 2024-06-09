@@ -137,7 +137,7 @@ public class ServiceRequestController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of serviceRequests in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.CUSTOMER + "')")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public List<ServiceRequestDTO> getAllServiceRequests(@RequestParam(name = "filter", required = false) String filter) {
         if ("transport-is-null".equals(filter)) {
             log.debug("REST request to get all ServiceRequests where transport is null");
@@ -158,6 +158,7 @@ public class ServiceRequestController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.CUSTOMER + "')")
     public ResponseEntity<ServiceRequestDTO> partialUpdateServiceRequest(
         @PathVariable(value = "id", required = false) final UUID id,
         @RequestBody ServiceRequestDTO serviceRequestDTO

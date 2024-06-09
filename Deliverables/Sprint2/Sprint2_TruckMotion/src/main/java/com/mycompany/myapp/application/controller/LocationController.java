@@ -56,6 +56,7 @@ public class LocationController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.CUSTOMER + "')")
     public ResponseEntity<LocationDTO> createLocation(@RequestBody LocationDTO locationDTO) throws URISyntaxException {
         log.debug("REST request to save Location : {}", locationDTO);
         if (locationDTO.getId() != null) {
@@ -88,6 +89,7 @@ public class LocationController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.CUSTOMER + "')")
     public ResponseEntity<LocationDTO> updateLocation(
         @PathVariable(value = "id", required = false) final UUID id,
         @RequestBody LocationDTO locationDTO
@@ -113,6 +115,7 @@ public class LocationController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of locations in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public List<LocationDTO> getAllLocations(@RequestParam(name = "filter", required = false) String filter) {
         if ("servicerequest-is-null".equals(filter)) {
             log.debug("REST request to get all Locations where serviceRequest is null");
@@ -134,6 +137,7 @@ public class LocationController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the locationDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.CUSTOMER + "')")
     public ResponseEntity<LocationDTO> getLocation(@PathVariable("id") UUID id) {
         log.debug("REST request to get Location : {}", id);
         Optional<LocationDTO> locationDTO = locationService.findOne(id);
@@ -147,6 +151,7 @@ public class LocationController {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.CUSTOMER + "')")
     public ResponseEntity<Void> deleteLocation(@PathVariable("id") UUID id) {
         log.debug("REST request to delete Location : {}", id);
         locationService.delete(id);
