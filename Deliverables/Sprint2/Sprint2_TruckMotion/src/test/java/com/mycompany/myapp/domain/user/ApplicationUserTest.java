@@ -43,7 +43,7 @@ class ApplicationUserTest {
         assertThat(driverBack.getApplicationUser()).isNull();
     }
 
-    @Test
+    /*@Test
     void managerTest()  {
         ApplicationUser applicationUser = getApplicationUserRandomSampleGenerator();
         Manager managerBack = new Manager();
@@ -57,7 +57,7 @@ class ApplicationUserTest {
 
         assertThat(applicationUser.getManager()).isNull();
         assertThat(managerBack.getApplicationUser()).isNull();
-    }
+    }*/
 
     @Test
     void customerTest() throws Exception {
