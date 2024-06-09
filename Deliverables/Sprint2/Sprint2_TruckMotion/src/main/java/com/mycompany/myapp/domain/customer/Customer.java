@@ -77,7 +77,6 @@ public class Customer implements Serializable {
 
     public ApplicationUser getApplicationUser() {
         return this.applicationUser;
-
     }
 
     public void updateApplicationUser(ApplicationUser applicationUser) {
@@ -97,7 +96,7 @@ public class Customer implements Serializable {
         if (this.locations != null) {
             this.locations.forEach(i -> i.updateCustomer(null));
         }
-        this.locations = locations != null ? new HashSet<>(locations) : null;
+        this.locations = locations != null ? new HashSet<>(locations) : new HashSet<>();
     }
 
     public void addLocation(Location location) {
@@ -116,7 +115,7 @@ public class Customer implements Serializable {
     }
 
     public Set<ServiceRequest> getServiceRequests() {
-        return this.serviceRequests != null ? new HashSet<>(this.serviceRequests) : null;
+        return this.serviceRequests != null ? new HashSet<>(this.serviceRequests) : new HashSet<>();
     }
 
     public void updateServiceRequest(Set<ServiceRequest> serviceRequests) {
@@ -129,7 +128,7 @@ public class Customer implements Serializable {
             this.serviceRequests.forEach(i -> i.updateCustomer(null));
         }
 
-        this.serviceRequests = serviceRequests != null ? new HashSet<>(serviceRequests) : null;
+        this.serviceRequests = serviceRequests != null ? new HashSet<>(serviceRequests) : new HashSet<>();
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

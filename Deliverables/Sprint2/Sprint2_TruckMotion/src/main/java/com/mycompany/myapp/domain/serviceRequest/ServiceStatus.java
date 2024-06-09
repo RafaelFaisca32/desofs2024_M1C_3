@@ -80,7 +80,7 @@ public class ServiceStatus implements Serializable {
     }
 
     public ServiceRequest getServiceRequest() {
-        return this.serviceRequest != null ? new ServiceRequest(this.serviceRequest) : null;
+        return this.serviceRequest;
     }
 
     public void updateServiceRequest(ServiceRequest serviceRequest) {

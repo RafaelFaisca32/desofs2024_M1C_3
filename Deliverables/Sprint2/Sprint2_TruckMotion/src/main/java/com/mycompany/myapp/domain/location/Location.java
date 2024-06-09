@@ -73,7 +73,7 @@ public class Location implements Serializable {
     }
 
     public Customer getCustomer() {
-        return this.customer != null ? new Customer(this.customer) : null;
+        return this.customer;
     }
 
     public void updateCustomer(Customer customer) {
@@ -81,7 +81,7 @@ public class Location implements Serializable {
     }
 
     public Set<ServiceRequest> getServiceRequests() {
-        return this.serviceRequests != null ? new HashSet<>(this.serviceRequests) : null;
+        return this.serviceRequests != null ? new HashSet<>(this.serviceRequests) : new HashSet<>();
     }
 
     public void updateServiceRequest(Set<ServiceRequest> serviceRequests) {
@@ -92,10 +92,11 @@ public class Location implements Serializable {
         if (this.serviceRequests != null) {
             this.serviceRequests.forEach(i -> i.updateLocation(null));
         }
-        this.serviceRequests = serviceRequests != null ? new HashSet<>(serviceRequests) : null; }
+        this.serviceRequests = serviceRequests != null ? new HashSet<>(serviceRequests) : new HashSet<>();
+    }
 
     public Set<Transport> getTransports() {
-        return this.transports != null ? new HashSet<>(this.transports) : null;
+        return this.transports != null ? new HashSet<>(this.transports) : new HashSet<>();
     }
 
     public void updateTransport(Set<Transport> transports) {

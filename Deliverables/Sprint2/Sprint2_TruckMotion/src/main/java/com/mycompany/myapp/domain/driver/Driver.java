@@ -59,12 +59,12 @@ public class Driver implements Serializable {
         this.id = driver.getId();
         this.truck = driver.getTruck();
         this.applicationUser = driver.getApplicationUser();
-        this.transports = new HashSet<>(driver.getTransports());
+        this.transports = driver.getTransports();
     }
 
 
     public Truck getTruck() {
-        return this.truck != null ? new Truck(this.truck) : null;
+        return this.truck;
     }
 
     public void updateTruck(Truck truck) {
@@ -81,7 +81,7 @@ public class Driver implements Serializable {
     }
 
     public Set<Transport> getTransports() {
-        return this.transports != null ? new HashSet<>(this.transports) : null;
+        return this.transports != null ? new HashSet<>(this.transports) : new HashSet<>();
     }
 
     public void updateTransports(Set<Transport> transports) {
@@ -92,7 +92,7 @@ public class Driver implements Serializable {
         if (this.transports != null) {
             this.transports.forEach(i -> i.updateDriver(null));
         }
-        this.transports = transports != null ? new HashSet<>(transports) : null;
+        this.transports = transports != null ? new HashSet<>(transports) : new HashSet<>();
     }
 
 
