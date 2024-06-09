@@ -121,7 +121,9 @@ public class UserController {
         CustomerDTO customerDTO = completeUserDTO.getCustomerDTO();
         ManagerDTO managerDTO = completeUserDTO.getManagerDTO();
 
-
+        Optional<AdminUserDTO> meDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new);
 
         log.debug("REST request to save User : {}, " +
                 "with Application User : {}, " +
@@ -131,6 +133,7 @@ public class UserController {
             userDTO,applicationUserDTO,driverDTO,customerDTO,managerDTO);
 
 
+
         if (userDTO.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
@@ -138,6 +141,8 @@ public class UserController {
             throw new BadRequestAlertException("User must contain Application User information", "userManagement", "noapplicationuserinfo");
         } else if (userDTO.getAuthorities() == null) {
             throw new BadRequestAlertException("User must contain at least 1 role", "userManagement", "nouserrole");
+        } else if ( meDTO.isEmpty() || (!meDTO.get().getAuthorities().contains(AuthoritiesConstants.ADMIN) && userDTO.getAuthorities().contains(AuthoritiesConstants.ADMIN))){
+            throw new BadRequestAlertException("You have to be an admin to create an admin!", "userManagement", "cancreateadmininssuficientrole");
         } else if (userDTO.getAuthorities().contains(AuthoritiesConstants.DRIVER) && driverDTO == null) {
             throw new BadRequestAlertException("A driver must contain its information", "userManagement", "nodriverinfo");
         } else if(userDTO.getAuthorities().contains(AuthoritiesConstants.MANAGER) && managerDTO == null) {

@@ -84,7 +84,7 @@ public class ServiceStatus implements Serializable {
     }
 
     public void updateServiceRequest(ServiceRequest serviceRequest) {
-        this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
+        this.serviceRequest = serviceRequest;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

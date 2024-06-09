@@ -84,7 +84,7 @@ public class Truck implements Serializable {
         if (driver != null) {
             driver.updateTruck(this);
         }
-        this.driver = driver != null ? new Driver(driver) : null;
+        this.driver = driver;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

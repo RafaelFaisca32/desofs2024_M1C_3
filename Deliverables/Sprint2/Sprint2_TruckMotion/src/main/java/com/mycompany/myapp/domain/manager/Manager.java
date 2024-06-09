@@ -47,7 +47,7 @@ public class Manager implements Serializable {
     }
 
     public void updateApplicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser != null ? new ApplicationUser(applicationUser) : null;
+        this.applicationUser = applicationUser;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

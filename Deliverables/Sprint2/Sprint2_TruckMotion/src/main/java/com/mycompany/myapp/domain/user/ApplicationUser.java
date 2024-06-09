@@ -119,7 +119,7 @@ public class ApplicationUser implements Serializable {
     }
 
     public void updateInternalUser(User user) {
-        this.internalUser = user != null ? new User(user) : null;
+        this.internalUser = user;
     }
 
     public Driver getDriver() {
@@ -133,7 +133,7 @@ public class ApplicationUser implements Serializable {
         if (driver != null) {
             driver.updateApplicationUser(this);
         }
-        this.driver = driver != null ? new Driver(driver) : null;
+        this.driver = driver;
     }
 
     public Manager getManager() {
@@ -147,7 +147,7 @@ public class ApplicationUser implements Serializable {
         if (manager != null) {
             manager.updateApplicationUser(this);
         }
-        this.manager = manager != null ? new Manager(manager) : null;
+        this.manager = manager;
     }
     public Customer getCustomer() {
         return this.customer;
@@ -160,7 +160,7 @@ public class ApplicationUser implements Serializable {
         if (customer != null) {
             customer.updateApplicationUser(this);
         }
-        this.customer = customer != null ? new Customer(customer) : null;
+        this.customer = customer;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

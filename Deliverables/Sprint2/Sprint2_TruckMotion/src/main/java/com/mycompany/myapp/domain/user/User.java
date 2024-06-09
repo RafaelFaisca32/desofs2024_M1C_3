@@ -99,7 +99,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     public User(Long id, UserId uuidId){ this.id = id; this.uuidId = uuidId; }
 
     public User(User user){
-        this.uuidId = new UserId();
+        this.uuidId = user.getUuidId();
         this.login = user.getLogin();
         this.password = user.getPassword();
         this.firstName = user.getFirstName();

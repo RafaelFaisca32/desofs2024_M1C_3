@@ -90,11 +90,11 @@ public class Transport implements Serializable {
     }
 
     public Location getLocation() {
-        return this.location ;
+        return this.location;
     }
 
     public void updateLocation(Location location) {
-        this.location = location != null ? new Location(location) : null;
+        this.location = location;
     }
 
     public Driver getDriver() {
@@ -102,7 +102,7 @@ public class Transport implements Serializable {
     }
 
     public void updateDriver(Driver driver) {
-        this.driver = driver != null ? new Driver(driver) : null;
+        this.driver = driver;
     }
 
     public ServiceRequest getServiceRequest() {
@@ -110,7 +110,7 @@ public class Transport implements Serializable {
     }
 
     public void updateServiceRequest(ServiceRequest serviceRequest) {
-        this.serviceRequest = serviceRequest != null ? new ServiceRequest(serviceRequest) : null;
+        this.serviceRequest = serviceRequest;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

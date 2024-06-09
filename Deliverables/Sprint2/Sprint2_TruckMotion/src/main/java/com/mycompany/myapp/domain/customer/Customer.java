@@ -80,7 +80,7 @@ public class Customer implements Serializable {
     }
 
     public void updateApplicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser != null ? new ApplicationUser(applicationUser) : null;
+        this.applicationUser = applicationUser;
     }
 
 
