@@ -41,7 +41,7 @@ export const createEntity = createAsyncThunk(
   'serviceRequest/create_entity',
   async (entity: IServiceRequest, thunkAPI) => {
     const result = await axios.post<IServiceRequest>(apiUrl, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getEntitiesByUserLoggedIn({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -51,7 +51,7 @@ export const updateEntity = createAsyncThunk(
   'serviceRequest/update_entity',
   async (entity: IServiceRequest, thunkAPI) => {
     const result = await axios.put<IServiceRequest>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getEntitiesByUserLoggedIn({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -61,7 +61,7 @@ export const partialUpdateEntity = createAsyncThunk(
   'serviceRequest/partial_update_entity',
   async (entity: IServiceRequest, thunkAPI) => {
     const result = await axios.patch<IServiceRequest>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getEntitiesByUserLoggedIn({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -72,7 +72,7 @@ export const deleteEntity = createAsyncThunk(
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
     const result = await axios.delete<IServiceRequest>(requestUrl);
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getEntitiesByUserLoggedIn({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -83,7 +83,7 @@ export const updateEntityStatus = createAsyncThunk(
   async ({ id, isApproved, driverId, startDate, endDate }: { id: string | number; isApproved: boolean, driverId :string, startDate : string , endDate : string }, thunkAPI) => {
     const requestUrl = isApproved ? `${apiUrl}/${id}/${isApproved}/${driverId}/${startDate}/${endDate}` : `${apiUrl}/${id}/${isApproved}` ;
     const result = await axios.put<IServiceRequest>(requestUrl, { isApproved, driverId, startDate, endDate });
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getEntitiesByUserLoggedIn({}));
     return result.data;
   },
   { serializeError: serializeAxiosError },
@@ -126,6 +126,11 @@ export const ServiceRequestSlice = createEntitySlice({
         state.loading = false;
         state.updateSuccess = true;
         state.entity = action.payload.data;
+      })
+      .addMatcher(isPending(getEntitiesByUserLoggedIn, getEntity), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.loading = true;
       })
       .addMatcher(isPending(getEntities, getEntity), state => {
         state.errorMessage = null;

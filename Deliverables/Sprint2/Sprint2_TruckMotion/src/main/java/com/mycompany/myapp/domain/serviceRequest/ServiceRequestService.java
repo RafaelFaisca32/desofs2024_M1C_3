@@ -67,7 +67,7 @@ public class ServiceRequestService {
         } else {
             if (serviceRequestDTO.getStatus().getId() == null){
                 serviceRequestDTO.setStatus(new ServiceStatusDTO("",serviceRequestDTO.getStatus().getStatus(), serviceRequestDTO));
-                serviceRequest1.getServiceStatuses().add(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
+                serviceRequest1.addServiceStatuses(ServiceStatusMapper.toEntity(serviceRequestDTO.getStatus()));
             }
         }
         ServiceRequestMapper.partialUpdate(serviceRequest1, serviceRequestDTO);

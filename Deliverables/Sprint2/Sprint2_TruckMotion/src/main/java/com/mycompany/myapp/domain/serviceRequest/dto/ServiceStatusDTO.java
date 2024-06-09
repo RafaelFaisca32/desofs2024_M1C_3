@@ -111,7 +111,6 @@ public class ServiceStatusDTO implements Serializable {
             ", date='" + getDate() + "'" +
             ", observations='" + getObservations() + "'" +
             ", status='" + getStatus() + "'" +
-            ", serviceRequest=" + getServiceRequest() +
             "}";
     }
 }
