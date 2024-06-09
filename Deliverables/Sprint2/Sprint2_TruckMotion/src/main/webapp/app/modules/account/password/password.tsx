@@ -23,6 +23,7 @@ export const PasswordPage = () => {
     };
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const handleValidSubmit = ({ currentPassword, confirmPassword, newPassword }) => {
     const transformedFirstPassword = transformPassword(newPassword);
     const transformedSecondPassword = transformPassword(confirmPassword);
@@ -33,6 +34,7 @@ export const PasswordPage = () => {
     dispatch(savePassword({ currentPassword, newPassword }));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const transformPassword = (password) => {
     return password.replace(/\s{2,}/g, ' ');
   };

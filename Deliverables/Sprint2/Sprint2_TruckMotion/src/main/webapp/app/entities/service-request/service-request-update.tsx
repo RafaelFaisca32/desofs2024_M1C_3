@@ -1,4 +1,4 @@
-import React, {  useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
 import { ValidatedField, ValidatedForm } from 'react-jhipster';
@@ -60,8 +60,9 @@ export const ServiceRequestUpdate = () => {
       ...serviceRequestEntity,
       ...values,
       location: customer.locations.find(it => it.id.toString() === values.location?.toString()),
+      // eslint-disable-next-line object-shorthand
       customer: customer,
-      status: (values.status !== values.statusInitial) ? {id:null, date:null, observations:null, status: values.status, serviceRequest:null} : null,
+      status: (values.status !== values.statusInitial) ? { id: null, date: null, observations: null, status: values.status, serviceRequest: null } : null,
     };
 
     if (isNew) {
@@ -74,16 +75,16 @@ export const ServiceRequestUpdate = () => {
   const defaultValues = () =>
     isNew
       ? {
-          date: displayDefaultDateTime(),
-        }
+        date: displayDefaultDateTime(),
+      }
       : {
-          ...serviceRequestEntity,
-          date: convertDateTimeFromServer(serviceRequestEntity.date),
-          location: serviceRequestEntity?.location?.id,
-          customer: serviceRequestEntity?.customer?.id,
-          status: serviceRequestEntity.status?.status,
-          statusInitial: serviceRequestEntity.status?.status,
-        };
+        ...serviceRequestEntity,
+        date: convertDateTimeFromServer(serviceRequestEntity.date),
+        location: serviceRequestEntity?.location?.id,
+        customer: serviceRequestEntity?.customer?.id,
+        status: serviceRequestEntity.status?.status,
+        statusInitial: serviceRequestEntity.status?.status,
+      };
 
   return (
     <div>
@@ -128,7 +129,7 @@ export const ServiceRequestUpdate = () => {
                 {customer.locations
                   ? customer.locations.map(otherEntity => (
                     <option value={otherEntity.id} key={otherEntity.id}>
-                      {otherEntity.coordX +"--"+otherEntity.coordY+"--"+ otherEntity.coordZ}
+                      {otherEntity.coordX + "--" + otherEntity.coordY + "--" + otherEntity.coordZ}
                     </option>
                   ))
                   : null}

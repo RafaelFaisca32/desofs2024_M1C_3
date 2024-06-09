@@ -26,6 +26,7 @@ export const PasswordResetFinishPage = () => {
     [],
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const handleValidSubmit = ({ newPassword, confirmPassword }) => {
     const transformedFirstPassword = transformPassword(newPassword);
     const transformedSecondPassword = transformPassword(confirmPassword);
@@ -36,6 +37,7 @@ export const PasswordResetFinishPage = () => {
     dispatch(handlePasswordResetFinish({ key, newPassword }));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const transformPassword = (password) => {
     return password.replace(/\s{2,}/g, ' ');
   };

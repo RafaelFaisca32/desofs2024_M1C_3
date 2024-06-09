@@ -22,6 +22,7 @@ export const RegisterPage = () => {
     [dispatch],
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const transformPassword = (password) => {
     return password.replace(/\s{2,}/g, ' ');
   };

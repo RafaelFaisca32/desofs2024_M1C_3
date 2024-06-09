@@ -12,9 +12,9 @@ import { fetchFreeDrivers } from '../driver/driver.reducer';
 
 
 interface IAvailableDriverDTO {
-    id: string;
-    name: string;
-  }
+  id: string;
+  name: string;
+}
 
 export const ServiceRequestStatusUpdate = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +27,8 @@ export const ServiceRequestStatusUpdate = () => {
     dispatch(getEntity(id));
   }, []);
 
-  const updateStatus = (id: string, isApproved: boolean, driverId : string, startDate : string , endDate : string) => {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const updateStatus = (id: string, isApproved: boolean, driverId: string, startDate: string, endDate: string) => {
     dispatch(updateEntityStatus({ id, isApproved, driverId, startDate, endDate }));
     navigate('/service-request');
   };
@@ -47,7 +48,7 @@ export const ServiceRequestStatusUpdate = () => {
           setFreeDrivers(response.payload);
         })
         .catch((error: any) => {
-            setFreeDrivers([])
+          setFreeDrivers([])
         });
     }
   }, [dispatch, selectedStartDate, selectedEndDate]);
@@ -95,46 +96,46 @@ export const ServiceRequestStatusUpdate = () => {
             {serviceRequestEntity.date ? <TextFormat value={serviceRequestEntity.date} type="date" format={APP_DATE_FORMAT} /> : null}
           </dd>
           <dt>Location Coordinates(x,y,z)</dt>
-          <dd>{serviceRequestEntity.location ?  serviceRequestEntity.location.coordX +"--" +serviceRequestEntity.location.coordY+"--" +serviceRequestEntity.location.coordZ : ''}</dd>
+          <dd>{serviceRequestEntity.location ? serviceRequestEntity.location.coordX + "--" + serviceRequestEntity.location.coordY + "--" + serviceRequestEntity.location.coordZ : ''}</dd>
           <dt>Customer Company</dt>
           <dd>{serviceRequestEntity.customer ? serviceRequestEntity.customer.company : ''}</dd>
           <dt>Select Driver and Dates</dt>
-          {freeDrivers?.length > 0 ? <ValidatedField 
-        id="transport-driver" 
-        name="driver" 
-        data-cy="driver" 
-        label="Driver" 
-        type="select"
-        onChange={handleChangeDriver}
-      >
-        <option value="" key="0" />
-        {freeDrivers
-          ? freeDrivers.map(otherEntity => (
-              <option value={otherEntity.id} key={otherEntity.id}>
-                {otherEntity.name}
-              </option>
-            ))
-          : null}
-      </ValidatedField> : null} 
-         
-      <ValidatedField
-                onChange={handleChangeStartDate}
-                label="Start Date"
-                id="service-request-date"
-                name="date"
-                data-cy="date"
-                type="datetime-local"
-                placeholder="YYYY-MM-DD HH:mm"
-              />
-                     <ValidatedField
-                     onChange={handleChangeEndDate}
-                label="Delivered Date"
-                id="service-request-date"
-                name="date"
-                data-cy="date"
-                type="datetime-local"
-                placeholder="YYYY-MM-DD HH:mm"
-              />       
+          {freeDrivers?.length > 0 ? <ValidatedField
+            id="transport-driver"
+            name="driver"
+            data-cy="driver"
+            label="Driver"
+            type="select"
+            onChange={handleChangeDriver}
+          >
+            <option value="" key="0" />
+            {freeDrivers
+              ? freeDrivers.map(otherEntity => (
+                <option value={otherEntity.id} key={otherEntity.id}>
+                  {otherEntity.name}
+                </option>
+              ))
+              : null}
+          </ValidatedField> : null}
+
+          <ValidatedField
+            onChange={handleChangeStartDate}
+            label="Start Date"
+            id="service-request-date"
+            name="date"
+            data-cy="date"
+            type="datetime-local"
+            placeholder="YYYY-MM-DD HH:mm"
+          />
+          <ValidatedField
+            onChange={handleChangeEndDate}
+            label="Delivered Date"
+            id="service-request-date"
+            name="date"
+            data-cy="date"
+            type="datetime-local"
+            placeholder="YYYY-MM-DD HH:mm"
+          />
 
 
 
@@ -144,10 +145,10 @@ export const ServiceRequestStatusUpdate = () => {
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
         </Button>
         &nbsp;
-        {selectedDriver && selectedStartDate && selectedEndDate ? <Button onClick={() =>  updateStatus(serviceRequestEntity.id, true, selectedDriver, selectedStartDate, selectedEndDate)} replace color="primary">
+        {selectedDriver && selectedStartDate && selectedEndDate ? <Button onClick={() => updateStatus(serviceRequestEntity.id, true, selectedDriver, selectedStartDate, selectedEndDate)} replace color="primary">
           <FontAwesomeIcon icon="plus" /> <span className="d-none d-md-inline">Approve</span>
-        </Button>: null}
-        
+        </Button> : null}
+
       </Col>
     </Row>
   );

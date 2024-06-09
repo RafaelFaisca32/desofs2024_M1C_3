@@ -63,6 +63,7 @@ export const LocationUpdate = () => {
     const entity = {
       ...locationEntity,
       ...values,
+      // eslint-disable-next-line object-shorthand
       customer: customer,
     };
 
