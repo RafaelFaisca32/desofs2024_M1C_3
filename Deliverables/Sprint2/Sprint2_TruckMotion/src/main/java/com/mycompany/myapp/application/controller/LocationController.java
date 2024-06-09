@@ -115,7 +115,7 @@ public class LocationController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of locations in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '"+AuthoritiesConstants.DRIVER+"')")
     public List<LocationDTO> getAllLocations(@RequestParam(name = "filter", required = false) String filter) {
         if ("servicerequest-is-null".equals(filter)) {
             log.debug("REST request to get all Locations where serviceRequest is null");
