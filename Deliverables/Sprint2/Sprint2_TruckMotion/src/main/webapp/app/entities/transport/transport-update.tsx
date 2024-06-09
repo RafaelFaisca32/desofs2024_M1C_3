@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Row, Col, FormText } from 'reactstrap';
-import { isNumber, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { Button, Row, Col } from 'reactstrap';
+import {  ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { ILocation } from 'app/shared/model/location.model';
 import { getEntities as getLocations } from 'app/entities/location/location.reducer';
-import { IDriver } from 'app/shared/model/driver.model';
 import { getEntities as getDrivers } from 'app/entities/driver/driver.reducer';
-import { IServiceRequest } from 'app/shared/model/service-request.model';
 import { getEntities as getServiceRequests } from 'app/entities/service-request/service-request.reducer';
-import { ITransport } from 'app/shared/model/transport.model';
 import { getEntity, updateEntity, createEntity, reset } from './transport.reducer';
 
 export const TransportUpdate = () => {
@@ -121,42 +116,6 @@ export const TransportUpdate = () => {
                 type="datetime-local"
                 placeholder="YYYY-MM-DD HH:mm"
               />
-              <ValidatedField id="transport-location" name="location" data-cy="location" label="Location" type="select">
-                <option value="" key="0" />
-                {locations
-                  ? locations.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.coordX +"--"+otherEntity.coordY+"--"+ otherEntity.coordZ}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <ValidatedField id="transport-driver" name="driver" data-cy="driver" label="Driver" type="select">
-                <option value="" key="0" />
-                {drivers
-                  ? drivers.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <ValidatedField
-                id="transport-serviceRequest"
-                name="serviceRequest"
-                data-cy="serviceRequest"
-                label="Service Request"
-                type="select"
-              >
-                <option value="" key="0" />
-                {serviceRequests
-                  ? serviceRequests.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.serviceName}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/transport" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
