@@ -38,6 +38,8 @@ export const UserManagementUpdate = () => {
 
   const isRoleSelected = (role: string) => !!selectedRoles.find(element => element === role);
 
+  const validateRoleOption = (role: string) => AUTHORITIES.ADMIN != role || (AUTHORITIES.ADMIN == role && authoritiesLogin.includes(AUTHORITIES.ADMIN));
+
   useEffect(() => {
     if (isNew) {
       dispatch(reset());
@@ -117,6 +119,8 @@ export const UserManagementUpdate = () => {
   };
 
   const isInvalid = false;
+  const account = useAppSelector(state => state.authentication.account);
+  const authoritiesLogin = account.authorities as string[];
   const user = useAppSelector(state => state.userManagement.user);
   const loading = useAppSelector(state => state.userManagement.loading);
   const updating = useAppSelector(state => state.userManagement.updating);
@@ -214,11 +218,18 @@ export const UserManagementUpdate = () => {
               </ValidatedField>
               <ValidatedField type="checkbox" name="activated" check value={true} disabled={!user.id} label="Activated" />
               <ValidatedField type="select" name="authorities" multiple label="Profiles" onChange={handleRolesChange}>
-                {authorities.map(role => (
-                  <option value={role} key={role}>
-                    {role}
-                  </option>
-                ))}
+                {authorities.map(role => {
+                  const shouldRenderOption = validateRoleOption(role);
+                  if (shouldRenderOption) {
+                    return (
+                      <option value={role} key={role}>
+                        {role}
+                      </option>
+                    );
+                  } else {
+                    return null; // Return null if the condition is not met
+                  }
+                })}
               </ValidatedField>
               { isRoleSelected(AUTHORITIES.MANAGER) && null}
               { isRoleSelected(AUTHORITIES.DRIVER) && (
