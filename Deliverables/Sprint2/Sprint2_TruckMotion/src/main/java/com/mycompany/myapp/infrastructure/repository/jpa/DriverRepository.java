@@ -16,4 +16,9 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface DriverRepository extends JpaRepository<Driver, DriverId>, IDriverRepository {
+    @Query("SELECT d FROM Driver d " +
+        "JOIN d.applicationUser au " +
+        "JOIN au.internalUser u " +
+        "WHERE u.id = :userId" )
+    Optional<Driver> getByUserId(@Param("userId") Long userId);
 }

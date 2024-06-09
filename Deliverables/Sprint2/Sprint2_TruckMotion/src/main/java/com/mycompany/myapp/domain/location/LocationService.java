@@ -3,6 +3,9 @@ package com.mycompany.myapp.domain.location;
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
 import com.mycompany.myapp.domain.customer.CustomerService;
 import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
+import com.mycompany.myapp.domain.serviceRequest.ServiceRequestId;
+import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
+import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceRequestMapper;
 import com.mycompany.myapp.domain.user.UserService;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import com.mycompany.myapp.infrastructure.repository.jpa.LocationRepository;
@@ -166,7 +169,19 @@ public class LocationService {
     public Optional<LocationDTO> findOne(UUID id) {
         log.debug("Request to get Location : {}", id);
         LocationId lId = new LocationId(id);
-        return locationRepository.findById(lId).map(LocationMapper::toDto);
+
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+
+        Optional<LocationDTO> locationDTO = locationRepository.findById(lId).map(LocationMapper::toDto);
+        if (locationDTO.isPresent() && customer.isPresent() && locationDTO.get().getCustomer().equals(customer.get())) {
+            return locationDTO;
+        } else {
+            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+        }
     }
 
     /**

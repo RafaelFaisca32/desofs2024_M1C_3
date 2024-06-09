@@ -167,4 +167,9 @@ public class DriverService {
         driverRepository.deleteById(dId);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<DriverDTO> getByUserId(Long userId) {
+        log.debug("Request to get Driver by LoggedIn User : {}", userId);
+        return driverRepository.getByUserId(userId).map(DriverMapper::toDto);
+    }
 }
