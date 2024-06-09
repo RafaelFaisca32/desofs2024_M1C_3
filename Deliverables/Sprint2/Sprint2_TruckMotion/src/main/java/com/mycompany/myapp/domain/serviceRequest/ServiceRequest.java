@@ -154,7 +154,7 @@ public class ServiceRequest implements Serializable {
     }
 
     public void updateLocation(Location location) {
-        this.location = location != null ? new Location(location) : null;
+        this.location = location;
     }
 
     public Customer getCustomer() {
@@ -162,7 +162,7 @@ public class ServiceRequest implements Serializable {
     }
 
     public void updateCustomer(Customer customer) {
-        this.customer = customer != null ? new Customer(customer) : null;
+        this.customer = customer;
     }
 
     public Set<ServiceStatus> getServiceStatuses() {
@@ -214,7 +214,7 @@ public class ServiceRequest implements Serializable {
         if (transport != null) {
             transport.updateServiceRequest(this);
         }
-        this.transport = transport != null ? new Transport(transport) : null;
+        this.transport = transport;
     }
 
     public void updateRequestStatus(ServiceStatusDTO statusDTO){

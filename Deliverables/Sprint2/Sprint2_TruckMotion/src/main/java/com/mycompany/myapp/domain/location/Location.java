@@ -77,7 +77,7 @@ public class Location implements Serializable {
     }
 
     public void updateCustomer(Customer customer) {
-        this.customer = customer != null ? new Customer(customer): null;
+        this.customer = customer;
     }
 
     public Set<ServiceRequest> getServiceRequests() {

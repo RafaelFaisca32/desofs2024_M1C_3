@@ -68,7 +68,7 @@ public class Driver implements Serializable {
     }
 
     public void updateTruck(Truck truck) {
-        this.truck = truck != null ? new Truck(truck) : null;
+        this.truck = truck;
     }
 
 
@@ -77,7 +77,7 @@ public class Driver implements Serializable {
     }
 
     public void updateApplicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser != null ? new ApplicationUser(applicationUser) : null;
+        this.applicationUser = applicationUser;
     }
 
     public Set<Transport> getTransports() {
