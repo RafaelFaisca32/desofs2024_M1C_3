@@ -1,5 +1,8 @@
 package com.mycompany.myapp.application.controller;
 
+import com.mycompany.myapp.domain.customer.Customer;
+import com.mycompany.myapp.domain.customer.CustomerService;
+import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
 import com.mycompany.myapp.domain.serviceRequest.ServiceRequest;
 import com.mycompany.myapp.domain.user.UserService;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
@@ -39,9 +42,12 @@ public class ServiceRequestController {
 
     private final UserService userService;
 
-    public ServiceRequestController(ServiceRequestService serviceRequestService, UserService userService) {
+    private final CustomerService customerService;
+
+    public ServiceRequestController(ServiceRequestService serviceRequestService, UserService userService,CustomerService customerService) {
         this.serviceRequestService = serviceRequestService;
         this.userService = userService;
+        this.customerService = customerService;
     }
 
     /**
@@ -59,10 +65,21 @@ public class ServiceRequestController {
         if (serviceRequestDTO.getId() != null) {
             throw new BadRequestAlertException("A new serviceRequest cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        serviceRequestDTO = serviceRequestService.save(serviceRequestDTO);
-        return ResponseEntity.created(new URI("/api/service-requests/" + serviceRequestDTO.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, serviceRequestDTO.getId().toString()))
-            .body(serviceRequestDTO);
+
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+        if (customer.isPresent()) {
+            serviceRequestDTO.setCustomer(customer.get());
+            serviceRequestDTO = serviceRequestService.save(serviceRequestDTO);
+            return ResponseEntity.created(new URI("/api/service-requests/" + serviceRequestDTO.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, serviceRequestDTO.getId().toString()))
+                .body(serviceRequestDTO);
+        } else {
+            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+        }
     }
 
     @PutMapping({"/{id}/{isApproved}", "/{id}/{isApproved}/{driverId}/{startDate}/{endDate}"})
@@ -152,7 +169,6 @@ public class ServiceRequestController {
         if (!Objects.equals(id, serviceRequestDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-
         Optional<ServiceRequestDTO> result = serviceRequestService.partialUpdate(serviceRequestDTO);
 
         return ResponseUtil.wrapOrNotFound(
