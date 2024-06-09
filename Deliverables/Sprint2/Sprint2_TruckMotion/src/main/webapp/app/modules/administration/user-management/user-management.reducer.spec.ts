@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import { defaultValue } from 'app/shared/model/user.model';
+import {defaultValue, ICompleteUser} from 'app/shared/model/user.model';
 import { AUTHORITIES } from 'app/config/constants';
 import userManagement, {
   getUsers,
@@ -11,7 +11,6 @@ import userManagement, {
   getUser,
   createUser,
   updateUser,
-  deleteUser,
   reset,
 } from './user-management.reducer';
 
@@ -210,7 +209,7 @@ describe('User management reducer tests', () => {
     });
 
     it('dispatches CREATE_USER_PENDING and CREATE_USER_FULFILLED actions', async () => {
-      const arg = {};
+      const arg :ICompleteUser = {applicationUserDTO: undefined, userDTO: undefined};
 
       const result = await createUser(arg)(dispatch, getState, extra);
 
