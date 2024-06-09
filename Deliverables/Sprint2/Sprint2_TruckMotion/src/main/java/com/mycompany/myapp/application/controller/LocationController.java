@@ -13,10 +13,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -155,6 +157,7 @@ public class LocationController {
 
 
     @GetMapping("/getByUserLoggedIn")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.CUSTOMER + "')")
     public List<LocationDTO> getAllLocationsByLoggedInUser(@RequestParam(name = "filter", required = false) String filter) {
         AdminUserDTO adminUserDTO = userService
             .getUserWithAuthorities()
