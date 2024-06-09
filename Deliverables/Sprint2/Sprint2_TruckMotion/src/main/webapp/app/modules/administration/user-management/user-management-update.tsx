@@ -72,7 +72,7 @@ export const UserManagementUpdate = () => {
         lastName: values.lastName,
         email: values.email,
         activated: values.activated,
-        langKey: values.langKey == "" ? null : values.langKey,
+        langKey: values.langKey === "" ? null : values.langKey,
         authorities: values.authorities,
         createdBy: values.createdBy,
         createdDate: values.createdDate,
@@ -87,17 +87,17 @@ export const UserManagementUpdate = () => {
       }
 
       let manager : IManager = null;
-      if( !!values.authorities.find(x => x == AUTHORITIES.MANAGER) ){
+      if( values.authorities.find(x => x === AUTHORITIES.MANAGER) ){
         manager = {};
       }
       let driver : IDriver = null;
-      if(!!values.authorities.find(x => x == AUTHORITIES.DRIVER)){
+      if(values.authorities.find(x => x === AUTHORITIES.DRIVER)){
         driver = {
           truck: { id: values.truck }
         }
       }
       let customer : ICustomer = null;
-      if(!!values.authorities.find(x => x == AUTHORITIES.CUSTOMER)){
+      if(values.authorities.find(x => x === AUTHORITIES.CUSTOMER)){
         customer = {
           company: values.company
         }
