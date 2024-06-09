@@ -105,7 +105,7 @@ export const ServiceRequestSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getEntities, getEntitiesByUserLoggedIn), (state, action) => {
         const { data } = action.payload;
 
         return {
@@ -127,12 +127,7 @@ export const ServiceRequestSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntitiesByUserLoggedIn, getEntity), state => {
-        state.errorMessage = null;
-        state.updateSuccess = false;
-        state.loading = true;
-      })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getEntities, getEntity, getEntitiesByUserLoggedIn), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
