@@ -32,9 +32,9 @@ export const fetchFreeDrivers = createAsyncThunk(
   'driver/fetch_free_drivers',
   async ({ startDate, endDate }: { startDate: string; endDate: string }) => {
     const requestUrl = `${apiUrl}/freeDrivers/${startDate}/${endDate}`;
-    
+
     const response = await axios.get<IAvailableDriverDTO[]>(requestUrl);
-    return response.data as IAvailableDriverDTO[];
+    return response.data;
   }
 );
 

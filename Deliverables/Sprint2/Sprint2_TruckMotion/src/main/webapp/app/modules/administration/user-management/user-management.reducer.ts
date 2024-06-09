@@ -27,7 +27,7 @@ export const fetchFreeTrucks = createAsyncThunk(
     const requestUrl = `api/trucks?filter=driver-is-null`;
 
     const response = await axios.get<ITruck[]>(requestUrl);
-    return response.data as ITruck[];
+    return response.data ;
   }
 );
 
