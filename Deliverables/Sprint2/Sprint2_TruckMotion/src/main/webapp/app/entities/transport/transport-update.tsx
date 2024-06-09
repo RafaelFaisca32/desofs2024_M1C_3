@@ -7,9 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntities as getLocations } from 'app/entities/location/location.reducer';
-import { getEntities as getDrivers } from 'app/entities/driver/driver.reducer';
-import { getEntities as getServiceRequests } from 'app/entities/service-request/service-request.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './transport.reducer';
 
 export const TransportUpdate = () => {
@@ -38,10 +35,6 @@ export const TransportUpdate = () => {
     } else {
       dispatch(getEntity(id));
     }
-
-    dispatch(getLocations({}));
-    dispatch(getDrivers({}));
-    dispatch(getServiceRequests({}));
   }, []);
 
   useEffect(() => {
@@ -58,9 +51,9 @@ export const TransportUpdate = () => {
     const entity = {
       ...transportEntity,
       ...values,
-      location: locations.find(it => it.id.toString() === values.location?.toString()),
-      driver: drivers.find(it => it.id.toString() === values.driver?.toString()),
-      serviceRequest: serviceRequests.find(it => it.id.toString() === values.serviceRequest?.toString()),
+      location: transportEntity?.location,
+      driver: transportEntity?.driver,
+      serviceRequest: transportEntity?.serviceRequest,
     };
 
     if (isNew) {

@@ -123,7 +123,7 @@ public class TransportController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of transports in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "','"+AuthoritiesConstants.DRIVER+"')")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public List<TransportDTO> getAllTransports() {
         log.debug("REST request to get all Transports");
         return transportService.findAll();

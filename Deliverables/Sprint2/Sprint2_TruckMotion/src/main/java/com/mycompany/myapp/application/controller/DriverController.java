@@ -100,7 +100,7 @@ public class DriverController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of drivers in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" +AuthoritiesConstants.DRIVER+"')")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public List<DriverDTO> getAllDrivers(@RequestParam(name = "filter", required = false) String filter) {
         if ("transport-is-null".equals(filter)) {
             log.debug("REST request to get all Drivers where transport is null");

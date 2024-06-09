@@ -28,6 +28,7 @@ import java.util.stream.StreamSupport;
 
 import com.mycompany.myapp.domain.user.UserService;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -214,7 +215,7 @@ public class ServiceRequestService {
         Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
 
         Optional<ServiceRequestDTO> serviceRequestDTO = serviceRequestRepository.findById(new ServiceRequestId(id)).map(ServiceRequestMapper::toDto);
-        if (serviceRequestDTO.isPresent() && customer.isPresent() && serviceRequestDTO.get().getCustomer().equals(customer.get())){
+        if ((serviceRequestDTO.isPresent() && customer.isPresent() && serviceRequestDTO.get().getCustomer().equals(customer.get())) || adminUserDTO.getAuthorities().contains(AuthoritiesConstants.MANAGER)){
             return serviceRequestDTO;
         } else {
             throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
@@ -223,14 +224,10 @@ public class ServiceRequestService {
 
     public void updateRequestServiceStatus(UUID id, boolean isApproved, UUID driverId, String startTime,String endTime) {
         Optional<ServiceRequest> service = serviceRequestRepository.findById(new ServiceRequestId(id));
-        AdminUserDTO adminUserDTO = userService
-            .getUserWithAuthorities()
-            .map(AdminUserDTO::new).get();
 
-        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
         if(service.isPresent()) {
             ServiceRequestDTO serviceRequestDTO1 = ServiceRequestMapper.toDto(service.get());
-            if (customer.isPresent() && customer.get().getId().equals(service.get().getCustomer().getId().value()) && serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING)) {
+            if (serviceRequestDTO1.getStatus().getStatus().equals(Status.PENDING)) {
                 ServiceRequest req = service.get();
                 ServiceRequestDTO reqDTO = ServiceRequestMapper.toDto(req);
                 if (isApproved) {
