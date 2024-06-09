@@ -19,6 +19,6 @@ public class ApplicationUserTestSamples {
     }
 
     public static ApplicationUser getApplicationUserRandomSampleGenerator() {
-        return new ApplicationUser(longCount.incrementAndGet(),new ApplicationUserId(UUID.randomUUID()));
+        return new ApplicationUser(longCount.incrementAndGet(),new ApplicationUserId(UUID.randomUUID()),new ApplicationUserBirthDate(),Gender.MALE,new User());
     }
 }

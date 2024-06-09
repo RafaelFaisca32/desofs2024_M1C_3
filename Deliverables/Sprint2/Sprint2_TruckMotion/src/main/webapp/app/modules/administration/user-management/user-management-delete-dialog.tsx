@@ -25,7 +25,7 @@ export const UserManagementDeleteDialog = () => {
   const user = useAppSelector(state => state.userManagement.user);
 
   const confirmDelete = event => {
-    //dispatch(deleteUser(user.login));
+    // dispatch(deleteUser(user.login));
     handleClose(event);
   };
 

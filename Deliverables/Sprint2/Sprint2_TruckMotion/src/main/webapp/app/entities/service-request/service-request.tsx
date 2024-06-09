@@ -164,7 +164,7 @@ export const ServiceRequest = () => {
                   </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      {serviceRequest.status && managerRole.some(value => authorities.includes(value))  ?  serviceRequest.status.status == 'PENDING' ? <><Button tag={Link} to={`/service-request/${serviceRequest.id}/statusUpdate`} color="success" size="sm" data-cy="entityDetailsButton">
+                      {serviceRequest.status && managerRole.some(value => authorities.includes(value))  ?  serviceRequest.status.status === 'PENDING' ? <><Button tag={Link} to={`/service-request/${serviceRequest.id}/statusUpdate`} color="success" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="plus" /> <span className="d-none d-md-inline">Approve</span>
                       </Button><Button onClick={() =>  updateStatus(serviceRequest.id, false, '', '', '')} color="danger" size="sm" data-cy="entityDetailsButton">
                           <FontAwesomeIcon icon="ban" /> <span className="d-none d-md-inline">Reject</span>
@@ -173,7 +173,7 @@ export const ServiceRequest = () => {
                       <Button tag={Link} to={`/service-request/${serviceRequest.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
                       </Button>
-                      {customerRole.some(value => authorities.includes(value)) && serviceRequest.status?.status == 'PENDING' ?
+                      {customerRole.some(value => authorities.includes(value)) && serviceRequest.status?.status === 'PENDING' ?
                       <Button
                         tag={Link}
                         to={`/service-request/${serviceRequest.id}/edit`}
