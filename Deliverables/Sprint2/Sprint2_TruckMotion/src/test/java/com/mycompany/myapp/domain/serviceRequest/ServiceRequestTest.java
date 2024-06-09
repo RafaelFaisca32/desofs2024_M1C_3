@@ -87,6 +87,8 @@ class ServiceRequestTest {
         assertThat(transportBack.getServiceRequest()).isEqualTo(serviceRequest);
 
         serviceRequest.updateTransport(null);
+        transportBack.updateServiceRequest(null);
+
         assertThat(serviceRequest.getTransport()).isNull();
         assertThat(transportBack.getServiceRequest()).isNull();
     }

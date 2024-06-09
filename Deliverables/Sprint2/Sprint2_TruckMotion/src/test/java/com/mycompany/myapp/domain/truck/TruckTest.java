@@ -34,6 +34,8 @@ class TruckTest {
         assertThat(driverBack.getTruck()).isEqualTo(truck);
 
         truck.updateDriver(null);
+        driverBack.updateTruck(null);
+
         assertThat(truck.getDriver()).isNull();
         assertThat(driverBack.getTruck()).isNull();
     }

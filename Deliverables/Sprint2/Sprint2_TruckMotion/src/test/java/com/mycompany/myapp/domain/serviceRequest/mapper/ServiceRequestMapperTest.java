@@ -10,7 +10,7 @@ class ServiceRequestMapperTest {
 
     @Test
     void shouldConvertToDtoAndBack() {
-        var expected = getServiceRequestSample1();
+        var expected = getServiceRequestRandomSampleGenerator();
         var actual = ServiceRequestMapper.toEntity(ServiceRequestMapper.toDto(expected));
         assertServiceRequestAllPropertiesEquals(expected, actual);
     }

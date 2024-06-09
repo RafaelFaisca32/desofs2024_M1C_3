@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class ApplicationUserMapperTest {
     @Test
     void shouldConvertToDtoAndBack() {
-        var expected = getApplicationUserSample1();
+        var expected = getApplicationUserRandomSampleGenerator();
         var actual = ApplicationUserMapper.toEntity(ApplicationUserMapper.toDto(expected));
         assertApplicationUserAllPropertiesEquals(expected, actual);
     }

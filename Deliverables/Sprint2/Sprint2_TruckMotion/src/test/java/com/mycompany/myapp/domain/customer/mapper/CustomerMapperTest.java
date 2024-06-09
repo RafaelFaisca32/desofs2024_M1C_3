@@ -10,7 +10,7 @@ class CustomerMapperTest {
 
     @Test
     void shouldConvertToDtoAndBack() {
-        var expected = getCustomerSample1();
+        var expected = getCustomerRandomSampleGenerator();
         var actual = CustomerMapper.toEntity(CustomerMapper.toDto(expected));
 
         assertCustomerAllPropertiesEquals(expected, actual);

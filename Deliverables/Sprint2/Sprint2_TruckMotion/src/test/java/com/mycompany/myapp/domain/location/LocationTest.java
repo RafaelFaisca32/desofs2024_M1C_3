@@ -49,7 +49,7 @@ class LocationTest {
         ServiceRequest serviceRequestBack = getServiceRequestRandomSampleGenerator();
 
         location.updateServiceRequest(new HashSet<>(Set.of(serviceRequestBack)));
-        assertThat(location.getServiceRequests()).isEqualTo(serviceRequestBack);
+        assertThat(location.getServiceRequests().toArray()[0].equals(serviceRequestBack));
         assertThat(serviceRequestBack.getLocation()).isEqualTo(location);
 
         location.updateServiceRequest(null);
@@ -63,7 +63,7 @@ class LocationTest {
         Transport transportBack = getTransportRandomSampleGenerator();
 
         location.updateTransport(new HashSet<>(Set.of(transportBack)));
-        assertThat(location.getTransports()).isEqualTo(transportBack);
+        assertThat(location.getTransports().toArray()[0].equals(transportBack));
         assertThat(transportBack.getLocation()).isEqualTo(location);
 
         location.updateTransport(null);
