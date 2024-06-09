@@ -10,7 +10,7 @@ class LocationMapperTest {
 
     @Test
     void shouldConvertToDtoAndBack() {
-        var expected = getLocationSample1();
+        var expected = getLocationRandomSampleGenerator();
         var actual = LocationMapper.toEntity(LocationMapper.toDto(expected));
         assertLocationAllPropertiesEquals(expected, actual);
     }

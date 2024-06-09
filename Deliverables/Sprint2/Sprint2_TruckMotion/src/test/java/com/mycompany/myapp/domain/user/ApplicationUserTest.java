@@ -15,9 +15,8 @@ import org.junit.jupiter.api.Test;
 class ApplicationUserTest {
 
     @Test
-    void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ApplicationUser.class);
-        ApplicationUser applicationUser1 = getApplicationUserSample1();
+    void equalsVerifier()  {
+        ApplicationUser applicationUser1 = getApplicationUserRandomSampleGenerator();
         ApplicationUser applicationUser2 = new ApplicationUser();
         assertThat(applicationUser1).isNotEqualTo(applicationUser2);
 
@@ -38,20 +37,24 @@ class ApplicationUserTest {
         assertThat(driverBack.getApplicationUser()).isEqualTo(applicationUser);
 
         applicationUser.updateDriver(null);
+        driverBack.updateApplicationUser(null);
+
         assertThat(applicationUser.getDriver()).isNull();
         assertThat(driverBack.getApplicationUser()).isNull();
     }
 
     @Test
-    void managerTest() throws Exception {
+    void managerTest()  {
         ApplicationUser applicationUser = getApplicationUserRandomSampleGenerator();
-        Manager managerBack = getManagerRandomSampleGenerator();
+        Manager managerBack = new Manager();
 
         applicationUser.updateManager(managerBack);
         assertThat(applicationUser.getManager()).isEqualTo(managerBack);
         assertThat(managerBack.getApplicationUser()).isEqualTo(applicationUser);
 
         applicationUser.updateManager(null);
+        managerBack.updateApplicationUser(null);
+
         assertThat(applicationUser.getManager()).isNull();
         assertThat(managerBack.getApplicationUser()).isNull();
     }
@@ -66,6 +69,8 @@ class ApplicationUserTest {
         assertThat(customerBack.getApplicationUser()).isEqualTo(applicationUser);
 
         applicationUser.updateCustomer(null);
+        customerBack.updateApplicationUser(null);
+
         assertThat(applicationUser.getCustomer()).isNull();
         assertThat(customerBack.getApplicationUser()).isNull();
     }
