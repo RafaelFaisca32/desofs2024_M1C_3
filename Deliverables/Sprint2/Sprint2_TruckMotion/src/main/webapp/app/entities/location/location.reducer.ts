@@ -41,7 +41,7 @@ export const createEntity = createAsyncThunk(
   'location/create_entity',
   async (entity: ILocation, thunkAPI) => {
     const result = await axios.post<ILocation>(apiUrl, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getEntitiesByUserLoggedIn({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -51,7 +51,7 @@ export const updateEntity = createAsyncThunk(
   'location/update_entity',
   async (entity: ILocation, thunkAPI) => {
     const result = await axios.put<ILocation>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getEntitiesByUserLoggedIn({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -61,7 +61,7 @@ export const partialUpdateEntity = createAsyncThunk(
   'location/partial_update_entity',
   async (entity: ILocation, thunkAPI) => {
     const result = await axios.patch<ILocation>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getEntitiesByUserLoggedIn({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -72,7 +72,7 @@ export const deleteEntity = createAsyncThunk(
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
     const result = await axios.delete<ILocation>(requestUrl);
-    thunkAPI.dispatch(getEntities({}));
+    thunkAPI.dispatch(getEntitiesByUserLoggedIn({}));
     return result;
   },
   { serializeError: serializeAxiosError },
@@ -94,7 +94,7 @@ export const LocationSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addMatcher(isFulfilled(getEntities), (state, action) => {
+      .addMatcher(isFulfilled(getEntities, getEntitiesByUserLoggedIn), (state, action) => {
         const { data } = action.payload;
 
         return {
@@ -116,7 +116,7 @@ export const LocationSlice = createEntitySlice({
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
-      .addMatcher(isPending(getEntities, getEntity), state => {
+      .addMatcher(isPending(getEntities, getEntity, getEntitiesByUserLoggedIn), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
