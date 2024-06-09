@@ -1,11 +1,13 @@
 package com.mycompany.myapp.infrastructure.repository.jpa;
 
 import com.mycompany.myapp.domain.driver.Driver;
-import java.util.UUID;
+
+import java.util.Optional;
 
 import com.mycompany.myapp.domain.driver.DriverId;
 import com.mycompany.myapp.domain.driver.IDriverRepository;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,4 +15,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DriverRepository extends JpaRepository<Driver, DriverId>, IDriverRepository {}
+public interface DriverRepository extends JpaRepository<Driver, DriverId>, IDriverRepository {
+}

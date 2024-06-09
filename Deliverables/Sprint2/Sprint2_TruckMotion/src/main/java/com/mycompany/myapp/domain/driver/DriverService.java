@@ -1,10 +1,16 @@
 package com.mycompany.myapp.domain.driver;
 
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
+import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
+import com.mycompany.myapp.domain.customer.mapper.CustomerMapper;
 import com.mycompany.myapp.domain.driver.dto.AvailableDriverDTO;
+import com.mycompany.myapp.domain.serviceRequest.dto.ServiceRequestDTO;
+import com.mycompany.myapp.domain.serviceRequest.mapper.ServiceRequestMapper;
 import com.mycompany.myapp.domain.transport.ITransportRepository;
 import com.mycompany.myapp.domain.transport.TransportEndTime;
 import com.mycompany.myapp.domain.transport.TransportStartTime;
+import com.mycompany.myapp.domain.transport.dto.TransportDTO;
+import com.mycompany.myapp.domain.transport.mapper.TransportMapper;
 import com.mycompany.myapp.infrastructure.repository.jpa.DriverRepository;
 import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.driver.mapper.DriverMapper;
@@ -160,4 +166,5 @@ public class DriverService {
         DriverId dId = new DriverId(id);
         driverRepository.deleteById(dId);
     }
+
 }
