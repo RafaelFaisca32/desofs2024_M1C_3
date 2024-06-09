@@ -109,8 +109,8 @@ public class TransportController {
                 }
 
 
-        }
-        throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+            }
+            throw new RuntimeException("There is no transport with this id");
     }
 
     /**
