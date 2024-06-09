@@ -204,15 +204,6 @@ public class ServiceRequestService {
         return serviceRequestRepository.findById(new ServiceRequestId(id)).map(ServiceRequestMapper::toDto);
     }
 
-    /**
-     * Delete the serviceRequest by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(UUID id) {
-        log.debug("Request to delete ServiceRequest : {}", id);
-        serviceRequestRepository.deleteById(new ServiceRequestId(id));
-    }
     public void updateRequestServiceStatus(UUID id, boolean isApproved, UUID driverId, String startTime,String endTime) {
         Optional<ServiceRequest> service = serviceRequestRepository.findById(new ServiceRequestId(id));
         AdminUserDTO adminUserDTO = userService
