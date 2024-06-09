@@ -73,7 +73,7 @@ export const UserManagement = () => {
 
   const toggleActive = user => () => {
 
-    let isActive = user.activated;
+    const isActive = user.activated;
     if(isActive){
       dispatch(
         deactivateUser(user.id),
