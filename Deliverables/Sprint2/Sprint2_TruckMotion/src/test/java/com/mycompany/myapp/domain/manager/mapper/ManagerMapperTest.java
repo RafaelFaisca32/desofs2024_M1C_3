@@ -10,7 +10,7 @@ class ManagerMapperTest {
 
     @Test
     void shouldConvertToDtoAndBack() {
-        var expected = getManagerSample1();
+        var expected = getManagerRandomSampleGenerator();
         var actual = ManagerMapper.toEntity(ManagerMapper.toDto(expected));
         assertManagerAllPropertiesEquals(expected, actual);
     }

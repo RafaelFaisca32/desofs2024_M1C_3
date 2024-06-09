@@ -11,7 +11,7 @@ class DriverMapperTest {
 
     @Test
     void shouldConvertToDtoAndBack() {
-        var expected = getDriverSample1();
+        var expected = getDriverRandomSampleGenerator();
         var actual = DriverMapper.toEntity(DriverMapper.toDto(expected));
         assertDriverAllPropertiesEquals(expected, actual);
     }

@@ -10,7 +10,7 @@ class TransportMapperTest {
 
     @Test
     void shouldConvertToDtoAndBack() {
-        var expected = getTransportSample1();
+        var expected = getTransportRandomSampleGenerator();
         var actual = TransportMapper.toEntity(TransportMapper.toDto(expected));
         assertTransportAllPropertiesEquals(expected, actual);
     }
