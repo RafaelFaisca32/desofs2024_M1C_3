@@ -76,7 +76,8 @@ public class ServiceRequestService {
             .map(AdminUserDTO::new).get();
 
         Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
-        if (customer.isPresent() && !customer.get().getLocations().stream().filter(loc -> loc.equals(serviceRequestDTO.getLocation())).toList().isEmpty()) {
+        if (customer.isPresent() &&
+            !customer.get().getLocations().stream().filter(loc -> loc.equals(serviceRequestDTO.getLocation())).toList().isEmpty()) {
             serviceRequestDTO.setCustomer(customer.get());
 
             ServiceRequest serviceRequest1 = ServiceRequestMapper.toEntity(serviceRequestDTO);
@@ -205,7 +206,19 @@ public class ServiceRequestService {
     @Transactional(readOnly = true)
     public Optional<ServiceRequestDTO> findOne(UUID id) {
         log.debug("Request to get ServiceRequest : {}", id);
-        return serviceRequestRepository.findById(new ServiceRequestId(id)).map(ServiceRequestMapper::toDto);
+
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+
+        Optional<CustomerDTO> customer = customerService.getByUserId(adminUserDTO.getId());
+
+        Optional<ServiceRequestDTO> serviceRequestDTO = serviceRequestRepository.findById(new ServiceRequestId(id)).map(ServiceRequestMapper::toDto);
+        if (serviceRequestDTO.isPresent() && customer.isPresent() && serviceRequestDTO.get().getCustomer().equals(customer.get())){
+            return serviceRequestDTO;
+        } else {
+            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+        }
     }
 
     public void updateRequestServiceStatus(UUID id, boolean isApproved, UUID driverId, String startTime,String endTime) {

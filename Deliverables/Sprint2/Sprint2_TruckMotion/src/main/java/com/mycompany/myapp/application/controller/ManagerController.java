@@ -11,10 +11,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -105,6 +108,7 @@ public class ManagerController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the managerDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<ManagerDTO> getManager(@PathVariable("id") UUID id) {
         log.debug("REST request to get Manager : {}", id);
         Optional<ManagerDTO> managerDTO = managerService.findOne(id);
@@ -118,6 +122,7 @@ public class ManagerController {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<Void> deleteManager(@PathVariable("id") UUID id) {
         log.debug("REST request to delete Manager : {}", id);
         managerService.delete(id);

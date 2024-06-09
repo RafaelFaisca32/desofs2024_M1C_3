@@ -10,10 +10,13 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -47,6 +50,7 @@ public class ApplicationUserController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<ApplicationUserDTO> createApplicationUser(@RequestBody ApplicationUserDTO applicationUserDTO)
         throws URISyntaxException {
         log.debug("REST request to save ApplicationUser : {}", applicationUserDTO);
@@ -73,6 +77,7 @@ public class ApplicationUserController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<ApplicationUserDTO> updateApplicationUser(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody ApplicationUserDTO applicationUserDTO
@@ -103,6 +108,7 @@ public class ApplicationUserController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of applicationUsers in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public List<ApplicationUserDTO> getAllApplicationUsers(
         @RequestParam(name = "filter", required = false) String filter,
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
@@ -132,6 +138,7 @@ public class ApplicationUserController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the applicationUserDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<ApplicationUserDTO> getApplicationUser(@PathVariable("id") Long id) {
         log.debug("REST request to get ApplicationUser : {}", id);
         Optional<ApplicationUserDTO> applicationUserDTO = applicationUserService.findOne(id);
@@ -145,6 +152,7 @@ public class ApplicationUserController {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<Void> deleteApplicationUser(@PathVariable("id") Long id) {
         log.debug("REST request to delete ApplicationUser : {}", id);
         applicationUserService.delete(id);

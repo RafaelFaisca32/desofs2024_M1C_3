@@ -13,10 +13,12 @@ import java.util.UUID;
 
 import com.mycompany.myapp.domain.user.UserService;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -51,6 +53,7 @@ public class CustomerController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) throws URISyntaxException {
         log.debug("REST request to save Customer : {}", customerDTO);
         if (customerDTO.getId() != null) {
@@ -73,6 +76,7 @@ public class CustomerController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<CustomerDTO> updateCustomer(
         @PathVariable(value = "id", required = false) final UUID id,
         @RequestBody CustomerDTO customerDTO
@@ -100,6 +104,7 @@ public class CustomerController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of customers in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public List<CustomerDTO> getAllCustomers(@RequestParam(name = "filter", required = false) String filter) {
         if ("servicerequest-is-null".equals(filter)) {
             log.debug("REST request to get all Customers where serviceRequest is null");
@@ -116,6 +121,7 @@ public class CustomerController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the customerDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<CustomerDTO> getCustomer(@PathVariable("id") UUID id) {
         log.debug("REST request to get Customer : {}", id);
         Optional<CustomerDTO> customerDTO = customerService.findOne(id);
@@ -129,6 +135,7 @@ public class CustomerController {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "')")
     public ResponseEntity<Void> deleteCustomer(@PathVariable("id") UUID id) {
         log.debug("REST request to delete Customer : {}", id);
         customerService.delete(id);
@@ -138,6 +145,7 @@ public class CustomerController {
     }
 
     @GetMapping("/getByLoggedInUser")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "', '" + AuthoritiesConstants.MANAGER + "', '" + AuthoritiesConstants.CUSTOMER + "')")
     public CustomerDTO getByLoggedInUser() {
         log.debug("REST request to get Customer By LoggedIn User");
         AdminUserDTO adminUserDTO = userService

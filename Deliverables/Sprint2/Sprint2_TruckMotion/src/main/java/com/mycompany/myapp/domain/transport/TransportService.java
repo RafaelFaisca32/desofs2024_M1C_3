@@ -1,8 +1,13 @@
 package com.mycompany.myapp.domain.transport;
 
 import com.mycompany.myapp.application.controller.errors.BadRequestAlertException;
+import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
+import com.mycompany.myapp.domain.driver.DriverService;
+import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.location.mapper.LocationMapper;
+import com.mycompany.myapp.domain.user.UserService;
+import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
 import com.mycompany.myapp.infrastructure.repository.jpa.TransportRepository;
 import com.mycompany.myapp.domain.transport.dto.TransportDTO;
 import com.mycompany.myapp.domain.transport.mapper.TransportMapper;
@@ -29,10 +34,16 @@ public class TransportService {
 
     private final ITransportRepository transportRepository;
 
+    private final UserService userService;
+
+    private final DriverService driverService;
+
     private static final String ENTITY_NAME = "transport";
 
-    public TransportService(ITransportRepository transportRepository) {
+    public TransportService(ITransportRepository transportRepository, UserService userService, DriverService driverService) {
         this.transportRepository = transportRepository;
+        this.userService = userService;
+        this.driverService = driverService;
     }
 
     /**
@@ -108,7 +119,19 @@ public class TransportService {
     @Transactional(readOnly = true)
     public Optional<TransportDTO> findOne(UUID id) {
         log.debug("Request to get Transport : {}", id);
-        return transportRepository.findById(new TransportId(id)).map(TransportMapper::toDto);
+
+        AdminUserDTO adminUserDTO = userService
+            .getUserWithAuthorities()
+            .map(AdminUserDTO::new).get();
+
+        Optional<DriverDTO> driverDTO = driverService.getByUserId(adminUserDTO.getId());
+
+        Optional<TransportDTO> transportDTO = transportRepository.findById(new TransportId(id)).map(TransportMapper::toDto);
+        if (transportDTO.isPresent() && driverDTO.isPresent() && transportDTO.get().getDriver().equals(driverDTO.get())) {
+            return transportDTO;
+        } else {
+            throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
+        }
     }
 
     /**
