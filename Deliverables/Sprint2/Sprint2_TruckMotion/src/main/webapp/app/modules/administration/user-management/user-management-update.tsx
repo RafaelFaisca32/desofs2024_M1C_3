@@ -5,13 +5,13 @@ import { ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Gender } from 'app/shared/model/enumerations/gender.model';
 import { AUTHORITIES } from 'app/config/constants';
-import {getUser, getRoles, updateUser, createUser, reset, fetchFreeTrucks} from './user-management.reducer';
+import { getUser, getRoles, updateUser, createUser, reset, fetchFreeTrucks } from './user-management.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import {ICompleteUser, IUser} from "app/shared/model/user.model";
-import {IApplicationUser} from "app/shared/model/application-user.model";
-import {IManager} from "app/shared/model/manager.model";
-import {IDriver} from "app/shared/model/driver.model";
-import {ICustomer} from "app/shared/model/customer.model";
+import { ICompleteUser, IUser } from "app/shared/model/user.model";
+import { IApplicationUser } from "app/shared/model/application-user.model";
+import { IManager } from "app/shared/model/manager.model";
+import { IDriver } from "app/shared/model/driver.model";
+import { ICustomer } from "app/shared/model/customer.model";
 
 export const UserManagementUpdate = () => {
   const dispatch = useAppDispatch();
@@ -24,7 +24,7 @@ export const UserManagementUpdate = () => {
   const [selectedRoles, setSelectedRoles] = useState([])
   const [trucks, setTrucks] = useState([]);
 
-  const handleRolesChange = (event) =>{
+  const handleRolesChange = (event) => {
     const options = event.target.options;
     const selectedValues = [];
     for (let i = 0; i < options.length; i++) {
@@ -38,7 +38,8 @@ export const UserManagementUpdate = () => {
 
   const isRoleSelected = (role: string) => !!selectedRoles.find(element => element === role);
 
-  const validateRoleOption = (role: string) => AUTHORITIES.ADMIN != role || (AUTHORITIES.ADMIN == role && authoritiesLogin.includes(AUTHORITIES.ADMIN));
+
+  const validateRoleOption = (role: string) => AUTHORITIES.ADMIN !== role || (AUTHORITIES.ADMIN === role && authoritiesLogin.includes(AUTHORITIES.ADMIN));
 
   useEffect(() => {
     if (isNew) {
@@ -51,9 +52,9 @@ export const UserManagementUpdate = () => {
       .then((response: any) => {
         setTrucks(response.payload);
       })
-    .catch((error: any) => {
-      setTrucks([])
-    });
+      .catch((error: any) => {
+        setTrucks([])
+      });
     return () => {
       dispatch(reset());
     };
@@ -88,24 +89,24 @@ export const UserManagementUpdate = () => {
         gender: values.gender
       }
 
-      let manager : IManager = null;
-      if( values.authorities.find(x => x === AUTHORITIES.MANAGER) ){
+      let manager: IManager = null;
+      if (values.authorities.find(x => x === AUTHORITIES.MANAGER)) {
         manager = {};
       }
-      let driver : IDriver = null;
-      if(values.authorities.find(x => x === AUTHORITIES.DRIVER)){
+      let driver: IDriver = null;
+      if (values.authorities.find(x => x === AUTHORITIES.DRIVER)) {
         driver = {
           truck: { id: values.truck }
         }
       }
-      let customer : ICustomer = null;
-      if(values.authorities.find(x => x === AUTHORITIES.CUSTOMER)){
+      let customer: ICustomer = null;
+      if (values.authorities.find(x => x === AUTHORITIES.CUSTOMER)) {
         customer = {
           company: values.company
         }
       }
 
-      const completeUser : ICompleteUser = {
+      const completeUser: ICompleteUser = {
         userDTO: user,
         applicationUserDTO: applicationUser,
         managerDTO: manager,
@@ -131,7 +132,7 @@ export const UserManagementUpdate = () => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          {isNew ? (<h1>Create a user</h1>) : (<h1>User</h1>) }
+          {isNew ? (<h1>Create a user</h1>) : (<h1>User</h1>)}
         </Col>
       </Row>
       <Row className="justify-content-center">
@@ -231,8 +232,8 @@ export const UserManagementUpdate = () => {
                   }
                 })}
               </ValidatedField>
-              { isRoleSelected(AUTHORITIES.MANAGER) && null}
-              { isRoleSelected(AUTHORITIES.DRIVER) && (
+              {isRoleSelected(AUTHORITIES.MANAGER) && null}
+              {isRoleSelected(AUTHORITIES.DRIVER) && (
                 <ValidatedField id="driver-truck" name="truck" data-cy="truck" label="Truck" type="select">
                   <option value="" key="0" />
                   {trucks
@@ -244,7 +245,7 @@ export const UserManagementUpdate = () => {
                     : null}
                 </ValidatedField>
               )}
-              { isRoleSelected(AUTHORITIES.CUSTOMER) && (
+              {isRoleSelected(AUTHORITIES.CUSTOMER) && (
                 <ValidatedField label="Company" id="customer-company" name="company" data-cy="company" type="text" />
               )}
               <Button tag={Link} to="/admin/user-management" replace color="info">
@@ -253,12 +254,12 @@ export const UserManagementUpdate = () => {
                 <span className="d-none d-md-inline">Back</span>
               </Button>
               &nbsp;
-              { isNew &&
+              {isNew &&
                 (
-                <Button color="primary" type="submit" disabled={isInvalid || updating}>
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp; Save
-                </Button>
+                  <Button color="primary" type="submit" disabled={isInvalid || updating}>
+                    <FontAwesomeIcon icon="save" />
+                    &nbsp; Save
+                  </Button>
                 )
               }
             </ValidatedForm>
