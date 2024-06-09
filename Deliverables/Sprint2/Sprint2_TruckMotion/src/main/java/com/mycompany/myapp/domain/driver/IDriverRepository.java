@@ -1,5 +1,7 @@
 package com.mycompany.myapp.domain.driver;
 
+import com.mycompany.myapp.domain.customer.Customer;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +19,5 @@ public interface IDriverRepository {
     long count();
 
     boolean existsById(DriverId id);
+
 }

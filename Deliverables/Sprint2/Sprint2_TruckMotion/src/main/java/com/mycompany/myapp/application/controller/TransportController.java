@@ -1,7 +1,12 @@
 package com.mycompany.myapp.application.controller;
 
+import com.mycompany.myapp.domain.customer.dto.CustomerDTO;
+import com.mycompany.myapp.domain.driver.DriverId;
+import com.mycompany.myapp.domain.driver.DriverService;
+import com.mycompany.myapp.domain.driver.dto.DriverDTO;
 import com.mycompany.myapp.domain.location.dto.LocationDTO;
 import com.mycompany.myapp.domain.transport.Transport;
+import com.mycompany.myapp.domain.transport.TransportId;
 import com.mycompany.myapp.domain.user.User;
 import com.mycompany.myapp.domain.user.UserService;
 import com.mycompany.myapp.domain.user.dto.AdminUserDTO;
@@ -36,11 +41,13 @@ public class TransportController {
     private String applicationName;
 
     private final TransportService transportService;
+    private final DriverService driverService;
     private final UserService userService;
 
-    public TransportController(TransportService transportService, UserService userService) {
+    public TransportController(TransportService transportService, UserService userService,DriverService driverService) {
         this.transportService = transportService;
         this.userService = userService;
+        this.driverService = driverService;
     }
 
     /**
@@ -85,10 +92,25 @@ public class TransportController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        transportDTO = transportService.update(transportDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, transportDTO.getId().toString()))
-            .body(transportDTO);
+
+        Optional<TransportDTO> transportRet = transportService.findOne(transportDTO.getId());
+            if(transportRet.isPresent()) {
+                if(transportRet.get().getId().equals(transportDTO.getId()) &&
+                    transportRet.get().getDriver().equals(transportDTO.getDriver()) &&
+                    transportRet.get().getLocation().equals(transportDTO.getLocation())&&
+                    transportRet.get().getServiceRequest().equals(transportDTO.getServiceRequest()  )) {
+
+                    transportDTO = transportService.update(transportDTO);
+                    return ResponseEntity.ok()
+                        .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, transportDTO.getId().toString()))
+                        .body(transportDTO);
+                }else {
+                    throw new RuntimeException("Only can update the start date and end date");
+                }
+
+
+        }
+        throw new BadRequestAlertException("Unauthorized", ENTITY_NAME, "unauthorized");
     }
 
     /**
